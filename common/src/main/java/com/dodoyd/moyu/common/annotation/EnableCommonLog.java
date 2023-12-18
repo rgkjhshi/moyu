@@ -1,6 +1,6 @@
 package com.dodoyd.moyu.common.annotation;
 
-import com.mk.dodoyd.common.config.CommonLogConfig;
+import com.dodoyd.moyu.common.config.CommonLogConfig;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

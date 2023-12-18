@@ -1,7 +1,6 @@
 package com.dodoyd.moyu.admin.config;
 
-import com.mk.dodoyd.admin.interceptor.UserTokenInterceptor;
-import com.mk.dodoyd.admin.interceptor.VueHistoryInterceptor;
+import com.dodoyd.moyu.admin.interceptor.VueHistoryInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -21,8 +20,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Resource
     private VueHistoryInterceptor vueHistoryInterceptor;
 
-    @Resource
-    private UserTokenInterceptor userTokenInterceptor;
+//    @Resource
+//    private UserTokenInterceptor userTokenInterceptor;
 
     /**
      * 跨域访问， 参考：https://blog.csdn.net/qq_44606649/article/details/110679724
@@ -51,12 +50,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(vueHistoryInterceptor).addPathPatterns("/**")
                 .excludePathPatterns("/merchant/api/**", "/static/**", "/public/**", "/wxapp/**");
         // 用户登录拦截器
-        registry.addInterceptor(userTokenInterceptor).addPathPatterns("/merchant/api/**", "/wxapp/api/**")
-                .excludePathPatterns("/merchant/api/user/login", "/merchant/api/user/logout", "/merchant/api/user/info",
-                        "/merchant/api/monitor/index",
-                        "/wxapp/api/user/login", "/wxapp/api/main/**", "/wxapp/api/notify/callback",
-                        "/wxapp/api/card/getVenueCardList", "/wxapp/api/card/getVenueCardInfo",
-                        "/wxapp/api/activity/info", "/wxapp/api/activity/list", "/wxapp/api/activity/memberList",
-                        "/wxapp/api/monitor/index");
+//        registry.addInterceptor(userTokenInterceptor).addPathPatterns("/merchant/api/**", "/wxapp/api/**")
+//                .excludePathPatterns("/merchant/api/user/login", "/merchant/api/user/logout", "/merchant/api/user/info",
+//                        "/merchant/api/monitor/index",
+//                        "/wxapp/api/user/login", "/wxapp/api/main/**", "/wxapp/api/notify/callback",
+//                        "/wxapp/api/card/getVenueCardList", "/wxapp/api/card/getVenueCardInfo",
+//                        "/wxapp/api/activity/info", "/wxapp/api/activity/list", "/wxapp/api/activity/memberList",
+//                        "/wxapp/api/monitor/index");
     }
 }
