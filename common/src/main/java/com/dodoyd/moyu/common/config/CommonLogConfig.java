@@ -1,6 +1,6 @@
 package com.dodoyd.moyu.common.config;
 
-import com.mk.dodoyd.common.aop.LogAspect;
+import com.dodoyd.moyu.common.aop.LogAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
