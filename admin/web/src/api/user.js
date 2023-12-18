@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/merchant/api/user/login',
+    url: '/api/user/login',
     method: 'post',
     data
   })
@@ -10,7 +10,7 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/merchant/api/user/info',
+    url: '/api/user/info',
     method: 'get',
     params: { token }
   })
@@ -18,23 +18,15 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/merchant/api/user/logout',
+    url: '/api/user/logout',
     method: 'post'
-  })
-}
-
-export function getInfoByMobile(mobile) {
-  return request({
-    url: '/merchant/api/user/getInfoByMobile',
-    method: 'post',
-    params: { mobile }
   })
 }
 
 // 查询用户账号信息
 export function getUserInfo(data) {
   return request({
-    url: '/merchant/api/user/getUserInfo',
+    url: '/api/user/getUserInfo',
     method: 'post',
     data: data
   })
@@ -43,7 +35,7 @@ export function getUserInfo(data) {
 // 更改用户信息
 export function updateUserInfo(data) {
   return request({
-    url: '/merchant/api/user/updateInfo',
+    url: '/api/user/updateInfo',
     method: 'post',
     data: data
   })
@@ -52,7 +44,7 @@ export function updateUserInfo(data) {
 // 修改密码口令
 export function changePassword(data) {
   return request({
-    url: '/merchant/api/user/changePwd',
+    url: '/api/user/changePwd',
     method: 'post',
     data: data
   })
