@@ -103,7 +103,7 @@
 <script>
 
 import { parseTime } from '@/utils'
-import { queryVenueOrderList, applyRefund, queryLastedOrderInfo } from '@/api/dodoyd'
+import { applyRefund, queryLastedOrderInfo } from '@/api/dodoyd'
 
 export default {
   name: 'TableList',
@@ -225,34 +225,17 @@ export default {
     // 获取表格内的数据列表
     getDataList() {
       this.listLoading = true
-      if (this.queryRequest.orderNo) {
-        // 有订单号则单查
-        queryLastedOrderInfo(this.queryRequest).then(response => {
-          if (response.code === 0) {
-            this.total = 1
-            this.dataList = [response.data]
-          }
-          this.listLoading = false
-        }).catch(err => {
-          console.log(err)
-          this.listLoading = false
-        })
-      } else {
-        // 无订单号则查列表
-        this.queryRequest.venueId = this.venueId
-        this.queryRequest.startDate = this.defaultDate[0]
-        this.queryRequest.endDate = this.defaultDate[1]
-        queryVenueOrderList(this.queryRequest).then(response => {
-          if (response.code === 0) {
-            this.total = response.data.total
-            this.dataList = response.data.pageData
-          }
-          this.listLoading = false
-        }).catch(err => {
-          console.log(err)
-          this.listLoading = false
-        })
-      }
+      // 有订单号则单查
+      queryLastedOrderInfo(this.queryRequest).then(response => {
+        if (response.code === 0) {
+          this.total = 1
+          this.dataList = [response.data]
+        }
+        this.listLoading = false
+      }).catch(err => {
+        console.log(err)
+        this.listLoading = false
+      })
     },
     handleQuery() {
       this.getDataList()
