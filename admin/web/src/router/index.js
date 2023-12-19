@@ -238,37 +238,6 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/staff',
-    component: Layout,
-    redirect: '/staff/staffList',
-    alwaysShow: true,
-    meta: {
-      title: '人员管理',
-      icon: 'lock',
-      roles: ['admin']
-    },
-    children: [
-      {
-        path: 'addStaff',
-        component: () => import('@/views/dodoyd/staff/addStaff'),
-        name: 'AddStaff',
-        meta: { title: '添加成员', icon: 'user', roles: ['admin'], noCache: true }
-      },
-      {
-        path: 'staffList',
-        component: () => import('@/views/dodoyd/staff/staffList'),
-        name: 'StaffList',
-        meta: { title: '人员列表', icon: 'list', roles: ['admin'], noCache: true }
-      },
-      {
-        path: 'roleList',
-        component: () => import('@/views/dodoyd/my/myRoleList'),
-        name: 'MyRoleList',
-        meta: { title: '我的权限', icon: 'user', roles: ['admin'], noCache: true }
-      }
-    ]
-  },
-  {
     path: '/sysAdmin',
     component: Layout,
     redirect: '/sysAdmin/index',

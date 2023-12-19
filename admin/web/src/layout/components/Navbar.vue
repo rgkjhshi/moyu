@@ -9,9 +9,6 @@
       <span class="right-menu-item">
         <!--        Hi~ {{ name }}-->
       </span>
-      <span class="right-menu-item">
-        <CurrentVenue :callback="refreshPage" />
-      </span>
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <el-avatar :src="avatar" />
@@ -37,11 +34,9 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import CurrentVenue from '@/views/dodoyd/components/CurrentVenue'
 
 export default {
   components: {
-    CurrentVenue,
     Hamburger,
     Breadcrumb
   },

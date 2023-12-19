@@ -5,12 +5,14 @@ import com.dodoyd.moyu.admin.model.dto.UserInfoDTO;
 import com.dodoyd.moyu.admin.service.TokenService;
 import com.dodoyd.moyu.admin.util.UserLocalUtils;
 import com.dodoyd.moyu.common.model.BaseResponse;
+import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 
 /**
  * 用户信息处理器
@@ -50,6 +52,8 @@ public class UserController {
     @GetMapping(value = "/info")
     public BaseResponse<UserInfoDTO> userInfo(String token) {
         UserInfoDTO dto = new UserInfoDTO();
+        dto.setUserId(10001L);
+        dto.setRoles(Lists.newArrayList("user"));
         return BaseResponse.getSuccessResponse(dto);
     }
 
