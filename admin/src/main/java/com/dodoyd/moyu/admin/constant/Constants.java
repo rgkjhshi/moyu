@@ -3,6 +3,8 @@ package com.dodoyd.moyu.admin.constant;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -11,6 +13,11 @@ import org.joda.time.format.DateTimeFormatter;
  * @since 2023-04-28
  */
 public class Constants {
+
+    /**
+     * 序列化GSON
+     */
+    public static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
     /**
      * 时间格式

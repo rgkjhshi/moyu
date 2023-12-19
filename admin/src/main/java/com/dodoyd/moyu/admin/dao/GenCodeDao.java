@@ -1,5 +1,6 @@
 package com.dodoyd.moyu.admin.dao;
 
+import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -26,7 +27,7 @@ public interface GenCodeDao {
     })
     @Select({"<script>",
             "SELECT table_name, table_comment, create_time FROM information_schema.tables",
-            "WHERE table_schema = (select DATABASE())",
+            "WHERE table_schema = (SELECT DATABASE())",
             "</script>"})
-    List<?> selectAllDbTableList();
+    List<TableInfo> selectAllDbTableList();
 }
