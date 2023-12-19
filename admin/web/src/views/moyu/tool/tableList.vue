@@ -1,38 +1,29 @@
 <template>
   <div class="app-container">
     <!-- 上方选择框   -->
-    <el-form ref="queryRequest" :model="queryRequest">
-      <el-row :gutter="20">
-        <el-col :span="4">
-          <el-form-item label-width="60px" label="表名:">
-            <el-input v-model="queryRequest.orderNo" placeholder="请输入表名" clearable />
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-form-item label-width="60px" label="表描述:">
-            <el-input v-model="queryRequest.orderNo" placeholder="请输入表描述" clearable />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label-width="80px" label="日期范围:">
-            <el-date-picker
-              v-model="defaultDate"
-              value-format="yyyyMMdd"
-              type="daterange"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-button type="primary" size="small" icon="el-icon-search" @click="handleClickQuery">
-            查询
-          </el-button>
-        </el-col>
-      </el-row>
+    <el-form ref="queryRequest" :model="queryRequest" :inline="true" size="small">
+      <el-form-item label-width="60px" label="表名:">
+        <el-input v-model="queryRequest.orderNo" placeholder="请输入表名" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+      <el-form-item label-width="60px" label="表描述:">
+        <el-input v-model="queryRequest.orderNo" placeholder="请输入表描述" clearable />
+      </el-form-item>
+      <el-form-item label-width="80px" label="日期范围:">
+        <el-date-picker
+          v-model="defaultDate"
+          value-format="yyyyMMdd"
+          type="daterange"
+          unlink-panels
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :picker-options="pickerOptions"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
+        <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
+      </el-form-item>
     </el-form>
     <!-- 我的申请 列表数据 -->
     <el-table v-loading="listLoading" :data="dataList" border fit highlight-current-row>
@@ -263,7 +254,7 @@ export default {
         })
       }
     },
-    handleClickQuery() {
+    handleQuery() {
       this.getDataList()
     },
     handleRefund(row) {
