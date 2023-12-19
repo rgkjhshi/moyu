@@ -53,7 +53,7 @@ public class UserController {
     public BaseResponse<UserInfoDTO> userInfo(String token) {
         UserInfoDTO dto = new UserInfoDTO();
         dto.setUserId(10001L);
-        dto.setRoles(Lists.newArrayList("user"));
+        dto.setRoles(Lists.newArrayList("admin"));
         return BaseResponse.getSuccessResponse(dto);
     }
 
