@@ -45,19 +45,6 @@
           {{ row.totalAmount / 100 + "元" }}
         </template>
       </el-table-column>
-      <el-table-column label="订单状态" width="120px" align="center">
-        <template v-slot="{row}">
-          <!--  状态,2:支付成功,4:已退款 -->
-          <span v-if="row.payStatus === 1"> <el-tag>待支付</el-tag> </span>
-          <span v-else-if="row.payStatus === 2"> <el-tag type="success">支付成功</el-tag> </span>
-          <span v-else-if="row.payStatus === 4">
-            <!--  退款状态，1:退款处理中,2:退款成功,3:退款失败,4:已关闭 -->
-            <el-tag v-if="row.refundStatus === 2" type="info">已退款</el-tag>
-            <el-tag v-else type="info">退款处理中</el-tag>
-          </span>
-          <span v-else-if="row.payStatus === 5"> <el-tag type="info">已取消</el-tag> </span>
-        </template>
-      </el-table-column>
       <el-table-column label="支付方式" width="100px" align="center">
         <template v-slot="{row}">
           <!--  支付方式，1:微信支付,2:会员卡支付 -->
