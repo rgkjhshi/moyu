@@ -238,6 +238,25 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/tool',
+    component: Layout,
+    redirect: '/tool/gen',
+    alwaysShow: true,
+    meta: {
+      title: '系统工具',
+      icon: 'component',
+      roles: ['admin', 'user']
+    },
+    children: [
+      {
+        path: 'gen',
+        component: () => import('@/views/moyu/tool/tableList'),
+        name: 'TableList',
+        meta: { title: '代码生成', icon: 'list', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/sysAdmin',
     component: Layout,
     redirect: '/sysAdmin/index',

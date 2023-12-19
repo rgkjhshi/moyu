@@ -3,7 +3,17 @@
     <!-- 上方选择框   -->
     <el-form ref="queryRequest" :model="queryRequest">
       <el-row :gutter="20">
-        <el-col :span="7">
+        <el-col :span="4">
+          <el-form-item label-width="60px" label="表名:">
+            <el-input v-model="queryRequest.orderNo" placeholder="请输入表名" clearable />
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label-width="60px" label="表描述:">
+            <el-input v-model="queryRequest.orderNo" placeholder="请输入表描述" clearable />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
           <el-form-item label-width="80px" label="日期范围:">
             <el-date-picker
               v-model="defaultDate"
@@ -17,24 +27,8 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="4">
-          <el-form-item label-width="80px" label="订单类型:">
-            <el-select v-model="queryRequest.orderTypeFilter" @change="handleClickQuery">
-              <!-- 订单类型,0:全部,1:订场,2:约课,3:购卡 -->
-              <el-option label="全部" :value="null" />
-              <el-option label="订场" :value="1" />
-              <el-option label="约课" :value="2" />
-              <el-option label="购卡" :value="3" />
-            </el-select>
-          </el-form-item>
-        </el-col>
         <el-col :span="6">
-          <el-form-item label-width="60px" label="订单号:">
-            <el-input v-model="queryRequest.orderNo" placeholder="订单号" clearable />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-button type="primary" icon="el-icon-search" @click="handleClickQuery">
+          <el-button type="primary" size="small" icon="el-icon-search" @click="handleClickQuery">
             查询
           </el-button>
         </el-col>
@@ -121,7 +115,7 @@ import { parseTime } from '@/utils'
 import { queryVenueOrderList, applyRefund, queryLastedOrderInfo } from '@/api/dodoyd'
 
 export default {
-  name: 'OrderList',
+  name: 'TableList',
   directives: {
   },
   filters: {
