@@ -90,24 +90,10 @@
 <script>
 
 import { parseTime } from '@/utils'
-import { applyRefund, queryLastedOrderInfo } from '@/api/dodoyd'
+import { listDbTable } from '@/api/tool/gen'
 
 export default {
   name: 'TableList',
-  directives: {
-  },
-  filters: {
-    // 订单类型,0:全部,1:订场,2:约课,3:购卡
-    orderTypeFilter(orderType) {
-      const orderTypeMap = {
-        0: '全部',
-        1: '订场',
-        2: '约课',
-        3: '购卡'
-      }
-      return orderTypeMap[orderType]
-    }
-  },
   data() {
     return {
       listLoading: false,
@@ -116,11 +102,8 @@ export default {
       defaultDate: [parseTime(new Date(new Date().getTime() - 3600 * 1000 * 24 * 3), '{y}{m}{d}'), parseTime(new Date(), '{y}{m}{d}')],
       total: 0,
       queryRequest: {
-        venueId: null,
         startDate: null,
         endDate: null,
-        orderNo: null,
-        orderTypeFilter: null,
         // 页码
         pageNum: 1,
         // 页面大小
@@ -213,7 +196,7 @@ export default {
     getDataList() {
       this.listLoading = true
       // 有订单号则单查
-      queryLastedOrderInfo(this.queryRequest).then(response => {
+      listDbTable(this.queryRequest).then(response => {
         if (response.code === 0) {
           this.total = 1
           this.dataList = [response.data]
@@ -226,31 +209,6 @@ export default {
     },
     handleQuery() {
       this.getDataList()
-    },
-    handleRefund(row) {
-      this.$confirm('退款后支付金额将完全退回给用户', '确定要退款吗？', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async() => {
-        return applyRefund({ venueId: row.venueId, orderNo: row.orderNo })
-      }).then(response => {
-        if (response.code === 0) {
-          this.$message({ type: 'success', message: '已提交退款!' })
-          this.getDataList()
-        } else {
-          this.$message({ type: 'error', message: response.message })
-        }
-      }).catch(err => { console.log(err) })
-    },
-    handleRefresh(row) {
-      this.listLoading = true
-      queryLastedOrderInfo({ 'orderNo': row.orderNo }).then(response => {
-        this.getDataList()
-      }).catch(err => {
-        console.log(err)
-        this.listLoading = false
-      })
     },
     handleSizeChange(value) {
       // 已经通过.sync实现了双向绑定，否则这里要主动修改值 this.queryRequest.pageSize = value

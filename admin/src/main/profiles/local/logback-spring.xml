@@ -60,7 +60,7 @@
     </appender>
 
 
-    <logger name="com.dodoyd.moyu" level="debug"/>
+    <logger name="com.dodoyd.moyu" level="DEBUG"/>
     <logger name="org.springframework" level="INFO"/>
 
     <!-- 本地都统一打印到控制台 -->
