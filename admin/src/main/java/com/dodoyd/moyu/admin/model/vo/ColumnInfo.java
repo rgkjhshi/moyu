@@ -12,11 +12,6 @@ import lombok.Data;
 public class ColumnInfo {
 
     /**
-     * 归属表编号
-     */
-    private Long tableId;
-
-    /**
      * 数据库中的列名称
      */
     private String columnName;
@@ -34,7 +29,12 @@ public class ColumnInfo {
     /**
      * 是否主键（1是）
      */
-    private String isPk;
+    private Integer isPk;
+
+    /**
+     * 是否唯一键（1是）
+     */
+    private Integer isUk;
 
     /**
      * java的属性名
@@ -45,6 +45,5 @@ public class ColumnInfo {
      * java属性类型
      */
     private String javaType;
-
 
 }

@@ -2,6 +2,7 @@ package com.dodoyd.moyu.admin.dao;
 
 import com.dodoyd.moyu.admin.BaseTest;
 import com.dodoyd.moyu.admin.constant.Constants;
+import com.dodoyd.moyu.admin.model.vo.ColumnInfo;
 import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
@@ -33,6 +34,12 @@ class GenCodeDaoTest extends BaseTest {
     void selectTableByName() {
         TableInfo table = genCodeDao.selectTableByName("mt_tab_info");
         log.info(Constants.gson.toJson(table));
+    }
+
+    @Test
+    void selectColumnListByTableName() {
+        List<ColumnInfo> columnList = genCodeDao.selectColumnListByTableName("mt_tab_info");
+        log.info(Constants.gson.toJson(columnList));
     }
 
 }
