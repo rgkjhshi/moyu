@@ -28,45 +28,10 @@
     <!-- 我的申请 列表数据 -->
     <el-table v-loading="listLoading" :data="dataList" border fit highlight-current-row>
       <el-table-column label="序号" type="index" width="60px" align="center" />
-      <el-table-column prop="userNickname" label="下单用户" width="120px" align="center" />
-      <el-table-column prop="orderNo" label="订单号" width="200px" align="center" />
-      <el-table-column prop="orderTitle" label="订单标题" width="250px" align="center" />
-      <el-table-column label="订单类型" width="100px" align="center">
-        <template v-slot="{row}">
-          <!--  订单类型，1:订场,2:约课,3:办卡 -->
-          <span v-if="row.orderType === 1"> <el-tag>订场</el-tag> </span>
-          <span v-else-if="row.orderType === 2"> <el-tag>约课</el-tag> </span>
-          <span v-else-if="row.orderType === 3"> <el-tag>购卡</el-tag> </span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="orderTime" label="下单时间" width="160px" align="center" />
-      <el-table-column label="订单金额" width="100px" align="center">
-        <template v-slot="{row}">
-          {{ row.totalAmount / 100 + "元" }}
-        </template>
-      </el-table-column>
-      <el-table-column label="支付方式" width="100px" align="center">
-        <template v-slot="{row}">
-          <!--  支付方式，1:微信支付,2:会员卡支付 -->
-          <span v-if="row.payType === 1"> <el-tag>微信支付</el-tag> </span>
-          <span v-else-if="row.payType === 2"> <el-tag>会员卡</el-tag> </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="支付金额" width="100px" align="center">
-        <template v-slot="{row}">
-          <!--  支付方式，1:微信支付,2:会员卡支付 -->
-          <span v-if="row.payType === 1"> {{ row.payAmount / 100 + "元" }} </span>
-          <span v-else-if="row.payType === 2"> {{ row.payAmount > 100 ? (row.payAmount / 100) : row.payAmount }} </span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="showDate" label="场次日期" width="100px" align="center" />
-      <el-table-column label="场次" width="200px" align="center">
-        <template v-slot="{row}">
-          <el-tag v-for="item in row.infoList" :key="item.key" type="info">{{ item }}</el-tag><br>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="remark" label="备注" width="220px" align="center" />
+      <el-table-column prop="tableName" label="表名称" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="tableComment" label="表描述" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
       <el-table-column label="操作" align="center" min-width="160">
         <template v-slot="{row}">
           <el-button v-if="row.payStatus === 2" size="small" @click="handleRefund(row)"> 退款 </el-button>
@@ -109,14 +74,6 @@ export default {
         // 页面大小
         pageSize: 10
       },
-      // 0:全部,1:网球,2:羽毛球,3:篮球,4:足球
-      groundFilterOptions: [
-        { key: 0, name: '全部' },
-        { key: 1, name: '网球' },
-        { key: 2, name: '羽毛球' },
-        { key: 3, name: '篮球' },
-        { key: 4, name: '足球' }
-      ],
       minDate: '',
       maxDate: '',
       pickerOptions: {
@@ -195,11 +152,11 @@ export default {
     // 获取表格内的数据列表
     getDataList() {
       this.listLoading = true
-      // 有订单号则单查
+      // 查询数据
       listDbTable(this.queryRequest).then(response => {
         if (response.code === 0) {
           this.total = 1
-          this.dataList = [response.data]
+          this.dataList = response.data
         }
         this.listLoading = false
       }).catch(err => {

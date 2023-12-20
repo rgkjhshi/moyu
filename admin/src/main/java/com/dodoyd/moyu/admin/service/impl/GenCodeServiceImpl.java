@@ -1,6 +1,7 @@
 package com.dodoyd.moyu.admin.service.impl;
 
 import com.dodoyd.moyu.admin.dao.GenCodeDao;
+import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import com.dodoyd.moyu.admin.service.GenCodeService;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class GenCodeServiceImpl implements GenCodeService {
     private GenCodeDao genCodeDao;
 
     @Override
-    public List<?> queryAllTableList() {
+    public List<TableInfo> queryAllTableList() {
         return genCodeDao.selectAllDbTableList();
     }
 }

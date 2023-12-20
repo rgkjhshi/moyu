@@ -24,6 +24,7 @@ public interface GenCodeDao {
             @Result(property = "tableName", column = "table_name"),
             @Result(property = "tableComment", column = "table_comment"),
             @Result(property = "createTime", column = "create_time"),
+            @Result(property = "updateTime", column = "update_time"),
     })
     @Select({"<script>",
             "SELECT table_name, table_comment, create_time FROM information_schema.tables",

@@ -1,5 +1,7 @@
 package com.dodoyd.moyu.admin.service;
 
+import com.dodoyd.moyu.admin.model.vo.TableInfo;
+
 import java.util.List;
 
 /**
@@ -10,5 +12,5 @@ import java.util.List;
  */
 public interface GenCodeService {
 
-    List<?> queryAllTableList();
+    List<TableInfo> queryAllTableList();
 }

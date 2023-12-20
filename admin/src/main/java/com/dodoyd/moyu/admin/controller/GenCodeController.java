@@ -1,5 +1,6 @@
 package com.dodoyd.moyu.admin.controller;
 
+import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import com.dodoyd.moyu.admin.service.GenCodeService;
 import com.dodoyd.moyu.common.annotation.Log;
 import com.dodoyd.moyu.common.model.BaseResponse;
@@ -17,7 +18,7 @@ import java.util.List;
  * @since 2023-12-19
  */
 @RestController
-@RequestMapping(value = "/api/gen")
+@RequestMapping(value = "/api/tool/gen")
 public class GenCodeController {
 
     @Resource
@@ -25,8 +26,8 @@ public class GenCodeController {
 
     @Log(jsonLog = true, response = false)
     @PostMapping(value = "/list")
-    public BaseResponse<List<?>> queryAllTableList() {
-        List<?> list = genCodeService.queryAllTableList();
+    public BaseResponse<List<TableInfo>> queryAllTableList() {
+        List<TableInfo> list = genCodeService.queryAllTableList();
         return BaseResponse.getSuccessResponse(list);
     }
 
