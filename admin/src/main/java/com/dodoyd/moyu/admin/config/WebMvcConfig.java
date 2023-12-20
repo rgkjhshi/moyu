@@ -49,7 +49,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加用户vue后处理拦截器
         registry.addInterceptor(vueHistoryInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/merchant/api/**", "/static/**", "/public/**", "/wxapp/**");
+                .excludePathPatterns("/api/**", "/static/**", "/public/**");
         // 用户登录拦截器
 //        registry.addInterceptor(userTokenInterceptor).addPathPatterns("/merchant/api/**", "/wxapp/api/**")
 //                .excludePathPatterns("/merchant/api/user/login", "/merchant/api/user/logout", "/merchant/api/user/info",
