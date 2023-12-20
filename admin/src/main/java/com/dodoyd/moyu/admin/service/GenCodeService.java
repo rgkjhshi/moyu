@@ -12,5 +12,13 @@ import java.util.List;
  */
 public interface GenCodeService {
 
+    /**
+     * 查询所有表的列表
+     */
     List<TableInfo> queryAllTableList();
+
+    /**
+     * 生成代码
+     */
+    String genCode();
 }

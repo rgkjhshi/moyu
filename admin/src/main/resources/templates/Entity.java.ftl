@@ -1,21 +1,17 @@
-package ${packageName}.model;
+package ${packageName}.domain;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
 
 /**
- * ${modelName}
+ * ${className}实体模型
  *
- * @author: YZ.YANG
- * @date: ${.now?string["yyyy-MM-dd HH:mm:ss"]}
+ * @author shisong02
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Data
-public class ${modelName}{
+public class ${className}{
 
 <#if columns??>
     <#list columns as column>
