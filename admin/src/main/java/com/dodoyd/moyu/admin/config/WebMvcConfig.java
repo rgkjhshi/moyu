@@ -31,9 +31,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 允许跨域访问
         registry.addMapping("/**")
                 .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST")
+                .allowedMethods("*")
                 .allowedHeaders("*")
                 .exposedHeaders("Access-Control-Allow-Origin")
+                // credentials为true时,origin不能为通配符*，必须指定具体的域名，这是遵循CORS（跨源资源共享）规范的要求
                 .allowCredentials(true);
     }
 
