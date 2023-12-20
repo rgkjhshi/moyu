@@ -1,10 +1,7 @@
 package com.dodoyd.moyu.admin.dao;
 
 import com.dodoyd.moyu.admin.model.vo.TableInfo;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -27,8 +24,36 @@ public interface GenCodeDao {
             @Result(property = "updateTime", column = "update_time"),
     })
     @Select({"<script>",
-            "SELECT table_name, table_comment, create_time FROM information_schema.tables",
+            "SELECT table_name, table_comment, create_time, update_time FROM information_schema.tables",
             "WHERE table_schema = (SELECT DATABASE())",
             "</script>"})
-    List<TableInfo> selectAllDbTableList();
+    List<TableInfo> selectAllTableList();
+
+    /**
+     * 查询指定表名的表信息
+     */
+    @ResultMap("baseResult")
+    @Select({"<script>",
+            "SELECT table_name, table_comment, create_time, update_time FROM information_schema.tables",
+            "<where>",
+            "    table_schema = (SELECT DATABASE())",
+            "    AND table_name IN ",
+            "    <foreach collection='list' item='item' separator=',' open='(' close=')'>",
+            "        #{item} ",
+            "    </foreach>",
+            "</where>",
+            "</script>"})
+    List<TableInfo> selectTableListByNameList(List<String> nameList);
+
+    /**
+     * 查询指定表名的表信息
+     */
+    @ResultMap("baseResult")
+    @Select({"<script>",
+            "SELECT table_name, table_comment, create_time, update_time FROM information_schema.tables",
+            "WHERE table_schema = (SELECT DATABASE()) AND table_name = #{tableName}",
+            "</script>"})
+    TableInfo selectTableByName(String tableName);
+
+    
 }

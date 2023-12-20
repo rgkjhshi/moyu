@@ -20,6 +20,6 @@ public class GenCodeServiceImpl implements GenCodeService {
 
     @Override
     public List<TableInfo> queryAllTableList() {
-        return genCodeDao.selectAllDbTableList();
+        return genCodeDao.selectAllTableList();
     }
 }
