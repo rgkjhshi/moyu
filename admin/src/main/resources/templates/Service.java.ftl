@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * ${serviceName}
  *
- * @author: YZ.YANG
- * @date: ${.now?string["yyyy-MM-dd HH:mm:ss"]}
+ * @author shisong02
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 public interface ${serviceName}{
 

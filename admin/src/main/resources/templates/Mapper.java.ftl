@@ -7,8 +7,8 @@ import java.util.List;
 /**
  * ${mapperName}
  *
- * @author: YZ.YANG
- * @date: ${.now?string["yyyy-MM-dd HH:mm:ss"]}
+ * @author shisong02
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Mapper
 public interface ${mapperName}{

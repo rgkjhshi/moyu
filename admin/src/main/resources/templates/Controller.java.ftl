@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * ${controllerName}
  *
- * @author: YZ.YANG
- * @date: ${.now?string["yyyy-MM-dd HH:mm:ss"]}
+ * @author shisong02
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @RestController
 @RequestMapping("/${modelName?lower_case}")
