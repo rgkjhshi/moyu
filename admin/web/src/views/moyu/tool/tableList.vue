@@ -26,7 +26,7 @@
       </el-form-item>
     </el-form>
     <!-- 表格数据 -->
-    <el-table v-loading="listLoading" :data="dataList" border fit>
+    <el-table v-loading="listLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}">
       <el-table-column label="序号" type="index" width="60px" align="center" />
       <el-table-column prop="tableName" label="表名称" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="tableComment" label="表描述" width="200px" show-overflow-tooltip align="center" />
