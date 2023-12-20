@@ -1,0 +1,50 @@
+# 服务器配置
+server:
+  # 默认端口8080, 如果无需修改默认端口，此配置可不要
+  port: 8080
+  servlet:
+    # 配置servletContextPath路径后，所有的资源访问路径都会加上此前缀
+    context-path: /
+
+# 日志配置
+logging:
+  file:
+    # 日志文件位置, 如:/tmp/logs, 默认是当前路径
+    path: /data/logs
+
+# spring配置
+spring:
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://127.0.0.1/order_meta?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8
+    username: shisong
+    password: shisong
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  # mvc配置
+  mvc:
+    # json转换器
+    converters:
+      preferred-json-mapper: gson
+  # gson格式配置
+  gson:
+    serialize-nulls: false
+    date-format: yyyy-MM-dd HH:mm:ss
+  # freemarker配置
+  freemarker:
+    # 模板文件目录, 默认为 [classpath:/templates/]
+    template-loader-path: [ classpath:/templates/ ]
+    # 模板文件后缀, 默认为 ftlh
+    suffix: ftl
+
+# mybatis配置 参考：https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/zh/index.html
+mybatis:
+  type-aliases-package: com.dodoyd.moyu.admin.domain
+  mapper-locations: mapper/*.xml
+  #  config-location: classpath:mybatis-config.xml
+
+# 分页框架，可参考：https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
