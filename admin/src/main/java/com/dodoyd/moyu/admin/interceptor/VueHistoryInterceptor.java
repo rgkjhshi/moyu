@@ -27,7 +27,7 @@ public class VueHistoryInterceptor implements HandlerInterceptor {
             }
             // 保证浏览器不报错，如果是404则更改为200
             modelAndView.setStatus(HttpStatus.OK);
-            modelAndView.setViewName("index.html");
+            modelAndView.setViewName("index");
         }
     }
 
