@@ -22,6 +22,11 @@ public class TableInfo {
     private String tableComment;
 
     /**
+     * 表名对应的类名(首字母大写)
+     */
+    private String className;
+
+    /**
      * 表创建时间
      */
     private Date createTime;

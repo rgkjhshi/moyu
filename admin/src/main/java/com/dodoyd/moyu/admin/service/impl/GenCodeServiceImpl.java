@@ -39,9 +39,8 @@ public class GenCodeServiceImpl implements GenCodeService {
     @Override
     public String genCode() {
         String tableName = "mt_tab_info";
-        TableInfo tableInfo = new TableInfo();
-        tableInfo.setTableName(tableName);
-        String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName);
+        TableInfo tableInfo = genCodeDao.selectTableByName(tableName);
+        fillTableInfo(tableInfo);
 
         List<ColumnInfo> columnList = genCodeDao.selectColumnListByTableName(tableName);
         String result = "";
@@ -51,8 +50,7 @@ public class GenCodeServiceImpl implements GenCodeService {
             // 设置模板变量
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("packageName" , "packageName");
-            dataMap.put("tableName" , tableName);
-            dataMap.put("className" , className);
+            dataMap.put("table" , tableInfo);
             dataMap.put("columnList" , columnList);
             result = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
         } catch (Exception e) {
@@ -61,4 +59,11 @@ public class GenCodeServiceImpl implements GenCodeService {
         return result;
     }
 
+    /**
+     * 填充表信息
+     */
+    private void fillTableInfo(TableInfo tableInfo) {
+        String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableInfo.getTableName());
+        tableInfo.setClassName(className);
+    }
 }
