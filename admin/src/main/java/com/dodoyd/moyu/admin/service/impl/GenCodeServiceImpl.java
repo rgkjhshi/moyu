@@ -1,5 +1,6 @@
 package com.dodoyd.moyu.admin.service.impl;
 
+import com.dodoyd.moyu.admin.constant.GenConstants;
 import com.dodoyd.moyu.admin.dao.GenCodeDao;
 import com.dodoyd.moyu.admin.model.vo.ColumnInfo;
 import com.dodoyd.moyu.admin.model.vo.TableInfo;
@@ -49,12 +50,12 @@ public class GenCodeServiceImpl implements GenCodeService {
             Template template = configuration.getTemplate("Entity.java.ftl");
             // 设置模板变量
             Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("packageName" , "packageName");
-            dataMap.put("table" , tableInfo);
-            dataMap.put("columnList" , columnList);
+            dataMap.put("packageName", GenConstants.PACKAGE_NAME);
+            dataMap.put("table", tableInfo);
+            dataMap.put("columnList", columnList);
             result = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
         } catch (Exception e) {
-            log.error("生成代码失败" , e);
+            log.error("生成代码失败", e);
         }
         return result;
     }
