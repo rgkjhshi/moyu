@@ -53,7 +53,7 @@ public class GenCodeServiceImpl implements GenCodeService {
         String result = "";
         try {
             // 加载模板文件
-            Template template = configuration.getTemplate("Dao.java.str");
+            Template template = configuration.getTemplate("Dao.java.ftl");
             // 设置模板变量
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("packageName", GenConstants.PACKAGE_NAME);
