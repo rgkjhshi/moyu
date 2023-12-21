@@ -21,11 +21,9 @@ public interface ${entity.className}Dao {
      * @return 查询到的结果, 无结果将返回null
      */
     @Results(id = "baseResult", value = {
-    <#if columnList??>
         <#list columnList as column>
             @Result(property = "${column.javaName}", column = "${column.columnName}"),
         </#list>
-    </#if>
     })
     @Select("SELECT * FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
     ${entity.className} queryById(long id);
@@ -39,16 +37,16 @@ public interface ${entity.className}Dao {
     @Insert(<#noparse>{"<script>",</#noparse>
             "INSERT INTO ${entity.tableName}",
             "<trim prefix='(' suffix=')' suffixOverrides=','>",
-            ${repeat start}
+            <#list columnList as column>
             "    <if test='${entity.javaName} != null'>${entity.columnName},</if>",
-            ${repeat end}
+            </#list>
             "</trim>",
             "<trim prefix='VALUES (' suffix=')' suffixOverrides=','>",
-            ${repeat start}
-            "    <if test='${entity.javaName} != null'>#{${entity.javaName}},</if>",
-            ${repeat end}
+            <#list columnList as column>
+            "    <if test='${entity.javaName} != null'><#noparse>#{</#noparse>${entity.javaName}<#noparse>}</#noparse>,</if>",
+            </#list>
             "</trim>",
-            "</script>"})
+            <#noparse>"</script>"}<#noparse>)
     @Options(useGeneratedKeys = true)
     int add(${entity.className} ${entity.className?uncap_first});
 
@@ -58,7 +56,7 @@ public interface ${entity.className}Dao {
      * @param id 主键id
      * @return 返回受影响的记录条数
      */
-    @Delete("DELETE FROM ${entity.tableName} WHERE id = #{id}")
+    @Delete("DELETE FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
     int deleteById(long id);
 
     /**
