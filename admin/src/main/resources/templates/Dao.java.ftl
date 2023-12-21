@@ -46,7 +46,7 @@ public interface ${entity.className}Dao {
             "    <if test='${column.javaName} != null'><#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
             </#list>
             "</trim>",
-            <#noparse>"</script>"}<#noparse>)
+            <#noparse>"</script>"}</#noparse>)
     @Options(useGeneratedKeys = true)
     int add(${entity.className} ${entity.className?uncap_first});
 
