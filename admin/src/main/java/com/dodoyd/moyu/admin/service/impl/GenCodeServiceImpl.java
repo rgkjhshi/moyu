@@ -53,12 +53,12 @@ public class GenCodeServiceImpl implements GenCodeService {
         String result = "";
         try {
             // 加载模板文件
-            Template template = configuration.getTemplate("Entity.java.ftl");
+            Template template = configuration.getTemplate("Dao.java.str");
             // 设置模板变量
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("packageName", GenConstants.PACKAGE_NAME);
             dataMap.put("author", GenConstants.CODE_AUTHOR);
-            dataMap.put("table", tableInfo);
+            dataMap.put("entity", tableInfo);
             dataMap.put("columnList", columnList);
             result = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
         } catch (Exception e) {
