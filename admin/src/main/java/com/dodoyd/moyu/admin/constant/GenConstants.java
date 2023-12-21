@@ -41,12 +41,13 @@ public class GenConstants {
         // 字符
         map.put("char", "String");
         map.put("varchar", "String");
-        map.put("nvarchar", "String");
-        map.put("longvarchar", "String");
-        map.put("tinytext", "Integer");
-        map.put("mediumtext", "Integer");
-        map.put("text", "Integer");
-        map.put("longtext", "Integer");
+        map.put("tinytext", "String");
+        map.put("mediumtext", "String");
+        map.put("text", "String");
+        map.put("longtext", "String");
+        map.put("binary", "String");
+        map.put("varbinary", "String");
+        map.put("blob", "String");
         // 日期时间
         map.put("date", "Date");
         map.put("time", "Date");
