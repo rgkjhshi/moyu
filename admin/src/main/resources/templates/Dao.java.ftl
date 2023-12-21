@@ -34,7 +34,7 @@ public interface ${entity.className}Dao {
      * @param ${entity.className?uncap_first} 数据库实体
      * @return 返回受影响的记录条数
      */
-    @Insert(<#noparse>{"<script>",</#noparse>
+    @Insert(${r'{"<script>",'}
             "INSERT INTO ${entity.tableName}",
             "<trim prefix='(' suffix=')' suffixOverrides=','>",
             <#list columnList as column>
@@ -46,7 +46,7 @@ public interface ${entity.className}Dao {
             "    <if test='${column.javaName} != null'><#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
             </#list>
             "</trim>",
-            <#noparse>"</script>"}</#noparse>)
+            ${r'"</script>"}'})
     @Options(useGeneratedKeys = true)
     int add(${entity.className} ${entity.className?uncap_first});
 
