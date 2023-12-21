@@ -41,9 +41,15 @@ public class GenCodeServiceImpl implements GenCodeService {
     public String genCode() {
         String tableName = "mt_tab_info";
         TableInfo tableInfo = genCodeDao.selectTableByName(tableName);
+        // 填充表信息
         fillTableInfo(tableInfo);
 
         List<ColumnInfo> columnList = genCodeDao.selectColumnListByTableName(tableName);
+        for (ColumnInfo column : columnList) {
+            // 填充列信息
+            fillColumnInfo(column);
+        }
+
         String result = "";
         try {
             // 加载模板文件
@@ -51,6 +57,7 @@ public class GenCodeServiceImpl implements GenCodeService {
             // 设置模板变量
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("packageName", GenConstants.PACKAGE_NAME);
+            dataMap.put("author", GenConstants.CODE_AUTHOR);
             dataMap.put("table", tableInfo);
             dataMap.put("columnList", columnList);
             result = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
@@ -66,5 +73,13 @@ public class GenCodeServiceImpl implements GenCodeService {
     private void fillTableInfo(TableInfo tableInfo) {
         String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableInfo.getTableName());
         tableInfo.setClassName(className);
+    }
+
+    /**
+     * 填充字段信息
+     */
+    private void fillColumnInfo(ColumnInfo columnInfo) {
+        columnInfo.setJavaName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, columnInfo.getColumnName()));
+        columnInfo.setJavaType(GenConstants.JDBC_TYPE_MAP.getOrDefault(columnInfo.getJdbcType(), "String"));
     }
 }

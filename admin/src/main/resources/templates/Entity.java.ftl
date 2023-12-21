@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * ${table.tableComment!}实体模型
  *
- * @author shisong02
+ * @author ${author!}
  * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Data
@@ -18,7 +18,7 @@ public class ${table.className} {
         /**
          * ${column.comment!}
          */
-        private ${column.jdbcType} ${column.columnName};
+        private ${column.javaType} ${column.javaName};
 
     </#list>
 </#if>
