@@ -27,30 +27,30 @@ public interface ${entity.className}Dao {
         </#list>
     </#if>
     })
-    @Select("SELECT * FROM ${entity.tableName} WHERE id = ${r"#{id}"}")
+    @Select("SELECT * FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
     ${entity.className} queryById(long id);
 
     /**
      * 添加记录
      *
-     * @param ${entity.entityName} 数据库实体
+     * @param ${entity.className?uncap_first} 数据库实体
      * @return 返回受影响的记录条数
      */
-    @Insert({"<script>",
+    @Insert(<#noparse>{"<script>",</#noparse>
             "INSERT INTO ${entity.tableName}",
             "<trim prefix='(' suffix=')' suffixOverrides=','>",
             ${repeat start}
-            "    <if test='${entity.field.fieldName} != null'>${entity.field.columnName},</if>",
+            "    <if test='${entity.javaName} != null'>${entity.columnName},</if>",
             ${repeat end}
             "</trim>",
             "<trim prefix='VALUES (' suffix=')' suffixOverrides=','>",
             ${repeat start}
-            "    <if test='${entity.field.fieldName} != null'>#{${entity.field.fieldName}},</if>",
+            "    <if test='${entity.javaName} != null'>#{${entity.javaName}},</if>",
             ${repeat end}
             "</trim>",
             "</script>"})
     @Options(useGeneratedKeys = true)
-    int add(${entity.className} ${entity.entityName});
+    int add(${entity.className} ${entity.className?uncap_first});
 
     /**
      * 通过主键id删除
@@ -64,24 +64,24 @@ public interface ${entity.className}Dao {
     /**
      * 通过主键id更新
      *
-     * @param ${entity.entityName} 数据库实体
+     * @param ${entity.className?uncap_first} 数据库实体
      * @return 返回受影响的记录条数
      */
     @Update({"<script>",
             "UPDATE ${entity.tableName}",
             "<set>",
             ${repeat start}
-            "    <if test='${entity.field.fieldName} != null'>${entity.field.columnName} = #{${entity.field.fieldName}},</if>",
+            "    <if test='${entity.field.javaName} != null'>${entity.field.columnName} = #{${entity.field.javaName}},</if>",
             ${repeat end}
             "</set>",
             "WHERE id = #{id}",
             "</script>"})
-    int updateById(${entity.className} ${entity.entityName});
+    int updateById(${entity.className} ${entity.className?uncap_first});
 
     /**
      * 查询一条记录, 自行控制条件保证返回一条记录
      *
-     * @param ${entity.entityName} 实体的非空属性会做为查询条件
+     * @param ${entity.className?uncap_first} 实体的非空属性会做为查询条件
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")
@@ -89,16 +89,16 @@ public interface ${entity.className}Dao {
             "SELECT * FROM ${entity.tableName}",
             "<where>",
             ${repeat start}
-            "    <if test='${entity.field.fieldName} != null'>AND ${entity.field.columnName} = #{${entity.field.fieldName}}</if>",
+            "    <if test='${entity.field.javaName} != null'>AND ${entity.field.columnName} = #{${entity.field.javaName}}</if>",
             ${repeat end}
             "</where>",
             "</script>"})
-    ${entity.className} queryOne(${entity.className} ${entity.entityName});
+    ${entity.className} queryOne(${entity.className} ${entity.className?uncap_first});
 
     /**
      * 查询多条记录, 自行控制条件保证返回多条记录
      *
-     * @param ${entity.entityName} 实体的非空属性会作为查询条件
+     * @param ${entity.className?uncap_first} 实体的非空属性会作为查询条件
      * @return 查询到的结果, 无结果将返回空List
      */
     @ResultMap("baseResult")
@@ -106,10 +106,10 @@ public interface ${entity.className}Dao {
             "SELECT * FROM ${entity.tableName}",
             "<where>",
             ${repeat start}
-            "    <if test='${entity.field.fieldName} != null'>AND ${entity.field.columnName} = #{${entity.field.fieldName}}</if>",
+            "    <if test='${entity.field.javaName} != null'>AND ${entity.field.columnName} = #{${entity.field.javaName}}</if>",
             ${repeat end}
             "</where>",
             "</script>"})
-    List<${entity.className}> queryList(${entity.className} ${entity.entityName});
+    List<${entity.className}> queryList(${entity.className} ${entity.className?uncap_first});
 
 }
