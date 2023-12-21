@@ -61,13 +61,13 @@ public interface GenCodeDao {
      */
     @Results(id = "columnResult", value = {
             @Result(property = "columnName", column = "column_name"),
-            @Result(property = "columnComment", column = "column_type"),
-            @Result(property = "columnComment", column = "column_comment"),
+            @Result(property = "jdbcType", column = "data_type"),
+            @Result(property = "comment", column = "column_comment"),
             @Result(property = "isPk", column = "is_pk"),
             @Result(property = "isUk", column = "is_uk"),
     })
     @Select({"<script>",
-            "SELECT column_name, column_type, column_comment, ",
+            "SELECT column_name, data_type, column_comment, ",
             "    (case when column_key = 'PRI' then 1 else 0 end) as is_pk, ",
             "    (case when column_key = 'UNI' then 1 else 0 end) as is_uk ",
             "FROM information_schema.columns",

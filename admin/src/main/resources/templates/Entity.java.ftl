@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * ${tableComment}实体模型
+ * ${tableComment!}实体模型
  *
  * @author shisong02
  * @since ${.now?string["yyyy-MM-dd"]}
@@ -15,11 +15,11 @@ public class ${className} {
 
 <#if columnList??>
     <#list columnList as column>
-
         /**
-         * ${columnComment!}
+         * ${column.comment!}
          */
-        private ${javaType} ${javaName};
+        private ${column.jdbcType} ${column.comment};
+
     </#list>
 </#if>
 }

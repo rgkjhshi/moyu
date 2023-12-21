@@ -19,12 +19,12 @@ public class ColumnInfo {
     /**
      * 数据库中的列类型
      */
-    private String columnType;
+    private String jdbcType;
 
     /**
      * 列描述
      */
-    private String columnComment;
+    private String comment;
 
     /**
      * 是否主键（1是）

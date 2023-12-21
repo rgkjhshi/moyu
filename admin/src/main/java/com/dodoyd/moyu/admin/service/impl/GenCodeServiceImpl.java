@@ -1,6 +1,7 @@
 package com.dodoyd.moyu.admin.service.impl;
 
 import com.dodoyd.moyu.admin.dao.GenCodeDao;
+import com.dodoyd.moyu.admin.model.vo.ColumnInfo;
 import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import com.dodoyd.moyu.admin.service.GenCodeService;
 import com.google.common.base.CaseFormat;
@@ -37,19 +38,25 @@ public class GenCodeServiceImpl implements GenCodeService {
 
     @Override
     public String genCode() {
+        String tableName = "mt_tab_info";
+        TableInfo tableInfo = new TableInfo();
+        tableInfo.setTableName(tableName);
+        String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName);
+
+        List<ColumnInfo> columnList = genCodeDao.selectColumnListByTableName(tableName);
         String result = "";
         try {
             // 加载模板文件
             Template template = configuration.getTemplate("Entity.java.ftl");
             // 设置模板变量
-            Map<String, String> dataMap = new HashMap<>();
-            dataMap.put("packageName", "packageName");
-            String tableName = "user_info";
-            String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName);
-            dataMap.put("className", className);
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("packageName" , "packageName");
+            dataMap.put("tableName" , tableName);
+            dataMap.put("className" , className);
+            dataMap.put("columnList" , columnList);
             result = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
         } catch (Exception e) {
-            log.error("生成代码失败", e);
+            log.error("生成代码失败" , e);
         }
         return result;
     }
