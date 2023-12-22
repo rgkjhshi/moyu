@@ -107,50 +107,7 @@ export default {
             // 选择了最大日期后，清除已选日期，解除限制。
             this.minDate = ''
           }
-        },
-        disabledDate: (time) => {
-          // 是否禁用日期选择
-          if (this.minDate) {
-            // 时间跨度
-            const range = 60 * 24 * 3600 * 1000
-            // 大于或者小于本月的日期被禁用
-            return time.getTime() < (this.minDate.getTime() - range) || time.getTime() > (this.minDate.getTime() + range)
-          } else {
-            // true：不可以选择该日期；false：可以选择该日期。
-            return false
-          }
-        },
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const now = new Date()
-            picker.$emit('pick', [now, now])
-          }
-        }, {
-          text: '最近三天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 3)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近30天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }]
+        }
       }
     }
   },
