@@ -15,18 +15,28 @@ import java.util.List;
 public interface ${entity.className}Dao {
 
     /**
-     * 通过主键id查询
+     * 查询所有
      *
      * @param id 主键id
      * @return 查询到的结果, 无结果将返回null
      */
     @Results(id = "baseResult", value = {
-        <#list columnList as column>
-            @Result(property = "${column.javaName}", column = "${column.columnName}"),
-        </#list>
+    <#list columnList as column>
+        @Result(property = "${column.javaName}", column = "${column.columnName}"),
+    </#list>
     })
+    @Select("SELECT * FROM ${entity.tableName}")
+    ${entity.className} selectAll();
+
+    /**
+     * 通过主键id查询
+     *
+     * @param id 主键id
+     * @return 查询到的结果, 无结果将返回null
+     */
+    @ResultMap("baseResult")
     @Select("SELECT * FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
-    ${entity.className} selectById(long id);
+    ${entity.className} selectById(Long id);
 
     /**
      * 添加记录
