@@ -34,8 +34,6 @@ spring:
   freemarker:
     # 模板文件目录, 默认为 [classpath:/templates/]
     template-loader-path: [ classpath:/templates/ ]
-    # 模板文件后缀, 默认为 ftlh
-    suffix: ftl
 
 # mybatis配置 参考：https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/zh/index.html
 mybatis:
