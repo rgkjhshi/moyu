@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import SlideVerify from 'vue-monoplasty-slide-verify'
 
+import Highlight from './directive/highlight' // 这个是自定义的插件
+
 import Cookies from 'js-cookie'
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
@@ -26,6 +28,9 @@ Vue.use(Element, {
 
 // 滑块验证
 Vue.use(SlideVerify)
+
+// 自定义的highlight代码高亮插件
+Vue.use(Highlight)
 
 // register global utility filters
 Object.keys(filters).forEach(key => {

@@ -52,10 +52,10 @@
     <!-- 预览界面 -->
     <el-dialog :title="preview.title" :visible.sync="preview.open" width="80%" top="5vh" fullscreen append-to-body>
       <el-tabs v-model="preview.activeName">
-        <el-tab-pane v-for="(value, key) in preview.data" :key="key" :label="key" :name="key">
-          <el-link v-clipboard:copy="{ value }" v-clipboard:success="clipboardSuccess" icon="el-icon-document-copy" :underline="false" style="float:right">复制
+        <el-tab-pane v-for="(code, key) in preview.data" :key="key" :label="key" :name="key">
+          <el-link v-clipboard:copy="{ code }" v-clipboard:success="clipboardSuccess" icon="el-icon-document-copy" :underline="false" style="float:right">复制
           </el-link>
-          <pre><code>{{ value }}</code></pre>
+          <pre v-highlight><code class="">{{ code }}</code></pre>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
