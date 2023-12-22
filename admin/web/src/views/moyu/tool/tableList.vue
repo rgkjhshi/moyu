@@ -93,7 +93,7 @@ export default {
         open: false,
         title: '代码预览',
         data: {},
-        activeName: 'domain.java'
+        activeName: 'Domain.java'
       },
       minDate: '',
       maxDate: '',
@@ -160,7 +160,7 @@ export default {
       previewCode({ tableName: row.tableName }).then(response => {
         this.preview.data = response.data
         this.preview.open = true
-        this.preview.activeName = 'domain.java'
+        this.preview.activeName = 'Domain.java'
       })
     },
     /** 复制代码成功 */
