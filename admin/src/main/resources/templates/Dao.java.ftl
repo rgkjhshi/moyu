@@ -65,15 +65,15 @@ public interface ${entity.className}Dao {
      * @param ${entity.className?uncap_first} 数据库实体
      * @return 返回受影响的记录条数
      */
-    @Update({"<script>",
+    @Update(${r'{"<script>",'}
             "UPDATE ${entity.tableName}",
             "<set>",
-            ${repeat start}
-            "    <if test='${entity.field.javaName} != null'>${entity.field.columnName} = #{${entity.field.javaName}},</if>",
-            ${repeat end}
+            <#list columnList as column>
+            "    <if test='${column.javaName} != null'>${column.columnName} = <#noparse>#{</#noparse>${entity.field.javaName}<#noparse>}</#noparse>,</if>",
+            </#list>
             "</set>",
-            "WHERE id = #{id}",
-            "</script>"})
+            "WHERE id = <#noparse>#{id}</#noparse>",
+            ${r'"</script>"}'})
     int updateById(${entity.className} ${entity.className?uncap_first});
 
     /**
