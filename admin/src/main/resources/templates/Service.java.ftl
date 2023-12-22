@@ -13,19 +13,19 @@ import java.util.List;
 public interface ${entity.className}Service{
 
     /**
-    * 查询${entity.className}
-    *
-    * @param request 查询请求
-    * @return ${entity.className}
-    */
+     * 查询${entity.className}
+     *
+     * @param request 查询请求
+     * @return ${entity.className}
+     */
     ${entity.className} query${entity.className}(${entity.className} request);
 
     /**
-    * 查询${entity.className}列表
-    *
-    * @param request 查询请求
-    * @return ${entity.className}列表
-    */
+     * 查询${entity.className}列表
+     *
+     * @param request 查询请求
+     * @return ${entity.className}列表
+     */
     List<${entity.className}> query${entity.className}List(${entity.className} request);
 
     /**
