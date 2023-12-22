@@ -58,7 +58,7 @@ public interface ${entity.className}Dao {
             "</trim>",
             "</script>"})
     @Options(useGeneratedKeys = true)
-    int add(${entity.className} ${entity.className?uncap_first});
+    int insert(${entity.className} ${entity.className?uncap_first});
 
     /**
      * 通过主键id删除
