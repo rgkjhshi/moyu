@@ -25,6 +25,7 @@
     "element-ui": "^2.15.13",
     "file-saver": "2.0.1",
     "fuse.js": "3.4.4",
+    "highlight.js": "^11.9.0",
     "js-cookie": "2.2.0",
     "jsencrypt": "^3.3.2",
     "jsonlint": "1.6.3",
