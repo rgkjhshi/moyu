@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 生成代码服务的控制器
@@ -29,6 +30,13 @@ public class GenCodeController {
     public BaseResponse<List<TableInfo>> queryAllTableList() {
         List<TableInfo> list = genCodeService.queryAllTableList();
         return BaseResponse.getSuccessResponse(list);
+    }
+
+    @Log(jsonLog = true, response = false)
+    @PostMapping(value = "/preview")
+    public BaseResponse<Map<String, String>> previewCode(String tableName) {
+        Map<String, String> codeMap = genCodeService.genCode(tableName);
+        return BaseResponse.getSuccessResponse(codeMap);
     }
 
 }

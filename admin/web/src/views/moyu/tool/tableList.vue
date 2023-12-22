@@ -22,7 +22,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
-        <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
+        <el-button icon="el-icon-refresh" size="small" @click="handleQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格数据 -->
@@ -34,8 +34,8 @@
       <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
       <el-table-column label="操作" align="center" min-width="160">
         <template v-slot="{row}">
-          <el-button v-if="row.payStatus === 2" size="small" @click="handleRefund(row)"> 退款 </el-button>
-          <el-button v-if="row.payStatus === 4 && row.refundStatus === 1" size="small" @click="handleRefresh(row)"> 更新状态 </el-button>
+          <el-button type="primary" plain size="small" icon="el-icon-view" @click="handlePreview(row)">预览</el-button>
+          <el-button type="success" plain size="small" icon="el-icon-download" @click="handleGenTable(row)">生成代码</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -49,16 +49,30 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <!-- 预览界面 -->
+    <el-dialog :title="preview.title" :visible.sync="preview.open" append-to-body class="scrollbar">
+      <el-tabs v-model="preview.activeName">
+        <el-tab-pane v-for="(value, key) in preview.data" :key="key" :label="key" :name="key">
+          <el-link v-clipboard:copy="{ value }" v-clipboard:success="clipboardSuccess" icon="el-icon-document-copy" :underline="false" style="float:right">复制
+          </el-link>
+          <pre><code>{{ value }}</code></pre>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
 import { parseTime } from '@/utils'
-import { listDbTable } from '@/api/tool/gen'
+import clipboard from '@/directive/clipboard/index.js'
+import { listDbTable, previewCode } from '@/api/tool/gen'
 
 export default {
   name: 'TableList',
+  directives: {
+    clipboard
+  },
   data() {
     return {
       listLoading: false,
@@ -73,6 +87,13 @@ export default {
         pageNum: 1,
         // 页面大小
         pageSize: 10
+      },
+      // 预览参数
+      preview: {
+        open: false,
+        title: '代码预览',
+        data: {},
+        activeName: 'domain.java'
       },
       minDate: '',
       maxDate: '',
@@ -176,6 +197,18 @@ export default {
       // 已经通过.sync实现了双向绑定，否则这里要主动修改值 this.queryRequest.pageNum = value
       this.getDataList()
       // console.log(this.queryRequest.pageNum)
+    },
+    /** 预览按钮 */
+    handlePreview(row) {
+      previewCode({ tableName: row.tableName }).then(response => {
+        this.preview.data = response.data
+        this.preview.open = true
+        this.preview.activeName = 'domain.java'
+      })
+    },
+    /** 复制代码成功 */
+    clipboardSuccess() {
+      this.$message({ type: 'success', message: '复制成功' })
     }
   }
 }

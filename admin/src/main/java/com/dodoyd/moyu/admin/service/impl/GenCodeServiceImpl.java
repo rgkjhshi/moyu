@@ -6,14 +6,17 @@ import com.dodoyd.moyu.admin.model.vo.ColumnInfo;
 import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import com.dodoyd.moyu.admin.service.GenCodeService;
 import com.google.common.base.CaseFormat;
+import com.google.common.collect.Lists;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,8 +41,10 @@ public class GenCodeServiceImpl implements GenCodeService {
     }
 
     @Override
-    public String genCode() {
-        String tableName = "mt_tab_info";
+    public Map<String, String> genCode(String tableName) {
+        Assert.hasText(tableName, "表名不能为空");
+        // code代码map
+        Map<String, String> codeMap = new LinkedHashMap<>();
         TableInfo tableInfo = genCodeDao.selectTableByName(tableName);
         // 填充表信息
         fillTableInfo(tableInfo);
@@ -50,21 +55,24 @@ public class GenCodeServiceImpl implements GenCodeService {
             fillColumnInfo(column);
         }
 
-        String result = "";
-        try {
-            // 加载模板文件
-            Template template = configuration.getTemplate("Dao.java.ftl");
-            // 设置模板变量
-            Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("packageName", GenConstants.PACKAGE_NAME);
-            dataMap.put("author", GenConstants.CODE_AUTHOR);
-            dataMap.put("entity", tableInfo);
-            dataMap.put("columnList", columnList);
-            result = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
-        } catch (Exception e) {
-            log.error("生成代码失败", e);
-        }
-        return result;
+        List<String> templateList = Lists.newArrayList("domain.java", "Dao.java");
+        templateList.forEach(templateName -> {
+            try {
+                // 加载模板文件
+                Template template = configuration.getTemplate(templateName + ".ftl");
+                // 设置模板变量
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("packageName", GenConstants.PACKAGE_NAME);
+                dataMap.put("author", GenConstants.CODE_AUTHOR);
+                dataMap.put("entity", tableInfo);
+                dataMap.put("columnList", columnList);
+                String codeStr = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
+                codeMap.put(templateName, codeStr);
+            } catch (Exception e) {
+                log.error("生成代码失败", e);
+            }
+        });
+        return codeMap;
     }
 
     /**
