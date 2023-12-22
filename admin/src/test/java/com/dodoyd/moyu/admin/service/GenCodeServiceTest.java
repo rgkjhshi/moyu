@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Slf4j
 class GenCodeServiceTest extends BaseTest {
@@ -15,7 +16,8 @@ class GenCodeServiceTest extends BaseTest {
 
     @Test
     void genCode() {
-        String result = genCodeService.genCode();
-        System.out.println(result);
+        String tableName = "mt_tab_info";
+        Map<String, String> map = genCodeService.genCode(tableName);
+        System.out.println(map.get("Dao.java"));
     }
 }
