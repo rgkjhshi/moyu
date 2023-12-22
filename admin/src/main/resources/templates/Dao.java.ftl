@@ -44,7 +44,7 @@ public interface ${entity.className}Dao {
      * @param ${entity.className?uncap_first} 数据库实体
      * @return 返回受影响的记录条数
      */
-    @Insert(${r'{"<script>",'}
+    @Insert({"<script>",
             "INSERT INTO ${entity.tableName}",
             "<trim prefix='(' suffix=')' suffixOverrides=','>",
             <#list columnList as column>
@@ -53,10 +53,10 @@ public interface ${entity.className}Dao {
             "</trim>",
             "<trim prefix='VALUES (' suffix=')' suffixOverrides=','>",
             <#list columnList as column>
-            "    <if test='${column.javaName} != null'><#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
+            "    <if test='${column.javaName} != null'>${r'#{'}${column.javaName}},</if>",
             </#list>
             "</trim>",
-            ${r'"</script>"}'})
+            "</script>"})
     @Options(useGeneratedKeys = true)
     int add(${entity.className} ${entity.className?uncap_first});
 
@@ -75,15 +75,15 @@ public interface ${entity.className}Dao {
      * @param ${entity.className?uncap_first} 数据库实体
      * @return 返回受影响的记录条数
      */
-    @Update(${r'{"<script>",'}
+    @Update({"<script>",
             "UPDATE ${entity.tableName}",
             "<set>",
             <#list columnList as column>
-            "    <if test='${column.javaName} != null'>${column.columnName} = <#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
+            "    <if test='${column.javaName} != null'>${column.columnName} = ${r'#{'}${column.javaName}},</if>",
             </#list>
             "</set>",
             "WHERE id = <#noparse>#{id}</#noparse>",
-            ${r'"</script>"}'})
+            "</script>"})
     int updateById(${entity.className} ${entity.className?uncap_first});
 
     /**
@@ -93,14 +93,14 @@ public interface ${entity.className}Dao {
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")
-    @Select(${r'{"<script>",'}
+    @Select({"<script>",
             "SELECT * FROM ${entity.tableName}",
             "<where>",
             <#list columnList as column>
-            "    <if test='${column.javaName} != null'>AND ${column.columnName} = <#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
+            "    <if test='${column.javaName} != null'>AND ${column.columnName} = ${r'#{'}${column.javaName}},</if>",
             </#list>
             "</where>",
-            ${r'"</script>"}'})
+            "</script>"})
     ${entity.className} selectOne(${entity.className} ${entity.className?uncap_first});
 
     /**
@@ -110,14 +110,14 @@ public interface ${entity.className}Dao {
      * @return 查询到的结果, 无结果将返回空List
      */
     @ResultMap("baseResult")
-    @Select(${r'{"<script>",'}
+    @Select({"<script>",
             "SELECT * FROM ${entity.tableName}",
             "<where>",
             <#list columnList as column>
-            "    <if test='${column.javaName} != null'>AND ${column.columnName} = <#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
+            "    <if test='${column.javaName} != null'>AND ${column.columnName} = ${r'#{'}${column.javaName}},</if>",
             </#list>
             "</where>",
-            ${r'"</script>"}'})
+            "</script>"})
     List<${entity.className}> selectList(${entity.className} ${entity.className?uncap_first});
 
 }
