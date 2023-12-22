@@ -26,7 +26,7 @@ public interface ${entity.className}Dao {
         </#list>
     })
     @Select("SELECT * FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
-    ${entity.className} queryById(long id);
+    ${entity.className} selectById(long id);
 
     /**
      * 添加记录
@@ -69,7 +69,7 @@ public interface ${entity.className}Dao {
             "UPDATE ${entity.tableName}",
             "<set>",
             <#list columnList as column>
-            "    <if test='${column.javaName} != null'>${column.columnName} = <#noparse>#{</#noparse>${entity.field.javaName}<#noparse>}</#noparse>,</if>",
+            "    <if test='${column.javaName} != null'>${column.columnName} = <#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
             </#list>
             "</set>",
             "WHERE id = <#noparse>#{id}</#noparse>",
@@ -83,15 +83,15 @@ public interface ${entity.className}Dao {
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")
-    @Select({"<script>",
+    @Select(${r'{"<script>",'}
             "SELECT * FROM ${entity.tableName}",
             "<where>",
-            ${repeat start}
-            "    <if test='${entity.field.javaName} != null'>AND ${entity.field.columnName} = #{${entity.field.javaName}}</if>",
-            ${repeat end}
+            <#list columnList as column>
+            "    <if test='${column.javaName} != null'>AND ${column.columnName} = <#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
+            </#list>
             "</where>",
-            "</script>"})
-    ${entity.className} queryOne(${entity.className} ${entity.className?uncap_first});
+            ${r'"</script>"}'})
+    ${entity.className} selectOne(${entity.className} ${entity.className?uncap_first});
 
     /**
      * 查询多条记录, 自行控制条件保证返回多条记录
@@ -100,14 +100,14 @@ public interface ${entity.className}Dao {
      * @return 查询到的结果, 无结果将返回空List
      */
     @ResultMap("baseResult")
-    @Select({"<script>",
+    @Select(${r'{"<script>",'}
             "SELECT * FROM ${entity.tableName}",
             "<where>",
-            ${repeat start}
-            "    <if test='${entity.field.javaName} != null'>AND ${entity.field.columnName} = #{${entity.field.javaName}}</if>",
-            ${repeat end}
+            <#list columnList as column>
+            "    <if test='${column.javaName} != null'>AND ${column.columnName} = <#noparse>#{</#noparse>${column.javaName}<#noparse>}</#noparse>,</if>",
+            </#list>
             "</where>",
-            "</script>"})
-    List<${entity.className}> queryList(${entity.className} ${entity.className?uncap_first});
+            ${r'"</script>"}'})
+    List<${entity.className}> selectList(${entity.className} ${entity.className?uncap_first});
 
 }
