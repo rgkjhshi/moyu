@@ -18,6 +18,6 @@ class GenCodeServiceTest extends BaseTest {
     void genCode() {
         String tableName = "mt_tab_info";
         Map<String, String> map = genCodeService.genCode(tableName);
-        System.out.println(map.get("Dao.java"));
+        System.out.println(map.get("Service.java"));
     }
 }

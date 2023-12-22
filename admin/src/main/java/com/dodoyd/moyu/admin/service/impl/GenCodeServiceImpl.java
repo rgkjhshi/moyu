@@ -55,7 +55,7 @@ public class GenCodeServiceImpl implements GenCodeService {
             fillColumnInfo(column);
         }
 
-        List<String> templateList = Lists.newArrayList("Domain.java", "Dao.java");
+        List<String> templateList = Lists.newArrayList("Domain.java", "Dao.java", "Service.java");
         templateList.forEach(templateName -> {
             try {
                 // 加载模板文件
