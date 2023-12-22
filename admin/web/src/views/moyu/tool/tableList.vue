@@ -50,7 +50,7 @@
       @current-change="handleCurrentChange"
     />
     <!-- 预览界面 -->
-    <el-dialog :title="preview.title" :visible.sync="preview.open" append-to-body class="scrollbar">
+    <el-dialog :title="preview.title" :visible.sync="preview.open" width="80%" top="5vh" fullscreen append-to-body>
       <el-tabs v-model="preview.activeName">
         <el-tab-pane v-for="(value, key) in preview.data" :key="key" :label="key" :name="key">
           <el-link v-clipboard:copy="{ value }" v-clipboard:success="clipboardSuccess" icon="el-icon-document-copy" :underline="false" style="float:right">复制
