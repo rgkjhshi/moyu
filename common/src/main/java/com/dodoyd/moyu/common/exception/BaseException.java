@@ -3,6 +3,8 @@ package com.dodoyd.moyu.common.exception;
 
 import com.dodoyd.moyu.common.enums.ExceptionEnum;
 
+import java.util.StringJoiner;
+
 /**
  * <p>使用举例:</p>
  * <p>1. 构造方法: {@link #BaseException(int, String)}, {@link #BaseException(ExceptionEnum)}和{@link #BaseException(ExceptionEnum, String)}
@@ -91,5 +93,13 @@ public class BaseException extends RuntimeException {
     @Override
     public Throwable fillInStackTrace() {
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", getClass().getSimpleName() + "[", "]")
+                .add("code=" + code)
+                .add("message='" + message + "'")
+                .toString();
     }
 }
