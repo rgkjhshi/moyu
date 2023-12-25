@@ -29,20 +29,20 @@ public interface ${entity.className}Service{
     List<${entity.className}> query${entity.className}List(${entity.className} request);
 
     /**
-     * 修改${entity.className}
-     *
-     * @param request 请求参数
-     * @return 结果
-     */
-    int update${entity.className}(${entity.className} request);
-
-    /**
      * 新增${entity.className}
      *
      * @param request 请求参数
      * @return 结果
      */
     int add${entity.className}(${entity.className} request);
+
+    /**
+     * 修改${entity.className}
+     *
+     * @param request 请求参数
+     * @return 结果
+     */
+    int update${entity.className}(${entity.className} request);
 
 }
 
