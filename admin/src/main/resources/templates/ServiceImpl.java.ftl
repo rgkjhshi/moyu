@@ -48,7 +48,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
 
     @Override
     public int add${entity.className}(${entity.className} request) {
-        ${entity.className} add =  = new ${entity.className}();
+        ${entity.className} add = new ${entity.className}();
         <#list columnList as column>
         if(request.get${column.javaName?cap_first}() != null) {
             add.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
