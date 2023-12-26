@@ -53,9 +53,9 @@ public interface ${entity.className}Dao {
      */
     @Delete({"<script>",
             "DELETE FROM ${entity.tableName} WHERE id IN ",
-            "    <foreach collection='list' item='item' open='(' separator=',' close=')'>",
-            "        #{item} ",
-            "    </foreach>",
+            "<foreach collection='list' item='item' open='(' separator=',' close=')'>",
+            "    <#noparse>#{item}</#noparse> ",
+            "</foreach>",
             "</script>"})
     int deleteByIdList(List<Long> idList);
 
