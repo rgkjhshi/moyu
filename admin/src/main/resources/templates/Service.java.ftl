@@ -10,7 +10,7 @@ import java.util.List;
  * @author ${author!}
  * @since ${.now?string["yyyy-MM-dd"]}
  */
-public interface ${entity.className}Service{
+public interface ${entity.className}Service {
 
     /**
      * 查询${entity.className}

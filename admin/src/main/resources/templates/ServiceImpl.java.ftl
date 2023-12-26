@@ -1,24 +1,26 @@
-package ${packageName}.service;
+package ${packageName}.service.impl;
 
-import ${packageName}.model.${modelName};
-import ${packageName}.mapper.${mapperName};
+import ${packageName}.domain.${entity.className};
+import ${packageName}.dao.${entity.className}Dao;
+import ${packageName}.service.${entity.className}Service;
+
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 
 import java.util.List;
 
 /**
- * ${serviceName}
+ * ${entity.className}服务实现类
  *
- * @author shisong02
+ * @author ${author!}
  * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Service
-public class ${serviceName}Impl implements ${serviceName}{
+public class ${entity.className}ServiceImpl implements ${entity.className}Service {
 
-    @Autowired
-    private ${mapperName} ${mapperName?uncap_first};
-
+    @Resource
+    private ${entity.className}Service ${entity.className?uncap_first}Service;
 
     @Override
     public List<${modelName}> get${modelName}List(){
