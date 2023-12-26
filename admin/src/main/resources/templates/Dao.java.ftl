@@ -15,30 +15,6 @@ import java.util.List;
 public interface ${entity.className}Dao {
 
     /**
-     * 查询所有
-     *
-     * @param id 主键id
-     * @return 查询到的结果, 无结果将返回null
-     */
-    @Results(id = "baseResult", value = {
-    <#list columnList as column>
-        @Result(property = "${column.javaName}", column = "${column.columnName}"),
-    </#list>
-    })
-    @Select("SELECT * FROM ${entity.tableName}")
-    ${entity.className} selectAll();
-
-    /**
-     * 通过主键id查询
-     *
-     * @param id 主键id
-     * @return 查询到的结果, 无结果将返回null
-     */
-    @ResultMap("baseResult")
-    @Select("SELECT * FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
-    ${entity.className} selectById(Long id);
-
-    /**
      * 添加记录
      *
      * @param ${entity.className?uncap_first} 数据库实体
@@ -85,6 +61,30 @@ public interface ${entity.className}Dao {
             "WHERE id = <#noparse>#{id}</#noparse>",
             "</script>"})
     int updateById(${entity.className} ${entity.className?uncap_first});
+
+    /**
+     * 查询所有
+     *
+     * @param id 主键id
+     * @return 查询到的结果, 无结果将返回null
+     */
+    @Results(id = "baseResult", value = {
+    <#list columnList as column>
+        @Result(property = "${column.javaName}", column = "${column.columnName}"),
+    </#list>
+    })
+    @Select("SELECT * FROM ${entity.tableName}")
+    ${entity.className} selectAll();
+
+    /**
+     * 通过主键id查询
+     *
+     * @param id 主键id
+     * @return 查询到的结果, 无结果将返回null
+     */
+    @ResultMap("baseResult")
+    @Select("SELECT * FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
+    ${entity.className} selectById(Long id);
 
     /**
      * 查询一条记录, 自行控制条件保证返回一条记录
