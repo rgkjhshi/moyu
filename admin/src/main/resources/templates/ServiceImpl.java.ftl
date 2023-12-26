@@ -23,32 +23,51 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     private ${entity.className}Service ${entity.className?uncap_first}Service;
 
     @Override
-    public List<${modelName}> get${modelName}List(){
-        return ${mapperName?uncap_first}.selete${modelName}All();
+    public ${entity.className} query${entity.className}(${entity.className} request) {
+        ${entity.className} query = new ${entity.className}();
+        <#list columnList as column>
+        if(request.get${column.javaName?cap_first}() != null) {
+            query.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
+        }
+        </#list>
+        ${entity.className} ${entity.className?uncap_first} = ${entity.className}Dao.selectOne(query);
+        return ${entity.className?uncap_first};
     }
 
-
     @Override
-    public ${modelName} get${modelName}(int id){
-        return ${serviceName?uncap_first}.selete${modelName}ById(id);
+    public List<${entity.className}> query${entity.className}List(${entity.className} request) {
+        ${entity.className} query = new ${entity.className}();
+        <#list columnList as column>
+        if(request.get${column.javaName?cap_first}() != null) {
+            query.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
+        }
+        </#list>
+        List<${entity.className}> list = ${entity.className}Dao.selectList(query);
+        return list;
     }
 
-
     @Override
-    public int insert${modelName}(${modelName} ${modelName?lower_case}){
-        return ${serviceName?uncap_first}.insert${modelName}(${modelName?lower_case});
+    public int add${entity.className}(${entity.className} request) {
+        ${entity.className} add =  = new ${entity.className}();
+        <#list columnList as column>
+        if(request.get${column.javaName?cap_first}() != null) {
+            add.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
+        }
+        </#list>
+        int row = ${entity.className}Dao.insert(${entity.className?uncap_first});
+        return row;
     }
 
-
     @Override
-    public int update${modelName}(${modelName} ${modelName?lower_case}){
-        return ${serviceName?uncap_first}.update${modelName}(${modelName?lower_case});
-    }
-
-
-    @Override
-    public int delete${modelName}(int id){
-        return ${serviceName?uncap_first}.delete${modelName}ById(id);
+    public int update${entity.className}(${entity.className} request) {
+        ${entity.className} update = new ${entity.className}();
+        <#list columnList as column>
+        if(request.get${column.javaName?cap_first}() != null) {
+            update.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
+        }
+        </#list>
+        int row = ${entity.className}Dao.updateById(update);
+        return row;
     }
 
 }
