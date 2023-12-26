@@ -43,7 +43,21 @@ public interface ${entity.className}Dao {
      * @return 返回受影响的记录条数
      */
     @Delete("DELETE FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
-    int deleteById(long id);
+    int deleteById(Long id);
+
+    /**
+     * 通过主键id列表删除
+     *
+     * @param id 主键id
+     * @return 返回受影响的记录条数
+     */
+    @Delete({"<script>",
+            "DELETE FROM ${entity.tableName} WHERE id IN ",
+            "    <foreach collection='list' item='item' open='(' separator=',' close=')'>",
+            "        #{item} ",
+            "    </foreach>",
+            "</script>"})
+    int deleteByIdList(List<Long> idList);
 
     /**
      * 通过主键id更新
