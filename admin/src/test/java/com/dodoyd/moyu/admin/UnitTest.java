@@ -1,5 +1,10 @@
 package com.dodoyd.moyu.admin;
 
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
+import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
+import com.alibaba.druid.util.JdbcConstants;
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,5 +50,37 @@ public class UnitTest {
         Gson htmlGson = new GsonBuilder().disableHtmlEscaping().create();
         String requestBody = htmlGson.toJson(bodyMap);
         log.info(requestBody);
+    }
+
+    @Test
+    public void testSql() {
+        String sql = "CREATE TABLE example_table ( id INT COMMENT 'id comment', name VARCHAR(20) COMMENT 'name comment' ) COMMENT='table comment'";
+
+        SQLStatement statement = SQLUtils.parseSingleStatement(sql, JdbcConstants.MYSQL, true);
+
+        // 打印解析结果
+        System.out.println("SQL Type: " + statement.getClass().getSimpleName());
+
+        // 如果是CREATE TABLE语句，获取表名和字段信息
+        if (statement instanceof MySqlCreateTableStatement) {
+            MySqlCreateTableStatement createTableStatement = (MySqlCreateTableStatement) statement;
+            // 表名
+            System.out.println("Table Name: " + createTableStatement.getName().getSimpleName());
+            System.out.println("Table Name: " + createTableStatement.getComment().toString());
+
+            // 获取字段信息
+            System.out.println("Table name: " + createTableStatement.getName().getSimpleName());
+            System.out.println("Table comment: " + createTableStatement.getComment().toString());
+            // 遍历表的元素列表，如果元素是SQLColumnDefinition类型，则输出列的名称、类型和注释。
+            createTableStatement.getTableElementList().forEach(tableElement -> {
+                if (tableElement instanceof SQLColumnDefinition) {
+                    SQLColumnDefinition columnDefinition = (SQLColumnDefinition) tableElement;
+                    System.out.println("Column name: " + columnDefinition.getName().getSimpleName());
+                    System.out.println("Column type: " + columnDefinition.getDataType().getName());
+                    System.out.println("Column comment: " + columnDefinition.getComment().toString());
+                }
+            });
+        }
+
     }
 }
