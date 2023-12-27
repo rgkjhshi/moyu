@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import SlideVerify from 'vue-monoplasty-slide-verify'
 
-import Highlight from './directive/highlight' // 这个是自定义的插件
+// import Highlight from './directive/highlight' // 这个是自定义的插件
 
 import Cookies from 'js-cookie'
 
@@ -30,7 +30,7 @@ Vue.use(Element, {
 Vue.use(SlideVerify)
 
 // 自定义的highlight代码高亮插件
-Vue.use(Highlight)
+// Vue.use(Highlight)
 
 // register global utility filters
 Object.keys(filters).forEach(key => {
