@@ -26,7 +26,7 @@
 <script>
 
 import clipboard from '@/directive/clipboard/index.js'
-import { listDbTable, previewCode } from '@/api/tool/gen'
+import { listDbTable, previewCodeBySql } from '@/api/tool/gen'
 
 export default {
   name: 'GenFromSql',
@@ -67,8 +67,11 @@ export default {
     },
     /** 预览按钮 */
     handlePreview(row) {
-      const tableName = row.tableName || this.tableNameList[0]
-      previewCode({ tableName: tableName }).then(response => {
+      if (!this.sql) {
+        this.$message({ type: 'error', message: '建表语句不能为空' })
+        return
+      }
+      previewCodeBySql({ sql: this.sql }).then(response => {
         this.preview.data = response.data
         this.preview.open = true
         this.preview.activeName = 'Domain.java'

@@ -20,6 +20,16 @@ export function previewCode(data) {
   })
 }
 
+// 通过解析SQL预览生成代码
+export function previewCodeBySql(data) {
+  return request({
+    url: '/api/tool/gen/previewBySql',
+    method: 'post',
+    // data是json，params是表单
+    params: data
+  })
+}
+
 // 生成代码（自定义路径）
 export function genCode(data) {
   return request({
