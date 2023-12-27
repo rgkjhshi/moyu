@@ -88,6 +88,6 @@ public class GenCodeServiceImpl implements GenCodeService {
      */
     private void fillColumnInfo(ColumnInfo columnInfo) {
         columnInfo.setJavaName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, columnInfo.getColumnName()));
-        columnInfo.setJavaType(GenConstants.JDBC_TYPE_MAP.getOrDefault(columnInfo.getJdbcType(), "String"));
+        columnInfo.setJavaType(GenConstants.JDBC_TYPE_MAP.getOrDefault(columnInfo.getJdbcType().toUpperCase(), "String"));
     }
 }
