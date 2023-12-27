@@ -16,10 +16,10 @@
     <!-- 选中数据操作   -->
     <el-row :gutter="10" style="margin-bottom: 10px">
       <el-col :span="2">
-        <el-button type="primary" plain icon="el-icon-upload" size="mini" @click="handleDownLoad">从SQL生成</el-button>
+        <el-button type="success" plain icon="el-icon-upload" size="mini" @click="openGenFromSql">从SQL生成</el-button>
       </el-col>
       <el-col :span="2">
-        <el-button type="success" plain icon="el-icon-download" size="mini" :disabled="multiDisable" @click="handleDownLoad">批量下载</el-button>
+        <el-button type="primary" plain icon="el-icon-download" size="mini" :disabled="multiDisable" @click="handleDownLoad">批量下载</el-button>
       </el-col>
     </el-row>
     <!-- 表格数据 -->
@@ -32,8 +32,8 @@
       <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
       <el-table-column label="操作" align="center" min-width="160">
         <template v-slot="{row}">
-          <el-button type="primary" plain size="small" icon="el-icon-view" @click="handlePreview(row)">预览</el-button>
-          <el-button type="success" plain size="small" icon="el-icon-download" @click="handleDownLoad(row)">生成代码</el-button>
+          <el-button type="success" plain size="small" icon="el-icon-view" @click="handlePreview(row)">预览</el-button>
+          <el-button type="primary" plain size="small" icon="el-icon-download" @click="handleDownLoad(row)">生成代码</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,7 +48,7 @@
       @current-change="handleCurrentChange"
     />
     <!-- 预览界面 -->
-    <el-dialog :title="preview.title" :visible.sync="preview.open" width="80%" top="5vh" fullscreen append-to-body>
+    <el-dialog title="代码预览" :visible.sync="preview.open" width="80%" top="5vh" fullscreen append-to-body>
       <el-tabs v-model="preview.activeName">
         <el-tab-pane v-for="(code, key) in preview.data" :key="key" :label="key" :name="key">
           <el-link v-clipboard:copy="code" v-clipboard:success="clipboardSuccess" icon="el-icon-document-copy" :underline="false" style="float:right">复制
@@ -57,26 +57,21 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <!-- 从SQL生成 -->
-    <el-dialog :title="preview.title" :visible.sync="preview.open" width="80%" top="5vh" fullscreen append-to-body>
-      <el-tabs v-model="preview.activeName">
-        <el-tab-pane v-for="(code, key) in preview.data" :key="key" :label="key" :name="key">
-          <el-link v-clipboard:copy="code" v-clipboard:success="clipboardSuccess" icon="el-icon-document-copy" :underline="false" style="float:right">复制
-          </el-link>
-          <pre v-highlight><code class="">{{ code }}</code></pre>
-        </el-tab-pane>
-      </el-tabs>
-    </el-dialog>
+    <!-- 从SQL生成窗口 -->
+    <gen-from-sql ref="genFromSql" />
   </div>
 </template>
 
 <script>
 
 import clipboard from '@/directive/clipboard/index.js'
+import GenFromSql from '@/views/moyu/tool/genFromSql'
+
 import { listDbTable, previewCode } from '@/api/tool/gen'
 
 export default {
   name: 'TableList',
+  components: { GenFromSql },
   directives: {
     clipboard
   },
@@ -101,26 +96,10 @@ export default {
       // 预览参数
       preview: {
         open: false,
-        title: '代码预览',
         data: {},
         activeName: 'Domain.java'
       }
     }
-  },
-  computed: {
-    venueId() {
-      let venueId = this.$store.getters.venueId
-      if (!venueId) {
-        venueId = localStorage.getItem('venueId')
-      }
-      return venueId
-    }
-  },
-  created() {
-    if (this.$route.query.orderNo) {
-      this.queryRequest.orderNo = this.$route.query.orderNo
-    }
-    this.getDataList()
   },
   methods: {
     // 获取表格内的数据列表
@@ -178,6 +157,10 @@ export default {
       }
       console.log(tableNameList)
       // this.$download.zip("/tool/gen/genCode?tableList=" + tableNames, "moyu.zip");
+    },
+    /** 打开从SQL生成的弹窗 */
+    openGenFromSql() {
+      this.$refs.genFromSql.show()
     }
   }
 }
