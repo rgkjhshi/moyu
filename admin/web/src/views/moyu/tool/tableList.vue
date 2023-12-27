@@ -15,17 +15,11 @@
     </el-form>
     <!-- 选中数据操作   -->
     <el-row :gutter="10" style="margin-bottom: 10px">
-      <el-col :span="1.5">
-        <el-button v-hasPermi="['tool:gen:code']" type="primary" plain icon="el-icon-download" size="mini" @click="handleGenTable">生成</el-button>
+      <el-col :span="2">
+        <el-button type="primary" plain icon="el-icon-upload" size="mini" @click="handleDownLoad">从SQL生成</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button v-hasPermi="['tool:gen:import']" type="info" plain icon="el-icon-upload" size="mini" @click="openImportTable">导入</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button v-hasPermi="['tool:gen:edit']" type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleEditTable">修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button v-hasPermi="['tool:gen:remove']" type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
+      <el-col :span="2">
+        <el-button type="success" plain icon="el-icon-download" size="mini" :disabled="multiDisable" @click="handleDownLoad">批量下载</el-button>
       </el-col>
     </el-row>
     <!-- 表格数据 -->
@@ -39,7 +33,7 @@
       <el-table-column label="操作" align="center" min-width="160">
         <template v-slot="{row}">
           <el-button type="primary" plain size="small" icon="el-icon-view" @click="handlePreview(row)">预览</el-button>
-          <el-button type="success" plain size="small" icon="el-icon-download" @click="handleGenTable(row)">生成代码</el-button>
+          <el-button type="success" plain size="small" icon="el-icon-download" @click="handleDownLoad(row)">生成代码</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -54,6 +48,16 @@
       @current-change="handleCurrentChange"
     />
     <!-- 预览界面 -->
+    <el-dialog :title="preview.title" :visible.sync="preview.open" width="80%" top="5vh" fullscreen append-to-body>
+      <el-tabs v-model="preview.activeName">
+        <el-tab-pane v-for="(code, key) in preview.data" :key="key" :label="key" :name="key">
+          <el-link v-clipboard:copy="code" v-clipboard:success="clipboardSuccess" icon="el-icon-document-copy" :underline="false" style="float:right">复制
+          </el-link>
+          <pre v-highlight><code class="">{{ code }}</code></pre>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
+    <!-- 从SQL生成 -->
     <el-dialog :title="preview.title" :visible.sync="preview.open" width="80%" top="5vh" fullscreen append-to-body>
       <el-tabs v-model="preview.activeName">
         <el-tab-pane v-for="(code, key) in preview.data" :key="key" :label="key" :name="key">
@@ -80,6 +84,10 @@ export default {
     return {
       listLoading: false,
       downloadLoading: false,
+      // 选中表数组
+      tableNameList: [],
+      // 少于2个为true
+      multiDisable: true,
       dataList: [],
       total: 0,
       queryRequest: {
@@ -145,7 +153,8 @@ export default {
     },
     /** 预览按钮 */
     handlePreview(row) {
-      previewCode({ tableName: row.tableName }).then(response => {
+      const tableName = row.tableName || this.tableNameList[0]
+      previewCode({ tableName: tableName }).then(response => {
         this.preview.data = response.data
         this.preview.open = true
         this.preview.activeName = 'Domain.java'
@@ -154,6 +163,21 @@ export default {
     /** 复制代码成功 */
     clipboardSuccess() {
       this.$message({ type: 'success', message: '复制成功' })
+    },
+    /** 多选框选中数据 */
+    handleSelectionChange(selection) {
+      this.tableNameList = selection.map(item => item.tableName)
+      this.multiDisable = selection.length < 2
+    },
+    /** 生成代码操作 */
+    handleDownLoad(row) {
+      const tableNameList = row.tableName || '' + this.tableNameList
+      if (tableNameList === '') {
+        this.$message({ type: 'error', message: '请选择要生成的表' })
+        return
+      }
+      console.log(tableNameList)
+      // this.$download.zip("/tool/gen/genCode?tableList=" + tableNames, "moyu.zip");
     }
   }
 }
