@@ -4,6 +4,7 @@ import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
+import com.alibaba.druid.sql.parser.ParserException;
 import com.alibaba.druid.util.JdbcConstants;
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
@@ -55,6 +56,14 @@ public class UnitTest {
     @Test
     public void testSql() {
         String sql = "CREATE TABLE example_table ( id INT COMMENT 'id comment', name VARCHAR(20) COMMENT 'name comment' ) COMMENT='table comment'";
+
+        try {
+            SQLStatement statement = SQLUtils.parseSingleStatement(sql, JdbcConstants.MYSQL, true);
+            System.out.println("SQL语句语法正确");
+        } catch (ParserException e) {
+            System.out.println("SQL语句语法错误：" + e.getMessage());
+            return;
+        }
 
         SQLStatement statement = SQLUtils.parseSingleStatement(sql, JdbcConstants.MYSQL, true);
 
