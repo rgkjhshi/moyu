@@ -8,25 +8,29 @@
       <el-form-item label-width="60px" label="表描述:">
         <el-input v-model="queryRequest.orderNo" placeholder="请输入表描述" clearable />
       </el-form-item>
-      <el-form-item label-width="80px" label="日期范围:">
-        <el-date-picker
-          v-model="defaultDate"
-          value-format="yyyyMMdd"
-          type="daterange"
-          unlink-panels
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions"
-        />
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
         <el-button icon="el-icon-refresh" size="small" @click="handleQuery">重置</el-button>
       </el-form-item>
     </el-form>
+    <!-- 选中数据操作   -->
+    <el-row :gutter="10" style="margin-bottom: 10px">
+      <el-col :span="1.5">
+        <el-button v-hasPermi="['tool:gen:code']" type="primary" plain icon="el-icon-download" size="mini" @click="handleGenTable">生成</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button v-hasPermi="['tool:gen:import']" type="info" plain icon="el-icon-upload" size="mini" @click="openImportTable">导入</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button v-hasPermi="['tool:gen:edit']" type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleEditTable">修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button v-hasPermi="['tool:gen:remove']" type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
+      </el-col>
+    </el-row>
     <!-- 表格数据 -->
-    <el-table v-loading="listLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}">
+    <el-table v-loading="listLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" align="center" width="55" />
       <el-table-column label="序号" type="index" width="60px" align="center" />
       <el-table-column prop="tableName" label="表名称" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="tableComment" label="表描述" width="200px" show-overflow-tooltip align="center" />
@@ -64,7 +68,6 @@
 
 <script>
 
-import { parseTime } from '@/utils'
 import clipboard from '@/directive/clipboard/index.js'
 import { listDbTable, previewCode } from '@/api/tool/gen'
 
@@ -78,7 +81,6 @@ export default {
       listLoading: false,
       downloadLoading: false,
       dataList: [],
-      defaultDate: [parseTime(new Date(new Date().getTime() - 3600 * 1000 * 24 * 3), '{y}{m}{d}'), parseTime(new Date(), '{y}{m}{d}')],
       total: 0,
       queryRequest: {
         startDate: null,
@@ -94,20 +96,6 @@ export default {
         title: '代码预览',
         data: {},
         activeName: 'Domain.java'
-      },
-      minDate: '',
-      maxDate: '',
-      pickerOptions: {
-        // 周起始日,1 到 7
-        firstDayOfWeek: 1,
-        onPick: ({ maxDate, minDate }) => {
-          this.minDate = minDate
-          this.maxDate = maxDate
-          if (maxDate) {
-            // 选择了最大日期后，清除已选日期，解除限制。
-            this.minDate = ''
-          }
-        }
       }
     }
   },
