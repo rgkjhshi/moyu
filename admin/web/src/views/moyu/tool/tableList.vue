@@ -101,6 +101,12 @@ export default {
       }
     }
   },
+  created() {
+    if (this.$route.query.orderNo) {
+      this.queryRequest.orderNo = this.$route.query.orderNo
+    }
+    this.getDataList()
+  },
   methods: {
     // 获取表格内的数据列表
     getDataList() {
