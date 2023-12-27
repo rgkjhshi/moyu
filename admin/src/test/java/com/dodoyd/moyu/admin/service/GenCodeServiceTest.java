@@ -1,7 +1,6 @@
 package com.dodoyd.moyu.admin.service;
 
 import com.dodoyd.moyu.admin.BaseTest;
-import com.dodoyd.moyu.admin.constant.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +16,7 @@ class GenCodeServiceTest extends BaseTest {
     @Test
     void genCode() {
         String tableName = "mt_tab_info";
-        Map<String, String> map = genCodeService.genCode(tableName);
+        Map<String, String> map = genCodeService.genCodeByTable(tableName);
         System.out.println(map.get("Service.java"));
     }
 }

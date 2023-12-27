@@ -35,7 +35,14 @@ public class GenCodeController {
     @Log(jsonLog = true, response = false)
     @PostMapping(value = "/preview")
     public BaseResponse<Map<String, String>> previewCode(String tableName) {
-        Map<String, String> codeMap = genCodeService.genCode(tableName);
+        Map<String, String> codeMap = genCodeService.genCodeByTable(tableName);
+        return BaseResponse.getSuccessResponse(codeMap);
+    }
+
+    @Log(jsonLog = true, response = false)
+    @PostMapping(value = "/previewBySql")
+    public BaseResponse<Map<String, String>> previewCodeBySql(String sql) {
+        Map<String, String> codeMap = genCodeService.genCodeBySql(sql);
         return BaseResponse.getSuccessResponse(codeMap);
     }
 

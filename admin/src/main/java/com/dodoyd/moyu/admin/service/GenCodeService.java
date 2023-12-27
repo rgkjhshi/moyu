@@ -21,5 +21,10 @@ public interface GenCodeService {
     /**
      * 生成代码
      */
-    Map<String, String> genCode(String tableName);
+    Map<String, String> genCodeByTable(String tableName);
+
+    /**
+     * 解析SQL生成代码
+     */
+    Map<String, String> genCodeBySql(String sql);
 }
