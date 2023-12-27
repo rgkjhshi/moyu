@@ -89,58 +89,6 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/venue',
-    component: Layout,
-    redirect: '/venue/index',
-    alwaysShow: true,
-    meta: {
-      title: '场地管理',
-      icon: 'component',
-      roles: ['admin', 'user']
-    },
-    children: [
-      {
-        path: 'venueInfo',
-        component: () => import('@/views/dodoyd/venue/venueInfo'),
-        name: 'VenueInfo',
-        meta: { title: '场馆信息', icon: 'example', noCache: true }
-      },
-      {
-        path: 'bookGround',
-        component: () => import('@/views/dodoyd/venue/bookGround'),
-        name: 'BookGround',
-        meta: { title: '预订场地', icon: 'guide', noCache: true }
-      },
-      {
-        path: 'groundUseRecord',
-        component: () => import('@/views/dodoyd/venue/groundUseRecord'),
-        name: 'GroundUseRecord',
-        meta: { title: '场地使用记录', icon: 'list', noCache: true }
-      },
-      {
-        path: 'editVenue',
-        component: () => import('@/views/dodoyd/venue/editVenue'),
-        name: 'EditVenue',
-        meta: { title: '修改场馆信息', icon: 'edit', roles: ['admin'], noCache: true },
-        hidden: true
-      },
-      {
-        path: 'addGround',
-        component: () => import('@/views/dodoyd/venue/addGround'),
-        name: 'AddGround',
-        meta: { title: '新建场地', icon: 'lock', roles: ['admin'], noCache: true },
-        hidden: true
-      },
-      {
-        path: 'editGround',
-        component: () => import('@/views/dodoyd/venue/editGround'),
-        name: 'EditGround',
-        meta: { title: '修改场地信息', icon: 'edit', roles: ['admin'], noCache: true },
-        hidden: true
-      }
-    ]
-  },
-  {
     path: '/vip',
     component: Layout,
     redirect: '/vip/venueCardList',
@@ -190,31 +138,6 @@ export const asyncRoutes = [
         name: 'VipConsumeLog',
         meta: { title: '消费记录', icon: 'user', noCache: true },
         hidden: true
-      }
-    ]
-  },
-  {
-    path: '/coach',
-    component: Layout,
-    redirect: '/coach/coachList',
-    alwaysShow: true,
-    meta: {
-      title: '课程管理',
-      icon: 'component',
-      roles: ['admin', 'user']
-    },
-    children: [
-      {
-        path: 'coachList',
-        component: () => import('@/views/dodoyd/coach/coachList'),
-        name: 'CoachList',
-        meta: { title: '教练列表', icon: 'list', noCache: true }
-      },
-      {
-        path: 'coachBookList',
-        component: () => import('@/views/dodoyd/coach/coachBookList'),
-        name: 'CoachBookList',
-        meta: { title: '教练课程表', icon: 'table', noCache: true }
       }
     ]
   },

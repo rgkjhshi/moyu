@@ -14,7 +14,7 @@ public class GenConstants {
     /**
      * 作者
      */
-    public static final String CODE_AUTHOR = "moyu";
+    public static final String CODE_AUTHOR = "moyusi";
     /**
      * 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
      */
@@ -28,34 +28,34 @@ public class GenConstants {
     static {
         Map<String, String> map = new HashMap<>();
         // 数字
-        map.put("tinyint", "Integer");
-        map.put("smallint", "Integer");
-        map.put("mediumint", "Integer");
-        map.put("int", "Integer");
-        map.put("integer", "Integer");
-        map.put("number", "Integer");
-        map.put("bigint", "Long");
-        map.put("float", "Float");
-        map.put("double", "Double");
-        map.put("decimal", "BigDecimal");
+        map.put("TINYINT", "Integer");
+        map.put("SMALLINT", "Integer");
+        map.put("MEDIUMINT", "Integer");
+        map.put("INT", "Integer");
+        map.put("INTEGER", "Integer");
+        map.put("NUMBER", "Integer");
+        map.put("BIGINT", "Long");
+        map.put("FLOAT", "Float");
+        map.put("DOUBLE", "Double");
+        map.put("DECIMAL", "BigDecimal");
         // 字符
-        map.put("char", "String");
-        map.put("varchar", "String");
-        map.put("tinytext", "String");
-        map.put("mediumtext", "String");
-        map.put("text", "String");
-        map.put("longtext", "String");
-        map.put("binary", "String");
-        map.put("varbinary", "String");
-        map.put("blob", "String");
+        map.put("CHAR", "String");
+        map.put("VARCHAR", "String");
+        map.put("TINYTEXT", "String");
+        map.put("MEDIUMTEXT", "String");
+        map.put("TEXT", "String");
+        map.put("LONGTEXT", "String");
+        map.put("BINARY", "String");
+        map.put("VARBINARY", "String");
+        map.put("BLOB", "String");
         // 日期时间
-        map.put("date", "Date");
-        map.put("time", "Date");
-        map.put("datetime", "Date");
-        map.put("timestamp", "Date");
+        map.put("DATE", "Date");
+        map.put("TIME", "Date");
+        map.put("DATETIME", "Date");
+        map.put("TIMESTAMP", "Date");
         // 其他
-        map.put("bit", "Integer");
-        map.put("bool", "Boolean");
+        map.put("BIT", "Integer");
+        map.put("BOOL", "Boolean");
 
         // 添加其他jdbcType与javaType的映射关系
         JDBC_TYPE_MAP = Collections.unmodifiableMap(map);
