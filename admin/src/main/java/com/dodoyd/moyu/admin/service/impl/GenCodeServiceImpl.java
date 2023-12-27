@@ -66,8 +66,10 @@ public class GenCodeServiceImpl implements GenCodeService {
             Assert.hasText(sql, "SQL不能为空");
             SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
         } catch (Exception e) {
-            throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), "SQL语句语法错误" + e.getMessage());
+            throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), "SQL语句语法错误：" + e.getMessage());
         }
+        // 存放生成代码的map
+        Map<String, String> codeMap = new HashMap<>();
         //  解析SQL语句，获取SQLStatement对象
         List<SQLStatement> statementList = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
         for (SQLStatement statement : statementList) {
@@ -96,12 +98,12 @@ public class GenCodeServiceImpl implements GenCodeService {
                         columnList.add(columnInfo);
                     }
                 });
-                return genCode(tableInfo, columnList);
+                codeMap = genCode(tableInfo, columnList);
+                // 第一个处理完后就返回,只能预览一个表的生成代码
+                break;
             }
-
         }
-
-        return null;
+        return codeMap;
     }
 
     /**
