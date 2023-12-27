@@ -19,7 +19,7 @@
         <el-button type="success" plain icon="el-icon-upload" size="mini" @click="openGenFromSql">从SQL生成</el-button>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" plain icon="el-icon-download" size="mini" :disabled="multiDisable" @click="handleDownLoad">批量下载</el-button>
+        <el-button type="primary" plain icon="el-icon-download" size="mini" @click="handleDownLoad">批量下载</el-button>
       </el-col>
     </el-row>
     <!-- 表格数据 -->
@@ -81,8 +81,6 @@ export default {
       downloadLoading: false,
       // 选中表数组
       tableNameList: [],
-      // 少于2个为true
-      multiDisable: true,
       dataList: [],
       total: 0,
       queryRequest: {
@@ -152,7 +150,6 @@ export default {
     /** 多选框选中数据 */
     handleSelectionChange(selection) {
       this.tableNameList = selection.map(item => item.tableName)
-      this.multiDisable = selection.length < 2
     },
     /** 生成代码操作 */
     handleDownLoad(row) {
