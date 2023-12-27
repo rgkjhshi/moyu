@@ -66,7 +66,7 @@ export default {
       this.visible = true
     },
     /** 预览按钮 */
-    handlePreview(row) {
+    handlePreview() {
       if (!this.sql) {
         this.$message({ type: 'error', message: '建表语句不能为空' })
         return
