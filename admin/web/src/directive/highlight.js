@@ -8,7 +8,7 @@ const install = function(Vue) {
   Vue.directive('highlight', function(el) {
     const blocks = el.querySelectorAll('pre code')
     blocks.forEach((block) => {
-      Highlight.highlightBlock(block)
+      Highlight.highlightElement(block)
     })
   })
 }
