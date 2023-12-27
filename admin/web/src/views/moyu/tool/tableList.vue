@@ -53,7 +53,7 @@
         <el-tab-pane v-for="(code, key) in preview.data" :key="key" :label="key" :name="key">
           <el-link v-clipboard:copy="code" v-clipboard:success="clipboardSuccess" icon="el-icon-document-copy" :underline="false" style="float:right">复制
           </el-link>
-          <pre><code class="hljs" v-html="highlightedCode(code, key)" /></pre>
+          <pre><code class="" v-html="highlightedCode(code, key)" /></pre>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -67,13 +67,7 @@
 import clipboard from '@/directive/clipboard/index.js'
 import GenFromSql from '@/views/moyu/tool/genFromSql'
 import hljs from 'highlight.js' // 导入代码高亮文件
-import 'highlight.js/styles/idea.css' // 代码高亮风格，选择更多风格需导入 node_modules/hightlight.js/styles/ 目录下其它css文件
-hljs.registerLanguage('java', require('highlight.js/lib/languages/java'))
-hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'))
-hljs.registerLanguage('html', require('highlight.js/lib/languages/xml'))
-hljs.registerLanguage('vue', require('highlight.js/lib/languages/xml'))
-hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'))
-hljs.registerLanguage('sql', require('highlight.js/lib/languages/sql'))
+import 'highlight.js/styles/github.css' // 代码高亮风格，选择更多风格需导入 node_modules/hightlight.js/styles/ 目录下其它css文件
 
 import { listDbTable, previewCode } from '@/api/tool/gen'
 
