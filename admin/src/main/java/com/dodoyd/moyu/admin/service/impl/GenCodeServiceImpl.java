@@ -78,8 +78,10 @@ public class GenCodeServiceImpl implements GenCodeService {
                 MySqlCreateTableStatement createTableStatement = (MySqlCreateTableStatement) statement;
                 // 表信息
                 TableInfo tableInfo = new TableInfo();
-                tableInfo.setTableName(createTableStatement.getName().getSimpleName());
-                tableInfo.setTableComment(createTableStatement.getComment().toString());
+                tableInfo.setTableName(removeQuotes(createTableStatement.getName().getSimpleName()));
+                if (createTableStatement.getComment() != null) {
+                    tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
+                }
                 //  补充表信息
                 fillTableInfo(tableInfo);
                 // 列信息
@@ -92,7 +94,9 @@ public class GenCodeServiceImpl implements GenCodeService {
                         ColumnInfo columnInfo = new ColumnInfo();
                         columnInfo.setColumnName(columnDefinition.getName().getSimpleName());
                         columnInfo.setJdbcType(columnDefinition.getDataType().getName());
-                        columnInfo.setComment(columnDefinition.getComment().toString());
+                        if (columnDefinition.getComment() != null) {
+                            columnInfo.setComment(removeQuotes(columnDefinition.getComment().toString()));
+                        }
                         // 填充列信息
                         fillColumnInfo(columnInfo);
                         columnList.add(columnInfo);
@@ -146,5 +150,15 @@ public class GenCodeServiceImpl implements GenCodeService {
             }
         });
         return codeMap;
+    }
+
+    /**
+     * 去掉反引号和单引号
+     */
+    private String removeQuotes(String str) {
+        if (str != null) {
+            str = str.replace("`", "").replace("'", "");
+        }
+        return str;
     }
 }

@@ -5,6 +5,7 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import com.alibaba.druid.sql.parser.ParserException;
+import com.alibaba.druid.sql.parser.SQLParserFeature;
 import com.alibaba.druid.util.JdbcConstants;
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
@@ -55,7 +56,17 @@ public class UnitTest {
 
     @Test
     public void testSql() {
-        String sql = "CREATE TABLE example_table ( id INT COMMENT 'id comment', name VARCHAR(20) COMMENT 'name comment' ) COMMENT='table comment'";
+        String sql = "CREATE TABLE `mt_tab_info`\n" +
+                "(\n" +
+                "    `id`       bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',\n" +
+                "    `tab_code` int(5)              NOT NULL DEFAULT '0' COMMENT '聚合tab值',\n" +
+                "    `tab_name` varchar(32)         NOT NULL DEFAULT '' COMMENT '聚合tab名称',\n" +
+                "    `tab_desc` varchar(64)         NOT NULL DEFAULT '' COMMENT '名称',\n" +
+                "    `c_time`   datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
+                "    `u_time`   datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',\n" +
+                "    PRIMARY KEY (`id`),\n" +
+                "    UNIQUE KEY `uniq_tab_code` (`tab_code`)\n" +
+                ") ENGINE = InnoDB COMMENT ='平台聚合方式信息元数据表';";
 
         try {
             SQLStatement statement = SQLUtils.parseSingleStatement(sql, JdbcConstants.MYSQL, true);
@@ -65,7 +76,7 @@ public class UnitTest {
             return;
         }
 
-        SQLStatement statement = SQLUtils.parseSingleStatement(sql, JdbcConstants.MYSQL, true);
+        SQLStatement statement = SQLUtils.parseSingleStatement(sql, JdbcConstants.MYSQL, SQLParserFeature.KeepComments, SQLParserFeature.IgnoreNameQuotes);
 
         // 打印解析结果
         System.out.println("SQL Type: " + statement.getClass().getSimpleName());
@@ -75,11 +86,11 @@ public class UnitTest {
             MySqlCreateTableStatement createTableStatement = (MySqlCreateTableStatement) statement;
             // 表名
             System.out.println("Table Name: " + createTableStatement.getName().getSimpleName());
-            System.out.println("Table Name: " + createTableStatement.getComment().toString());
+            if (createTableStatement.getComment() != null) {
+                System.out.println("Table Name: " + createTableStatement.getComment().toString());
+            }
 
             // 获取字段信息
-            System.out.println("Table name: " + createTableStatement.getName().getSimpleName());
-            System.out.println("Table comment: " + createTableStatement.getComment().toString());
             // 遍历表的元素列表，如果元素是SQLColumnDefinition类型，则输出列的名称、类型和注释。
             createTableStatement.getTableElementList().forEach(tableElement -> {
                 if (tableElement instanceof SQLColumnDefinition) {
