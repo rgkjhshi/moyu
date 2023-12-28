@@ -168,9 +168,7 @@ export default {
         this.$message({ type: 'error', message: '请选择要生成的表' })
         return
       }
-      console.log(tableNames)
       downloadCode({ tableNames: tableNames }).then(response => {
-        console.log(response)
       }).catch(err => {
         console.log(err)
       })

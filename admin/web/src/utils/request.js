@@ -91,7 +91,13 @@ export function download(config) {
   return service({
     responseType: 'blob',
     ...config
-  }).then(response => {
+  }).then(async response => {
+    if (response.data.type === 'application/json') {
+      const resText = await response.data.text()
+      const res = JSON.parse(resText)
+      Message.error(res.message)
+      return
+    }
     // 创建一个链接元素用于下载
     const url = window.URL.createObjectURL(new Blob([response.data]))
     const link = document.createElement('a')

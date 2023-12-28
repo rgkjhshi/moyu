@@ -119,6 +119,8 @@ public class GenCodeServiceImpl implements GenCodeService {
     @Override
     public byte[] downloadCodeByTable(String tableNames) {
         Assert.hasText(tableNames, "表名不能为空");
+        List<String> tableNameList = Constants.COMMA_SPLITTER.splitToList(tableNames);
+        Assert.isTrue(tableNameList.size() <= 10, "下载内容过多，单次下载不能超过10个");
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         // 创建一个字节输出流来存储ZIP文件
         ZipOutputStream zip = new ZipOutputStream(outputStream);
