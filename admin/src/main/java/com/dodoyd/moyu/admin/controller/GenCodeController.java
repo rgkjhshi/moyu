@@ -58,6 +58,20 @@ public class GenCodeController {
     @PostMapping(value = "/download")
     public void downloadCode(String tableNames, HttpServletResponse response) throws IOException {
         byte[] data = genCodeService.downloadCodeByTable(tableNames);
+        buildResponse(response, data);
+    }
+
+    @Log
+    @PostMapping(value = "/downloadBySql")
+    public void downloadCodeBySql(String sql, HttpServletResponse response) throws IOException {
+        byte[] data = genCodeService.downloadCodeBySql(sql);
+        buildResponse(response, data);
+    }
+
+    /**
+     * 构造响应结果
+     */
+    private void buildResponse(HttpServletResponse response, byte[] data) throws IOException {
         // 设置响应头信息
         response.setStatus(HttpServletResponse.SC_OK);
         response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"download.zip\"");
@@ -71,11 +85,5 @@ public class GenCodeController {
         }
         // 刷新输出流，确保所有数据都被发送到客户端
         response.flushBuffer();
-    }
-
-    @Log
-    @PostMapping(value = "/downloadBySql")
-    public void downloadCodeBySql(String sql) {
-        Map<String, String> codeMap = genCodeService.genCodeBySql(sql);
     }
 }

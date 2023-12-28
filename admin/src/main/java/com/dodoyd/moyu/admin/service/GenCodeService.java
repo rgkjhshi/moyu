@@ -4,7 +4,6 @@ import com.dodoyd.moyu.admin.model.vo.TableInfo;
 
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipOutputStream;
 
 /**
  * 生成代码服务接口
@@ -33,5 +32,10 @@ public interface GenCodeService {
      * 生成代码zip包
      */
     byte[] downloadCodeByTable(String tableNames);
+
+    /**
+     * 生成代码zip包
+     */
+    byte[] downloadCodeBySql(String sql);
 
 }

@@ -21,12 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -88,26 +90,11 @@ public class GenCodeServiceImpl implements GenCodeService {
                 if (createTableStatement.getComment() != null) {
                     tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
                 }
-                //  补充表信息
+                // 补充表信息
                 fillTableInfo(tableInfo);
                 // 列信息
-                List<ColumnInfo> columnList = new ArrayList<>();
-                // 遍历表的元素列表，如果元素是SQLColumnDefinition类型，则获取列的名称、类型和注释。
-                createTableStatement.getTableElementList().forEach(tableElement -> {
-                    if (tableElement instanceof SQLColumnDefinition) {
-                        SQLColumnDefinition columnDefinition = (SQLColumnDefinition) tableElement;
-                        // 列信息
-                        ColumnInfo columnInfo = new ColumnInfo();
-                        columnInfo.setColumnName(removeQuotes(columnDefinition.getName().getSimpleName()));
-                        columnInfo.setJdbcType(columnDefinition.getDataType().getName());
-                        if (columnDefinition.getComment() != null) {
-                            columnInfo.setComment(removeQuotes(columnDefinition.getComment().toString()));
-                        }
-                        // 填充列信息
-                        fillColumnInfo(columnInfo);
-                        columnList.add(columnInfo);
-                    }
-                });
+                List<ColumnInfo> columnList = getColumnList(createTableStatement);
+                // 生成代码
                 codeMap = genCode(tableInfo, columnList);
                 // 第一个处理完后就返回,只能预览一个表的生成代码
                 break;
@@ -121,11 +108,12 @@ public class GenCodeServiceImpl implements GenCodeService {
         Assert.hasText(tableNames, "表名不能为空");
         List<String> tableNameList = Constants.COMMA_SPLITTER.splitToList(tableNames);
         Assert.isTrue(tableNameList.size() <= 10, "下载内容过多，单次下载不能超过10个");
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         // 创建一个字节输出流来存储ZIP文件
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         for (String tableName : Constants.COMMA_SPLITTER.split(tableNames)) {
-            genCode(tableName, zip);
+            Map<String, String> codeMap = genCodeByTable(tableName);
+            genCode(tableName, codeMap, zip);
         }
         try {
             // 完成所有文件的添加
@@ -135,6 +123,76 @@ public class GenCodeServiceImpl implements GenCodeService {
             log.error("生成文件失败", e);
         }
         return outputStream.toByteArray();
+    }
+
+    @Override
+    public byte[] downloadCodeBySql(String sql) {
+        List<SQLStatement> statementList = new ArrayList<>();
+        // 校验格式
+        try {
+            Assert.hasText(sql, "SQL不能为空");
+            statementList = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
+        } catch (Exception e) {
+            throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), "SQL语句语法错误：" + e.getMessage());
+        }
+        List<MySqlCreateTableStatement> createStatementList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(statementList)) {
+            createStatementList = statementList.stream().filter(statement -> statement instanceof MySqlCreateTableStatement).map(e -> (MySqlCreateTableStatement) e).collect(Collectors.toList());
+        }
+        Assert.isTrue(createStatementList.size() > 0 && createStatementList.size() <= 10, "只能处理1~10个建表语句");
+        // 创建一个字节输出流来存储ZIP文件
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        // 遍历建表语句生成代码并添加到zip
+        for (MySqlCreateTableStatement createTableStatement : createStatementList) {
+            // 表信息
+            TableInfo tableInfo = new TableInfo();
+            tableInfo.setTableName(removeQuotes(createTableStatement.getName().getSimpleName()));
+            if (createTableStatement.getComment() != null) {
+                tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
+            }
+            //  补充表信息
+            fillTableInfo(tableInfo);
+            // 列信息
+            List<ColumnInfo> columnList = getColumnList(createTableStatement);
+            // 存放生成代码的map
+            Map<String, String> codeMap = genCode(tableInfo, columnList);
+            // 第一个处理完后就返回,只能预览一个表的生成代码
+            genCode(tableInfo.getTableName(), codeMap, zip);
+        }
+        try {
+            // 完成所有文件的添加
+            zip.finish();
+            zip.close();
+        } catch (IOException e) {
+            log.error("生成文件失败", e);
+        }
+        return outputStream.toByteArray();
+    }
+
+    /**
+     * 通过表创建语句获取列信息列表
+     */
+    private List<ColumnInfo> getColumnList(MySqlCreateTableStatement createTableStatement) {
+        // 列信息
+        List<ColumnInfo> columnList = new ArrayList<>();
+        // 遍历表的元素列表，如果元素是SQLColumnDefinition类型，则获取列的名称、类型和注释。
+        createTableStatement.getTableElementList().forEach(tableElement -> {
+            if (tableElement instanceof SQLColumnDefinition) {
+                SQLColumnDefinition columnDefinition = (SQLColumnDefinition) tableElement;
+                // 列信息
+                ColumnInfo columnInfo = new ColumnInfo();
+                columnInfo.setColumnName(removeQuotes(columnDefinition.getName().getSimpleName()));
+                columnInfo.setJdbcType(columnDefinition.getDataType().getName());
+                if (columnDefinition.getComment() != null) {
+                    columnInfo.setComment(removeQuotes(columnDefinition.getComment().toString()));
+                }
+                // 填充列信息
+                fillColumnInfo(columnInfo);
+                columnList.add(columnInfo);
+            }
+        });
+        return columnList;
     }
 
     /**
@@ -182,8 +240,10 @@ public class GenCodeServiceImpl implements GenCodeService {
     /**
      * 生成代码
      */
-    private void genCode(String tableName, ZipOutputStream zip) {
-        Map<String, String> codeMap = genCodeByTable(tableName);
+    private void genCode(String tableName, Map<String, String> codeMap, ZipOutputStream zip) {
+        if (CollectionUtils.isEmpty(codeMap)) {
+            return;
+        }
         for (Map.Entry<String, String> entry : codeMap.entrySet()) {
             String fileName = getFileName(entry.getKey(), tableName);
             try {
