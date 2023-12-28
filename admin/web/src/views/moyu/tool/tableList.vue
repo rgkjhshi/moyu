@@ -114,8 +114,8 @@ export default {
       // 查询数据
       listDbTable(this.queryRequest).then(response => {
         if (response.code === 0) {
-          this.total = 1
-          this.dataList = response.data
+          this.total = response.data.total
+          this.dataList = response.data.pageData
         }
         this.listLoading = false
       }).catch(err => {

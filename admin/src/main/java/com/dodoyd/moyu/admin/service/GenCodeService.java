@@ -1,8 +1,9 @@
 package com.dodoyd.moyu.admin.service;
 
+import com.dodoyd.moyu.admin.model.request.GenCodeRequest;
 import com.dodoyd.moyu.admin.model.vo.TableInfo;
+import com.dodoyd.moyu.common.model.PageResult;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,7 +17,7 @@ public interface GenCodeService {
     /**
      * 查询所有表的列表
      */
-    List<TableInfo> queryAllTableList();
+    PageResult<TableInfo> queryAllTableList(GenCodeRequest request);
 
     /**
      * 生成代码

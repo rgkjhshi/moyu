@@ -5,6 +5,7 @@ import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import com.dodoyd.moyu.admin.service.GenCodeService;
 import com.dodoyd.moyu.common.annotation.Log;
 import com.dodoyd.moyu.common.model.BaseResponse;
+import com.dodoyd.moyu.common.model.PageResult;
 import com.google.common.io.ByteStreams;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,7 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,8 +37,8 @@ public class GenCodeController {
 
     @Log(jsonLog = true, response = false)
     @PostMapping(value = "/list")
-    public BaseResponse<List<TableInfo>> queryAllTableList(GenCodeRequest request) {
-        List<TableInfo> list = genCodeService.queryAllTableList();
+    public BaseResponse<PageResult<TableInfo>> queryAllTableList(GenCodeRequest request) {
+        PageResult<TableInfo> list = genCodeService.queryAllTableList(request);
         return BaseResponse.getSuccessResponse(list);
     }
 

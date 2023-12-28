@@ -8,11 +8,15 @@ import com.alibaba.druid.util.JdbcConstants;
 import com.dodoyd.moyu.admin.constant.Constants;
 import com.dodoyd.moyu.admin.constant.GenConstants;
 import com.dodoyd.moyu.admin.dao.GenCodeDao;
+import com.dodoyd.moyu.admin.model.request.GenCodeRequest;
 import com.dodoyd.moyu.admin.model.vo.ColumnInfo;
 import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import com.dodoyd.moyu.admin.service.GenCodeService;
 import com.dodoyd.moyu.common.enums.ExceptionEnum;
 import com.dodoyd.moyu.common.exception.BaseException;
+import com.dodoyd.moyu.common.model.PageResult;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
 import freemarker.template.Configuration;
@@ -48,8 +52,17 @@ public class GenCodeServiceImpl implements GenCodeService {
     private Configuration configuration;
 
     @Override
-    public List<TableInfo> queryAllTableList() {
-        return genCodeDao.selectAllTableList();
+    public PageResult<TableInfo> queryAllTableList(GenCodeRequest request) {
+        // 分页插件
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        Page<TableInfo> page = (Page<TableInfo>) genCodeDao.selectAllTableList();
+        // 组装分页数据
+        PageResult<TableInfo> pageResult = new PageResult<>();
+        pageResult.setPageNum(page.getPageNum());
+        pageResult.setTotal(page.getTotal());
+        // 设置页内数据
+        pageResult.setPageData(page);
+        return pageResult;
     }
 
     @Override
