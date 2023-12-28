@@ -26,7 +26,7 @@
 <script>
 
 import clipboard from '@/directive/clipboard/index.js'
-import { listDbTable, previewCodeBySql } from '@/api/tool/gen'
+import { downloadCodeBySql, previewCodeBySql } from '@/api/tool/gen'
 import hljs from 'highlight.js' // 导入代码高亮文件
 import 'highlight.js/styles/github.css' // 代码高亮风格，选择更多风格需导入 node_modules/hightlight.js/styles/ 目录下其它css文件
 
@@ -50,18 +50,6 @@ export default {
   methods: {
     // 获取表格内的数据列表
     getDataList() {
-      this.listLoading = true
-      // 查询数据
-      listDbTable(this.queryRequest).then(response => {
-        if (response.code === 0) {
-          this.total = 1
-          this.dataList = response.data
-        }
-        this.listLoading = false
-      }).catch(err => {
-        console.log(err)
-        this.listLoading = false
-      })
     },
     // 展示弹窗
     show() {
@@ -91,13 +79,11 @@ export default {
     },
     /** 生成代码操作 */
     handleDownLoad(row) {
-      const tableNameList = row.tableName || '' + this.tableNameList
-      if (tableNameList === '') {
-        this.$message({ type: 'error', message: '请选择要生成的表' })
+      if (!this.sql) {
+        this.$message({ type: 'error', message: '建表语句不能为空' })
         return
       }
-      console.log(tableNameList)
-      // this.$download.zip("/tool/gen/genCode?tableList=" + tableNames, "moyu.zip");
+      downloadCodeBySql({ sql: this.sql })
     }
   }
 }
