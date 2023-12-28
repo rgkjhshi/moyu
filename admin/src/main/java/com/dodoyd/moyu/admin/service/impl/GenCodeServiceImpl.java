@@ -92,7 +92,7 @@ public class GenCodeServiceImpl implements GenCodeService {
                         SQLColumnDefinition columnDefinition = (SQLColumnDefinition) tableElement;
                         // 列信息
                         ColumnInfo columnInfo = new ColumnInfo();
-                        columnInfo.setColumnName(columnDefinition.getName().getSimpleName());
+                        columnInfo.setColumnName(removeQuotes(columnDefinition.getName().getSimpleName()));
                         columnInfo.setJdbcType(columnDefinition.getDataType().getName());
                         if (columnDefinition.getComment() != null) {
                             columnInfo.setComment(removeQuotes(columnDefinition.getComment().toString()));
