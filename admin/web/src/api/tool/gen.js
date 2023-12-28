@@ -6,7 +6,7 @@ export function listDbTable(data) {
     url: '/api/tool/gen/list',
     method: 'post',
     // data是json，params是表单
-    data: data
+    params: data
   })
 }
 
@@ -16,7 +16,7 @@ export function previewCode(data) {
     url: '/api/tool/gen/preview',
     method: 'post',
     // data是json，params是表单
-    params: data
+    data: data
   })
 }
 
@@ -26,7 +26,7 @@ export function previewCodeBySql(data) {
     url: '/api/tool/gen/previewBySql',
     method: 'post',
     // data是json，params是表单
-    params: data
+    data: data
   })
 }
 
@@ -36,7 +36,7 @@ export function downloadCode(data) {
     url: '/api/tool/gen/download',
     method: 'post',
     // data是json，params是表单
-    params: data
+    data: data
   })
 }
 
@@ -46,17 +46,7 @@ export function downloadCodeBySql(data) {
     url: '/api/tool/gen/downloadBySql',
     method: 'post',
     // data是json，params是表单
-    params: data
-  })
-}
-
-// 生成代码（自定义路径）
-export function genCode(data) {
-  return request({
-    url: '/api/tool/gen/genCode',
-    method: 'post',
-    // data是json，params是表单
-    params: data
+    data: data
   })
 }
 

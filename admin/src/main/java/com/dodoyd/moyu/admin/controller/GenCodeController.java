@@ -1,5 +1,6 @@
 package com.dodoyd.moyu.admin.controller;
 
+import com.dodoyd.moyu.admin.model.request.GenCodeRequest;
 import com.dodoyd.moyu.admin.model.vo.TableInfo;
 import com.dodoyd.moyu.admin.service.GenCodeService;
 import com.dodoyd.moyu.common.annotation.Log;
@@ -8,6 +9,7 @@ import com.google.common.io.ByteStreams;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,36 +37,36 @@ public class GenCodeController {
 
     @Log(jsonLog = true, response = false)
     @PostMapping(value = "/list")
-    public BaseResponse<List<TableInfo>> queryAllTableList() {
+    public BaseResponse<List<TableInfo>> queryAllTableList(GenCodeRequest request) {
         List<TableInfo> list = genCodeService.queryAllTableList();
         return BaseResponse.getSuccessResponse(list);
     }
 
     @Log(jsonLog = true, response = false)
     @PostMapping(value = "/preview")
-    public BaseResponse<Map<String, String>> previewCode(String tableName) {
-        Map<String, String> codeMap = genCodeService.genCodeByTable(tableName);
+    public BaseResponse<Map<String, String>> previewCode(@RequestBody GenCodeRequest request) {
+        Map<String, String> codeMap = genCodeService.genCodeByTable(request.getTableName());
         return BaseResponse.getSuccessResponse(codeMap);
     }
 
     @Log(jsonLog = true, response = false)
     @PostMapping(value = "/previewBySql")
-    public BaseResponse<Map<String, String>> previewCodeBySql(String sql) {
-        Map<String, String> codeMap = genCodeService.genCodeBySql(sql);
+    public BaseResponse<Map<String, String>> previewCodeBySql(@RequestBody GenCodeRequest request) {
+        Map<String, String> codeMap = genCodeService.genCodeBySql(request.getSql());
         return BaseResponse.getSuccessResponse(codeMap);
     }
 
     @Log
     @PostMapping(value = "/download")
-    public void downloadCode(String tableNames, HttpServletResponse response) throws IOException {
-        byte[] data = genCodeService.downloadCodeByTable(tableNames);
+    public void downloadCode(@RequestBody GenCodeRequest request, HttpServletResponse response) throws IOException {
+        byte[] data = genCodeService.downloadCodeByTable(request.getTableNames());
         buildResponse(response, data);
     }
 
     @Log
     @PostMapping(value = "/downloadBySql")
-    public void downloadCodeBySql(String sql, HttpServletResponse response) throws IOException {
-        byte[] data = genCodeService.downloadCodeBySql(sql);
+    public void downloadCodeBySql(@RequestBody GenCodeRequest request, HttpServletResponse response) throws IOException {
+        byte[] data = genCodeService.downloadCodeBySql(request.getSql());
         buildResponse(response, data);
     }
 
