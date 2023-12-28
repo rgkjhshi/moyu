@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { download } from '@/utils/request'
 
 // 查询数据库表
 export function listDbTable(data) {
@@ -24,6 +25,16 @@ export function previewCode(data) {
 export function previewCodeBySql(data) {
   return request({
     url: '/api/tool/gen/previewBySql',
+    method: 'post',
+    // data是json，params是表单
+    params: data
+  })
+}
+
+// 预览生成代码
+export function downloadCode(data) {
+  return download({
+    url: '/api/tool/gen/download',
     method: 'post',
     // data是json，params是表单
     params: data

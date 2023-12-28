@@ -5,6 +5,7 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import com.alibaba.druid.util.JdbcConstants;
+import com.dodoyd.moyu.admin.constant.Constants;
 import com.dodoyd.moyu.admin.constant.GenConstants;
 import com.dodoyd.moyu.admin.dao.GenCodeDao;
 import com.dodoyd.moyu.admin.model.vo.ColumnInfo;
@@ -22,7 +23,12 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @author shisong02
@@ -110,6 +116,25 @@ public class GenCodeServiceImpl implements GenCodeService {
         return codeMap;
     }
 
+    @Override
+    public byte[] downloadCodeByTable(String tableNames) {
+        Assert.hasText(tableNames, "表名不能为空");
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        // 创建一个字节输出流来存储ZIP文件
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        for (String tableName : Constants.COMMA_SPLITTER.split(tableNames)) {
+            genCode(tableName, zip);
+        }
+        try {
+            // 完成所有文件的添加
+            zip.finish();
+            zip.close();
+        } catch (IOException e) {
+            log.error("生成文件失败", e);
+        }
+        return outputStream.toByteArray();
+    }
+
     /**
      * 填充表信息
      */
@@ -153,6 +178,27 @@ public class GenCodeServiceImpl implements GenCodeService {
     }
 
     /**
+     * 生成代码
+     */
+    private void genCode(String tableName, ZipOutputStream zip) {
+        Map<String, String> codeMap = genCodeByTable(tableName);
+        for (Map.Entry<String, String> entry : codeMap.entrySet()) {
+            String fileName = getFileName(entry.getKey(), tableName);
+            try {
+                // 添加文件到ZIP文件
+                ZipEntry zipEntry = new ZipEntry(fileName);
+                zip.putNextEntry(zipEntry);
+                String code = codeMap.get("Domain.java");
+                zip.write(code.getBytes(StandardCharsets.UTF_8));
+                zip.flush();
+                zip.closeEntry();
+            } catch (IOException e) {
+                log.error("生成文件失败，表名：" + tableName, e);
+            }
+        }
+    }
+
+    /**
      * 去掉反引号和单引号
      */
     private String removeQuotes(String str) {
@@ -161,4 +207,27 @@ public class GenCodeServiceImpl implements GenCodeService {
         }
         return str;
     }
+
+    /**
+     * 获取文件名
+     */
+    private String getFileName(String template, String tableName) {
+        // 大写类名
+        String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName);
+        // 文件名称
+        String fileName = className;
+        if (template.equalsIgnoreCase("Domain.java")) {
+            fileName = String.format("domain/%s.java", className);
+        } else if (template.equalsIgnoreCase("Dao.java")) {
+            fileName = String.format("dao/%sDao.java", className);
+        } else if (template.equalsIgnoreCase("Service.java")) {
+            fileName = String.format("service/%sService.java", className);
+        } else if (template.equalsIgnoreCase("ServiceImpl.java")) {
+            fileName = String.format("service/impl/%sServiceImpl.java", className);
+        } else if (template.equalsIgnoreCase("Controller.java")) {
+            fileName = String.format("controller/%sController.java", className);
+        }
+        return fileName;
+    }
+
 }

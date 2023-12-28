@@ -69,7 +69,7 @@ import GenFromSql from '@/views/moyu/tool/genFromSql'
 import hljs from 'highlight.js' // 导入代码高亮文件
 import 'highlight.js/styles/github.css' // 代码高亮风格，选择更多风格需导入 node_modules/hightlight.js/styles/ 目录下其它css文件
 
-import { listDbTable, previewCode } from '@/api/tool/gen'
+import { listDbTable, previewCode, downloadCode } from '@/api/tool/gen'
 
 export default {
   name: 'TableList',
@@ -143,6 +143,8 @@ export default {
         this.preview.data = response.data
         this.preview.open = true
         this.preview.activeName = 'Domain.java'
+      }).catch(err => {
+        console.log(err)
       })
     },
     /** 高亮显示 */
@@ -161,13 +163,17 @@ export default {
     },
     /** 生成代码操作 */
     handleDownLoad(row) {
-      const tableNameList = row.tableName || '' + this.tableNameList
-      if (tableNameList === '') {
+      const tableNames = row.tableName || '' + this.tableNameList
+      if (tableNames === '') {
         this.$message({ type: 'error', message: '请选择要生成的表' })
         return
       }
-      console.log(tableNameList)
-      // this.$download.zip("/tool/gen/genCode?tableList=" + tableNames, "moyu.zip");
+      console.log(tableNames)
+      downloadCode({ tableNames: tableNames }).then(response => {
+        console.log(response)
+      }).catch(err => {
+        console.log(err)
+      })
     },
     /** 打开从SQL生成的弹窗 */
     openGenFromSql() {

@@ -43,6 +43,10 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    // 二进制数据则直接返回
+    if (response.request.responseType === 'blob') {
+      return response
+    }
     const res = response.data
 
     // if the custom code is not 0, it is judged as an error.
@@ -81,5 +85,28 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+// 自定义的通用下载方法
+export function download(config) {
+  return service({
+    responseType: 'blob',
+    ...config
+  }).then(response => {
+    // 创建一个链接元素用于下载
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    // 设置下载文件名
+    link.setAttribute('download', 'moyu.zip')
+    document.body.appendChild(link)
+    link.click()
+    // 清理并移除链接元素
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  }).catch(err => {
+    console.error(err)
+    Message.error('下载文件失败！')
+  })
+}
 
 export default service
