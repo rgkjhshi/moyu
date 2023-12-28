@@ -107,7 +107,7 @@ public class GenCodeServiceImpl implements GenCodeService {
     public byte[] downloadCodeByTable(String tableNames) {
         Assert.hasText(tableNames, "表名不能为空");
         List<String> tableNameList = Constants.COMMA_SPLITTER.splitToList(tableNames);
-        Assert.isTrue(tableNameList.size() <= 10, "下载内容过多，单次下载不能超过10个");
+        Assert.isTrue(tableNameList.size() <= 10, "下载内容过多，每次生成不能超过10个");
         // 创建一个字节输出流来存储ZIP文件
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
@@ -139,7 +139,7 @@ public class GenCodeServiceImpl implements GenCodeService {
         if (!CollectionUtils.isEmpty(statementList)) {
             createStatementList = statementList.stream().filter(statement -> statement instanceof MySqlCreateTableStatement).map(e -> (MySqlCreateTableStatement) e).collect(Collectors.toList());
         }
-        Assert.isTrue(createStatementList.size() > 0 && createStatementList.size() <= 10, "只能处理1~10个建表语句");
+        Assert.isTrue(createStatementList.size() > 0 && createStatementList.size() <= 10, "每次只能处理1~10个建表语句");
         // 创建一个字节输出流来存储ZIP文件
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);

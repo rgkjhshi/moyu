@@ -6,7 +6,7 @@
       <el-input v-model="sql" type="textarea" placeholder="请输入建表语句" :autosize="{ minRows: 20}" />
       <div slot="footer">
         <el-button type="success" plain size="small" icon="el-icon-view" @click="handlePreview()">预览</el-button>
-        <el-button type="primary" plain size="small" icon="el-icon-download" @click="handleDownLoad()">下载</el-button>
+        <el-button type="primary" plain size="small" icon="el-icon-download" @click="handleDownLoad()">生成</el-button>
         <el-button @click="visible = false">取 消</el-button>
       </div>
     </el-dialog>

@@ -19,7 +19,7 @@
         <el-button type="success" plain icon="el-icon-upload" size="mini" @click="openGenFromSql">从SQL生成</el-button>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary" plain icon="el-icon-download" size="mini" @click="handleDownLoad">批量下载</el-button>
+        <el-button type="primary" plain icon="el-icon-download" size="mini" @click="handleDownLoad">批量生成</el-button>
       </el-col>
     </el-row>
     <!-- 表格数据 -->
@@ -33,7 +33,7 @@
       <el-table-column label="操作" align="center" min-width="160">
         <template v-slot="{row}">
           <el-button type="success" plain size="small" icon="el-icon-view" @click="handlePreview(row)">预览</el-button>
-          <el-button type="primary" plain size="small" icon="el-icon-download" @click="handleDownLoad(row)">生成代码</el-button>
+          <el-button type="primary" plain size="small" icon="el-icon-download" @click="handleDownLoad(row)">生成</el-button>
         </template>
       </el-table-column>
     </el-table>
