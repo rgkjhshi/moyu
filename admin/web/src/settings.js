@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'admin',
+  title: '魔芋管理系统',
 
   /**
    * @type {boolean} true | false
