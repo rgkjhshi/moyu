@@ -5,7 +5,7 @@ export function listDbTable(data) {
   return request({
     url: '/api/tool/gen/list',
     method: 'post',
-    // data是json，params是表单
+    // data是json，params是查询参数
     params: data
   })
 }
@@ -15,7 +15,7 @@ export function previewCode(data) {
   return request({
     url: '/api/tool/gen/preview',
     method: 'post',
-    // data是json，params是表单
+    // data是json，params是查询参数
     data: data
   })
 }
@@ -25,7 +25,6 @@ export function previewCodeBySql(data) {
   return request({
     url: '/api/tool/gen/previewBySql',
     method: 'post',
-    // data是json，params是表单
     data: data
   })
 }
@@ -35,7 +34,6 @@ export function downloadCode(data) {
   return download({
     url: '/api/tool/gen/download',
     method: 'post',
-    // data是json，params是表单
     data: data
   })
 }
@@ -45,7 +43,6 @@ export function downloadCodeBySql(data) {
   return download({
     url: '/api/tool/gen/downloadBySql',
     method: 'post',
-    // data是json，params是表单
     data: data
   })
 }
