@@ -86,8 +86,6 @@ export default {
       dataList: [],
       total: 0,
       queryRequest: {
-        startDate: null,
-        endDate: null,
         // 页码
         pageNum: 1,
         // 页面大小
