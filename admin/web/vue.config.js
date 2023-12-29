@@ -6,7 +6,8 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || '魔芋管理系统' // 网站标题
+// 网站标题
+const name = defaultSettings.title
 
 // 端口，可以使用下面的方式改变端口
 // port = 9527 npm run dev OR npm run dev --port = 9527
