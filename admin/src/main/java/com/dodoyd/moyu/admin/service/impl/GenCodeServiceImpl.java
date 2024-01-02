@@ -2,7 +2,7 @@ package com.dodoyd.moyu.admin.service.impl;
 
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
+import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import com.alibaba.druid.util.JdbcConstants;
 import com.dodoyd.moyu.admin.constant.Constants;
@@ -82,37 +82,36 @@ public class GenCodeServiceImpl implements GenCodeService {
 
     @Override
     public Map<String, String> genCodeBySql(String sql) {
+        // 只处理第一个建表语句
+        Optional<MySqlCreateTableStatement> opt = Optional.empty();
         // 校验格式
         try {
             Assert.hasText(sql, "SQL不能为空");
-            SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
+            //  解析SQL语句，获取SQLStatement对象
+            List<SQLStatement> statementList = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
+            // 只处理第一个建表语句
+            opt = statementList.stream().filter(e -> e instanceof MySqlCreateTableStatement).findFirst().map(e -> (MySqlCreateTableStatement) e);
         } catch (Exception e) {
             throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), "SQL语句语法错误：" + e.getMessage());
         }
         // 存放生成代码的map
         Map<String, String> codeMap = new HashMap<>();
-        //  解析SQL语句，获取SQLStatement对象
-        List<SQLStatement> statementList = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
-        for (SQLStatement statement : statementList) {
-            // 如果是CREATE TABLE语句，获取表名和字段信息
-            if (statement instanceof MySqlCreateTableStatement) {
-                MySqlCreateTableStatement createTableStatement = (MySqlCreateTableStatement) statement;
-                // 表信息
-                TableInfo tableInfo = new TableInfo();
-                tableInfo.setTableName(removeQuotes(createTableStatement.getName().getSimpleName()));
-                if (createTableStatement.getComment() != null) {
-                    tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
-                }
-                // 补充表信息
-                fillTableInfo(tableInfo);
-                // 列信息
-                List<ColumnInfo> columnList = getColumnList(createTableStatement);
-                // 生成代码
-                codeMap = genCode(tableInfo, columnList);
-                // 第一个处理完后就返回,只能预览一个表的生成代码
-                break;
-            }
+        if (!opt.isPresent()) {
+            return codeMap;
         }
+        MySqlCreateTableStatement createTableStatement = opt.get();
+        // 表信息
+        TableInfo tableInfo = new TableInfo();
+        tableInfo.setTableName(removeQuotes(createTableStatement.getName().getSimpleName()));
+        if (createTableStatement.getComment() != null) {
+            tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
+        }
+        // 补充表信息
+        fillTableInfo(tableInfo);
+        // 列信息
+        List<ColumnInfo> columnList = getColumnList(createTableStatement);
+        // 生成代码
+        codeMap = genCode(tableInfo, columnList);
         return codeMap;
     }
 
@@ -184,6 +183,27 @@ public class GenCodeServiceImpl implements GenCodeService {
     }
 
     /**
+     * 解析创建表语句
+     */
+    private TableInfo parseCreateTable(MySqlCreateTableStatement createTableStatement) {
+        // 表信息
+        TableInfo tableInfo = new TableInfo();
+        // 表名
+        tableInfo.setTableName(removeQuotes(createTableStatement.getName().getSimpleName()));
+        // 表注释
+        if (createTableStatement.getComment() != null) {
+            tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
+        }
+        // 表对应的类名
+        String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableInfo.getTableName());
+        tableInfo.setClassName(className);
+        // 列信息
+        tableInfo.setColumnList(getColumnList(createTableStatement));
+        tableInfo.setPkColumn(getPkColumn(createTableStatement));
+        return tableInfo;
+    }
+
+    /**
      * 通过表创建语句获取列信息列表
      */
     private List<ColumnInfo> getColumnList(MySqlCreateTableStatement createTableStatement) {
@@ -206,6 +226,38 @@ public class GenCodeServiceImpl implements GenCodeService {
             }
         });
         return columnList;
+    }
+
+    /**
+     * 通过表创建语句获取主键列信息(只处理主键为单列的情况)
+     */
+    private ColumnInfo getPkColumn(SQLCreateTableStatement createTableStatement) {
+        // 列信息
+        ColumnInfo pkColumnInfo = null;
+        // 遍历建表语句的元素列表，判断是否为主键列
+        for (SQLTableElement tableElement : createTableStatement.getTableElementList()) {
+            // 判断是否为唯一键(一个表只有一个唯一键)
+            if (tableElement instanceof SQLPrimaryKey) {
+                SQLPrimaryKey sqlPrimaryKey = (SQLPrimaryKey) tableElement;
+                // 获取构成唯一键的所有列信息
+                List<SQLSelectOrderByItem> columns = sqlPrimaryKey.getColumns();
+                if (columns.size() == 1) {
+                    // 组成主键的列可以有多个，但通常只会有一个列为主键
+                    SQLColumnDefinition pkColumn = createTableStatement.findColumn(columns.get(0).getExpr().toString());
+                    if (pkColumn != null) {
+                        // 列信息
+                        pkColumnInfo = new ColumnInfo();
+                        // 列名称
+                        pkColumnInfo.setColumnName(removeQuotes(pkColumn.getName().getSimpleName()));
+                        // jdbc类型
+                        pkColumnInfo.setJdbcType(pkColumn.getDataType().getName());
+                        // 填充java类型和名称
+                        fillColumnInfo(pkColumnInfo);
+                    }
+                }
+            }
+        }
+        return pkColumnInfo;
     }
 
     /**
@@ -274,13 +326,14 @@ public class GenCodeServiceImpl implements GenCodeService {
     }
 
     /**
-     * 去掉反引号和单引号
+     * 去掉引号和反引号
      */
     private String removeQuotes(String str) {
-        if (str != null) {
-            str = str.replace("`", "").replace("'", "");
-        }
-        return str;
+        return SQLUtils.normalize(str);
+//        if (str != null) {
+//            str = str.replace("`", "").replace("'", "").replace("\"", "");
+//        }
+//        return str;
     }
 
     /**
