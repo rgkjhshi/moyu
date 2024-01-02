@@ -31,6 +31,15 @@ public class GsonConfig {
                         return Strings.isNullOrEmpty(json.getAsString()) ? null : json.getAsInt();
                     }
                 });
+
+                // 用于将JSON中的长整数反序列化为Long对象的自定义反序列化器。
+                builder.registerTypeAdapter(Long.class, new JsonDeserializer<Long>() {
+                    @Override
+                    public Long deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                        // 字符串转换为Long时，仅将空字符串转换为null
+                        return Strings.isNullOrEmpty(json.getAsString()) ? null : json.getAsLong();
+                    }
+                });
             }
         };
     }
