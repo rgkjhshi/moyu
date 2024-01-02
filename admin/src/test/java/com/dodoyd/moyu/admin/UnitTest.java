@@ -55,7 +55,7 @@ public class UnitTest {
     }
 
     @Test
-    public void testSql() {
+    public void testDruidSql() {
         String sql = "CREATE TABLE `mt_tab_info`\n" +
                 "(\n" +
                 "    `id`       bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',\n" +
