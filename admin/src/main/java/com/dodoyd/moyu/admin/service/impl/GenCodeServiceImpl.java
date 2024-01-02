@@ -304,11 +304,11 @@ public class GenCodeServiceImpl implements GenCodeService {
      * 去掉引号和反引号
      */
     private String removeQuotes(String str) {
-        return SQLUtils.normalize(str);
-//        if (str != null) {
-//            str = str.replace("`", "").replace("'", "").replace("\"", "");
-//        }
-//        return str;
+//        return SQLUtils.normalize(str);
+        if (str != null) {
+            str = str.replace("`", "").replace("'", "").replace("\"", "");
+        }
+        return str;
     }
 
     /**
