@@ -3,6 +3,7 @@ package com.dodoyd.moyu.admin.model.vo;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author shisong02
@@ -35,4 +36,14 @@ public class TableInfo {
      * 更新时间
      */
     private Date updateTime;
+
+    /**
+     * 列信息列表
+     */
+    private List<ColumnInfo> columnList;
+
+    /**
+     * 主键列信息
+     */
+    private ColumnInfo pkColumn;
 }

@@ -65,7 +65,7 @@ public class UnitTest {
                 "    `c_time`   datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
                 "    `u_time`   datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',\n" +
                 "    PRIMARY KEY (`id`),\n" +
-                "    UNIQUE KEY `uniq_tab_code` (`tab_code`)\n" +
+                "    UNIQUE KEY `uniq_tab_code` (`tab_code`, `tab_name`)\n" +
                 ") ENGINE = InnoDB COMMENT ='平台聚合方式信息元数据表';";
 
         try {
@@ -87,7 +87,7 @@ public class UnitTest {
             // 表名
             System.out.println("Table Name: " + createTableStatement.getName().getSimpleName());
             if (createTableStatement.getComment() != null) {
-                System.out.println("Table Name: " + createTableStatement.getComment().toString());
+                System.out.println("Table Comment: " + SQLUtils.normalize(createTableStatement.getComment().toString()));
             }
 
             // 获取字段信息
@@ -97,7 +97,7 @@ public class UnitTest {
                     SQLColumnDefinition columnDefinition = (SQLColumnDefinition) tableElement;
                     System.out.println("Column name: " + columnDefinition.getName().getSimpleName());
                     System.out.println("Column type: " + columnDefinition.getDataType().getName());
-                    System.out.println("Column comment: " + columnDefinition.getComment().toString());
+                    System.out.println("Column comment: " + SQLUtils.normalize(columnDefinition.getComment().toString()));
                 }
             });
         }
