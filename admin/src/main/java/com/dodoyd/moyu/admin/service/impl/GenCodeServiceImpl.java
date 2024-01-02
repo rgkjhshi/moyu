@@ -69,8 +69,8 @@ public class GenCodeServiceImpl implements GenCodeService {
     public Map<String, String> genCodeByTable(String tableName) {
         Assert.hasText(tableName, "表名不能为空");
         TableInfo tableInfo = genCodeDao.selectTableByName(tableName);
-        // 填充表信息
-        fillTableInfo(tableInfo);
+        // 表对应的类名
+        tableInfo.setClassName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableInfo.getTableName()));
 
         List<ColumnInfo> columnList = genCodeDao.selectColumnListByTableName(tableName);
         for (ColumnInfo column : columnList) {
@@ -179,8 +179,7 @@ public class GenCodeServiceImpl implements GenCodeService {
             tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
         }
         // 表对应的类名
-        String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableInfo.getTableName());
-        tableInfo.setClassName(className);
+        tableInfo.setClassName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableInfo.getTableName()));
         // 列信息
         tableInfo.setColumnList(getColumnList(createTableStatement));
         tableInfo.setPkColumn(getPkColumn(createTableStatement));
@@ -242,14 +241,6 @@ public class GenCodeServiceImpl implements GenCodeService {
             }
         }
         return pkColumnInfo;
-    }
-
-    /**
-     * 填充表信息
-     */
-    private void fillTableInfo(TableInfo tableInfo) {
-        String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableInfo.getTableName());
-        tableInfo.setClassName(className);
     }
 
     /**
