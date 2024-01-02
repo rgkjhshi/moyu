@@ -77,7 +77,8 @@ public class GenCodeServiceImpl implements GenCodeService {
             // 填充列信息
             fillColumnInfo(column);
         }
-        return genCode(tableInfo, columnList);
+        tableInfo.setColumnList(columnList);
+        return genCode(tableInfo);
     }
 
     @Override
@@ -99,19 +100,10 @@ public class GenCodeServiceImpl implements GenCodeService {
         if (!opt.isPresent()) {
             return codeMap;
         }
-        MySqlCreateTableStatement createTableStatement = opt.get();
         // 表信息
-        TableInfo tableInfo = new TableInfo();
-        tableInfo.setTableName(removeQuotes(createTableStatement.getName().getSimpleName()));
-        if (createTableStatement.getComment() != null) {
-            tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
-        }
-        // 补充表信息
-        fillTableInfo(tableInfo);
-        // 列信息
-        List<ColumnInfo> columnList = getColumnList(createTableStatement);
+        TableInfo tableInfo = parseCreateTable(opt.get());
         // 生成代码
-        codeMap = genCode(tableInfo, columnList);
+        codeMap = genCode(tableInfo);
         return codeMap;
     }
 
@@ -151,24 +143,16 @@ public class GenCodeServiceImpl implements GenCodeService {
         if (!CollectionUtils.isEmpty(statementList)) {
             createStatementList = statementList.stream().filter(statement -> statement instanceof MySqlCreateTableStatement).map(e -> (MySqlCreateTableStatement) e).collect(Collectors.toList());
         }
-        Assert.isTrue(createStatementList.size() > 0 && createStatementList.size() <= 10, "每次只能处理1~10个建表语句");
+        Assert.isTrue(!createStatementList.isEmpty() && createStatementList.size() <= 10, "每次只能处理1~10个建表语句");
         // 创建一个字节输出流来存储ZIP文件
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         // 遍历建表语句生成代码并添加到zip
         for (MySqlCreateTableStatement createTableStatement : createStatementList) {
             // 表信息
-            TableInfo tableInfo = new TableInfo();
-            tableInfo.setTableName(removeQuotes(createTableStatement.getName().getSimpleName()));
-            if (createTableStatement.getComment() != null) {
-                tableInfo.setTableComment(removeQuotes(createTableStatement.getComment().toString()));
-            }
-            //  补充表信息
-            fillTableInfo(tableInfo);
-            // 列信息
-            List<ColumnInfo> columnList = getColumnList(createTableStatement);
+            TableInfo tableInfo = parseCreateTable(createTableStatement);
             // 存放生成代码的map
-            Map<String, String> codeMap = genCode(tableInfo, columnList);
+            Map<String, String> codeMap = genCode(tableInfo);
             // 第一个处理完后就返回,只能预览一个表的生成代码
             genCode(tableInfo.getTableName(), codeMap, zip);
         }
@@ -279,7 +263,7 @@ public class GenCodeServiceImpl implements GenCodeService {
     /**
      * 通过组装好的结构按照模板生成代码
      */
-    Map<String, String> genCode(TableInfo tableInfo, List<ColumnInfo> columnList) {
+    Map<String, String> genCode(TableInfo tableInfo) {
         // code代码map
         Map<String, String> codeMap = new LinkedHashMap<>();
         List<String> templateList = Lists.newArrayList("Domain.java", "Dao.java", "Service.java", "ServiceImpl.java");
@@ -292,7 +276,7 @@ public class GenCodeServiceImpl implements GenCodeService {
                 dataMap.put("packageName", GenConstants.PACKAGE_NAME);
                 dataMap.put("author", GenConstants.CODE_AUTHOR);
                 dataMap.put("entity", tableInfo);
-                dataMap.put("columnList", columnList);
+                dataMap.put("columnList", tableInfo.getColumnList());
                 String codeStr = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
                 codeMap.put(templateName, codeStr);
             } catch (Exception e) {
