@@ -2,6 +2,7 @@ package com.dodoyd.moyu.common.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * @author shisong02
@@ -54,5 +55,14 @@ public class PageResult<T> {
         pageResult.setPageNum(1);
         pageResult.setPageData(new ArrayList<>());
         return pageResult;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", PageResult.class.getSimpleName() + "[", "]")
+                .add("total=" + total)
+                .add("pageNum=" + pageNum)
+                .add("pageData=" + pageData)
+                .toString();
     }
 }

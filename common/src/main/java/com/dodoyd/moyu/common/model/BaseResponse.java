@@ -1,6 +1,7 @@
 package com.dodoyd.moyu.common.model;
 
 import java.io.Serializable;
+import java.util.StringJoiner;
 
 /**
  * 基本响应对象, 包含错误代码和错误描述信息, 返回的具体数据可包含在 data 字段中, data采用范型, 可根据需要定义类型
@@ -105,10 +106,10 @@ public class BaseResponse<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "BaseResponse{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                ", data=" + data +
-                '}';
+        return new StringJoiner(", ", BaseResponse.class.getSimpleName() + "[", "]")
+                .add("code=" + code)
+                .add("message='" + message + "'")
+                .add("data=" + data)
+                .toString();
     }
 }
