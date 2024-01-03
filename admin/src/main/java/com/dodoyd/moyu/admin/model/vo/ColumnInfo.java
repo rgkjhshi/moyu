@@ -27,16 +27,6 @@ public class ColumnInfo {
     private String comment;
 
     /**
-     * 是否主键（1是）
-     */
-    private Integer isPk;
-
-    /**
-     * 是否唯一键（1是）
-     */
-    private Integer isUk;
-
-    /**
      * java的属性名
      */
     private String javaName;
