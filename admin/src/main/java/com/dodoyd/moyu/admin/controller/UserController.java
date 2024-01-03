@@ -2,17 +2,15 @@ package com.dodoyd.moyu.admin.controller;
 
 
 import com.dodoyd.moyu.admin.model.dto.UserInfoDTO;
+import com.dodoyd.moyu.admin.model.request.LoginRequest;
+import com.dodoyd.moyu.admin.service.LoginService;
 import com.dodoyd.moyu.admin.service.TokenService;
 import com.dodoyd.moyu.admin.util.UserLocalUtils;
 import com.dodoyd.moyu.common.model.BaseResponse;
 import com.google.common.collect.Lists;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 
 /**
  * 用户信息处理器
@@ -25,15 +23,18 @@ import java.util.ArrayList;
 public class UserController {
 
     @Resource
+    private LoginService loginService;
+
+    @Resource
     private TokenService tokenService;
 
     /**
      * 登录
      */
     @PostMapping(value = "/login")
-    public BaseResponse<String> login() {
+    public BaseResponse<String> login(@RequestBody LoginRequest request) {
         // 获取userInfo后生成用户token
-        String token = tokenService.createToken(10001L);
+        String token = loginService.login(request.getUsername(), request.getPassword());
         return BaseResponse.getSuccessResponse(token);
     }
 
