@@ -8,9 +8,13 @@ import com.dodoyd.moyu.admin.constant.Constants;
 import com.dodoyd.moyu.admin.service.TokenService;
 import com.dodoyd.moyu.common.enums.ExceptionEnum;
 import com.dodoyd.moyu.common.exception.BaseException;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author shisong
@@ -19,6 +23,29 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class TokenServiceImpl implements TokenService {
+
+    /**
+     * token令牌前缀
+     */
+    public static final String TOKEN_PREFIX = "Bearer ";
+
+    /**
+     * token在header中的标识
+     */
+    private static final String TOKEN_HEADER = "X-Token";
+
+    // 令牌秘钥
+    @Value("${token.secret}")
+    private String secret;
+
+    @Override
+    public String getToken(HttpServletRequest request) {
+        String token = request.getHeader(TOKEN_HEADER);
+        if (!Strings.isNullOrEmpty(token) && token.startsWith(TOKEN_PREFIX)) {
+            token = token.replace(TOKEN_PREFIX, "");
+        }
+        return token;
+    }
 
     @Override
     public String createToken(Long userId) {

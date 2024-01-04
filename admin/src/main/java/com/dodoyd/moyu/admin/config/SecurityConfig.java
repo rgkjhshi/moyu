@@ -1,5 +1,6 @@
 package com.dodoyd.moyu.admin.config;
 
+import com.dodoyd.moyu.admin.security.filter.JwtTokenAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
 
@@ -23,6 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private UserDetailsService userDetailsService;
 
+    @Resource
+    private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // 注解标记允许匿名访问的url
@@ -35,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 允许跨域访问
                 .cors()
                 // 禁用HTTP响应标头
-//                .and().headers().cacheControl().disable()
+                .and().headers().cacheControl().disable()
+                .and().headers().frameOptions().disable()
                 // 设置会话会话创建策略为无状态, 基于token，不使用session
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 // 过滤请求
@@ -46,10 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/static/**", "/public/**", "/**/*.css", "/**/*.js").permitAll()
 //                .antMatchers("/api/**").authenticated()
                 // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().authenticated()
-                .and().headers().frameOptions().disable();
+                .anyRequest().authenticated();
         // 添加JWT filter
-//        httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     /**

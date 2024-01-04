@@ -4,11 +4,18 @@ package com.dodoyd.moyu.admin.service;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.dodoyd.moyu.common.exception.BaseException;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author shisong
  * @since 2019-02-26
  */
 public interface TokenService {
+
+    /**
+     * 从http请求头中读取token
+     */
+    String getToken(HttpServletRequest request);
 
     /**
      * 创建token
