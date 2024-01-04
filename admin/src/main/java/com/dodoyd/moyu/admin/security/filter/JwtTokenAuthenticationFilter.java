@@ -32,6 +32,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         // 如果token存在，进行验证并设置SecurityContext
         if (token != null) {
             // 验证token并获取用户信息
+            tokenService.verifyToken(token);
             // 注意：这里的验证逻辑需要你根据实际情况进行实现
             UserDetails userDetails = verifyToken(token);
             if (userDetails != null) {

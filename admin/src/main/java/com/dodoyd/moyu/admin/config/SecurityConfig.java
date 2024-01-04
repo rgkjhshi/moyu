@@ -3,6 +3,7 @@ package com.dodoyd.moyu.admin.config;
 import com.dodoyd.moyu.admin.security.filter.JwtTokenAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
+    /**
+     * Security配置
+     */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // 注解标记允许匿名访问的url
@@ -39,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 // 允许跨域访问
                 .cors()
+                // 表单登录处理器地址
+//                .and().formLogin().loginProcessingUrl("/api/login")
                 // 禁用HTTP响应标头
                 .and().headers().cacheControl().disable()
                 .and().headers().frameOptions().disable()
@@ -58,19 +64,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 强散列哈希加密实现
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    /**
-     * 身份认证接口
+     * 认证管理器配置
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // 设置自定义身份认证接口UserDetailsService进行身份认证，并使用BCryptPasswordEncoder进行密码加密。
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        // 设置自定义身份认证接口进行身份认证，并使用BCryptPasswordEncoder进行密码加密。
+        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }
+
+    /**
+     * AuthenticationManager作为Bean声明，使用时可直接注入
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
 }
