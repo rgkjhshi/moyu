@@ -1,5 +1,6 @@
 package com.dodoyd.moyu.admin.security.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -18,11 +19,13 @@ import java.util.List;
  * @author shisong02
  * @since 2024-01-04
  */
+@Slf4j
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("用户验证:{}", username);
         // 权限
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
         List<GrantedAuthority> authorities = new ArrayList<>();

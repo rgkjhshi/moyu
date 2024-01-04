@@ -54,20 +54,9 @@ export default {
   components: { },
 
   data() {
-    const checkUsername = (rule, value, callback) => {
+    const checkRequire = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请填写手机号'))
-      }
-      // 使用正则表达式进行验证手机号码
-      if (!/^1[3456789]\d{9}$/.test(value)) {
-        callback(new Error('请输入正确的手机号'))
-      }
-      // 自定义校验规则 需要调用callback()函数！
-      callback()
-    }
-    const checkPassword = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入密码'))
+        callback(new Error('不可为空'))
       }
       // 自定义校验规则 需要调用callback()函数！
       callback()
@@ -87,8 +76,8 @@ export default {
       redirect: undefined,
       otherQuery: {},
       loginRules: {
-        username: [{ validator: checkUsername, trigger: 'blur' }],
-        password: [{ validator: checkPassword, trigger: 'blur' }]
+        username: [{ validator: checkRequire, trigger: 'blur' }],
+        password: [{ validator: checkRequire, trigger: 'blur' }]
       }
     }
   },

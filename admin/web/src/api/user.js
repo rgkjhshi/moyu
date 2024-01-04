@@ -1,24 +1,23 @@
 import request from '@/utils/request'
 
 export function login(data) {
-  return request({
-    url: '/api/user/login',
-    method: 'post',
-    data
-  })
+  const formData = new FormData()
+  for (const key in data) {
+    formData.append(key, data[key])
+  }
+  return request.post('/api/login', formData)
 }
 
 export function getInfo(token) {
   return request({
-    url: '/api/user/info',
-    method: 'get',
-    params: { token }
+    url: '/api/info',
+    method: 'get'
   })
 }
 
 export function logout() {
   return request({
-    url: '/api/user/logout',
+    url: '/api/logout',
     method: 'post'
   })
 }
