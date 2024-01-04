@@ -24,25 +24,15 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public class TokenServiceImpl implements TokenService {
 
-    /**
-     * token令牌前缀
-     */
-    public static final String TOKEN_PREFIX = "Bearer ";
-
-    /**
-     * token在header中的标识
-     */
-    private static final String TOKEN_HEADER = "X-Token";
-
     // 令牌秘钥
     @Value("${token.secret}")
     private String secret;
 
     @Override
     public String getToken(HttpServletRequest request) {
-        String token = request.getHeader(TOKEN_HEADER);
-        if (!Strings.isNullOrEmpty(token) && token.startsWith(TOKEN_PREFIX)) {
-            token = token.replace(TOKEN_PREFIX, "");
+        String token = request.getHeader(Constants.Token.HEADER);
+        if (!Strings.isNullOrEmpty(token) && token.startsWith(Constants.Token.PREFIX)) {
+            token = token.replace(Constants.Token.PREFIX, "");
         }
         return token;
     }

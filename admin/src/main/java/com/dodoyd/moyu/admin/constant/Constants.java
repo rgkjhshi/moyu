@@ -45,6 +45,14 @@ public class Constants {
      */
     public static class Token {
         /**
+         * token在header中的标识
+         */
+        public static final String HEADER = "X-Token";
+        /**
+         * token令牌前缀
+         */
+        public static final String PREFIX = "Bearer ";
+        /**
          * jwt秘钥
          */
         public static final String SECRET = "something_secret";
