@@ -43,4 +43,13 @@ public interface TokenService {
      * @throws BaseException 校验失败抛出异常
      */
     Long verifyAndGetUserId(String token) throws BaseException;
+
+    /**
+     * 校验token并返回token中的sub
+     *
+     * @param token 用户token
+     * @return 成功返回sub, 失败返回null
+     * @throws BaseException 校验失败抛出异常
+     */
+    String verifyAndGetSubject(String token) throws BaseException;
 }

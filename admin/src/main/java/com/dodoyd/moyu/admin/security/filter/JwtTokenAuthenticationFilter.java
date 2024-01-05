@@ -1,6 +1,7 @@
 package com.dodoyd.moyu.admin.security.filter;
 
 import com.dodoyd.moyu.admin.model.LoginUser;
+import com.dodoyd.moyu.admin.security.service.CustomUserDetailsService;
 import com.dodoyd.moyu.admin.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,6 +32,9 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     @Resource
     private TokenService tokenService;
 
+    @Resource
+    private CustomUserDetailsService customUserDetailsService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 从请求头中获取token
@@ -45,7 +48,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = verifyToken(token);
             if (userDetails != null) {
                 // 创建Authentication并设置到SecurityContext中
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
@@ -56,8 +59,16 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
     private UserDetails verifyToken(String token) {
         // 这里是验证token的逻辑，需要你根据实际情况进行实现
-        Long userId = tokenService.verifyAndGetUserId(token);
+        String username = tokenService.verifyAndGetSubject(token);
+        // 从数据库获取用户
 
-        return null;
+        // 获取授权列表
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        // 通过用户获取角色
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
+        authorities.add(authority);
+        LoginUser loginUser = new LoginUser(username, null, authorities);
+        // Create UserDetails object
+        return loginUser;
     }
 }

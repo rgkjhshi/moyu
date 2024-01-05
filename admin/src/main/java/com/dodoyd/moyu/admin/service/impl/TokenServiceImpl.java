@@ -75,4 +75,10 @@ public class TokenServiceImpl implements TokenService {
         DecodedJWT jwt = verifyToken(token);
         return jwt.getClaim("userId").asLong();
     }
+
+    @Override
+    public String verifyAndGetSubject(String token) throws BaseException {
+        DecodedJWT jwt = verifyToken(token);
+        return jwt.getSubject();
+    }
 }
