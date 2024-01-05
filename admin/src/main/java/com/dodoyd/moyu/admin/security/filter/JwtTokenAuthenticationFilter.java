@@ -43,9 +43,9 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         // 如果token存在，进行验证并设置SecurityContext
         if (token != null) {
             // 验证token并获取用户信息
-            tokenService.verifyToken(token);
+            String username = tokenService.verifyAndGetSubject(token);
             // 注意：这里的验证逻辑需要你根据实际情况进行实现
-            UserDetails userDetails = verifyToken(token);
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
             if (userDetails != null) {
                 // 创建Authentication并设置到SecurityContext中
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
