@@ -1,5 +1,6 @@
 package com.dodoyd.moyu.admin.service;
 
+import com.dodoyd.moyu.admin.domain.SysRole;
 import com.dodoyd.moyu.admin.domain.SysUser;
 
 import java.util.List;
@@ -11,6 +12,14 @@ import java.util.List;
  * @since 2024-01-05
  */
 public interface SysUserService {
+
+    /**
+     * 查询SysUser
+     *
+     * @param username 用户username
+     * @return SysRole
+     */
+    SysUser querySysUserByUsername(String username);
 
     /**
      * 查询SysUser
