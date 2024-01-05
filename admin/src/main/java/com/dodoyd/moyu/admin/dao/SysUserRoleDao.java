@@ -110,9 +110,9 @@ public interface SysUserRoleDao {
     @Select({"<script>",
             "SELECT * FROM sys_user_role",
             "<where>",
-            "    <if test='id != null'>AND id = #{id},</if>",
-            "    <if test='userId != null'>AND user_id = #{userId},</if>",
-            "    <if test='roleId != null'>AND role_id = #{roleId},</if>",
+            "    <if test='id != null'>AND id = #{id}</if>",
+            "    <if test='userId != null'>AND user_id = #{userId}</if>",
+            "    <if test='roleId != null'>AND role_id = #{roleId}</if>",
             "</where>",
             "</script>"})
     SysUserRole selectOne(SysUserRole sysUserRole);
@@ -127,9 +127,9 @@ public interface SysUserRoleDao {
     @Select({"<script>",
             "SELECT * FROM sys_user_role",
             "<where>",
-            "    <if test='id != null'>AND id = #{id},</if>",
-            "    <if test='userId != null'>AND user_id = #{userId},</if>",
-            "    <if test='roleId != null'>AND role_id = #{roleId},</if>",
+            "    <if test='id != null'>AND id = #{id}</if>",
+            "    <if test='userId != null'>AND user_id = #{userId}</if>",
+            "    <if test='roleId != null'>AND role_id = #{roleId}</if>",
             "</where>",
             "</script>"})
     List<SysUserRole> selectList(SysUserRole sysUserRole);

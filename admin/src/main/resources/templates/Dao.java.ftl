@@ -111,7 +111,7 @@ public interface ${entity.className}Dao {
             "SELECT * FROM ${entity.tableName}",
             "<where>",
             <#list columnList as column>
-            "    <if test='${column.javaName} != null'>AND ${column.columnName} = ${r'#{'}${column.javaName}},</if>",
+            "    <if test='${column.javaName} != null'>AND ${column.columnName} = ${r'#{'}${column.javaName}}</if>",
             </#list>
             "</where>",
             "</script>"})
@@ -128,7 +128,7 @@ public interface ${entity.className}Dao {
             "SELECT * FROM ${entity.tableName}",
             "<where>",
             <#list columnList as column>
-            "    <if test='${column.javaName} != null'>AND ${column.columnName} = ${r'#{'}${column.javaName}},</if>",
+            "    <if test='${column.javaName} != null'>AND ${column.columnName} = ${r'#{'}${column.javaName}}</if>",
             </#list>
             "</where>",
             "</script>"})

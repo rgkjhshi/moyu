@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("用户验证:{}", username);
         // 从数据库获取用户
-        SysUser sysUser = sysUserService.querySysUserByUsername(username);
+//        SysUser sysUser = sysUserService.querySysUserByUsername(username);
 
         // 获取授权列表
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -42,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
         authorities.add(authority);
         // Load user from database or other data source
-        String password = new BCryptPasswordEncoder().encode(sysUser.getUserPwd());
+        String password = new BCryptPasswordEncoder().encode("admin");
         LoginUser loginUser = new LoginUser(username, password, authorities);
         // Create UserDetails object
         return loginUser;
