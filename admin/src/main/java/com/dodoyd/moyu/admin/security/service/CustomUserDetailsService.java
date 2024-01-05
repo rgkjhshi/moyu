@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,15 +25,21 @@ import java.util.List;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+    @Resource
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("用户验证:{}", username);
-        // 权限
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
+        // 从数据库获取用户
+
+        // 获取授权列表
         List<GrantedAuthority> authorities = new ArrayList<>();
+        // 通过用户获取角色
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
         authorities.add(authority);
         // Load user from database or other data source
-        String password = new BCryptPasswordEncoder().encode("admin2");
+        String password = bCryptPasswordEncoder.encode("admin");
         LoginUser loginUser = new LoginUser(username, password, authorities);
         // Create UserDetails object
         return loginUser;

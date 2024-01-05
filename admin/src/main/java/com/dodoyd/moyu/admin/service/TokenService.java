@@ -42,5 +42,5 @@ public interface TokenService {
      * @return 成功返回userId, 失败返回null
      * @throws BaseException 校验失败抛出异常
      */
-    Long getUserIdByToken(String token) throws BaseException;
+    Long verifyAndGetUserId(String token) throws BaseException;
 }

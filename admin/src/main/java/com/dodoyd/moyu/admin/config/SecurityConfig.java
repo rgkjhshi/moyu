@@ -64,12 +64,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * 强散列哈希加密实现
+     */
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    /**
      * 认证管理器配置
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 设置自定义身份认证接口进行身份认证，并使用BCryptPasswordEncoder进行密码加密。
-        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
     /**

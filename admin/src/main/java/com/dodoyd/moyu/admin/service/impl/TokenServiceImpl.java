@@ -44,12 +44,13 @@ public class TokenServiceImpl implements TokenService {
         DateTime now = DateTime.now();
         // 各个字段含义参考 http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html
         token = JWT.create()
+                // 主题,即username
+                .withSubject(loginUser.getUsername())
                 // 签发时间
                 .withIssuedAt(DateTime.now().toDate())
                 // 过期时间
                 .withExpiresAt(now.plusSeconds(Constants.Token.TOKEN_VALID_TIME).toDate())
                 .withClaim("userId", loginUser.getUserId())
-                .withClaim("username", loginUser.getUsername())
                 .sign(Constants.Token.SIGNATURE_ALGORITHM);
         return token;
     }
@@ -70,7 +71,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public Long getUserIdByToken(String token) throws BaseException {
+    public Long verifyAndGetUserId(String token) throws BaseException {
         DecodedJWT jwt = verifyToken(token);
         return jwt.getClaim("userId").asLong();
     }
