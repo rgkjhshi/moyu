@@ -47,7 +47,7 @@ public class TokenServiceImpl implements TokenService {
                 // 主题,即username
                 .withSubject(loginUser.getUsername())
                 // 签发时间
-                .withIssuedAt(DateTime.now().toDate())
+                .withIssuedAt(now.toDate())
                 // 过期时间
                 .withExpiresAt(now.plusSeconds(Constants.Token.TOKEN_VALID_TIME).toDate())
                 .withClaim("userId", loginUser.getUserId())
