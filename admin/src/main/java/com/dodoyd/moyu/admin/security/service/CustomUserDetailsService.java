@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("用户验证:{}", username);
         // 从数据库获取用户
-//        SysUser sysUser = sysUserService.querySysUserByUsername(username);
+        SysUser sysUser = sysUserService.querySysUserByUsername(username);
 
         // 获取授权列表
         List<GrantedAuthority> authorities = new ArrayList<>();
