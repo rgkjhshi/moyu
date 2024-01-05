@@ -19,7 +19,8 @@ CREATE TABLE sys_user
     create_time datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     remark      varchar(500)        NOT NULL DEFAULT '' COMMENT '备注',
-    PRIMARY KEY (user_id)
+    PRIMARY KEY (user_id),
+    UNIQUE KEY uniq_user_name (user_name)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 10000 COMMENT = '用户信息表';
 
@@ -67,7 +68,7 @@ CREATE TABLE sys_menu
     menu_type   char(1)             NOT NULL DEFAULT '' COMMENT '资源类型,D:目录,M:菜单,B:按钮',
     path        varchar(256)        NOT NULL DEFAULT '' COMMENT '路径地址',
     component   varchar(256)        NOT NULL DEFAULT '' COMMENT '组件路径',
-    perms       varchar(100)        NOT NULL DEFAULT NULL COMMENT '权限标识',
+    perms       varchar(100)        NOT NULL DEFAULT '' COMMENT '权限标识',
     icon        varchar(100)        NOT NULL DEFAULT '#' COMMENT '菜单图标',
     hidden      tinyint(5)          NOT NULL DEFAULT 0 COMMENT '是否隐藏,0:显示,1:隐藏',
     link        tinyint(5)          NOT NULL DEFAULT 0 COMMENT '是否外链,0:非外链,1:外链',
@@ -85,7 +86,8 @@ CREATE TABLE sys_menu
 
 -- 初始化-菜单信息表数据 ---------
 -- 一级菜单
-INSERT INTO sys_menu (id, menu_name, parent_id, sort_order, menu_type, path, component, perms, icon, hidden, link, remark)
+INSERT INTO sys_menu (id, menu_name, parent_id, sort_order, menu_type, path, component, perms, icon, hidden, link,
+                      remark)
 VALUES (1, '系统管理', 0, 1, 'D', 'system', '', '', 'system', 0, 0, '系统管理目录'),
        (2, '系统监控', 0, 2, 'D', 'monitor', '', '', 'monitor', 0, 0, '系统监控目录'),
        (3, '系统工具', 0, 3, 'D', 'tool', '', '', 'tool', 0, 0, '系统工具目录'),
@@ -132,7 +134,8 @@ CREATE TABLE sys_user_role
     id      bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
     user_id bigint(20)          not null comment '用户ID',
     role_id bigint(20)          not null comment '角色ID',
-    primary key (user_id, role_id)
+    PRIMARY KEY (id),
+    UNIQUE KEY uniq_user_role (user_id, role_id)
 ) ENGINE = innodb comment = '用户和角色关联表';
 
 -- 初始化-用户和角色关联表数据 ----
@@ -148,7 +151,8 @@ CREATE TABLE sys_role_menu
     id      bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
     role_id bigint(20)          NOT NULL COMMENT '角色ID',
     menu_id bigint(20)          NOT NULL COMMENT '菜单ID',
-    primary key (role_id, menu_id)
+    PRIMARY KEY (id),
+    UNIQUE KEY uniq_role_menu (role_id, menu_id)
 ) ENGINE = innodb COMMENT = '角色和菜单关联表';
 
 -- 初始化-用户和角色关联表数据 ----
@@ -176,4 +180,3 @@ VALUES (101, 1),
        (101, 1013),
        (101, 1014);
 -- ----------------------------
-
