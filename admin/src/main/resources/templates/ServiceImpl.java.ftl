@@ -1,7 +1,7 @@
 package ${packageName}.service.impl;
 
-import ${packageName}.domain.${entity.className};
 import ${packageName}.dao.${entity.className}Dao;
+import ${packageName}.domain.${entity.className};
 import ${packageName}.service.${entity.className}Service;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.List;
 public class ${entity.className}ServiceImpl implements ${entity.className}Service {
 
     @Resource
-    private ${entity.className}Service ${entity.className?uncap_first}Service;
+    private ${entity.className}Dao ${entity.className?uncap_first}Dao;
 
     @Override
     public ${entity.className} query${entity.className}(${entity.className} request) {
@@ -30,7 +30,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
             query.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
-        ${entity.className} ${entity.className?uncap_first} = ${entity.className}Dao.selectOne(query);
+        ${entity.className} ${entity.className?uncap_first} = ${entity.className?uncap_first}Dao.selectOne(query);
         return ${entity.className?uncap_first};
     }
 
@@ -42,7 +42,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
             query.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
-        List<${entity.className}> list = ${entity.className}Dao.selectList(query);
+        List<${entity.className}> list = ${entity.className?uncap_first}Dao.selectList(query);
         return list;
     }
 
@@ -54,7 +54,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
             add.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
-        int row = ${entity.className}Dao.insert(${entity.className?uncap_first});
+        int row = ${entity.className?uncap_first}Dao.insert(add);
         return row;
     }
 
@@ -66,7 +66,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
             update.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
-        int row = ${entity.className}Dao.updateById(update);
+        int row = ${entity.className?uncap_first}Dao.updateById(update);
         return row;
     }
 
