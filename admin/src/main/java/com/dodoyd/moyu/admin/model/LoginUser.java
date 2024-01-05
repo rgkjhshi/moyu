@@ -1,7 +1,10 @@
 package com.dodoyd.moyu.admin.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 
@@ -9,45 +12,22 @@ import java.util.Collection;
  * @author shisong02
  * @since 2024-01-04
  */
-public class LoginUser implements UserDetails {
-
+@Getter
+@Setter
+@ToString
+public class LoginUser extends User {
     /**
      * 用户ID
      */
     private Long userId;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    /**
+     * 用户唯一标识
+     */
+    private String token;
+
+    public LoginUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
     }
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

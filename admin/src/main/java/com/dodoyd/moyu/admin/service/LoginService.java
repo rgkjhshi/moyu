@@ -1,6 +1,7 @@
 package com.dodoyd.moyu.admin.service;
 
 import com.dodoyd.moyu.admin.exception.ParameterErrorException;
+import com.dodoyd.moyu.admin.model.LoginUser;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,10 +58,10 @@ public class LoginService {
             }
         }
         // 通过当前的认证情况获取用户，如果没有认证，那么就是用户名，如果认证了，返回UserDetails
-        User user = (User) authentication.getPrincipal();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         // 记录登录信息
-        log.info("用户登录:{}", user.getUsername());
+        log.info("用户登录:{}", loginUser.getUsername());
         // 生成token
-        return tokenService.createToken(1L);
+        return tokenService.createToken(loginUser);
     }
 }

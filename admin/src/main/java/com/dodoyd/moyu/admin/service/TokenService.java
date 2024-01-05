@@ -2,6 +2,7 @@ package com.dodoyd.moyu.admin.service;
 
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.dodoyd.moyu.admin.model.LoginUser;
 import com.dodoyd.moyu.common.exception.BaseException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public interface TokenService {
      * @param userId 用户userId, 将会放到token中
      * @return token
      */
-    String createToken(Long userId);
+    String createToken(LoginUser loginUser);
 
     /**
      * 校验token合法性, 验证失败会抛出业务异常

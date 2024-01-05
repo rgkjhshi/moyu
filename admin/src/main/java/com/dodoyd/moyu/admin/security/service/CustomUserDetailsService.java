@@ -1,9 +1,9 @@
 package com.dodoyd.moyu.admin.security.service;
 
+import com.dodoyd.moyu.admin.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,8 +33,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         authorities.add(authority);
         // Load user from database or other data source
         String password = new BCryptPasswordEncoder().encode("admin2");
-        User user = new User(username, password, authorities);
+        LoginUser loginUser = new LoginUser(username, password, authorities);
         // Create UserDetails object
-        return user;
+        return loginUser;
     }
 }
