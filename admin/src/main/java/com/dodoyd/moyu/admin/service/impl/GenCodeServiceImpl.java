@@ -115,7 +115,7 @@ public class GenCodeServiceImpl implements GenCodeService {
         // 创建一个字节输出流来存储ZIP文件
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
-        for (String tableName : Constants.COMMA_SPLITTER.split(tableNames)) {
+        for (String tableName : tableNameList) {
             Map<String, String> codeMap = genCodeByTable(tableName);
             genCode(tableName, codeMap, zip);
         }
@@ -290,7 +290,7 @@ public class GenCodeServiceImpl implements GenCodeService {
                 // 添加文件到ZIP文件
                 ZipEntry zipEntry = new ZipEntry(fileName);
                 zip.putNextEntry(zipEntry);
-                String code = codeMap.get("Domain.java");
+                String code = entry.getValue();
                 zip.write(code.getBytes(StandardCharsets.UTF_8));
                 zip.flush();
                 zip.closeEntry();
