@@ -6,7 +6,6 @@ import com.dodoyd.moyu.admin.model.request.LoginRequest;
 import com.dodoyd.moyu.admin.service.LoginService;
 import com.dodoyd.moyu.admin.service.TokenService;
 import com.dodoyd.moyu.common.model.BaseResponse;
-import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,10 +53,7 @@ public class LoginController {
      */
     @GetMapping(value = "/info")
     public BaseResponse<UserInfoDTO> userInfo(String token) {
-        UserInfoDTO dto = new UserInfoDTO();
-        dto.setUserId(10001L);
-        dto.setRoles(Lists.newArrayList("admin"));
-        return BaseResponse.getSuccessResponse(dto);
+        return BaseResponse.getSuccessResponse(loginService.getUserInfo());
     }
 
 }
