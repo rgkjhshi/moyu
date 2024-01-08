@@ -36,7 +36,8 @@ public class LoginService {
 
     /**
      * 用户登录并返回token
-     * 使用security配置表单登录处理器formLogin().loginProcessingUrl()可自动进行登录校验，使用此方法登录则不可设置表单登录处理器
+     * 使用此方法主动处理登录请求，不使用UsernamePasswordAuthenticationFilter处理，因此不要配置登录处理URL
+     * 若配置登录处理URL[formLogin().loginProcessingUrl()]，会自动使用UsernamePasswordAuthenticationFilter进行登录校验处理
      *
      * @link <a href="https://blog.csdn.net/crazymakercircle/article/details/130276558">参考自定义登录部分</a>
      */
