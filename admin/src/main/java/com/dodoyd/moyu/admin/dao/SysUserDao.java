@@ -9,7 +9,7 @@ import java.util.List;
  * SysUser数据访问对象
  *
  * @author moyusi
- * @since 2024-01-05
+ * @since 2024-01-08
  */
 @Mapper
 public interface SysUserDao {
@@ -24,8 +24,8 @@ public interface SysUserDao {
             "INSERT INTO sys_user",
             "<trim prefix='(' suffix=')' suffixOverrides=','>",
             "    <if test='userId != null'>user_id,</if>",
-            "    <if test='userName != null'>user_name,</if>",
-            "    <if test='nickName != null'>nick_name,</if>",
+            "    <if test='username != null'>username,</if>",
+            "    <if test='nickname != null'>nickname,</if>",
             "    <if test='gender != null'>gender,</if>",
             "    <if test='avatar != null'>avatar,</if>",
             "    <if test='email != null'>email,</if>",
@@ -43,8 +43,8 @@ public interface SysUserDao {
             "</trim>",
             "<trim prefix='VALUES (' suffix=')' suffixOverrides=','>",
             "    <if test='userId != null'>#{userId},</if>",
-            "    <if test='userName != null'>#{userName},</if>",
-            "    <if test='nickName != null'>#{nickName},</if>",
+            "    <if test='username != null'>#{username},</if>",
+            "    <if test='nickname != null'>#{nickname},</if>",
             "    <if test='gender != null'>#{gender},</if>",
             "    <if test='avatar != null'>#{avatar},</if>",
             "    <if test='email != null'>#{email},</if>",
@@ -97,8 +97,8 @@ public interface SysUserDao {
             "UPDATE sys_user",
             "<set>",
             "    <if test='userId != null'>user_id = #{userId},</if>",
-            "    <if test='userName != null'>user_name = #{userName},</if>",
-            "    <if test='nickName != null'>nick_name = #{nickName},</if>",
+            "    <if test='username != null'>username = #{username},</if>",
+            "    <if test='nickname != null'>nickname = #{nickname},</if>",
             "    <if test='gender != null'>gender = #{gender},</if>",
             "    <if test='avatar != null'>avatar = #{avatar},</if>",
             "    <if test='email != null'>email = #{email},</if>",
@@ -121,27 +121,26 @@ public interface SysUserDao {
     /**
      * 查询所有
      *
-     * @param id 主键id
      * @return 查询到的结果, 无结果将返回null
      */
     @Results(id = "baseResult", value = {
-        @Result(property = "userId", column = "user_id"),
-        @Result(property = "userName", column = "user_name"),
-        @Result(property = "nickName", column = "nick_name"),
-        @Result(property = "gender", column = "gender"),
-        @Result(property = "avatar", column = "avatar"),
-        @Result(property = "email", column = "email"),
-        @Result(property = "mobile", column = "mobile"),
-        @Result(property = "userPwd", column = "user_pwd"),
-        @Result(property = "loginIp", column = "login_ip"),
-        @Result(property = "loginTime", column = "login_time"),
-        @Result(property = "status", column = "status"),
-        @Result(property = "deleted", column = "deleted"),
-        @Result(property = "createBy", column = "create_by"),
-        @Result(property = "updateBy", column = "update_by"),
-        @Result(property = "createTime", column = "create_time"),
-        @Result(property = "updateTime", column = "update_time"),
-        @Result(property = "remark", column = "remark"),
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "username", column = "username"),
+            @Result(property = "nickname", column = "nickname"),
+            @Result(property = "gender", column = "gender"),
+            @Result(property = "avatar", column = "avatar"),
+            @Result(property = "email", column = "email"),
+            @Result(property = "mobile", column = "mobile"),
+            @Result(property = "userPwd", column = "user_pwd"),
+            @Result(property = "loginIp", column = "login_ip"),
+            @Result(property = "loginTime", column = "login_time"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "deleted", column = "deleted"),
+            @Result(property = "createBy", column = "create_by"),
+            @Result(property = "updateBy", column = "update_by"),
+            @Result(property = "createTime", column = "create_time"),
+            @Result(property = "updateTime", column = "update_time"),
+            @Result(property = "remark", column = "remark"),
     })
     @Select("SELECT * FROM sys_user")
     SysUser selectAll();
@@ -167,8 +166,8 @@ public interface SysUserDao {
             "SELECT * FROM sys_user",
             "<where>",
             "    <if test='userId != null'>AND user_id = #{userId}</if>",
-            "    <if test='userName != null'>AND user_name = #{userName}</if>",
-            "    <if test='nickName != null'>AND nick_name = #{nickName}</if>",
+            "    <if test='username != null'>AND username = #{username}</if>",
+            "    <if test='nickname != null'>AND nickname = #{nickname}</if>",
             "    <if test='gender != null'>AND gender = #{gender}</if>",
             "    <if test='avatar != null'>AND avatar = #{avatar}</if>",
             "    <if test='email != null'>AND email = #{email}</if>",
@@ -198,8 +197,8 @@ public interface SysUserDao {
             "SELECT * FROM sys_user",
             "<where>",
             "    <if test='userId != null'>AND user_id = #{userId}</if>",
-            "    <if test='userName != null'>AND user_name = #{userName}</if>",
-            "    <if test='nickName != null'>AND nick_name = #{nickName}</if>",
+            "    <if test='username != null'>AND username = #{username}</if>",
+            "    <if test='nickname != null'>AND nickname = #{nickname}</if>",
             "    <if test='gender != null'>AND gender = #{gender}</if>",
             "    <if test='avatar != null'>AND avatar = #{avatar}</if>",
             "    <if test='email != null'>AND email = #{email}</if>",
