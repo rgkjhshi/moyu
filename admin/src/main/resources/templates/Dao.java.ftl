@@ -84,7 +84,7 @@ public interface ${entity.className}Dao {
      */
     @Results(id = "baseResult", value = {
     <#list columnList as column>
-        @Result(property = "${column.javaName}", column = "${column.columnName}"),
+            @Result(property = "${column.javaName}", column = "${column.columnName}"),
     </#list>
     })
     @Select("SELECT * FROM ${entity.tableName}")
