@@ -74,7 +74,7 @@ public class LoginService {
         UserInfoDTO dto = new UserInfoDTO();
         dto.setUserId(loginUser.getUserId());
         dto.setRoles(getRoles(loginUser));
-        dto.setNickname(loginUser.getSysUser().getNickName());
+        dto.setNickname(loginUser.getSysUser().getNickname());
         dto.setAvatar(loginUser.getSysUser().getAvatar());
         dto.setGender(loginUser.getSysUser().getGender());
         return dto;

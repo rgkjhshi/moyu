@@ -23,7 +23,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser querySysUserByUsername(String username) {
         SysUser query = new SysUser();
-        query.setUserName(username);
+        query.setUsername(username);
         return sysUserDao.selectOne(query);
     }
 
@@ -33,11 +33,11 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUserId() != null) {
             query.setUserId(request.getUserId());
         }
-        if (request.getUserName() != null) {
-            query.setUserName(request.getUserName());
+        if (request.getUsername() != null) {
+            query.setUsername(request.getUsername());
         }
-        if (request.getNickName() != null) {
-            query.setNickName(request.getNickName());
+        if (request.getNickname() != null) {
+            query.setNickname(request.getNickname());
         }
         if (request.getGender() != null) {
             query.setGender(request.getGender());
@@ -91,11 +91,11 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUserId() != null) {
             query.setUserId(request.getUserId());
         }
-        if (request.getUserName() != null) {
-            query.setUserName(request.getUserName());
+        if (request.getUsername() != null) {
+            query.setUsername(request.getUsername());
         }
-        if (request.getNickName() != null) {
-            query.setNickName(request.getNickName());
+        if (request.getNickname() != null) {
+            query.setNickname(request.getNickname());
         }
         if (request.getGender() != null) {
             query.setGender(request.getGender());
@@ -149,11 +149,11 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUserId() != null) {
             add.setUserId(request.getUserId());
         }
-        if (request.getUserName() != null) {
-            add.setUserName(request.getUserName());
+        if (request.getUsername() != null) {
+            add.setUsername(request.getUsername());
         }
-        if (request.getNickName() != null) {
-            add.setNickName(request.getNickName());
+        if (request.getNickname() != null) {
+            add.setNickname(request.getNickname());
         }
         if (request.getGender() != null) {
             add.setGender(request.getGender());
@@ -207,11 +207,11 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUserId() != null) {
             update.setUserId(request.getUserId());
         }
-        if (request.getUserName() != null) {
-            update.setUserName(request.getUserName());
+        if (request.getUsername() != null) {
+            update.setUsername(request.getUsername());
         }
-        if (request.getNickName() != null) {
-            update.setNickName(request.getNickName());
+        if (request.getNickname() != null) {
+            update.setNickname(request.getNickname());
         }
         if (request.getGender() != null) {
             update.setGender(request.getGender());

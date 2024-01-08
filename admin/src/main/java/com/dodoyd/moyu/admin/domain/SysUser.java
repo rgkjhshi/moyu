@@ -21,12 +21,12 @@ public class SysUser {
         /**
          * 用户账号
          */
-        private String userName;
+        private String username;
 
         /**
          * 用户昵称
          */
-        private String nickName;
+        private String nickname;
 
         /**
          * 性别,0:未知,1:男,2:女
