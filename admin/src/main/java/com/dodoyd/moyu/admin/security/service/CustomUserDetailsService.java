@@ -37,6 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("加载{}的用户信息", username);
         // 从数据库获取用户
         SysUser sysUser = sysUserService.querySysUserByUsername(username);
         if (sysUser == null) {
