@@ -1,7 +1,8 @@
 package com.dodoyd.moyu.admin.config;
 
 import com.dodoyd.moyu.admin.security.filter.JwtTokenAuthenticationFilter;
-import com.dodoyd.moyu.admin.security.handle.ExceptionAuthenticationEntryPoint;
+import com.dodoyd.moyu.admin.security.handle.AuthenticationEntryPointImpl;
+import com.dodoyd.moyu.admin.security.handle.LogoutSuccessHandlerImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
     @Resource
-    private ExceptionAuthenticationEntryPoint authenticationEntryPoint;
+    private AuthenticationEntryPointImpl authenticationEntryPoint;
+
+    @Resource
+    private LogoutSuccessHandlerImpl logoutSuccessHandler;
 
     /**
      * Security配置
@@ -63,6 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/**").authenticated()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
+        // 添加Logout处理器
+        httpSecurity.logout().logoutUrl("/api/logout").logoutSuccessHandler(logoutSuccessHandler);
         // 添加JWT filter
         httpSecurity.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

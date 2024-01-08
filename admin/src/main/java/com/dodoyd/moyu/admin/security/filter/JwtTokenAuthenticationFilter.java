@@ -1,12 +1,9 @@
 package com.dodoyd.moyu.admin.security.filter;
 
-import com.dodoyd.moyu.admin.model.LoginUser;
 import com.dodoyd.moyu.admin.security.service.CustomUserDetailsService;
 import com.dodoyd.moyu.admin.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -19,11 +16,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
+ * JWT令牌认证过滤器，用于从请求头中获取令牌并进行验证。
+ *
  * @author shisong02
+ * @link <a href="https://mikechen.cc/30272.html">Security工作流程参考这里</a>
  * @since 2024-01-04
  */
 @Slf4j
@@ -57,20 +55,5 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
         // 继续执行后续的过滤器链
         filterChain.doFilter(request, response);
-    }
-
-    private UserDetails verifyToken(String token) {
-        // 这里是验证token的逻辑，需要你根据实际情况进行实现
-        String username = tokenService.verifyAndGetSubject(token);
-        // 从数据库获取用户
-
-        // 获取授权列表
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        // 通过用户获取角色
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
-        authorities.add(authority);
-        LoginUser loginUser = new LoginUser(username, null, authorities);
-        // Create UserDetails object
-        return loginUser;
     }
 }

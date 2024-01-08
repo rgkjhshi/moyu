@@ -17,7 +17,7 @@ import java.io.IOException;
  * @since 2024-01-08
  */
 @Service
-public class ExceptionAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
