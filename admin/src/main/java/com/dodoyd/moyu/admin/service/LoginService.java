@@ -36,8 +36,9 @@ public class LoginService {
 
     /**
      * 用户登录并返回token
-     * 使用此方法主动处理登录请求，不使用UsernamePasswordAuthenticationFilter处理，因此不要配置登录处理URL
-     * 若配置登录处理URL[formLogin().loginProcessingUrl()]，会自动使用UsernamePasswordAuthenticationFilter进行登录校验处理
+     * 使用此方法主动处理登录请求，既可以处理表单，又可以处理JsonBody。
+     * 不使用UsernamePasswordAuthenticationFilter处理，因此不要配置表单登录处理(formLogin().loginProcessingUrl())
+     * 若配置登录处理URL，会自动使用UsernamePasswordAuthenticationFilter进行登录处理，且只能处理表单提交
      *
      * @link <a href="https://blog.csdn.net/crazymakercircle/article/details/130276558">参考自定义登录部分</a>
      */

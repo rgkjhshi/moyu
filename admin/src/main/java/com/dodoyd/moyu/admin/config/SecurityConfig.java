@@ -1,6 +1,7 @@
 package com.dodoyd.moyu.admin.config;
 
 import com.dodoyd.moyu.admin.security.filter.JwtTokenAuthenticationFilter;
+import com.dodoyd.moyu.admin.security.handle.ExceptionAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
+    @Resource
+    private ExceptionAuthenticationEntryPoint authenticationEntryPoint;
+
     /**
      * Security配置
      */
@@ -47,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 禁用HTTP响应标头
                 .and().headers().cacheControl().disable()
                 .and().headers().frameOptions().disable()
+                // 认证失败处理
+                .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 // 设置会话会话创建策略为无状态, 基于token，不使用session
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 // 过滤请求
