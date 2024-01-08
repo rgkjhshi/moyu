@@ -60,6 +60,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         String password = new BCryptPasswordEncoder().encode("admin");
         LoginUser loginUser = new LoginUser(username, password, authorities);
         loginUser.setUserId(sysUser.getUserId());
+        loginUser.setSysUser(sysUser);
         return loginUser;
     }
 }
