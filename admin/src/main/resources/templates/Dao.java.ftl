@@ -79,7 +79,6 @@ public interface ${entity.className}Dao {
     /**
      * 查询所有
      *
-     * @param id 主键id
      * @return 查询到的结果, 无结果将返回null
      */
     @Results(id = "baseResult", value = {
