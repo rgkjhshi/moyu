@@ -30,7 +30,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String token = tokenService.getToken(request);
         String username = tokenService.verifyAndGetSubject(token);
-        log.info("用户{}退出登录", username);
+        log.info("退出登录:{}", username);
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().print(Constants.gson.toJson(BaseResponse.getSuccessResponse("退出成功")));
