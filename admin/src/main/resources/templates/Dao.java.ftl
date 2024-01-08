@@ -46,9 +46,9 @@ public interface ${entity.className}Dao {
     int deleteById(Long id);
 
     /**
-     * 通过主键id列表删除
+     * 通过主键列表删除
      *
-     * @param id 主键id
+     * @param idList 主键id列表
      * @return 返回受影响的记录条数
      */
     @Delete({"<script>",
