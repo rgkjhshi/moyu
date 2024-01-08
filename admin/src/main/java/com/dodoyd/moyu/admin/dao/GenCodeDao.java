@@ -70,4 +70,14 @@ public interface GenCodeDao {
             "ORDER BY ordinal_position",
             "</script>"})
     List<ColumnInfo> selectColumnListByTableName(String tableName);
+
+    /**
+     * 查询主键列(可能存在联合主键的情形，因此结果为list)
+     */
+    @ResultMap("columnResult")
+    @Select({"<script>",
+            "SELECT column_name, data_type, column_comment  FROM information_schema.columns",
+            "WHERE table_schema = (SELECT DATABASE()) AND table_name = #{tableName} AND column_key = 'PRI'",
+            "</script>"})
+    List<ColumnInfo> selectPkColumnListByTableName(String tableName);
 }

@@ -78,6 +78,12 @@ public class GenCodeServiceImpl implements GenCodeService {
             fillColumnInfo(column);
         }
         tableInfo.setColumnList(columnList);
+        // 填充主键信息
+        List<ColumnInfo> pkColumnList = genCodeDao.selectPkColumnListByTableName(tableName);
+        // 只处理只有一个主键的情况，不支持联合主键
+        if (pkColumnList.size() == 1) {
+            tableInfo.setPkColumn(pkColumnList.get(0));
+        }
         return genCode(tableInfo);
     }
 
@@ -224,6 +230,7 @@ public class GenCodeServiceImpl implements GenCodeService {
                 SQLPrimaryKey sqlPrimaryKey = (SQLPrimaryKey) tableElement;
                 // 获取构成唯一键的所有列信息
                 List<SQLSelectOrderByItem> columns = sqlPrimaryKey.getColumns();
+                // 只处理只有一个主键的情况，不支持联合主键
                 if (columns.size() == 1) {
                     // 组成主键的列可以有多个，但通常只会有一个列为主键
                     SQLColumnDefinition pkColumn = createTableStatement.findColumn(columns.get(0).getExpr().toString());
@@ -237,8 +244,6 @@ public class GenCodeServiceImpl implements GenCodeService {
                         // 填充java类型和名称
                         fillColumnInfo(pkColumnInfo);
                     }
-                } else {
-                    log.warn("暂不支持多字段主键");
                 }
             }
         }

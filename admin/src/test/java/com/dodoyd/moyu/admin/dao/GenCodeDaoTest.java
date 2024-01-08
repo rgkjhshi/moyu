@@ -42,4 +42,9 @@ class GenCodeDaoTest extends BaseTest {
         log.info(Constants.gson.toJson(columnList));
     }
 
+    @Test
+    void selectPkColumnListByTableName() {
+        List<ColumnInfo> columnList = genCodeDao.selectPkColumnListByTableName("sys_user");
+        log.info(Constants.gson.toJson(columnList));
+    }
 }
