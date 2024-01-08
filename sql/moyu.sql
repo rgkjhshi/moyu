@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS sys_user;
 CREATE TABLE sys_user
 (
     user_id     bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户唯一ID',
-    user_name   varchar(30)         NOT NULL DEFAULT '' COMMENT '用户账号',
-    nick_name   varchar(30)         NOT NULL DEFAULT '' COMMENT '用户昵称',
+    username    varchar(30)         NOT NULL DEFAULT '' COMMENT '用户账号',
+    nickname    varchar(30)         NOT NULL DEFAULT '' COMMENT '用户昵称',
     gender      tinyint(5)          NOT NULL DEFAULT 0 COMMENT '性别,0:未知,1:男,2:女',
     avatar      varchar(256)        NOT NULL DEFAULT '' COMMENT '头像地址',
     email       varchar(50)         NOT NULL DEFAULT '' COMMENT '用户邮箱',
@@ -20,12 +20,12 @@ CREATE TABLE sys_user
     update_time datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     remark      varchar(500)        NOT NULL DEFAULT '' COMMENT '备注',
     PRIMARY KEY (user_id),
-    UNIQUE KEY uniq_user_name (user_name)
+    UNIQUE KEY uniq_user_name (username)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 10000 COMMENT = '用户信息表';
 
 -- 初始化-用户信息表数据  --------
-INSERT INTO sys_user (user_id, user_name, nick_name, gender, avatar, email, mobile, user_pwd, login_ip, login_time,
+INSERT INTO sys_user (user_id, username, nickname, gender, avatar, email, mobile, user_pwd, login_ip, login_time,
                       remark)
 VALUES (1001, 'admin', '管理员', 1, '', 'moyu@126.com', '15888888888', 'pwd', '127.0.0.1', SYSDATE(), '管理员'),
        (1002, 'moyu', '魔芋', 2, '', 'moyu@126.com', '15888888888', 'pwd', '127.0.0.1', SYSDATE(), '管理员');
@@ -94,10 +94,12 @@ VALUES (1, '系统管理', 0, 1, 'D', 'system', '', '', 'system', 0, 0, '系统�
        (4, '魔芋官网', 0, 4, 'D', 'https://moyu.dodoyd.com', '', '', 'guide', 0, 0, '魔芋官网地址');
 
 -- 二级菜单
-INSERT INTO sys_menu (id, menu_name, parent_id, sort_order, menu_type, path, component, perms, icon, hidden, link, remark)
+INSERT INTO sys_menu (id, menu_name, parent_id, sort_order, menu_type, path, component, perms, icon, hidden, link,
+                      remark)
 VALUES (101, '用户管理', 1, 1, 'M', 'user', 'system/user/index', 'system:user:list', 'user', 0, 0, '系统管理菜单'),
        (102, '角色管理', 1, 2, 'M', 'role', 'system/role/index', 'system:role:list', 'peoples', 0, 0, '角色管理菜单'),
-       (103, '菜单管理', 1, 3, 'M', 'menu', 'system/menu/index', 'system:menu:list', 'tree-table', 0, 0, '菜单管理菜单'),
+       (103, '菜单管理', 1, 3, 'M', 'menu', 'system/menu/index', 'system:menu:list', 'tree-table', 0, 0,
+        '菜单管理菜单'),
        (104, '代码生成', 3, 1, 'M', 'gen', 'tool/gen/index', 'system:gen:list', 'code', 0, 0, '代码生成菜单');
 
 -- 用户管理按钮
