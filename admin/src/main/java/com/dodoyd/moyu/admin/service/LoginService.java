@@ -71,6 +71,9 @@ public class LoginService {
         return tokenService.createToken(loginUser);
     }
 
+    /**
+     * 获取用户信息
+     */
     public UserInfoDTO getUserInfo() {
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserInfoDTO dto = new UserInfoDTO();
@@ -82,6 +85,9 @@ public class LoginService {
         return dto;
     }
 
+    /**
+     * 获取用户角色列表
+     */
     private List<String> getRoles(LoginUser loginUser) {
         List<String> roles = new ArrayList<>();
         if (CollectionUtils.isEmpty(loginUser.getAuthorities())) {
