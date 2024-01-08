@@ -48,9 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 // 表单登录处理器地址
 //                .and().formLogin().loginProcessingUrl("/api/login")
-                // 禁用HTTP响应标头
+                // 禁用HTTP响应头的缓存控制。默认情况下，会添加一些缓存控制头部，如no-store和private，以确保敏感数据不会被缓存。
                 .and().headers().cacheControl().disable()
-                .and().headers().frameOptions().disable()
                 // 认证失败处理
                 .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 // 设置会话会话创建策略为无状态, 基于token，不使用session

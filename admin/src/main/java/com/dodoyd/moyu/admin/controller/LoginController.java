@@ -31,6 +31,7 @@ public class LoginController {
 
     /**
      * 登录
+     * 不使用httpSecurity.formLogin(),自行处理登录请求
      */
     @PostMapping(value = "/login")
     public BaseResponse<String> login(LoginRequest request) {
