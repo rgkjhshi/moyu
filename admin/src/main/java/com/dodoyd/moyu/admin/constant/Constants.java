@@ -45,7 +45,7 @@ public class Constants {
      */
     public static class Token {
         /**
-         * token在header中的标识
+         * token在header中的标识(Authorization)
          */
         public static final String HEADER = "X-Token";
         /**
