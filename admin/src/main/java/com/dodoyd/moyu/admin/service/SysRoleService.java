@@ -13,6 +13,14 @@ import java.util.List;
 public interface SysRoleService {
 
     /**
+     * 查询用户权限列表
+     *
+     * @param userId 用户ID
+     * @return SysRole列表
+     */
+    List<SysRole> queryUserRoleList(Long userId);
+
+    /**
      * 查询SysRole
      *
      * @param request 查询请求

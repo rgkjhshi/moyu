@@ -107,17 +107,17 @@ public interface SysRoleDao {
      * @return 查询到的结果, 无结果将返回null
      */
     @Results(id = "baseResult", value = {
-        @Result(property = "id", column = "id"),
-        @Result(property = "roleName", column = "role_name"),
-        @Result(property = "roleKey", column = "role_key"),
-        @Result(property = "sortOrder", column = "sort_order"),
-        @Result(property = "status", column = "status"),
-        @Result(property = "deleted", column = "deleted"),
-        @Result(property = "createBy", column = "create_by"),
-        @Result(property = "updateBy", column = "update_by"),
-        @Result(property = "createTime", column = "create_time"),
-        @Result(property = "updateTime", column = "update_time"),
-        @Result(property = "remark", column = "remark"),
+            @Result(property = "id", column = "id"),
+            @Result(property = "roleName", column = "role_name"),
+            @Result(property = "roleKey", column = "role_key"),
+            @Result(property = "sortOrder", column = "sort_order"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "deleted", column = "deleted"),
+            @Result(property = "createBy", column = "create_by"),
+            @Result(property = "updateBy", column = "update_by"),
+            @Result(property = "createTime", column = "create_time"),
+            @Result(property = "updateTime", column = "update_time"),
+            @Result(property = "remark", column = "remark"),
     })
     @Select("SELECT * FROM sys_role")
     SysRole selectAll();
@@ -182,4 +182,12 @@ public interface SysRoleDao {
             "</script>"})
     List<SysRole> selectList(SysRole sysRole);
 
+    @ResultMap("baseResult")
+    @Select({"<script>",
+            "SELECT * FROM sys_role WHERE id IN",
+            "<foreach collection='list' item='item' open='(' separator=',' close=')'>",
+            "    #{item} ",
+            "</foreach>",
+            "</script>"})
+    List<SysRole> selectByIdList(List<Long> idList);
 }

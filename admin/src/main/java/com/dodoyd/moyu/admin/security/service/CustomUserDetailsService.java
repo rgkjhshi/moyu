@@ -1,7 +1,9 @@
 package com.dodoyd.moyu.admin.security.service;
 
+import com.dodoyd.moyu.admin.domain.SysRole;
 import com.dodoyd.moyu.admin.domain.SysUser;
 import com.dodoyd.moyu.admin.model.LoginUser;
+import com.dodoyd.moyu.admin.service.SysRoleService;
 import com.dodoyd.moyu.admin.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,21 +32,35 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Resource
     private SysUserService sysUserService;
 
+    @Resource
+    private SysRoleService sysRoleService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("用户验证:{}", username);
         // 从数据库获取用户
         SysUser sysUser = sysUserService.querySysUserByUsername(username);
-
-        // 获取授权列表
+        if (sysUser == null) {
+            log.info("登录用户:{}不存在", username);
+            throw new UsernameNotFoundException("用户不存在");
+        } else if (sysUser.getDeleted() == 1) {
+            log.info("登录用户:{}已被删除", username);
+            throw new UsernameNotFoundException("用户不存在");
+        } else if (sysUser.getStatus() == 1) {
+            log.info("登录用户:{}已被停用", username);
+            throw new UsernameNotFoundException("用户不存在");
+        }
+        // 查询用户的权限
+        List<SysRole> roleList = sysRoleService.queryUserRoleList(sysUser.getUserId());
         List<GrantedAuthority> authorities = new ArrayList<>();
-        // 通过用户获取角色
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
-        authorities.add(authority);
-        // Load user from database or other data source
+        for (SysRole sysRole : roleList) {
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(sysRole.getRoleKey());
+            authorities.add(authority);
+        }
+        // 创建 UserDetails
         String password = new BCryptPasswordEncoder().encode("admin");
         LoginUser loginUser = new LoginUser(username, password, authorities);
-        // Create UserDetails object
+        loginUser.setUserId(sysUser.getUserId());
         return loginUser;
     }
 }

@@ -1,12 +1,17 @@
 package com.dodoyd.moyu.admin.service.impl;
 
 import com.dodoyd.moyu.admin.dao.SysRoleDao;
+import com.dodoyd.moyu.admin.dao.SysUserRoleDao;
 import com.dodoyd.moyu.admin.domain.SysRole;
+import com.dodoyd.moyu.admin.domain.SysUserRole;
 import com.dodoyd.moyu.admin.service.SysRoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * SysRole服务实现类
@@ -19,6 +24,21 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Resource
     private SysRoleDao sysRoleDao;
+
+    @Resource
+    private SysUserRoleDao sysUserRoleDao;
+
+    @Override
+    public List<SysRole> queryUserRoleList(Long userId) {
+        SysUserRole queryUserRole = new SysUserRole();
+        queryUserRole.setUserId(userId);
+        List<SysUserRole> userRoleList = sysUserRoleDao.selectList(queryUserRole);
+        if (CollectionUtils.isEmpty(userRoleList)) {
+            return new ArrayList<>();
+        }
+        List<Long> idList = userRoleList.stream().map(SysUserRole::getRoleId).collect(Collectors.toList());
+        return sysRoleDao.selectByIdList(idList);
+    }
 
     @Override
     public SysRole querySysRole(SysRole request) {
