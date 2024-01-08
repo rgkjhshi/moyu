@@ -34,6 +34,5 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().print(Constants.gson.toJson(BaseResponse.getSuccessResponse("退出成功")));
-
     }
 }

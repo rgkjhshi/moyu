@@ -41,15 +41,6 @@ public class LoginController {
     }
 
     /**
-     * 退出
-     */
-    @RequestMapping(value = "/logout")
-    public BaseResponse<?> logout() {
-        return BaseResponse.getSuccessResponse("成功");
-    }
-
-
-    /**
      * 获取userInfo
      */
     @GetMapping(value = "/info")
