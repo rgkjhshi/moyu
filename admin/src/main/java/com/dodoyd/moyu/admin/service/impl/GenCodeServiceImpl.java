@@ -237,6 +237,8 @@ public class GenCodeServiceImpl implements GenCodeService {
                         // 填充java类型和名称
                         fillColumnInfo(pkColumnInfo);
                     }
+                } else {
+                    log.warn("暂不支持多字段主键");
                 }
             }
         }
