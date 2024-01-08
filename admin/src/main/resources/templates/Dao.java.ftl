@@ -83,9 +83,9 @@ public interface ${entity.className}Dao {
      * @return 查询到的结果, 无结果将返回null
      */
     @Results(id = "baseResult", value = {
-    <#list columnList as column>
+        <#list columnList as column>
             @Result(property = "${column.javaName}", column = "${column.columnName}"),
-    </#list>
+        </#list>
     })
     @Select("SELECT * FROM ${entity.tableName}")
     ${entity.className} selectAll();
