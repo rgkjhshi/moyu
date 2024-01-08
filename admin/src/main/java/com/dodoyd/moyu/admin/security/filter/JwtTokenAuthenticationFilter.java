@@ -40,7 +40,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 从请求头中获取token
         String token = tokenService.getToken(request);
-        log.info("JwtToken认证");
         // 如果token存在，进行验证并设置SecurityContext
         if (token != null) {
             // 验证token并获取用户信息
