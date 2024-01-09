@@ -3,7 +3,7 @@ package ${packageName}.service.impl;
 import ${packageName}.dao.${entity.className}Dao;
 import ${packageName}.domain.${entity.className};
 import ${packageName}.service.${entity.className}Service;
-
+import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,7 +25,11 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     public ${entity.className} query${entity.className}(${entity.className} request) {
         ${entity.className} query = new ${entity.className}();
         <#list columnList as column>
+            <#if (column.javaType!"") == "String">
+        if(!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
+            <#else >
         if(request.get${column.javaName?cap_first}() != null) {
+            </#if>
             query.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
@@ -37,7 +41,11 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     public List<${entity.className}> query${entity.className}List(${entity.className} request) {
         ${entity.className} query = new ${entity.className}();
         <#list columnList as column>
+            <#if (column.javaType!"") == "String">
+        if(!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
+            <#else >
         if(request.get${column.javaName?cap_first}() != null) {
+            </#if>
             query.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
@@ -49,7 +57,11 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     public int add${entity.className}(${entity.className} request) {
         ${entity.className} add = new ${entity.className}();
         <#list columnList as column>
+            <#if (column.javaType!"") == "String">
+        if(!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
+            <#else >
         if(request.get${column.javaName?cap_first}() != null) {
+            </#if>
             add.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
@@ -61,7 +73,11 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     public int update${entity.className}(${entity.className} request) {
         ${entity.className} update = new ${entity.className}();
         <#list columnList as column>
+            <#if (column.javaType!"") == "String">
+        if(!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
+            <#else >
         if(request.get${column.javaName?cap_first}() != null) {
+            </#if>
             update.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
