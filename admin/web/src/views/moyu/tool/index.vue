@@ -72,7 +72,7 @@ import 'highlight.js/styles/github.css' // 代码高亮风格，选择更多风�
 import { listDbTable, previewCode, downloadCode } from '@/api/tool/gen'
 
 export default {
-  name: 'TableList',
+  name: 'GenCode',
   components: { GenFromSql },
   directives: {
     clipboard

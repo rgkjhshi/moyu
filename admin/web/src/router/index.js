@@ -173,8 +173,8 @@ export const asyncRoutes = [
     children: [
       {
         path: 'gen',
-        component: () => import('@/views/moyu/tool/tableList'),
-        name: 'TableList',
+        component: () => import('@/views/moyu/tool/index.vue'),
+        name: 'GenCode',
         meta: { title: '代码生成', icon: 'list', noCache: true }
       }
     ]
