@@ -30,13 +30,14 @@ public class SysUserController {
     @Log(response = false)
     @PostMapping(value = "/list")
     public BaseResponse<PageResult<SysUser>> queryList(@RequestBody SysUserRequest request) {
-        PageResult<SysUser> list = sysUserService.querySysUserList(request);
-        return BaseResponse.getSuccessResponse(list);
+        PageResult<SysUser> page = sysUserService.querySysUserList(request);
+        return BaseResponse.getSuccessResponse(page);
     }
 
     /**
      * 查询SysUser详细信息
      */
+    @Log(response = false)
     @GetMapping(value = "/get")
     public BaseResponse<SysUser> getInfo(Long userId) {
         SysUser info = sysUserService.querySysUserByUserId(userId);
@@ -46,6 +47,7 @@ public class SysUserController {
     /**
      * 查询SysUser详细信息
      */
+    @Log(response = false)
     @PostMapping(value = "/query")
     public BaseResponse<SysUser> queryInfo(@RequestBody SysUserRequest request) {
         SysUser info = sysUserService.querySysUser(request);
@@ -55,6 +57,7 @@ public class SysUserController {
     /**
      * 新增SysUser
      */
+    @Log
     @PostMapping(value = "/add")
     public BaseResponse<?> add(@RequestBody SysUserRequest request) {
         sysUserService.addSysUser(request);
@@ -64,6 +67,7 @@ public class SysUserController {
     /**
      * 修改SysUser
      */
+    @Log
     @PostMapping(value = "/edit")
     public BaseResponse<?> edit(@RequestBody SysUserRequest request) {
         sysUserService.updateSysUser(request);
@@ -73,6 +77,7 @@ public class SysUserController {
     /**
      * 删除SysUser
      */
+    @Log
     @PostMapping(value = "/delete")
     public BaseResponse<?> delete(Long userId) {
         sysUserService.deleteSysUser(userId);
@@ -83,6 +88,7 @@ public class SysUserController {
      * 批量删除SysUser
      * 请求参数Key为userIdList, value为逗号分割的字符串，如:idList=1,2,3
      */
+    @Log
     @PostMapping(value = "/batchDelete")
     public BaseResponse<?> batchDelete(@RequestParam("userIdList") List<Long> userIdList) {
         sysUserService.batchDeleteSysUser(userIdList);
