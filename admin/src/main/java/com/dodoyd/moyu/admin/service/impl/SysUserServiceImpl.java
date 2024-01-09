@@ -3,6 +3,7 @@ package com.dodoyd.moyu.admin.service.impl;
 import com.dodoyd.moyu.admin.dao.SysUserDao;
 import com.dodoyd.moyu.admin.domain.SysUser;
 import com.dodoyd.moyu.admin.service.SysUserService;
+import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,28 +34,28 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUserId() != null) {
             query.setUserId(request.getUserId());
         }
-        if (request.getUsername() != null) {
+        if (!Strings.isNullOrEmpty(request.getUsername())) {
             query.setUsername(request.getUsername());
         }
-        if (request.getNickname() != null) {
+        if (!Strings.isNullOrEmpty(request.getNickname())) {
             query.setNickname(request.getNickname());
         }
         if (request.getGender() != null) {
             query.setGender(request.getGender());
         }
-        if (request.getAvatar() != null) {
+        if (!Strings.isNullOrEmpty(request.getAvatar())) {
             query.setAvatar(request.getAvatar());
         }
-        if (request.getEmail() != null) {
+        if (!Strings.isNullOrEmpty(request.getEmail())) {
             query.setEmail(request.getEmail());
         }
-        if (request.getMobile() != null) {
+        if (!Strings.isNullOrEmpty(request.getMobile())) {
             query.setMobile(request.getMobile());
         }
-        if (request.getUserPwd() != null) {
+        if (!Strings.isNullOrEmpty(request.getUserPwd())) {
             query.setUserPwd(request.getUserPwd());
         }
-        if (request.getLoginIp() != null) {
+        if (!Strings.isNullOrEmpty(request.getLoginIp())) {
             query.setLoginIp(request.getLoginIp());
         }
         if (request.getLoginTime() != null) {
@@ -66,10 +67,10 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getDeleted() != null) {
             query.setDeleted(request.getDeleted());
         }
-        if (request.getCreateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getCreateBy())) {
             query.setCreateBy(request.getCreateBy());
         }
-        if (request.getUpdateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getUpdateBy())) {
             query.setUpdateBy(request.getUpdateBy());
         }
         if (request.getCreateTime() != null) {
@@ -78,7 +79,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUpdateTime() != null) {
             query.setUpdateTime(request.getUpdateTime());
         }
-        if (request.getRemark() != null) {
+        if (!Strings.isNullOrEmpty(request.getRemark())) {
             query.setRemark(request.getRemark());
         }
         SysUser sysUser = sysUserDao.selectOne(query);
@@ -91,28 +92,28 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUserId() != null) {
             query.setUserId(request.getUserId());
         }
-        if (request.getUsername() != null) {
+        if (!Strings.isNullOrEmpty(request.getUsername())) {
             query.setUsername(request.getUsername());
         }
-        if (request.getNickname() != null) {
+        if (!Strings.isNullOrEmpty(request.getNickname())) {
             query.setNickname(request.getNickname());
         }
         if (request.getGender() != null) {
             query.setGender(request.getGender());
         }
-        if (request.getAvatar() != null) {
+        if (!Strings.isNullOrEmpty(request.getAvatar())) {
             query.setAvatar(request.getAvatar());
         }
-        if (request.getEmail() != null) {
+        if (!Strings.isNullOrEmpty(request.getEmail())) {
             query.setEmail(request.getEmail());
         }
-        if (request.getMobile() != null) {
+        if (!Strings.isNullOrEmpty(request.getMobile())) {
             query.setMobile(request.getMobile());
         }
-        if (request.getUserPwd() != null) {
+        if (!Strings.isNullOrEmpty(request.getUserPwd())) {
             query.setUserPwd(request.getUserPwd());
         }
-        if (request.getLoginIp() != null) {
+        if (!Strings.isNullOrEmpty(request.getLoginIp())) {
             query.setLoginIp(request.getLoginIp());
         }
         if (request.getLoginTime() != null) {
@@ -124,10 +125,10 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getDeleted() != null) {
             query.setDeleted(request.getDeleted());
         }
-        if (request.getCreateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getCreateBy())) {
             query.setCreateBy(request.getCreateBy());
         }
-        if (request.getUpdateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getUpdateBy())) {
             query.setUpdateBy(request.getUpdateBy());
         }
         if (request.getCreateTime() != null) {
@@ -136,7 +137,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUpdateTime() != null) {
             query.setUpdateTime(request.getUpdateTime());
         }
-        if (request.getRemark() != null) {
+        if (!Strings.isNullOrEmpty(request.getRemark())) {
             query.setRemark(request.getRemark());
         }
         List<SysUser> list = sysUserDao.selectList(query);
@@ -149,28 +150,28 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUserId() != null) {
             add.setUserId(request.getUserId());
         }
-        if (request.getUsername() != null) {
+        if (!Strings.isNullOrEmpty(request.getUsername())) {
             add.setUsername(request.getUsername());
         }
-        if (request.getNickname() != null) {
+        if (!Strings.isNullOrEmpty(request.getNickname())) {
             add.setNickname(request.getNickname());
         }
         if (request.getGender() != null) {
             add.setGender(request.getGender());
         }
-        if (request.getAvatar() != null) {
+        if (!Strings.isNullOrEmpty(request.getAvatar())) {
             add.setAvatar(request.getAvatar());
         }
-        if (request.getEmail() != null) {
+        if (!Strings.isNullOrEmpty(request.getEmail())) {
             add.setEmail(request.getEmail());
         }
-        if (request.getMobile() != null) {
+        if (!Strings.isNullOrEmpty(request.getMobile())) {
             add.setMobile(request.getMobile());
         }
-        if (request.getUserPwd() != null) {
+        if (!Strings.isNullOrEmpty(request.getUserPwd())) {
             add.setUserPwd(request.getUserPwd());
         }
-        if (request.getLoginIp() != null) {
+        if (!Strings.isNullOrEmpty(request.getLoginIp())) {
             add.setLoginIp(request.getLoginIp());
         }
         if (request.getLoginTime() != null) {
@@ -182,10 +183,10 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getDeleted() != null) {
             add.setDeleted(request.getDeleted());
         }
-        if (request.getCreateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getCreateBy())) {
             add.setCreateBy(request.getCreateBy());
         }
-        if (request.getUpdateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getUpdateBy())) {
             add.setUpdateBy(request.getUpdateBy());
         }
         if (request.getCreateTime() != null) {
@@ -194,7 +195,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUpdateTime() != null) {
             add.setUpdateTime(request.getUpdateTime());
         }
-        if (request.getRemark() != null) {
+        if (!Strings.isNullOrEmpty(request.getRemark())) {
             add.setRemark(request.getRemark());
         }
         int row = sysUserDao.insert(add);
@@ -207,28 +208,28 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUserId() != null) {
             update.setUserId(request.getUserId());
         }
-        if (request.getUsername() != null) {
+        if (!Strings.isNullOrEmpty(request.getUsername())) {
             update.setUsername(request.getUsername());
         }
-        if (request.getNickname() != null) {
+        if (!Strings.isNullOrEmpty(request.getNickname())) {
             update.setNickname(request.getNickname());
         }
         if (request.getGender() != null) {
             update.setGender(request.getGender());
         }
-        if (request.getAvatar() != null) {
+        if (!Strings.isNullOrEmpty(request.getAvatar())) {
             update.setAvatar(request.getAvatar());
         }
-        if (request.getEmail() != null) {
+        if (!Strings.isNullOrEmpty(request.getEmail())) {
             update.setEmail(request.getEmail());
         }
-        if (request.getMobile() != null) {
+        if (!Strings.isNullOrEmpty(request.getMobile())) {
             update.setMobile(request.getMobile());
         }
-        if (request.getUserPwd() != null) {
+        if (!Strings.isNullOrEmpty(request.getUserPwd())) {
             update.setUserPwd(request.getUserPwd());
         }
-        if (request.getLoginIp() != null) {
+        if (!Strings.isNullOrEmpty(request.getLoginIp())) {
             update.setLoginIp(request.getLoginIp());
         }
         if (request.getLoginTime() != null) {
@@ -240,10 +241,10 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getDeleted() != null) {
             update.setDeleted(request.getDeleted());
         }
-        if (request.getCreateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getCreateBy())) {
             update.setCreateBy(request.getCreateBy());
         }
-        if (request.getUpdateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getUpdateBy())) {
             update.setUpdateBy(request.getUpdateBy());
         }
         if (request.getCreateTime() != null) {
@@ -252,11 +253,10 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getUpdateTime() != null) {
             update.setUpdateTime(request.getUpdateTime());
         }
-        if (request.getRemark() != null) {
+        if (!Strings.isNullOrEmpty(request.getRemark())) {
             update.setRemark(request.getRemark());
         }
         int row = sysUserDao.updateByUserId(update);
         return row;
     }
-
 }
