@@ -37,30 +37,30 @@ public interface ${entity.className}Dao {
     int insert(${entity.className} ${entity.className?uncap_first});
 
     /**
-     * 通过主键id删除
+     * 通过主键删除
      *
-     * @param id 主键id
+     * @param ${entity.pkColumn.javaName} 主键
      * @return 返回受影响的记录条数
      */
-    @Delete("DELETE FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
-    int deleteById(Long id);
+    @Delete("DELETE FROM ${entity.tableName} WHERE ${entity.pkColumn.columnName} = ${r'#{'}${entity.pkColumn.javaName}}")
+    int deleteBy${entity.pkColumn.javaName?cap_first}(${entity.pkColumn.javaType} ${entity.pkColumn.javaName});
 
     /**
-     * 通过主键列表删除
+     * 通过主键列表批量删除
      *
-     * @param idList 主键id列表
+     * @param ${entity.pkColumn.javaName}List 主键列表
      * @return 返回受影响的记录条数
      */
     @Delete({"<script>",
-            "DELETE FROM ${entity.tableName} WHERE id IN ",
+            "DELETE FROM ${entity.tableName} WHERE ${entity.pkColumn.columnName} IN ",
             "<foreach collection='list' item='item' open='(' separator=',' close=')'>",
             "    <#noparse>#{item}</#noparse> ",
             "</foreach>",
             "</script>"})
-    int deleteByIdList(List<Long> idList);
+    int deleteBy${entity.pkColumn.javaName?cap_first}List(List<${entity.pkColumn.javaType}> ${entity.pkColumn.javaName}List);
 
     /**
-     * 通过主键id更新
+     * 通过主键更新
      *
      * @param ${entity.className?uncap_first} 数据库实体
      * @return 返回受影响的记录条数
@@ -72,9 +72,9 @@ public interface ${entity.className}Dao {
             "    <if test='${column.javaName} != null'>${column.columnName} = ${r'#{'}${column.javaName}},</if>",
             </#list>
             "</set>",
-            "WHERE id = <#noparse>#{id}</#noparse>",
+            "WHERE ${entity.pkColumn.columnName} = ${r'#{'}${entity.pkColumn.javaName}}",
             "</script>"})
-    int updateById(${entity.className} ${entity.className?uncap_first});
+    int updateBy${entity.pkColumn.javaName?cap_first}(${entity.className} ${entity.className?uncap_first});
 
     /**
      * 查询所有
@@ -90,14 +90,14 @@ public interface ${entity.className}Dao {
     ${entity.className} selectAll();
 
     /**
-     * 通过主键id查询
+     * 通过主键查询
      *
-     * @param id 主键id
+     * @param ${entity.pkColumn.javaName} 主键查询条件
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")
-    @Select("SELECT * FROM ${entity.tableName} WHERE id = <#noparse>#{id}</#noparse>")
-    ${entity.className} selectById(Long id);
+    @Select("SELECT * FROM ${entity.tableName} WHERE ${entity.pkColumn.columnName} = ${r'#{'}${entity.pkColumn.javaName}}")
+    ${entity.className} selectBy${entity.pkColumn.javaName?cap_first}(${entity.pkColumn.javaType} ${entity.pkColumn.javaName});
 
     /**
      * 查询一条记录, 自行控制条件保证返回一条记录
