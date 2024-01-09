@@ -18,7 +18,7 @@ public interface ${entity.className}Service {
      * @param request 查询请求
      * @return ${entity.className}
      */
-    ${entity.className} query${entity.className}(${entity.className} request);
+    ${entity.className} query${entity.className}(${entity.className}Request request);
 
     /**
      * 查询${entity.className}列表
@@ -26,7 +26,7 @@ public interface ${entity.className}Service {
      * @param request 查询请求
      * @return ${entity.className}列表
      */
-    List<${entity.className}> query${entity.className}List(${entity.className} request);
+    List<${entity.className}> query${entity.className}List(${entity.className}Request request);
 
     /**
      * 新增${entity.className}
@@ -34,7 +34,7 @@ public interface ${entity.className}Service {
      * @param request 请求参数
      * @return 结果
      */
-    int add${entity.className}(${entity.className} request);
+    int add${entity.className}(${entity.className}Request request);
 
     /**
      * 修改${entity.className}
@@ -42,7 +42,7 @@ public interface ${entity.className}Service {
      * @param request 请求参数
      * @return 结果
      */
-    int update${entity.className}(${entity.className} request);
+    int update${entity.className}(${entity.className}Request request);
 
     /**
      * 删除${entity.className}

@@ -22,7 +22,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     private ${entity.className}Dao ${entity.className?uncap_first}Dao;
 
     @Override
-    public ${entity.className} query${entity.className}(${entity.className} request) {
+    public ${entity.className} query${entity.className}(${entity.className}Request request) {
         ${entity.className} query = new ${entity.className}();
         <#list columnList as column>
             <#if (column.javaType!"") == "String">
@@ -38,7 +38,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     }
 
     @Override
-    public List<${entity.className}> query${entity.className}List(${entity.className} request) {
+    public List<${entity.className}> query${entity.className}List(${entity.className}Request request) {
         ${entity.className} query = new ${entity.className}();
         <#list columnList as column>
             <#if (column.javaType!"") == "String">
@@ -54,7 +54,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     }
 
     @Override
-    public int add${entity.className}(${entity.className} request) {
+    public int add${entity.className}(${entity.className}Request request) {
         ${entity.className} add = new ${entity.className}();
         <#list columnList as column>
             <#if (column.javaType!"") == "String">
@@ -70,7 +70,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     }
 
     @Override
-    public int update${entity.className}(${entity.className} request) {
+    public int update${entity.className}(${entity.className}Request request) {
         ${entity.className} update = new ${entity.className}();
         <#list columnList as column>
             <#if (column.javaType!"") == "String">
