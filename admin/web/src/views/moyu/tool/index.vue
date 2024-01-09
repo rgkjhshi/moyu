@@ -23,7 +23,7 @@
       </el-col>
     </el-row>
     <!-- 表格数据 -->
-    <el-table v-loading="listLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
+    <el-table v-loading="dataLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" width="55" />
       <el-table-column label="序号" type="index" width="60px" align="center" />
       <el-table-column prop="tableName" label="表名称" width="200px" show-overflow-tooltip align="center" />
@@ -79,11 +79,10 @@ export default {
   },
   data() {
     return {
-      listLoading: false,
-      downloadLoading: false,
+      dataLoading: false,
+      dataList: [],
       // 选中表数组
       tableNameList: [],
-      dataList: [],
       total: 0,
       queryRequest: {
         // 页码
@@ -109,17 +108,17 @@ export default {
   methods: {
     // 获取表格内的数据列表
     getDataList() {
-      this.listLoading = true
+      this.dataLoading = true
       // 查询数据
       listDbTable(this.queryRequest).then(response => {
         if (response.code === 0) {
           this.total = response.data.total
           this.dataList = response.data.pageData
         }
-        this.listLoading = false
+        this.dataLoading = false
       }).catch(err => {
         console.log(err)
-        this.listLoading = false
+        this.dataLoading = false
       })
     },
     /** 查询按钮操作 */
