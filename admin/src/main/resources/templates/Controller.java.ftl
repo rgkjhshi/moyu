@@ -5,10 +5,7 @@ import ${packageName}.service.${entity.className}Service;
 import ${packageName}.model.request.${entity.className}Request;
 import org.springframework.stereotype.Service;
 import com.dodoyd.moyu.common.model.BaseResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
