@@ -22,6 +22,11 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
     private ${entity.className}Dao ${entity.className?uncap_first}Dao;
 
     @Override
+    public ${entity.className} query${entity.className}By${entity.pkColumn.javaName?cap_first}(${entity.pkColumn.javaType} ${entity.pkColumn.javaName}) {
+        return ${entity.className?uncap_first}Dao.selectBy${entity.pkColumn.javaName?cap_first}(${entity.pkColumn.javaName});
+    }
+
+    @Override
     public ${entity.className} query${entity.className}(${entity.className}Request request) {
         ${entity.className} query = new ${entity.className}();
         <#list columnList as column>
