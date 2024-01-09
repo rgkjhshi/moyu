@@ -41,5 +41,5 @@ export function delete${entity.className}(data) {
 
 // 批量删除${entity.className}
 export function batchDelete${entity.className}(data) {
-return request.postForm('/api/${entity.className?uncap_first}/batchDelete', data)
+  return request.postForm('/api/${entity.className?uncap_first}/batchDelete', data)
 }
