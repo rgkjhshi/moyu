@@ -259,4 +259,16 @@ public class SysUserServiceImpl implements SysUserService {
         int row = sysUserDao.updateByUserId(update);
         return row;
     }
+
+    @Override
+    public int deleteSysUser(Long userId) {
+        int row = sysUserDao.deleteByUserId(userId);
+        return row;
+    }
+
+    @Override
+    public int batchDeleteSysUser(List<Long> userIdList) {
+        int row = sysUserDao.deleteByUserIdList(userIdList);
+        return row;
+    }
 }

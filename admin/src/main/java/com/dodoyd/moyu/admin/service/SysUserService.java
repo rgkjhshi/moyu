@@ -1,6 +1,5 @@
 package com.dodoyd.moyu.admin.service;
 
-import com.dodoyd.moyu.admin.domain.SysRole;
 import com.dodoyd.moyu.admin.domain.SysUser;
 
 import java.util.List;
@@ -53,5 +52,20 @@ public interface SysUserService {
      */
     int updateSysUser(SysUser request);
 
+    /**
+     * 删除SysUser
+     *
+     * @param userId 主键
+     * @return 结果
+     */
+    int deleteSysUser(Long userId);
+
+    /**
+     * 批量删除SysUser
+     *
+     * @param userIdList 主键列表
+     * @return 结果
+     */
+    int batchDeleteSysUser(List<Long> userIdList);
 }
 
