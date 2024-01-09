@@ -1,6 +1,7 @@
 package com.dodoyd.moyu.admin.service;
 
 import com.dodoyd.moyu.admin.domain.SysUser;
+import com.dodoyd.moyu.admin.model.request.SysUserRequest;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * SysUser服务
  *
  * @author moyusi
- * @since 2024-01-05
+ * @since 2024-01-09
  */
 public interface SysUserService {
 
@@ -21,12 +22,20 @@ public interface SysUserService {
     SysUser querySysUserByUsername(String username);
 
     /**
+     * 通过主键查询SysUser
+     *
+     * @param userId 主键
+     * @return SysUser
+     */
+    SysUser querySysUserByUserId(Long userId);
+
+    /**
      * 查询SysUser
      *
      * @param request 查询请求
      * @return SysUser
      */
-    SysUser querySysUser(SysUser request);
+    SysUser querySysUser(SysUserRequest request);
 
     /**
      * 查询SysUser列表
@@ -34,7 +43,7 @@ public interface SysUserService {
      * @param request 查询请求
      * @return SysUser列表
      */
-    List<SysUser> querySysUserList(SysUser request);
+    List<SysUser> querySysUserList(SysUserRequest request);
 
     /**
      * 新增SysUser
@@ -42,7 +51,7 @@ public interface SysUserService {
      * @param request 请求参数
      * @return 结果
      */
-    int addSysUser(SysUser request);
+    int addSysUser(SysUserRequest request);
 
     /**
      * 修改SysUser
@@ -50,7 +59,7 @@ public interface SysUserService {
      * @param request 请求参数
      * @return 结果
      */
-    int updateSysUser(SysUser request);
+    int updateSysUser(SysUserRequest request);
 
     /**
      * 删除SysUser
@@ -67,5 +76,6 @@ public interface SysUserService {
      * @return 结果
      */
     int batchDeleteSysUser(List<Long> userIdList);
+
 }
 

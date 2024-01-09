@@ -4,7 +4,9 @@ import com.dodoyd.moyu.admin.dao.SysRoleDao;
 import com.dodoyd.moyu.admin.dao.SysUserRoleDao;
 import com.dodoyd.moyu.admin.domain.SysRole;
 import com.dodoyd.moyu.admin.domain.SysUserRole;
+import com.dodoyd.moyu.admin.model.request.SysRoleRequest;
 import com.dodoyd.moyu.admin.service.SysRoleService;
+import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
  * SysRole服务实现类
  *
  * @author moyusi
- * @since 2024-01-05
+ * @since 2024-01-09
  */
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
@@ -41,15 +43,20 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public SysRole querySysRole(SysRole request) {
+    public SysRole querySysRoleById(Long id) {
+        return sysRoleDao.selectById(id);
+    }
+
+    @Override
+    public SysRole querySysRole(SysRoleRequest request) {
         SysRole query = new SysRole();
         if (request.getId() != null) {
             query.setId(request.getId());
         }
-        if (request.getRoleName() != null) {
+        if (!Strings.isNullOrEmpty(request.getRoleName())) {
             query.setRoleName(request.getRoleName());
         }
-        if (request.getRoleKey() != null) {
+        if (!Strings.isNullOrEmpty(request.getRoleKey())) {
             query.setRoleKey(request.getRoleKey());
         }
         if (request.getSortOrder() != null) {
@@ -61,10 +68,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (request.getDeleted() != null) {
             query.setDeleted(request.getDeleted());
         }
-        if (request.getCreateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getCreateBy())) {
             query.setCreateBy(request.getCreateBy());
         }
-        if (request.getUpdateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getUpdateBy())) {
             query.setUpdateBy(request.getUpdateBy());
         }
         if (request.getCreateTime() != null) {
@@ -73,7 +80,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (request.getUpdateTime() != null) {
             query.setUpdateTime(request.getUpdateTime());
         }
-        if (request.getRemark() != null) {
+        if (!Strings.isNullOrEmpty(request.getRemark())) {
             query.setRemark(request.getRemark());
         }
         SysRole sysRole = sysRoleDao.selectOne(query);
@@ -81,15 +88,15 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public List<SysRole> querySysRoleList(SysRole request) {
+    public List<SysRole> querySysRoleList(SysRoleRequest request) {
         SysRole query = new SysRole();
         if (request.getId() != null) {
             query.setId(request.getId());
         }
-        if (request.getRoleName() != null) {
+        if (!Strings.isNullOrEmpty(request.getRoleName())) {
             query.setRoleName(request.getRoleName());
         }
-        if (request.getRoleKey() != null) {
+        if (!Strings.isNullOrEmpty(request.getRoleKey())) {
             query.setRoleKey(request.getRoleKey());
         }
         if (request.getSortOrder() != null) {
@@ -101,10 +108,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (request.getDeleted() != null) {
             query.setDeleted(request.getDeleted());
         }
-        if (request.getCreateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getCreateBy())) {
             query.setCreateBy(request.getCreateBy());
         }
-        if (request.getUpdateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getUpdateBy())) {
             query.setUpdateBy(request.getUpdateBy());
         }
         if (request.getCreateTime() != null) {
@@ -113,7 +120,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (request.getUpdateTime() != null) {
             query.setUpdateTime(request.getUpdateTime());
         }
-        if (request.getRemark() != null) {
+        if (!Strings.isNullOrEmpty(request.getRemark())) {
             query.setRemark(request.getRemark());
         }
         List<SysRole> list = sysRoleDao.selectList(query);
@@ -121,15 +128,15 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public int addSysRole(SysRole request) {
+    public int addSysRole(SysRoleRequest request) {
         SysRole add = new SysRole();
         if (request.getId() != null) {
             add.setId(request.getId());
         }
-        if (request.getRoleName() != null) {
+        if (!Strings.isNullOrEmpty(request.getRoleName())) {
             add.setRoleName(request.getRoleName());
         }
-        if (request.getRoleKey() != null) {
+        if (!Strings.isNullOrEmpty(request.getRoleKey())) {
             add.setRoleKey(request.getRoleKey());
         }
         if (request.getSortOrder() != null) {
@@ -141,10 +148,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (request.getDeleted() != null) {
             add.setDeleted(request.getDeleted());
         }
-        if (request.getCreateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getCreateBy())) {
             add.setCreateBy(request.getCreateBy());
         }
-        if (request.getUpdateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getUpdateBy())) {
             add.setUpdateBy(request.getUpdateBy());
         }
         if (request.getCreateTime() != null) {
@@ -153,7 +160,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (request.getUpdateTime() != null) {
             add.setUpdateTime(request.getUpdateTime());
         }
-        if (request.getRemark() != null) {
+        if (!Strings.isNullOrEmpty(request.getRemark())) {
             add.setRemark(request.getRemark());
         }
         int row = sysRoleDao.insert(add);
@@ -161,15 +168,15 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public int updateSysRole(SysRole request) {
+    public int updateSysRole(SysRoleRequest request) {
         SysRole update = new SysRole();
         if (request.getId() != null) {
             update.setId(request.getId());
         }
-        if (request.getRoleName() != null) {
+        if (!Strings.isNullOrEmpty(request.getRoleName())) {
             update.setRoleName(request.getRoleName());
         }
-        if (request.getRoleKey() != null) {
+        if (!Strings.isNullOrEmpty(request.getRoleKey())) {
             update.setRoleKey(request.getRoleKey());
         }
         if (request.getSortOrder() != null) {
@@ -181,10 +188,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (request.getDeleted() != null) {
             update.setDeleted(request.getDeleted());
         }
-        if (request.getCreateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getCreateBy())) {
             update.setCreateBy(request.getCreateBy());
         }
-        if (request.getUpdateBy() != null) {
+        if (!Strings.isNullOrEmpty(request.getUpdateBy())) {
             update.setUpdateBy(request.getUpdateBy());
         }
         if (request.getCreateTime() != null) {
@@ -193,11 +200,22 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (request.getUpdateTime() != null) {
             update.setUpdateTime(request.getUpdateTime());
         }
-        if (request.getRemark() != null) {
+        if (!Strings.isNullOrEmpty(request.getRemark())) {
             update.setRemark(request.getRemark());
         }
         int row = sysRoleDao.updateById(update);
         return row;
     }
 
+    @Override
+    public int deleteSysRole(Long id) {
+        int row = sysRoleDao.deleteById(id);
+        return row;
+    }
+
+    @Override
+    public int batchDeleteSysRole(List<Long> idList) {
+        int row = sysRoleDao.deleteByIdList(idList);
+        return row;
+    }
 }

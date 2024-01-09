@@ -2,6 +2,7 @@ package com.dodoyd.moyu.admin.service.impl;
 
 import com.dodoyd.moyu.admin.dao.SysUserDao;
 import com.dodoyd.moyu.admin.domain.SysUser;
+import com.dodoyd.moyu.admin.model.request.SysUserRequest;
 import com.dodoyd.moyu.admin.service.SysUserService;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.List;
  * SysUser服务实现类
  *
  * @author moyusi
- * @since 2024-01-05
+ * @since 2024-01-09
  */
 @Service
 public class SysUserServiceImpl implements SysUserService {
@@ -29,7 +30,12 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public SysUser querySysUser(SysUser request) {
+    public SysUser querySysUserByUserId(Long userId) {
+        return sysUserDao.selectByUserId(userId);
+    }
+
+    @Override
+    public SysUser querySysUser(SysUserRequest request) {
         SysUser query = new SysUser();
         if (request.getUserId() != null) {
             query.setUserId(request.getUserId());
@@ -87,7 +93,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public List<SysUser> querySysUserList(SysUser request) {
+    public List<SysUser> querySysUserList(SysUserRequest request) {
         SysUser query = new SysUser();
         if (request.getUserId() != null) {
             query.setUserId(request.getUserId());
@@ -145,7 +151,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public int addSysUser(SysUser request) {
+    public int addSysUser(SysUserRequest request) {
         SysUser add = new SysUser();
         if (request.getUserId() != null) {
             add.setUserId(request.getUserId());
@@ -203,7 +209,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public int updateSysUser(SysUser request) {
+    public int updateSysUser(SysUserRequest request) {
         SysUser update = new SysUser();
         if (request.getUserId() != null) {
             update.setUserId(request.getUserId());

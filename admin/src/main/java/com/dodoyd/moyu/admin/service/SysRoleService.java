@@ -1,6 +1,7 @@
 package com.dodoyd.moyu.admin.service;
 
 import com.dodoyd.moyu.admin.domain.SysRole;
+import com.dodoyd.moyu.admin.model.request.SysRoleRequest;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * SysRole服务
  *
  * @author moyusi
- * @since 2024-01-05
+ * @since 2024-01-09
  */
 public interface SysRoleService {
 
@@ -21,12 +22,20 @@ public interface SysRoleService {
     List<SysRole> queryUserRoleList(Long userId);
 
     /**
+     * 通过主键查询SysRole
+     *
+     * @param id 主键
+     * @return SysRole
+     */
+    SysRole querySysRoleById(Long id);
+
+    /**
      * 查询SysRole
      *
      * @param request 查询请求
      * @return SysRole
      */
-    SysRole querySysRole(SysRole request);
+    SysRole querySysRole(SysRoleRequest request);
 
     /**
      * 查询SysRole列表
@@ -34,7 +43,7 @@ public interface SysRoleService {
      * @param request 查询请求
      * @return SysRole列表
      */
-    List<SysRole> querySysRoleList(SysRole request);
+    List<SysRole> querySysRoleList(SysRoleRequest request);
 
     /**
      * 新增SysRole
@@ -42,7 +51,7 @@ public interface SysRoleService {
      * @param request 请求参数
      * @return 结果
      */
-    int addSysRole(SysRole request);
+    int addSysRole(SysRoleRequest request);
 
     /**
      * 修改SysRole
@@ -50,7 +59,23 @@ public interface SysRoleService {
      * @param request 请求参数
      * @return 结果
      */
-    int updateSysRole(SysRole request);
+    int updateSysRole(SysRoleRequest request);
+
+    /**
+     * 删除SysRole
+     *
+     * @param id 主键
+     * @return 结果
+     */
+    int deleteSysRole(Long id);
+
+    /**
+     * 批量删除SysRole
+     *
+     * @param idList 主键列表
+     * @return 结果
+     */
+    int batchDeleteSysRole(List<Long> idList);
 
 }
 
