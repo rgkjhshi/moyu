@@ -3,6 +3,7 @@ package com.dodoyd.moyu.admin.controller;
 import com.dodoyd.moyu.admin.domain.SysUser;
 import com.dodoyd.moyu.admin.model.request.SysUserRequest;
 import com.dodoyd.moyu.admin.service.SysUserService;
+import com.dodoyd.moyu.common.annotation.Log;
 import com.dodoyd.moyu.common.model.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class SysUserController {
     /**
      * 查询SysUser列表
      */
+    @Log(response = false)
     @PostMapping(value = "/list")
     public BaseResponse<List<SysUser>> queryList(@RequestBody SysUserRequest request) {
         List<SysUser> list = sysUserService.querySysUserList(request);

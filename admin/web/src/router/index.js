@@ -161,6 +161,25 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/system',
+    component: Layout,
+    redirect: '/user/list',
+    alwaysShow: true,
+    meta: {
+      title: '系统管理',
+      icon: 'component',
+      roles: ['admin', 'user']
+    },
+    children: [
+      {
+        path: 'user',
+        component: () => import('@/views/moyu/system/user/index'),
+        name: 'User',
+        meta: { title: '用户管理', icon: 'list', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/tool',
     component: Layout,
     redirect: '/tool/gen',
@@ -173,7 +192,7 @@ export const asyncRoutes = [
     children: [
       {
         path: 'gen',
-        component: () => import('@/views/moyu/tool/index.vue'),
+        component: () => import('@/views/moyu/tool/index'),
         name: 'GenCode',
         meta: { title: '代码生成', icon: 'list', noCache: true }
       }
