@@ -4,6 +4,9 @@ import com.dodoyd.moyu.admin.dao.SysUserDao;
 import com.dodoyd.moyu.admin.domain.SysUser;
 import com.dodoyd.moyu.admin.model.request.SysUserRequest;
 import com.dodoyd.moyu.admin.service.SysUserService;
+import com.dodoyd.moyu.common.model.PageResult;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 
@@ -93,7 +96,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public List<SysUser> querySysUserList(SysUserRequest request) {
+    public PageResult<SysUser> querySysUserList(SysUserRequest request) {
         SysUser query = new SysUser();
         if (request.getUserId() != null) {
             query.setUserId(request.getUserId());
@@ -146,8 +149,14 @@ public class SysUserServiceImpl implements SysUserService {
         if (!Strings.isNullOrEmpty(request.getRemark())) {
             query.setRemark(request.getRemark());
         }
-        List<SysUser> list = sysUserDao.selectList(query);
-        return list;
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        Page<SysUser> page = (Page<SysUser>) sysUserDao.selectList(query);
+        // 分页结果
+        PageResult<SysUser> pageResult = new PageResult<>();
+        pageResult.setPageNum(page.getPageNum());
+        pageResult.setTotal(page.getTotal());
+        pageResult.setPageData(page.getResult());
+        return pageResult;
     }
 
     @Override

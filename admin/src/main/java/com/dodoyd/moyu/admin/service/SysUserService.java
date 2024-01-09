@@ -2,6 +2,7 @@ package com.dodoyd.moyu.admin.service;
 
 import com.dodoyd.moyu.admin.domain.SysUser;
 import com.dodoyd.moyu.admin.model.request.SysUserRequest;
+import com.dodoyd.moyu.common.model.PageResult;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public interface SysUserService {
      * @param request 查询请求
      * @return SysUser列表
      */
-    List<SysUser> querySysUserList(SysUserRequest request);
+    PageResult<SysUser> querySysUserList(SysUserRequest request);
 
     /**
      * 新增SysUser

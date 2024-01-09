@@ -4,6 +4,7 @@ import ${packageName}.domain.${entity.className};
 import ${packageName}.model.request.${entity.className}Request;
 import ${packageName}.service.${entity.className}Service;
 import com.dodoyd.moyu.common.model.BaseResponse;
+import com.dodoyd.moyu.common.model.PageResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,9 +27,9 @@ public class ${entity.className}Controller {
      * 查询${entity.className}列表
      */
     @PostMapping(value = "/list")
-    public BaseResponse<List<${entity.className}>> queryList(@RequestBody ${entity.className}Request request) {
-        List<${entity.className}> list = ${entity.className?uncap_first}Service.query${entity.className}List(request);
-        return BaseResponse.getSuccessResponse(list);
+    public BaseResponse<PageResult<${entity.className}>> queryList(@RequestBody ${entity.className}Request request) {
+        PageResult<${entity.className}> page = ${entity.className?uncap_first}Service.query${entity.className}List(request);
+        return BaseResponse.getSuccessResponse(page);
     }
 
     /**

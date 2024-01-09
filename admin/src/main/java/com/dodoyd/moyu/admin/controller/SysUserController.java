@@ -5,6 +5,7 @@ import com.dodoyd.moyu.admin.model.request.SysUserRequest;
 import com.dodoyd.moyu.admin.service.SysUserService;
 import com.dodoyd.moyu.common.annotation.Log;
 import com.dodoyd.moyu.common.model.BaseResponse;
+import com.dodoyd.moyu.common.model.PageResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,8 +29,8 @@ public class SysUserController {
      */
     @Log(response = false)
     @PostMapping(value = "/list")
-    public BaseResponse<List<SysUser>> queryList(@RequestBody SysUserRequest request) {
-        List<SysUser> list = sysUserService.querySysUserList(request);
+    public BaseResponse<PageResult<SysUser>> queryList(@RequestBody SysUserRequest request) {
+        PageResult<SysUser> list = sysUserService.querySysUserList(request);
         return BaseResponse.getSuccessResponse(list);
     }
 

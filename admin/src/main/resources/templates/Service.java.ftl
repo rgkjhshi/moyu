@@ -2,6 +2,7 @@ package ${packageName}.service;
 
 import ${packageName}.domain.${entity.className};
 import ${packageName}.model.request.${entity.className}Request;
+import com.dodoyd.moyu.common.model.PageResult;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public interface ${entity.className}Service {
      * @param request 查询请求
      * @return ${entity.className}列表
      */
-    List<${entity.className}> query${entity.className}List(${entity.className}Request request);
+    PageResult<${entity.className}> query${entity.className}List(${entity.className}Request request);
 
     /**
      * 新增${entity.className}
