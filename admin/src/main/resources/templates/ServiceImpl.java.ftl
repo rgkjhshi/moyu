@@ -26,9 +26,9 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
         ${entity.className} query = new ${entity.className}();
         <#list columnList as column>
             <#if (column.javaType!"") == "String">
-        if(!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
+        if (!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
             <#else >
-        if(request.get${column.javaName?cap_first}() != null) {
+        if (request.get${column.javaName?cap_first}() != null) {
             </#if>
             query.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
@@ -42,9 +42,9 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
         ${entity.className} query = new ${entity.className}();
         <#list columnList as column>
             <#if (column.javaType!"") == "String">
-        if(!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
+        if (!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
             <#else >
-        if(request.get${column.javaName?cap_first}() != null) {
+        if (request.get${column.javaName?cap_first}() != null) {
             </#if>
             query.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
@@ -58,9 +58,9 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
         ${entity.className} add = new ${entity.className}();
         <#list columnList as column>
             <#if (column.javaType!"") == "String">
-        if(!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
+        if (!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
             <#else >
-        if(request.get${column.javaName?cap_first}() != null) {
+        if (request.get${column.javaName?cap_first}() != null) {
             </#if>
             add.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
@@ -74,9 +74,9 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
         ${entity.className} update = new ${entity.className}();
         <#list columnList as column>
             <#if (column.javaType!"") == "String">
-        if(!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
+        if (!Strings.isNullOrEmpty(request.get${column.javaName?cap_first}())) {
             <#else >
-        if(request.get${column.javaName?cap_first}() != null) {
+        if (request.get${column.javaName?cap_first}() != null) {
             </#if>
             update.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
