@@ -267,7 +267,7 @@ public class GenCodeServiceImpl implements GenCodeService {
     Map<String, String> genCode(TableInfo tableInfo) {
         // code代码map
         Map<String, String> codeMap = new LinkedHashMap<>();
-        List<String> templateList = Lists.newArrayList("Domain.java", "Dao.java", "Request.java", "Service.java", "ServiceImpl.java");
+        List<String> templateList = Lists.newArrayList("Domain.java", "Dao.java", "Request.java", "Service.java", "ServiceImpl.java", "Controller.java");
         templateList.forEach(templateName -> {
             try {
                 // 加载模板文件
@@ -333,14 +333,14 @@ public class GenCodeServiceImpl implements GenCodeService {
             fileName = String.format("domain/%s.java", className);
         } else if (template.equalsIgnoreCase("Dao.java")) {
             fileName = String.format("dao/%sDao.java", className);
+        } else if (template.equalsIgnoreCase("Request.java")) {
+            fileName = String.format("model/request/%sRequest.java", className);
         } else if (template.equalsIgnoreCase("Service.java")) {
             fileName = String.format("service/%sService.java", className);
         } else if (template.equalsIgnoreCase("ServiceImpl.java")) {
             fileName = String.format("service/impl/%sServiceImpl.java", className);
         } else if (template.equalsIgnoreCase("Controller.java")) {
             fileName = String.format("controller/%sController.java", className);
-        } else if (template.equalsIgnoreCase("Request.java")) {
-            fileName = String.format("model/request/%sRequest.java", className);
         }
         return fileName;
     }
