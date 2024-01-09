@@ -1,6 +1,7 @@
 package ${packageName}.service;
 
 import ${packageName}.domain.${entity.className};
+import ${packageName}.model.request.${entity.className}Request;
 
 import java.util.List;
 

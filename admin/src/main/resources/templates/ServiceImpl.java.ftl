@@ -2,6 +2,7 @@ package ${packageName}.service.impl;
 
 import ${packageName}.dao.${entity.className}Dao;
 import ${packageName}.domain.${entity.className};
+import ${packageName}.model.request.${entity.className}Request;
 import ${packageName}.service.${entity.className}Service;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
