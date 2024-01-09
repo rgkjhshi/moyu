@@ -82,7 +82,10 @@ public class GenCodeServiceImpl implements GenCodeService {
         List<ColumnInfo> pkColumnList = genCodeDao.selectPkColumnListByTableName(tableName);
         // 只处理只有一个主键的情况，不支持联合主键
         if (pkColumnList.size() == 1) {
-            tableInfo.setPkColumn(pkColumnList.get(0));
+            ColumnInfo pkColumn = pkColumnList.get(0);
+            // 填充列信息
+            fillColumnInfo(pkColumn);
+            tableInfo.setPkColumn(pkColumn);
         }
         return genCode(tableInfo);
     }
