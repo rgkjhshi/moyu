@@ -1,70 +1,92 @@
-package ${packageName}.controller;
+package ${packageName}.service.impl;
 
-import ${packageName}.model.${modelName};
-import ${packageName}.service.${serviceName};
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import ${packageName}.domain.${entity.className};
+import ${packageName}.service.${entity.className}Service;
+import ${packageName}.model.request.${entity.className}Request;
+import org.springframework.stereotype.Service;
+import com.dodoyd.moyu.common.model.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * ${controllerName}
+ * ${entity.className}Controller控制器
  *
- * @author shisong02
+ * @author ${author!}
  * @since ${.now?string["yyyy-MM-dd"]}
  */
 @RestController
-@RequestMapping("/${modelName?lower_case}")
-public class ${controllerName} {
+@RequestMapping("/api/${entity.className?uncap_first}")
+public class ${entity.className}Controller {
 
-    @Autowired
-    private ${serviceName} ${serviceName?uncap_first};
-
-    /**
-     * 查询列表
-     */
-    @GetMapping("/list" )
-    public List<${modelName}> get${modelName}List(){
-        return ${serviceName?uncap_first}.get${modelName}List();
-    }
-
+    @Resource
+    private ${entity.className}Service ${entity.className?uncap_first}Service;
 
     /**
-     * 查询实体
+     * 查询${entity.className}列表
      */
-    @GetMapping("/{id}" )
-    public ${modelName} get${modelName}(@PathVariable("id") int id){
-        return ${serviceName?uncap_first}.get${modelName}();
+    @PostMapping(value = "/list")
+    public BaseResponse<List<${entity.className}>> queryList(@RequestBody ${entity.className}Request request) {
+        List<${entity.className}> list = ${entity.className?uncap_first}Service.selectList(request);
+        return BaseResponse.getSuccessResponse(list);
     }
-
 
     /**
-     * 插入
+     * 查询${entity.className}详细信息
      */
-    @PostMapping("/add" )
-    public int insert${modelName}(${modelName} ${modelName?lower_case}){
-        return ${serviceName?uncap_first}.insert${modelName}(${modelName?lower_case});
+    @GetMapping(value = "/get")
+    public BaseResponse<${entity.className}> getInfo(${entity.pkColumn.javaType} ${entity.pkColumn.javaName}) {
+        ${entity.className} info = ${entity.className?uncap_first}Service.query${entity.className}By${entity.pkColumn.javaName?cap_first}(${entity.pkColumn.javaName});
+        return BaseResponse.getSuccessResponse(info);
     }
-
 
     /**
-     * 更新
+     * 查询${entity.className}详细信息
      */
-    @PostMapping("/update")
-    public int update${modelName}(${modelName} ${modelName?lower_case}){
-        return ${serviceName?uncap_first}.update${modelName}(${modelName?lower_case});
+    @PostMapping(value = "/query")
+    public BaseResponse<${entity.className}> queryInfo(@RequestBody ${entity.className}Request request) {
+        ${entity.className} info = ${entity.className?uncap_first}Service.query${entity.className}(request);
+        return BaseResponse.getSuccessResponse(info);
     }
-
 
     /**
-     * 删除
+     * 新增${entity.className}
      */
-    @DeleteMapping("/delete/{id}")
-    public int delete${modelName}(@PathVariable("id") int id){
-        return ${serviceName?uncap_first}.delete${modelName}(id);
+    @PostMapping(value = "/add")
+    public BaseResponse<?> add(@RequestBody ${entity.className}Request request) {
+        ${entity.className?uncap_first}Service.add${entity.className}(request);
+        return BaseResponse.getSuccessResponse();
     }
 
+    /**
+     * 修改${entity.className}
+     */
+    @PostMapping(value = "/edit")
+    public BaseResponse<?> edit(@RequestBody ${entity.className}Request request) {
+        ${entity.className?uncap_first}Service.update${entity.className}(request);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 删除${entity.className}
+     */
+    @PostMapping(value = "/delete")
+    public BaseResponse<?> delete(${entity.pkColumn.javaType} ${entity.pkColumn.javaName}) {
+        ${entity.className?uncap_first}Service.delete${entity.className}(${entity.pkColumn.javaName});
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 批量删除${entity.className}
+     * 请求参数Key为${entity.pkColumn.javaName}List, value为逗号分割的字符串，如:idList=1,2,3
+     */
+    @PostMapping(value = "/batchDelete")
+    public BaseResponse<?> batchDelete(@RequestParam("${entity.pkColumn.javaName}List") List<${entity.pkColumn.javaType}> ${entity.pkColumn.javaName}List) {
+        ${entity.className?uncap_first}Service.batchDelete${entity.className}(${entity.pkColumn.javaName}List);
+        return BaseResponse.getSuccessResponse();
+    }
 }
