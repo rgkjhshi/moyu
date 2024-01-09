@@ -85,4 +85,15 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
         return row;
     }
 
+    @Override
+    int delete${entity.className}(${entity.pkColumn.javaType} ${entity.pkColumn.javaName}) {
+        int row = ${entity.className?uncap_first}Dao.deleteBy${entity.pkColumn.javaName?cap_first}(${entity.pkColumn.javaName});
+        return row;
+    }
+
+    @Override
+    int batchDelete${entity.className}(List<${entity.pkColumn.javaType}> ${entity.pkColumn.javaName}List) {
+        int row = ${entity.className?uncap_first}Dao.deleteBy${entity.pkColumn.javaName?cap_first}List(${entity.pkColumn.javaName}List);
+        return row;
+    }
 }

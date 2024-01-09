@@ -44,5 +44,21 @@ public interface ${entity.className}Service {
      */
     int update${entity.className}(${entity.className} request);
 
+    /**
+     * 删除${entity.className}
+     *
+     * @param ${entity.pkColumn.javaName} 主键
+     * @return 结果
+     */
+    int delete${entity.className}(${entity.pkColumn.javaType} ${entity.pkColumn.javaName});
+
+    /**
+     * 批量删除${entity.className}
+     *
+     * @param ${entity.pkColumn.javaName}List 主键列表
+     * @return 结果
+     */
+    int batchDelete${entity.className}(List<${entity.pkColumn.javaType}> ${entity.pkColumn.javaName}List);
+
 }
 
