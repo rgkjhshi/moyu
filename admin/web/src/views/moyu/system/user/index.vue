@@ -134,7 +134,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.idList = selection.map(item => item.id)
+      this.idList = selection.map(item => item.userId)
       this.single = !(selection.length === 1)
       this.multi = !(selection.length > 0)
     },
@@ -154,12 +154,15 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || '' + this.idList
-      if (ids === '') {
-        this.$message({ type: 'error', message: '请选择要生成的表' })
-        return
-      }
-      batchDeleteSysUser({ idList: ids }).then(response => {
+      const ids = row.userId || '' + this.idList
+      this.$confirm('是否确认删除${pkColumn.javaName}为"' + ids + '"的数据?', {
+        type: 'warning'
+      }).then(async() => {
+        return batchDeleteSysUser({ idList: ids })
+      }).then(response => {
+        if (response.code === 0) {
+          this.$message({ showClose: true, message: response.message, type: 'success' })
+        }
       }).catch(err => {
         console.log(err)
       })
