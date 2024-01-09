@@ -129,9 +129,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      // 重置属性
       this.$refs['queryForm'].resetFields()
-      // 查询数据
       this.handleQuery()
     },
     handleSizeChange(value) {
