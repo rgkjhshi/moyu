@@ -2,11 +2,11 @@
   <div class="app-container">
     <!-- 上方选择框   -->
     <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small">
-      <el-form-item label-width="60px" label="表名:">
+      <el-form-item label-width="60px" label="表名:" prop="tableName">
         <el-input v-model="queryRequest.tableName" placeholder="请输入表名" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label-width="60px" label="表描述:">
-        <el-input v-model="queryRequest.orderNo" placeholder="请输入表描述" clearable @keyup.enter.native="handleQuery" />
+      <el-form-item label-width="60px" label="表描述:" prop="tableName">
+        <el-input v-model="queryRequest.tableName" placeholder="请输入表描述" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
@@ -128,9 +128,9 @@ export default {
       this.getDataList()
     },
     /** 重置按钮操作 */
-    resetQuery(formName) {
+    resetQuery() {
       // 重置属性
-      this.$refs[formName].resetFields()
+      this.$refs['queryForm'].resetFields()
       // 查询数据
       this.handleQuery()
     },
