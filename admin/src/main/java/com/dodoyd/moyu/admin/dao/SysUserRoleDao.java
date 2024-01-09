@@ -9,7 +9,7 @@ import java.util.List;
  * SysUserRole数据访问对象
  *
  * @author moyusi
- * @since 2024-01-05
+ * @since 2024-01-09
  */
 @Mapper
 public interface SysUserRoleDao {
@@ -37,18 +37,18 @@ public interface SysUserRoleDao {
     int insert(SysUserRole sysUserRole);
 
     /**
-     * 通过主键id删除
+     * 通过主键删除
      *
-     * @param id 主键id
+     * @param id 主键
      * @return 返回受影响的记录条数
      */
     @Delete("DELETE FROM sys_user_role WHERE id = #{id}")
     int deleteById(Long id);
 
     /**
-     * 通过主键id列表删除
+     * 通过主键列表批量删除
      *
-     * @param id 主键id
+     * @param idList 主键列表
      * @return 返回受影响的记录条数
      */
     @Delete({"<script>",
@@ -60,7 +60,7 @@ public interface SysUserRoleDao {
     int deleteByIdList(List<Long> idList);
 
     /**
-     * 通过主键id更新
+     * 通过主键更新
      *
      * @param sysUserRole 数据库实体
      * @return 返回受影响的记录条数
@@ -79,21 +79,20 @@ public interface SysUserRoleDao {
     /**
      * 查询所有
      *
-     * @param id 主键id
      * @return 查询到的结果, 无结果将返回null
      */
     @Results(id = "baseResult", value = {
-        @Result(property = "id", column = "id"),
-        @Result(property = "userId", column = "user_id"),
-        @Result(property = "roleId", column = "role_id"),
+            @Result(property = "id", column = "id"),
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "roleId", column = "role_id"),
     })
     @Select("SELECT * FROM sys_user_role")
     SysUserRole selectAll();
 
     /**
-     * 通过主键id查询
+     * 通过主键查询
      *
-     * @param id 主键id
+     * @param id 主键查询条件
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")

@@ -9,7 +9,7 @@ import java.util.List;
  * SysUser数据访问对象
  *
  * @author moyusi
- * @since 2024-01-08
+ * @since 2024-01-09
  */
 @Mapper
 public interface SysUserDao {
