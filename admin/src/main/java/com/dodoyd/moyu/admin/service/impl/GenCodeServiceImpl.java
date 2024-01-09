@@ -267,7 +267,8 @@ public class GenCodeServiceImpl implements GenCodeService {
     Map<String, String> genCode(TableInfo tableInfo) {
         // code代码map
         Map<String, String> codeMap = new LinkedHashMap<>();
-        List<String> templateList = Lists.newArrayList("Domain.java", "Dao.java", "Request.java", "Controller.java", "Service.java", "ServiceImpl.java");
+        List<String> templateList = Lists.newArrayList("Domain.java", "Dao.java", "Request.java", "Controller.java", "Service.java", "ServiceImpl.java",
+                "api.js");
         templateList.forEach(templateName -> {
             try {
                 // 加载模板文件
@@ -327,6 +328,8 @@ public class GenCodeServiceImpl implements GenCodeService {
     private String getFileName(String template, String tableName) {
         // 大写类名
         String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName);
+        // 小写类名
+        String javaName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, tableName);
         // 文件名称
         String fileName = className;
         if (template.equalsIgnoreCase("Domain.java")) {
@@ -341,6 +344,10 @@ public class GenCodeServiceImpl implements GenCodeService {
             fileName = String.format("service/%sService.java", className);
         } else if (template.equalsIgnoreCase("ServiceImpl.java")) {
             fileName = String.format("service/impl/%sServiceImpl.java", className);
+        } else if (template.equalsIgnoreCase("api.js")) {
+            fileName = String.format("api/%s.js", javaName);
+        } else if (template.equalsIgnoreCase("index.vue")) {
+            fileName = String.format("views/%s/index.vue", javaName);
         }
         return fileName;
     }

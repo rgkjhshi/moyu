@@ -2,11 +2,7 @@ import request from '@/utils/request'
 
 // 查询数据库表
 export function listDbTable(data) {
-  const formData = new FormData()
-  for (const key in data) {
-    formData.append(key, data[key])
-  }
-  return request.post('/api/tool/gen/list', formData)
+  return request.postForm('/api/tool/gen/list', data)
 }
 
 // 预览生成代码
