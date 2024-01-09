@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <!-- 上方选择框   -->
-    <el-form ref="queryRequest" :model="queryRequest" :inline="true" size="small">
+    <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small">
       <el-form-item label-width="60px" label="表名:">
-        <el-input v-model="queryRequest.orderNo" placeholder="请输入表名" clearable @keyup.enter.native="handleQuery" />
+        <el-input v-model="queryRequest.tableName" placeholder="请输入表名" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label-width="60px" label="表描述:">
-        <el-input v-model="queryRequest.orderNo" placeholder="请输入表描述" clearable />
+        <el-input v-model="queryRequest.orderNo" placeholder="请输入表描述" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
-        <el-button icon="el-icon-refresh" size="small" @click="handleQuery">重置</el-button>
+        <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 选中数据操作   -->
@@ -89,7 +89,8 @@ export default {
         // 页码
         pageNum: 1,
         // 页面大小
-        pageSize: 10
+        pageSize: 10,
+        tableName: null
       },
       // 预览参数
       preview: {
@@ -121,8 +122,17 @@ export default {
         this.listLoading = false
       })
     },
+    /** 查询按钮操作 */
     handleQuery() {
+      this.queryRequest.pageNum = 1
       this.getDataList()
+    },
+    /** 重置按钮操作 */
+    resetQuery(formName) {
+      // 重置属性
+      this.$refs[formName].resetFields()
+      // 查询数据
+      this.handleQuery()
     },
     handleSizeChange(value) {
       // 已经通过.sync实现了双向绑定，否则这里要主动修改值 this.queryRequest.pageSize = value
