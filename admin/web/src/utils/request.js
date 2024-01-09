@@ -87,7 +87,7 @@ service.interceptors.response.use(
 )
 
 // 自定义的通用下载方法
-export function download(config) {
+service.download = function download(config) {
   return service({
     responseType: 'blob',
     ...config

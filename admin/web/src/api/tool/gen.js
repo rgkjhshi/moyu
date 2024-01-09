@@ -1,4 +1,4 @@
-import request, { download } from '@/utils/request'
+import request from '@/utils/request'
 
 // 查询数据库表
 export function listDbTable(data) {
@@ -26,7 +26,7 @@ export function previewCodeBySql(data) {
 
 // 下载代码
 export function downloadCode(data) {
-  return download({
+  return request.download({
     url: '/api/tool/gen/download',
     method: 'post',
     // data是json，params是查询参数
@@ -36,7 +36,7 @@ export function downloadCode(data) {
 
 // 通过SQL生成代码并下载
 export function downloadCodeBySql(data) {
-  return download({
+  return request.download({
     url: '/api/tool/gen/downloadBySql',
     method: 'post',
     data: data
