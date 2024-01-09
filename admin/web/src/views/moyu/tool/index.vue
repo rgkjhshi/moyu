@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <!-- 上方选择框   -->
-    <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small">
-      <el-form-item label-width="60px" label="表名:" prop="tableName">
+    <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small" label-width="80px">
+      <el-form-item label="表名:" prop="tableName">
         <el-input v-model="queryRequest.tableName" placeholder="请输入表名" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label-width="60px" label="表描述:" prop="tableName">
+      <el-form-item label="表描述:" prop="tableName">
         <el-input v-model="queryRequest.tableName" placeholder="请输入表描述" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
