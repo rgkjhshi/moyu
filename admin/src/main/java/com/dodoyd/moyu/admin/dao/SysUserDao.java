@@ -65,30 +65,30 @@ public interface SysUserDao {
     int insert(SysUser sysUser);
 
     /**
-     * 通过主键id删除
+     * 通过主键删除
      *
-     * @param id 主键id
+     * @param userId 主键
      * @return 返回受影响的记录条数
      */
-    @Delete("DELETE FROM sys_user WHERE id = #{id}")
-    int deleteById(Long id);
+    @Delete("DELETE FROM sys_user WHERE user_id = #{userId}")
+    int deleteByUserId(Long userId);
 
     /**
-     * 通过主键id列表删除
+     * 通过主键列表批量删除
      *
-     * @param idList 主键id列表
+     * @param userIdList 主键列表
      * @return 返回受影响的记录条数
      */
     @Delete({"<script>",
-            "DELETE FROM sys_user WHERE id IN ",
+            "DELETE FROM sys_user WHERE user_id IN ",
             "<foreach collection='list' item='item' open='(' separator=',' close=')'>",
             "    #{item} ",
             "</foreach>",
             "</script>"})
-    int deleteByIdList(List<Long> idList);
+    int deleteByUserIdList(List<Long> userIdList);
 
     /**
-     * 通过主键id更新
+     * 通过主键更新
      *
      * @param sysUser 数据库实体
      * @return 返回受影响的记录条数
@@ -114,9 +114,9 @@ public interface SysUserDao {
             "    <if test='updateTime != null'>update_time = #{updateTime},</if>",
             "    <if test='remark != null'>remark = #{remark},</if>",
             "</set>",
-            "WHERE id = #{id}",
+            "WHERE user_id = #{userId}",
             "</script>"})
-    int updateById(SysUser sysUser);
+    int updateByUserId(SysUser sysUser);
 
     /**
      * 查询所有
@@ -146,14 +146,14 @@ public interface SysUserDao {
     SysUser selectAll();
 
     /**
-     * 通过主键id查询
+     * 通过主键查询
      *
-     * @param id 主键id
+     * @param userId 主键查询条件
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")
-    @Select("SELECT * FROM sys_user WHERE id = #{id}")
-    SysUser selectById(Long id);
+    @Select("SELECT * FROM sys_user WHERE user_id = #{userId}")
+    SysUser selectByUserId(Long userId);
 
     /**
      * 查询一条记录, 自行控制条件保证返回一条记录
