@@ -59,7 +59,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
         }
         </#list>
         PageHelper.startPage(request.getPageNum(), request.getPageSize());
-        Page<${entity.className}> page = (Page<${entity.className}>)  ${entity.className?uncap_first}Dao.selectList(query);
+        Page<${entity.className}> page = (Page<${entity.className}>) ${entity.className?uncap_first}Dao.selectList(query);
         // 分页结果
         PageResult<${entity.className}> pageResult = new PageResult<>();
         pageResult.setPageNum(page.getPageNum());
