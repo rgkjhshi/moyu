@@ -92,12 +92,27 @@ public interface ${entity.className}Dao {
     /**
      * 通过主键查询
      *
-     * @param ${entity.pkColumn.javaName} 主键查询条件
+     * @param ${entity.pkColumn.javaName} 主键
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")
     @Select("SELECT * FROM ${entity.tableName} WHERE ${entity.pkColumn.columnName} = ${r'#{'}${entity.pkColumn.javaName}}")
     ${entity.className} selectBy${entity.pkColumn.javaName?cap_first}(${entity.pkColumn.javaType} ${entity.pkColumn.javaName});
+
+    /**
+     * 通过主键列表查询
+     *
+     * @param ${entity.pkColumn.javaName}List 主键列表
+     * @return 查询到的结果, 无结果将返回空List
+     */
+    @ResultMap("baseResult")
+    @Select({"<script>",
+            "SELECT * FROM ${entity.tableName} WHERE ${entity.pkColumn.columnName} IN ",
+            "<foreach collection='list' item='item' open='(' separator=',' close=')'>",
+            "    <#noparse>#{item}</#noparse> ",
+            "</foreach>",
+            "</script>"})
+    List<${entity.className}> selectBy${entity.pkColumn.javaName?cap_first}List(List<${entity.pkColumn.javaType}> ${entity.pkColumn.javaName}List);
 
     /**
      * 查询一条记录, 自行控制条件保证返回一条记录
