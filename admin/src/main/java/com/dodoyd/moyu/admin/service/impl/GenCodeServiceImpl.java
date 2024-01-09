@@ -126,7 +126,7 @@ public class GenCodeServiceImpl implements GenCodeService {
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         for (String tableName : tableNameList) {
             Map<String, String> codeMap = genCodeByTable(tableName);
-            genCode(tableName, codeMap, zip);
+            zipCode(tableName, codeMap, zip);
         }
         try {
             // 完成所有文件的添加
@@ -163,7 +163,7 @@ public class GenCodeServiceImpl implements GenCodeService {
             // 存放生成代码的map
             Map<String, String> codeMap = genCode(tableInfo);
             // 第一个处理完后就返回,只能预览一个表的生成代码
-            genCode(tableInfo.getTableName(), codeMap, zip);
+            zipCode(tableInfo.getTableName(), codeMap, zip);
         }
         try {
             // 完成所有文件的添加
@@ -290,7 +290,7 @@ public class GenCodeServiceImpl implements GenCodeService {
     /**
      * 生成代码
      */
-    private void genCode(String tableName, Map<String, String> codeMap, ZipOutputStream zip) {
+    private void zipCode(String tableName, Map<String, String> codeMap, ZipOutputStream zip) {
         if (CollectionUtils.isEmpty(codeMap)) {
             return;
         }
