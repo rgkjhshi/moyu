@@ -1,11 +1,7 @@
 import request from '@/utils/request'
 
 export function login(data) {
-  const formData = new FormData()
-  for (const key in data) {
-    formData.append(key, data[key])
-  }
-  return request.post('/api/login', formData)
+  return request.postForm('/api/login', data)
 }
 
 export function getInfo(token) {

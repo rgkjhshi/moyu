@@ -115,4 +115,27 @@ export function download(config) {
   })
 }
 
+// 提交表单
+service.postForm = function postForm(url, data, config) {
+  // 删除所有的null属性和未定义属性
+  const formData = new FormData()
+  for (const key in data) {
+    if (data[key] != null && typeof (data[key]) !== 'undefined') {
+      formData.append(key, data[key])
+    }
+  }
+  return service.post(url, formData, config)
+}
+
+// 提交Json
+service.postJson = function postJson(url, data, config) {
+  // 删除所有的null属性和未定义属性
+  for (const key in data) {
+    if (data[key] == null || typeof (data[key]) === 'undefined') {
+      delete data[key]
+    }
+  }
+  return service.post(url, data, config)
+}
+
 export default service
