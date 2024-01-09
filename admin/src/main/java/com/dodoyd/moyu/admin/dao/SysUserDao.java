@@ -148,12 +148,27 @@ public interface SysUserDao {
     /**
      * 通过主键查询
      *
-     * @param userId 主键查询条件
+     * @param userId 主键
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")
     @Select("SELECT * FROM sys_user WHERE user_id = #{userId}")
     SysUser selectByUserId(Long userId);
+
+    /**
+     * 通过主键列表查询
+     *
+     * @param userIdList 主键列表
+     * @return 查询到的结果, 无结果将返回空List
+     */
+    @ResultMap("baseResult")
+    @Select({"<script>",
+            "SELECT * FROM sys_user WHERE user_id IN ",
+            "<foreach collection='list' item='item' open='(' separator=',' close=')'>",
+            "    #{item} ",
+            "</foreach>",
+            "</script>"})
+    List<SysUser> selectByUserIdList(List<Long> userIdList);
 
     /**
      * 查询一条记录, 自行控制条件保证返回一条记录

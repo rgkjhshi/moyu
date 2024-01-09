@@ -124,12 +124,27 @@ public interface SysRoleDao {
     /**
      * 通过主键查询
      *
-     * @param id 主键查询条件
+     * @param id 主键
      * @return 查询到的结果, 无结果将返回null
      */
     @ResultMap("baseResult")
     @Select("SELECT * FROM sys_role WHERE id = #{id}")
     SysRole selectById(Long id);
+
+    /**
+     * 通过主键列表查询
+     *
+     * @param idList 主键列表
+     * @return 查询到的结果, 无结果将返回空List
+     */
+    @ResultMap("baseResult")
+    @Select({"<script>",
+            "SELECT * FROM sys_role WHERE id IN ",
+            "<foreach collection='list' item='item' open='(' separator=',' close=')'>",
+            "    #{item} ",
+            "</foreach>",
+            "</script>"})
+    List<SysRole> selectByIdList(List<Long> idList);
 
     /**
      * 查询一条记录, 自行控制条件保证返回一条记录
@@ -181,12 +196,4 @@ public interface SysRoleDao {
             "</script>"})
     List<SysRole> selectList(SysRole sysRole);
 
-    @ResultMap("baseResult")
-    @Select({"<script>",
-            "SELECT * FROM sys_role WHERE id IN",
-            "<foreach collection='list' item='item' open='(' separator=',' close=')'>",
-            "    #{item} ",
-            "</foreach>",
-            "</script>"})
-    List<SysRole> selectByIdList(List<Long> idList);
 }
