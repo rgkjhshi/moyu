@@ -65,7 +65,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
             update.set${column.javaName?cap_first}(request.get${column.javaName?cap_first}());
         }
         </#list>
-        int row = ${entity.className?uncap_first}Dao.updateById(update);
+        int row = ${entity.className?uncap_first}Dao.updateBy${entity.pkColumn.javaName?cap_first}(update);
         return row;
     }
 
