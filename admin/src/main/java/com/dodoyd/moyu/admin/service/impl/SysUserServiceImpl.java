@@ -255,7 +255,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (request.getRemark() != null) {
             update.setRemark(request.getRemark());
         }
-        int row = sysUserDao.updateById(update);
+        int row = sysUserDao.updateByUserId(update);
         return row;
     }
 
