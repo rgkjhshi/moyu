@@ -15,7 +15,7 @@ public interface ${entity.className}Service {
     /**
      * 通过主键查询${entity.className}
      *
-     * @param ${entity.pkColumn.javaName} 主键查询条件
+     * @param ${entity.pkColumn.javaName} 主键
      * @return ${entity.className}
      */
     ${entity.className} query${entity.className}By${entity.pkColumn.javaName?cap_first}(${entity.pkColumn.javaType} ${entity.pkColumn.javaName});
