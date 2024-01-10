@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询SysUser列表
-export function querySysUserList(data) {
+export function listSysUser(data) {
   return request.postJson('/api/sysUser/list', data)
 }
 
@@ -34,12 +34,7 @@ export function editSysUser(data) {
   return request.postJson('/api/sysUser/edit', data)
 }
 
-// 删除SysUser
-export function deleteSysUser(data) {
-  return request.postForm('/api/sysUser/delete', data)
-}
-
 // 批量删除SysUser
-export function batchDeleteSysUser(data) {
+export function deleteSysUser(data) {
   return request.postForm('/api/sysUser/batchDelete', data)
 }

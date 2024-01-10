@@ -58,7 +58,7 @@
 
 import clipboard from '@/directive/clipboard/index.js'
 
-import { querySysUserList, addSysUser, editSysUser, batchDeleteSysUser } from '@/api/system/sysUser'
+import { listSysUser, addSysUser, editSysUser, deleteSysUser } from '@/api/system/sysUser'
 
 export default {
   name: 'User',
@@ -97,7 +97,7 @@ export default {
     getDataList() {
       this.dataLoading = true
       // 查询数据
-      querySysUserList(this.queryRequest).then(response => {
+      listSysUser(this.queryRequest).then(response => {
         if (response.code === 0) {
           this.total = response.data.total
           this.dataList = response.data.pageData
@@ -144,7 +144,7 @@ export default {
       this.$confirm('是否确认删除${pkColumn.javaName}为"' + ids + '"的数据?', {
         type: 'warning'
       }).then(async() => {
-        return batchDeleteSysUser({ idList: ids })
+        return deleteSysUser({ idList: ids })
       }).then(response => {
         if (response.code === 0) {
           this.$message({ showClose: true, message: response.message, type: 'success' })
