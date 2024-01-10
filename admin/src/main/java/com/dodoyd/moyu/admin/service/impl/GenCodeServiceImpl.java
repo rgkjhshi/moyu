@@ -267,8 +267,8 @@ public class GenCodeServiceImpl implements GenCodeService {
     Map<String, String> genCode(TableInfo tableInfo) {
         // code代码map
         Map<String, String> codeMap = new LinkedHashMap<>();
-        List<String> templateList = Lists.newArrayList("Domain.java", "Dao.java", "Request.java", "Controller.java", "Service.java", "ServiceImpl.java",
-                "api.js");
+        List<String> templateList = Lists.newArrayList("java/Domain.java", "java/Dao.java", "java/Request.java",
+                "java/Controller.java", "java/Service.java", "java/ServiceImpl.java", "js/api.js");
         templateList.forEach(templateName -> {
             try {
                 // 加载模板文件
@@ -280,7 +280,7 @@ public class GenCodeServiceImpl implements GenCodeService {
                 dataMap.put("entity", tableInfo);
                 dataMap.put("columnList", tableInfo.getColumnList());
                 String codeStr = FreeMarkerTemplateUtils.processTemplateIntoString(template, dataMap);
-                codeMap.put(templateName, codeStr);
+                codeMap.put(getSimpleName(templateName), codeStr);
             } catch (Exception e) {
                 log.error("生成代码失败", e);
             }
@@ -350,6 +350,16 @@ public class GenCodeServiceImpl implements GenCodeService {
             fileName = String.format("views/%s/index.vue", javaName);
         }
         return fileName;
+    }
+
+    /**
+     * 获取模板名，不包含路径，如api.js、Dao.java
+     */
+    private String getSimpleName(String templateName) {
+        // 模板名
+        String simpleName = templateName.replace(".ftl", "");
+        simpleName = simpleName.substring(simpleName.lastIndexOf("/") + 1);
+        return simpleName;
     }
 
 }
