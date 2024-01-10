@@ -118,20 +118,6 @@ export default {
       this.$refs['queryForm'].resetFields()
       this.handleQuery()
     },
-    handleSizeChange(value) {
-      // 已经通过.sync实现了双向绑定，否则这里要主动修改值 this.queryRequest.pageSize = value
-      this.getDataList()
-      // console.log('页大小：' + this.queryRequest.pageSize)
-    },
-    handleCurrentChange(value) {
-      // 已经通过.sync实现了双向绑定，否则这里要主动修改值 this.queryRequest.pageNum = value
-      this.getDataList()
-      // console.log(this.queryRequest.pageNum)
-    },
-    /** 复制代码成功 */
-    clipboardSuccess() {
-      this.$message({ type: 'success', message: '复制成功' })
-    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.idList = selection.map(item => item.userId)
