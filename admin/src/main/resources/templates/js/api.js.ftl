@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询${entity.className}列表
-export function query${entity.className}List(data) {
+export function list${entity.className}(data) {
   return request.postJson('/api/${entity.className?uncap_first}/list', data)
 }
 
@@ -34,12 +34,7 @@ export function edit${entity.className}(data) {
   return request.postJson('/api/${entity.className?uncap_first}/edit', data)
 }
 
-// 删除${entity.className}
-export function delete${entity.className}(data) {
-  return request.postForm('/api/${entity.className?uncap_first}/delete', data)
-}
-
 // 批量删除${entity.className}
-export function batchDelete${entity.className}(data) {
+export function delete${entity.className}(data) {
   return request.postForm('/api/${entity.className?uncap_first}/batchDelete', data)
 }
