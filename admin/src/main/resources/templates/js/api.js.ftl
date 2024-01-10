@@ -34,7 +34,7 @@ export function edit${entity.className}(data) {
   return request.postJson('/api/${entity.className?uncap_first}/edit', data)
 }
 
-// 批量删除${entity.className}
+// 删除${entity.className}
 export function delete${entity.className}(data) {
   return request.postForm('/api/${entity.className?uncap_first}/batchDelete', data)
 }
