@@ -56,15 +56,12 @@
 
 <script>
 
-import clipboard from '@/directive/clipboard/index.js'
-
 import { listSysUser, addSysUser, editSysUser, deleteSysUser } from '@/api/system/sysUser'
 
 export default {
   name: 'User',
   components: { },
   directives: {
-    clipboard
   },
   data() {
     return {
