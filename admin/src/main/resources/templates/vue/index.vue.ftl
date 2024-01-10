@@ -26,13 +26,9 @@
     <el-table v-loading="dataLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" width="55" />
       <el-table-column label="序号" type="index" width="60px" align="center" />
-
-      <el-table-column prop="userId" label="userId" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="username" label="username" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
-
+<#list columnList as column>
+      <el-table-column prop="${column.javaName}" label="${column.comment}" width="200px" show-overflow-tooltip align="center" />
+</#list>
       <el-table-column label="操作" align="center" min-width="160">
         <template v-slot="{row}">
           <el-button type="success" plain size="small" icon="el-icon-edit" @click="handleEdit(row)">修改</el-button>
