@@ -2,7 +2,7 @@
   <div class="app-container">
     <!-- 上方选择框   -->
     <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small" label-width="80px">
-      <el-form-item label="用户唯一ID:" prop="userId">
+      <el-form-item label="用户ID:" prop="userId">
         <el-input v-model="queryRequest.userId" placeholder="请输入用户唯一ID" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
@@ -26,24 +26,18 @@
     <el-table v-loading="dataLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" width="55" />
       <el-table-column label="序号" type="index" width="60px" align="center" />
-      <el-table-column prop="userId" label="用户唯一ID" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="userId" label="用户ID" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="username" label="用户账号" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="nickname" label="用户昵称" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="gender" label="性别,0:未知,1:男,2:女" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="avatar" label="头像地址" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="email" label="用户邮箱" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="mobile" label="手机号码" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="userPwd" label="登录口令密文" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="loginIp" label="最后登录IP" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="loginTime" label="最后登录时间" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="status" label="帐号状态,0:正常,1:停用" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="deleted" label="删除标志,0:未删除,1:已删除" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="createBy" label="创建者" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="updateBy" label="更新者" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column label="操作" align="center" min-width="200">
+      <el-table-column label="操作" fixed="right" align="center" min-width="200">
         <template v-slot="{row}">
           <el-button type="success" plain size="small" icon="el-icon-edit" @click="handleEdit(row)">修改</el-button>
           <el-button type="danger" plain size="small" icon="el-icon-delete" @click="handleDelete(row)">删除</el-button>

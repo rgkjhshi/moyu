@@ -29,7 +29,7 @@
 <#list columnList as column>
       <el-table-column prop="${column.javaName}" label="${column.comment}" width="200px" show-overflow-tooltip align="center" />
 </#list>
-      <el-table-column label="操作" align="center" min-width="200">
+      <el-table-column label="操作" fixed="right" align="center" min-width="200">
         <template v-slot="{row}">
           <el-button type="success" plain size="small" icon="el-icon-edit" @click="handleEdit(row)">修改</el-button>
           <el-button type="danger" plain size="small" icon="el-icon-delete" @click="handleDelete(row)">删除</el-button>
