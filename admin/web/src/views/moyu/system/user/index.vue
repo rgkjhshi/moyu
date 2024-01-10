@@ -84,9 +84,6 @@ export default {
     }
   },
   created() {
-    if (this.$route.query.orderNo) {
-      this.queryRequest.orderNo = this.$route.query.orderNo
-    }
     this.getDataList()
   },
   methods: {
