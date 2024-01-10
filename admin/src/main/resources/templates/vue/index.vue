@@ -2,11 +2,8 @@
   <div class="app-container">
     <!-- 上方选择框   -->
     <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small" label-width="80px">
-      <el-form-item label="表名:" prop="tableName">
-        <el-input v-model="queryRequest.tableName" placeholder="请输入表名" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="表描述:" prop="tableName">
-        <el-input v-model="queryRequest.tableName" placeholder="请输入表描述" clearable @keyup.enter.native="handleQuery" />
+      <el-form-item label="${entity.pkColumn.comment}:" prop="${entity.pkColumn.javaName}">
+        <el-input v-model="queryRequest.${entity.pkColumn.javaName}" placeholder="请输入${entity.pkColumn.comment}" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
@@ -29,11 +26,13 @@
     <el-table v-loading="dataLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" width="55" />
       <el-table-column label="序号" type="index" width="60px" align="center" />
+
       <el-table-column prop="userId" label="userId" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="username" label="username" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
+
       <el-table-column label="操作" align="center" min-width="160">
         <template v-slot="{row}">
           <el-button type="success" plain size="small" icon="el-icon-edit" @click="handleEdit(row)">修改</el-button>
@@ -56,15 +55,12 @@
 
 <script>
 
-import clipboard from '@/directive/clipboard/index.js'
-
-import { listSysUser, addSysUser, editSysUser, deleteSysUser } from '@/api/system/sysUser'
+import { list${entity.className}, add${entity.className}, edit${entity.className}, delete${entity.className} } from '@/api/system/sysUser'
 
 export default {
-  name: 'User',
+  name: '${entity.className}',
   components: { },
   directives: {
-    clipboard
   },
   data() {
     return {
@@ -87,9 +83,6 @@ export default {
     }
   },
   created() {
-    if (this.$route.query.orderNo) {
-      this.queryRequest.orderNo = this.$route.query.orderNo
-    }
     this.getDataList()
   },
   methods: {
@@ -97,7 +90,7 @@ export default {
     getDataList() {
       this.dataLoading = true
       // 查询数据
-      listSysUser(this.queryRequest).then(response => {
+      list${entity.className}(this.queryRequest).then(response => {
         if (response.code === 0) {
           this.total = response.data.total
           this.dataList = response.data.pageData
@@ -126,25 +119,25 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      addSysUser().then(response => {
+      add${entity.className}().then(response => {
       }).catch(err => {
         console.log(err)
       })
     },
     /** 修改按钮操作 */
     handleEdit(row) {
-      editSysUser(row).then(response => {
+      edit${entity.className}(row).then(response => {
       }).catch(err => {
         console.log(err)
       })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.userId || '' + this.idList
-      this.$confirm('是否确认删除${pkColumn.javaName}为"' + ids + '"的数据?', {
+      const ids = row.${entity.pkColumn.javaName} || '' + this.idList
+      this.$confirm('是否确认删除${entity.pkColumn.javaName}为"' + ids + '"的数据?', {
         type: 'warning'
       }).then(async() => {
-        return deleteSysUser({ idList: ids })
+        return delete${entity.className}({ ${entity.pkColumn.javaName}List: ids })
       }).then(response => {
         if (response.code === 0) {
           this.$message({ showClose: true, message: response.message, type: 'success' })
