@@ -29,6 +29,7 @@ import clipboard from '@/directive/clipboard/index.js'
 import { downloadCodeBySql, previewCodeBySql } from '@/api/tool/gen'
 import hljs from 'highlight.js' // 导入代码高亮文件
 import 'highlight.js/styles/github.css' // 代码高亮风格，选择更多风格需导入 node_modules/hightlight.js/styles/ 目录下其它css文件
+hljs.registerLanguage('vue', require('highlight.js/lib/languages/xml'))
 
 export default {
   name: 'GenFromSql',
@@ -74,7 +75,8 @@ export default {
     /** 高亮显示 */
     highlightedCode(code, key) {
       var language = key.substring(key.indexOf('.') + 1, key.length)
-      const result = hljs.highlight(code, { language: language, ignoreIllegals: true })
+      const result = hljs.highlight(language, code, true)
+      // const result = hljs.highlight(code, { language: language, ignoreIllegals: true })
       return result.value
     },
     /** 生成代码操作 */

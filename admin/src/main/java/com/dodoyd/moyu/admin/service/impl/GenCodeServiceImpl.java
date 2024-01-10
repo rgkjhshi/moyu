@@ -268,7 +268,7 @@ public class GenCodeServiceImpl implements GenCodeService {
         // code代码map
         Map<String, String> codeMap = new LinkedHashMap<>();
         List<String> templateList = Lists.newArrayList("java/Domain.java", "java/Dao.java", "java/Request.java",
-                "java/Controller.java", "java/Service.java", "java/ServiceImpl.java", "js/api.js");
+                "java/Controller.java", "java/Service.java", "java/ServiceImpl.java", "js/api.js", "vue/index.vue");
         templateList.forEach(templateName -> {
             try {
                 // 加载模板文件
