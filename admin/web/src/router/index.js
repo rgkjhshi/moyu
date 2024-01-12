@@ -176,6 +176,12 @@ export const asyncRoutes = [
         component: () => import('@/views/moyu/system/user/index'),
         name: 'User',
         meta: { title: '用户管理', icon: 'list', noCache: true }
+      },
+      {
+        path: 'menu',
+        component: () => import('@/views/moyu/system/menu/index'),
+        name: 'Menu',
+        meta: { title: '菜单管理', icon: 'list', noCache: true }
       }
     ]
   },
