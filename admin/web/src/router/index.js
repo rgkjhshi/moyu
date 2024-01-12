@@ -7,23 +7,23 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
+ * 注意: 子菜单只会在route的子节点>=1时出现
+ * 详见: https://panjiachen.github.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html
  *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * hidden: true                   // 当设置 true 的时候该路由不会在侧边栏出现 如401，login等页面。(默认 false)
+ * alwaysShow: true               为 true 时，一直显示根路由
+ *                                如果不设置alwaysShow, 当路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式
+ *                                只有一个时，会将那个子路由当做根路由显示在侧边栏。
+ * redirect: noRedirect           当设置 noRedirect 的时候该路由在面包屑导航中不可被点击
+ * name:'router-name'             设定路由的名字，一定要填写，不然使用<keep-alive>时会出现各种问题
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    roles: ['admin','editor']     设置该路由进入的权限，支持多个权限叠加
+    title: 'title'                设置该路由在侧边栏和面包屑中展示的名字
+    icon: 'svg-name'/'el-icon-x'  设置该路由的图标，支持 svg-class，也支持 el-icon-x element-ui 的 icon
+    noCache: true                 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
+    affix: true                   如果设置为true，它则会固定在tags-view中(默认 false)
+    breadcrumb: false             如果设置为false，则不会在breadcrumb面包屑中显示(默认 true)
+    activeMenu: '/example/list'   当路由设置了该属性，则会高亮相对应的侧边栏。
   }
  */
 
