@@ -235,7 +235,20 @@ public interface SysMenuDao {
             "    <if test='updateTime != null'>AND update_time = #{updateTime}</if>",
             "    <if test='remark != null'>AND remark = #{remark}</if>",
             "</where>",
+            "ORDER BY parent_id, sort_order",
             "</script>"})
     List<SysMenu> selectList(SysMenu sysMenu);
+
+    /**
+     * 查询所有有效的菜单列表(目录+菜单)
+     *
+     * @return 查询到的结果, 无结果将返回空List
+     */
+    @ResultMap("baseResult")
+    @Select({"<script>",
+            "SELECT * FROM sys_menu WHERE status = 0 AND deleted = 0 AND menu_type IN ('D', 'M', 'L')",
+            "ORDER BY parent_id, sort_order",
+            "</script>"})
+    List<SysMenu> selectValidMenuList();
 
 }

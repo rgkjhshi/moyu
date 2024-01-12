@@ -1,17 +1,24 @@
 package com.dodoyd.moyu.admin.service.impl;
 
+import com.dodoyd.moyu.admin.constant.Constants;
 import com.dodoyd.moyu.admin.dao.SysMenuDao;
 import com.dodoyd.moyu.admin.domain.SysMenu;
 import com.dodoyd.moyu.admin.model.request.SysMenuRequest;
+import com.dodoyd.moyu.admin.model.vo.MetaVO;
+import com.dodoyd.moyu.admin.model.vo.RouterVO;
 import com.dodoyd.moyu.admin.service.SysMenuService;
 import com.dodoyd.moyu.common.model.PageResult;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * SysMenu服务实现类
@@ -291,4 +298,108 @@ public class SysMenuServiceImpl implements SysMenuService {
         int row = sysMenuDao.deleteByIdList(idList);
         return row;
     }
+
+    @Override
+    public List<RouterVO> queryMenuTree() {
+        // 查询所有的菜单树
+        List<SysMenu> list = sysMenuDao.selectValidMenuList();
+        return buildMenuTree(list, 0L);
+    }
+
+    /**
+     * 过滤菜单列表，根据父菜单ID筛选
+     */
+    private List<SysMenu> filterMenuList(List<SysMenu> list, Long parentId) {
+        return list.stream().filter(sysMenu -> sysMenu.getParentId().equals(parentId)).collect(Collectors.toList());
+    }
+
+    /**
+     * 构造菜单树(一层一层递归构造)
+     */
+    private List<RouterVO> buildMenuTree(List<SysMenu> list, Long parentId) {
+        List<SysMenu> children = filterMenuList(list, parentId);
+        // 无节点则返回
+        if (CollectionUtils.isEmpty(children)) {
+            return null;
+        }
+        List<RouterVO> routerList = new ArrayList<>();
+        // 遍历本层所有节点,创建router, 并递归构建子层
+        for (SysMenu menu : children) {
+            RouterVO router = buildRouterVO(menu);
+            // 递归构建菜单树的子层
+            router.setChildren(buildMenuTree(list, menu.getId()));
+            // 如果是目录且有子节点, 则设置显示
+            if (Constants.MenuType.DIR.equals(menu.getMenuType()) && !CollectionUtils.isEmpty(router.getChildren())) {
+                router.setAlwaysShow(true);
+                router.setRedirect("noRedirect");
+            }
+
+            routerList.add(router);
+        }
+        return routerList;
+    }
+
+    private RouterVO buildRouterVO(SysMenu menu) {
+        RouterVO router = new RouterVO();
+        router.setName(getRouteName(menu));
+        router.setPath(getRouterPath(menu));
+        router.setComponent(getComponent(menu));
+        router.setHidden(menu.getHidden().equals(1));
+
+        MetaVO meta = new MetaVO();
+        meta.setTitle(menu.getMenuName());
+        meta.setIcon(menu.getIcon());
+        meta.setNoCache(true);
+        if (Constants.MenuType.LINK.equals(menu.getMenuType())) {
+            meta.setLink(menu.getPath());
+        }
+        List<String> roles = new ArrayList<>();
+        // TODO roles
+        router.setMeta(meta);
+        return router;
+    }
+
+    /**
+     * 获取路由名称
+     */
+    public String getRouteName(SysMenu menu) {
+        String routerName = null;
+        // 如果不是链接
+        if (!Constants.MenuType.LINK.equals(menu.getMenuType())) {
+            routerName = StringUtils.capitalize(menu.getPath());
+        }
+        return routerName;
+    }
+
+    /**
+     * 获取路由地址
+     */
+    public String getRouterPath(SysMenu menu) {
+        String path = menu.getPath();
+        // 如果不是链接
+        if (!Constants.MenuType.LINK.equals(menu.getMenuType())) {
+            path = "/" + path;
+        }
+        return path;
+    }
+
+    /**
+     * 获取组件信息
+     */
+    public String getComponent(SysMenu menu) {
+        String component = "";
+        switch (menu.getMenuType()) {
+            case Constants.MenuType.DIR:
+                component = "Layout";
+                break;
+            case Constants.MenuType.MENU:
+                component = menu.getComponent();
+                break;
+            case Constants.MenuType.LINK:
+                component = null;
+                break;
+        }
+        return component;
+    }
+
 }

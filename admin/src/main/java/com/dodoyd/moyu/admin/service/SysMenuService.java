@@ -2,6 +2,7 @@ package com.dodoyd.moyu.admin.service;
 
 import com.dodoyd.moyu.admin.domain.SysMenu;
 import com.dodoyd.moyu.admin.model.request.SysMenuRequest;
+import com.dodoyd.moyu.admin.model.vo.RouterVO;
 import com.dodoyd.moyu.common.model.PageResult;
 
 import java.util.List;
@@ -70,5 +71,9 @@ public interface SysMenuService {
      */
     int batchDeleteSysMenu(List<Long> idList);
 
+    /**
+     * 查询菜单树
+     */
+    List<RouterVO> queryMenuTree();
 }
 
