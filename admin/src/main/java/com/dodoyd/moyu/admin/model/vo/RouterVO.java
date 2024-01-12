@@ -1,5 +1,7 @@
 package com.dodoyd.moyu.admin.model.vo;
 
+import lombok.Data;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,7 @@ import java.util.List;
  * @link <a href="https://panjiachen.github.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html">路由属性说明</a>
  * @since 2024-01-12
  */
+@Data
 public class RouterVO {
 
     /**

@@ -80,4 +80,26 @@ public class Constants {
         public static final Integer TOKEN_EXPIRED = 50014;
     }
 
+    /**
+     * 菜单类型
+     */
+    public static class MenuType {
+        /**
+         * 目录
+         */
+        public static final String DIR = "D";
+        /**
+         * 菜单
+         */
+        public static final String MENU = "M";
+        /**
+         * 按钮
+         */
+        public static final String BUTTON = "B";
+        /**
+         * 链接
+         */
+        public static final String LINK = "L";
+    }
+
 }

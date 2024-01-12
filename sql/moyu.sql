@@ -65,7 +65,7 @@ CREATE TABLE sys_menu
     menu_name   varchar(50)         NOT NULL COMMENT '菜单名称',
     parent_id   bigint(20)          NOT NULL DEFAULT 0 COMMENT '父菜单ID',
     sort_order  int(5)              NOT NULL DEFAULT 0 COMMENT '显示顺序',
-    menu_type   char(1)             NOT NULL DEFAULT '' COMMENT '资源类型,D:目录,M:菜单,B:按钮',
+    menu_type   varchar(1)          NOT NULL DEFAULT '' COMMENT '资源类型,D:目录,M:菜单,B:按钮',
     path        varchar(256)        NOT NULL DEFAULT '' COMMENT '路径地址',
     component   varchar(256)        NOT NULL DEFAULT '' COMMENT '组件路径',
     perms       varchar(100)        NOT NULL DEFAULT '' COMMENT '权限标识',
