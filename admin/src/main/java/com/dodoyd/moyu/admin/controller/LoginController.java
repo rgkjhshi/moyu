@@ -48,4 +48,11 @@ public class LoginController {
         return BaseResponse.getSuccessResponse(loginService.getUserInfo());
     }
 
+    /**
+     * 获取路由信息
+     */
+    @GetMapping("getRouters")
+    public BaseResponse<?> getRouters() {
+        return BaseResponse.getSuccessResponse();
+    }
 }

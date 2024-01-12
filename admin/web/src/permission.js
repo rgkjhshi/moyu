@@ -13,20 +13,19 @@ const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
-
   // set page title
   document.title = getPageTitle(to.meta.title)
 
-  // determine whether the user has logged in
+  // 用户是否已经登录过
   const hasToken = getToken()
 
   if (hasToken) {
+    /* 有token，已经登录 */
     if (to.path === '/login') {
-      // if is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
-      // determine whether the user has obtained his permission roles through getInfo
+      // 用户是否已经通过 getInfo 获取了权限角色
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
         next()
@@ -38,8 +37,7 @@ router.beforeEach(async(to, from, next) => {
 
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-
-          // dynamically add accessible routes
+          // 动态添加可访问路由
           router.addRoutes(accessRoutes)
 
           // hack method to ensure that addRoutes is complete
@@ -55,13 +53,12 @@ router.beforeEach(async(to, from, next) => {
       }
     }
   } else {
-    /* has no token*/
-
+    /* 无token */
     if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
+      // 免登录白名单直接访问
       next()
     } else {
-      // other pages that do not have permission to access are redirected to the login page.
+      // 其他无访问权限的页面重定向到登录页
       next(`/login?redirect=${to.path}`)
       NProgress.done()
     }
