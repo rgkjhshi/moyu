@@ -51,7 +51,7 @@
 
 <script>
 
-import { list${entity.className}, add${entity.className}, edit${entity.className}, delete${entity.className} } from '@/api/system/sysUser'
+import { list${entity.className}, add${entity.className}, edit${entity.className}, delete${entity.className} } from '@/api/system/${entity.className?uncap_first}'
 
 export default {
   name: '${entity.className}',
