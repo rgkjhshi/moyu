@@ -78,7 +78,7 @@ public class LoginService {
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserInfoDTO dto = new UserInfoDTO();
         dto.setUserId(loginUser.getUserId());
-        dto.setRoles(getRoles(loginUser));
+        dto.setRoles(getRoles());
         dto.setNickname(loginUser.getSysUser().getNickname());
         dto.setAvatar(loginUser.getSysUser().getAvatar());
         dto.setGender(loginUser.getSysUser().getGender());
@@ -88,7 +88,8 @@ public class LoginService {
     /**
      * 获取用户角色列表
      */
-    private List<String> getRoles(LoginUser loginUser) {
+    public List<String> getRoles() {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<String> roles = new ArrayList<>();
         if (CollectionUtils.isEmpty(loginUser.getAuthorities())) {
             return roles;

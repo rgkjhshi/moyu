@@ -3,14 +3,17 @@ package com.dodoyd.moyu.admin.service.impl;
 import com.dodoyd.moyu.admin.constant.Constants;
 import com.dodoyd.moyu.admin.dao.SysMenuDao;
 import com.dodoyd.moyu.admin.domain.SysMenu;
+import com.dodoyd.moyu.admin.model.LoginUser;
 import com.dodoyd.moyu.admin.model.request.SysMenuRequest;
 import com.dodoyd.moyu.admin.model.vo.MetaVO;
 import com.dodoyd.moyu.admin.model.vo.RouterVO;
+import com.dodoyd.moyu.admin.service.LoginService;
 import com.dodoyd.moyu.admin.service.SysMenuService;
 import com.dodoyd.moyu.common.model.PageResult;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.base.Strings;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -31,6 +34,9 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @Resource
     private SysMenuDao sysMenuDao;
+
+    @Resource
+    private LoginService loginService;
 
     @Override
     public SysMenu querySysMenuById(Long id) {
@@ -333,12 +339,27 @@ public class SysMenuServiceImpl implements SysMenuService {
                 router.setAlwaysShow(true);
                 router.setRedirect("noRedirect");
             }
-
-            routerList.add(router);
+            // 获取当前用户的权限
+            List<String> userRoles = loginService.getRoles();
+            // 如果所需权限不为空，则与当前用户权限取交集
+            if (!CollectionUtils.isEmpty(router.getMeta().getRoles())) {
+                List<String> retainList = new ArrayList<>(userRoles);
+                retainList.retainAll(router.getMeta().getRoles());
+                // 如果交集不为空，则将菜单添加到菜单树中。
+                if (!CollectionUtils.isEmpty(retainList)) {
+                    routerList.add(router);
+                }
+            } else {
+                // 所需权限为空，直接将菜单添加到菜单树中。
+                routerList.add(router);
+            }
         }
         return routerList;
     }
 
+    /**
+     * 构建RouterVO对象(不包含children)
+     */
     private RouterVO buildRouterVO(SysMenu menu) {
         RouterVO router = new RouterVO();
         router.setName(getRouteName(menu));
@@ -350,11 +371,13 @@ public class SysMenuServiceImpl implements SysMenuService {
         meta.setTitle(menu.getMenuName());
         meta.setIcon(menu.getIcon());
         meta.setNoCache(true);
+        // 资源所需权限
+        List<String> roles = sysMenuDao.selectMenuRole(menu.getId());
+        meta.setRoles(roles);
+        // 链接需要跳转地址
         if (Constants.MenuType.LINK.equals(menu.getMenuType())) {
             meta.setLink(menu.getPath());
         }
-        List<String> roles = new ArrayList<>();
-        // TODO roles
         router.setMeta(meta);
         return router;
     }

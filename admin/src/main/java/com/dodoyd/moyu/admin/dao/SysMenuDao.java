@@ -251,4 +251,12 @@ public interface SysMenuDao {
             "</script>"})
     List<SysMenu> selectValidMenuList();
 
+    /**
+     * 查询菜单需要的角色
+     */
+    @Select({"<script>",
+            "SELECT role_key FROM sys_role_menu rm LEFT JOIN sys_role r ON rm.role_id = r.id WHERE rm.menu_id = #{id}",
+            "</foreach>",
+            "</script>"})
+    List<String> selectMenuRole(Long id);
 }
