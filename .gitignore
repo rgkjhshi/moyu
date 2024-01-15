@@ -4,7 +4,6 @@
 *.iml
 *.ipr
 out
-gen
 
 # Compiled class file
 *.class
