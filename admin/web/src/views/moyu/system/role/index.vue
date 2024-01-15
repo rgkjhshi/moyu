@@ -32,8 +32,6 @@
       <el-table-column prop="sortOrder" label="显示顺序" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="status" label="角色状态,0:正常,1:停用" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="deleted" label="删除标志,0:未删除,1:已删除" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="createBy" label="创建者" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="updateBy" label="更新者" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
       <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
