@@ -42,6 +42,7 @@ export function filterAsyncRoutes(routes, roles) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
       }
+      // 后端返回的菜单需要处理为组件
       if (tmp.component === 'Layout') {
         tmp.component = Layout
       } else {
@@ -85,7 +86,10 @@ const actions = {
         if (response.code !== 0 || !response.data) {
           reject('获取菜单失败!')
         }
-        const accessedRoutes = filterAsyncRoutes(response.data.concat(asyncRoutes), roles)
+        // 后端菜单(getRouters)+前端菜单(router/index)
+        let accessedRoutes = response.data.concat(asyncRoutes)
+        // 权限过滤
+        accessedRoutes = filterAsyncRoutes(accessedRoutes, roles)
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }).catch(error => {
