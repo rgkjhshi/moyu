@@ -9,7 +9,7 @@ import java.util.List;
  * SysRole数据访问对象
  *
  * @author moyusi
- * @since 2024-01-09
+ * @since 2024-01-15
  */
 @Mapper
 public interface SysRoleDao {

@@ -6,6 +6,9 @@ import com.dodoyd.moyu.admin.domain.SysRole;
 import com.dodoyd.moyu.admin.domain.SysUserRole;
 import com.dodoyd.moyu.admin.model.request.SysRoleRequest;
 import com.dodoyd.moyu.admin.service.SysRoleService;
+import com.dodoyd.moyu.common.model.PageResult;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -19,7 +22,7 @@ import java.util.stream.Collectors;
  * SysRole服务实现类
  *
  * @author moyusi
- * @since 2024-01-09
+ * @since 2024-01-15
  */
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
@@ -88,7 +91,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public List<SysRole> querySysRoleList(SysRoleRequest request) {
+    public PageResult<SysRole> querySysRoleList(SysRoleRequest request) {
         SysRole query = new SysRole();
         if (request.getId() != null) {
             query.setId(request.getId());
@@ -123,8 +126,14 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (!Strings.isNullOrEmpty(request.getRemark())) {
             query.setRemark(request.getRemark());
         }
-        List<SysRole> list = sysRoleDao.selectList(query);
-        return list;
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        Page<SysRole> page = (Page<SysRole>) sysRoleDao.selectList(query);
+        // 分页结果
+        PageResult<SysRole> pageResult = new PageResult<>();
+        pageResult.setPageNum(page.getPageNum());
+        pageResult.setTotal(page.getTotal());
+        pageResult.setPageData(page.getResult());
+        return pageResult;
     }
 
     @Override

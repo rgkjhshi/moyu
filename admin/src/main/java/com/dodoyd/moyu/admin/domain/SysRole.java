@@ -8,7 +8,7 @@ import lombok.Data;
  * 角色信息表实体模型
  *
  * @author moyusi
- * @since 2024-01-09
+ * @since 2024-01-15
  */
 @Data
 public class SysRole {

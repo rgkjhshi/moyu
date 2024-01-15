@@ -2,6 +2,7 @@ package com.dodoyd.moyu.admin.service;
 
 import com.dodoyd.moyu.admin.domain.SysRole;
 import com.dodoyd.moyu.admin.model.request.SysRoleRequest;
+import com.dodoyd.moyu.common.model.PageResult;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * SysRole服务
  *
  * @author moyusi
- * @since 2024-01-09
+ * @since 2024-01-15
  */
 public interface SysRoleService {
 
@@ -43,7 +44,7 @@ public interface SysRoleService {
      * @param request 查询请求
      * @return SysRole列表
      */
-    List<SysRole> querySysRoleList(SysRoleRequest request);
+    PageResult<SysRole> querySysRoleList(SysRoleRequest request);
 
     /**
      * 新增SysRole

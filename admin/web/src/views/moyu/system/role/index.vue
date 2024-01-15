@@ -2,8 +2,8 @@
   <div class="app-container">
     <!-- 上方选择框   -->
     <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small" label-width="80px">
-      <el-form-item label="${entity.pkColumn.comment}:" prop="${entity.pkColumn.javaName}">
-        <el-input v-model="queryRequest.${entity.pkColumn.javaName}" placeholder="请输入${entity.pkColumn.comment}" clearable @keyup.enter.native="handleQuery" />
+      <el-form-item label="主键id:" prop="id">
+        <el-input v-model="queryRequest.id" placeholder="请输入主键id" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
@@ -26,9 +26,17 @@
     <el-table v-loading="dataLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" width="55" />
       <el-table-column label="序号" type="index" width="60px" align="center" />
-<#list columnList as column>
-      <el-table-column prop="${column.javaName}" label="${column.comment}" width="200px" show-overflow-tooltip align="center" />
-</#list>
+      <el-table-column prop="id" label="主键id" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="roleName" label="角色名称" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="roleKey" label="角色权限字符串" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="sortOrder" label="显示顺序" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="status" label="角色状态,0:正常,1:停用" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="deleted" label="删除标志,0:未删除,1:已删除" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="createBy" label="创建者" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="updateBy" label="更新者" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
+      <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
       <el-table-column label="操作" fixed="right" align="center" min-width="200">
         <template v-slot="{row}">
           <el-button type="success" plain size="small" icon="el-icon-edit" @click="handleEdit(row)">修改</el-button>
@@ -51,10 +59,10 @@
 
 <script>
 
-import { list${entity.className}, add${entity.className}, edit${entity.className}, delete${entity.className} } from '@/api/system/${entity.className?uncap_first}'
+import { listSysRole, addSysRole, editSysRole, deleteSysRole } from '@/api/system/sysRole'
 
 export default {
-  name: '${entity.className}',
+  name: 'SysRole',
   components: { },
   directives: {
   },
@@ -86,7 +94,7 @@ export default {
     getDataList() {
       this.dataLoading = true
       // 查询数据
-      list${entity.className}(this.queryRequest).then(response => {
+      listSysRole(this.queryRequest).then(response => {
         if (response.code === 0) {
           this.total = response.data.total
           this.dataList = response.data.pageData
@@ -115,25 +123,25 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      add${entity.className}().then(response => {
+      addSysRole().then(response => {
       }).catch(err => {
         console.log(err)
       })
     },
     /** 修改按钮操作 */
     handleEdit(row) {
-      edit${entity.className}(row).then(response => {
+      editSysRole(row).then(response => {
       }).catch(err => {
         console.log(err)
       })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.${entity.pkColumn.javaName} || '' + this.idList
-      this.$confirm('是否确认删除${entity.pkColumn.javaName}为"' + ids + '"的数据?', {
+      const ids = row.id || '' + this.idList
+      this.$confirm('是否确认删除id为"' + ids + '"的数据?', {
         type: 'warning'
       }).then(async() => {
-        return delete${entity.className}({ ${entity.pkColumn.javaName}List: ids })
+        return deleteSysRole({ idList: ids })
       }).then(response => {
         if (response.code === 0) {
           this.$message({ showClose: true, message: response.message, type: 'success' })
