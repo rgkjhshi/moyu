@@ -6,6 +6,7 @@ import com.dodoyd.moyu.admin.model.request.LoginRequest;
 import com.dodoyd.moyu.admin.model.vo.RouterVO;
 import com.dodoyd.moyu.admin.service.LoginService;
 import com.dodoyd.moyu.admin.service.SysMenuService;
+import com.dodoyd.moyu.common.annotation.Log;
 import com.dodoyd.moyu.common.model.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +54,7 @@ public class LoginController {
     /**
      * 获取路由信息
      */
+    @Log
     @GetMapping("getRouters")
     public BaseResponse<?> getRouters() {
         List<RouterVO> menuTree = sysMenuService.queryMenuTree();

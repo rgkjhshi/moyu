@@ -1,4 +1,6 @@
 import { asyncRoutes, constantRoutes } from '@/router'
+import { getRouters } from '@/api/menu'
+import Layout from '@/layout/index'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -14,6 +16,18 @@ function hasPermission(roles, route) {
 }
 
 /**
+ * 加载指定的vue组件
+ */
+export const loadComponent = (view) => {
+  // if (process.env.NODE_ENV === 'development') {
+  //   return (resolve) => require([`@/views/moyu/${view}`], resolve)
+  // } else {
+  //   // 使用 import 实现生产环境的路由懒加载
+  //   return () => import(`@/views/moyu/${view}`)
+  // }
+}
+
+/**
  * Filter asynchronous routing tables by recursion
  * @param routes asyncRoutes
  * @param roles
@@ -26,6 +40,11 @@ export function filterAsyncRoutes(routes, roles) {
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
+      }
+      if (route.component === 'Layout') {
+        route.component = Layout
+      } else {
+        route.component = loadComponent(route.component)
       }
       res.push(tmp)
     }
@@ -48,15 +67,35 @@ const mutations = {
 
 const actions = {
   generateRoutes({ commit }, roles) {
-    return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+    // 原来的前端配置菜单
+    // return new Promise(resolve => {
+    //   let accessedRoutes
+    //   if (roles.includes('admin')) {
+    //     accessedRoutes = asyncRoutes || []
+    //   } else {
+    //     accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+    //   }
+    //   commit('SET_ROUTES', accessedRoutes)
+    //   resolve(accessedRoutes)
+    // })
+    // 后端返回菜单
+    return new Promise((resolve, reject) => {
+      getRouters().then(response => {
+        if (response.code !== 0 || !response.data) {
+          reject('获取菜单失败!')
+        }
+        console.log(response.data)
+        let accessedRoutes = response.data.concat(asyncRoutes)
+        if (roles.includes('admin')) {
+          accessedRoutes = accessedRoutes || []
+        } else {
+          accessedRoutes = filterAsyncRoutes(accessedRoutes, roles)
+        }
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
+      }).catch(error => {
+        reject(error)
+      })
     })
   }
 }
