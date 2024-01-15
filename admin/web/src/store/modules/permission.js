@@ -19,12 +19,13 @@ function hasPermission(roles, route) {
  * 加载指定的vue组件
  */
 export const loadComponent = (view) => {
-  // if (process.env.NODE_ENV === 'development') {
-  //   return (resolve) => require([`@/views/moyu/${view}`], resolve)
-  // } else {
-  //   // 使用 import 实现生产环境的路由懒加载
-  //   return () => import(`@/views/moyu/${view}`)
-  // }
+  if (process.env.NODE_ENV === 'development') {
+    return (resolve) => require([`@/views/moyu/${view}`], resolve)
+  } else {
+    // 使用 import 实现生产环境的路由懒加载
+    return (resolve) => require([`@/views/moyu/${view}`], resolve)
+    // return () => import(`@/views/moyu/${view}`)
+  }
 }
 
 /**
@@ -41,10 +42,10 @@ export function filterAsyncRoutes(routes, roles) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
       }
-      if (route.component === 'Layout') {
-        route.component = Layout
+      if (tmp.component === 'Layout') {
+        tmp.component = Layout
       } else {
-        route.component = loadComponent(route.component)
+        tmp.component = loadComponent(tmp.component)
       }
       res.push(tmp)
     }
@@ -84,13 +85,7 @@ const actions = {
         if (response.code !== 0 || !response.data) {
           reject('获取菜单失败!')
         }
-        console.log(response.data)
-        let accessedRoutes = response.data.concat(asyncRoutes)
-        if (roles.includes('admin')) {
-          accessedRoutes = accessedRoutes || []
-        } else {
-          accessedRoutes = filterAsyncRoutes(accessedRoutes, roles)
-        }
+        const accessedRoutes = filterAsyncRoutes(response.data.concat(asyncRoutes), roles)
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }).catch(error => {
