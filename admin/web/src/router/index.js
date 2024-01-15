@@ -160,113 +160,50 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/system',
-    component: Layout,
-    redirect: '/user/list',
-    alwaysShow: true,
-    meta: {
-      title: '系统管理',
-      icon: 'component',
-      roles: ['admin', 'user']
-    },
-    children: [
-      {
-        path: 'user',
-        component: () => import('@/views/moyu/system/user/index'),
-        name: 'User',
-        meta: { title: '用户管理', icon: 'list', noCache: true }
-      },
-      {
-        path: 'menu',
-        component: () => import('@/views/moyu/system/menu/index'),
-        name: 'Menu',
-        meta: { title: '菜单管理', icon: 'list', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/tool',
-    component: Layout,
-    redirect: '/tool/gen',
-    alwaysShow: true,
-    meta: {
-      title: '系统工具',
-      icon: 'component',
-      roles: ['admin', 'user']
-    },
-    children: [
-      {
-        path: 'gen',
-        component: () => import('@/views/moyu/tool/gen/index'),
-        name: 'GenCode',
-        meta: { title: '代码生成', icon: 'list', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/sysAdmin',
-    component: Layout,
-    redirect: '/sysAdmin/index',
-    alwaysShow: true,
-    meta: {
-      title: '系统管理',
-      icon: 'lock',
-      roles: ['admin']
-    },
-    children: [
-      {
-        path: 'addVenue',
-        component: () => import('@/views/dodoyd/venue/addVenue'),
-        name: 'AddVenue',
-        meta: { title: '新增场馆', icon: 'lock', roles: ['admin'], noCache: true }
-      },
-      {
-        path: 'addVenueCard',
-        component: () => import('@/views/dodoyd/card/addVenueCard'),
-        name: 'AddVenueCard',
-        meta: { title: '制卡', icon: 'lock', roles: ['admin'], noCache: true }
-      },
-      {
-        path: 'editVenueCard',
-        component: () => import('@/views/dodoyd/card/editVenueCard'),
-        name: 'EditVenueCard',
-        meta: { title: '修改卡信息', icon: 'lock', roles: ['admin'], noCache: true },
-        hidden: true
-      },
-      {
-        path: 'venueList',
-        component: () => import('@/views/dodoyd/venue/venueList'),
-        name: 'VenueList',
-        meta: { title: '场馆列表', icon: 'list', roles: ['admin'], noCache: true }
-      },
-      {
-        path: 'groundList',
-        component: () => import('@/views/dodoyd/venue/groundList'),
-        name: 'GroundList',
-        meta: { title: '场地列表', icon: 'list', roles: ['admin'], noCache: true }
-      },
-      {
-        path: 'addRuleConfig',
-        component: () => import('@/views/dodoyd/rule/addRuleConfig'),
-        name: 'AddRuleConfig',
-        meta: { title: '添加规则配置', icon: 'lock', roles: ['admin'], noCache: true }
-      },
-      {
-        path: 'editRuleConfig',
-        component: () => import('@/views/dodoyd/rule/editRuleConfig'),
-        name: 'EditRuleConfig',
-        meta: { title: '修改配置信息', icon: 'lock', roles: ['admin'], noCache: true },
-        hidden: true
-      },
-      {
-        path: 'ruleConfigList',
-        component: () => import('@/views/dodoyd/rule/ruleConfigList'),
-        name: 'RuleConfigList',
-        meta: { title: '配置列表', icon: 'list', roles: ['admin'], noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/system',
+  //   component: Layout,
+  //   redirect: '/user/list',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '系统管理',
+  //     icon: 'component',
+  //     roles: ['admin', 'user']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'user',
+  //       component: () => import('@/views/moyu/system/user/index'),
+  //       name: 'User',
+  //       meta: { title: '用户管理', icon: 'list', noCache: true }
+  //     },
+  //     {
+  //       path: 'menu',
+  //       component: () => import('@/views/moyu/system/menu/index'),
+  //       name: 'Menu',
+  //       meta: { title: '菜单管理', icon: 'list', noCache: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/tool',
+  //   component: Layout,
+  //   redirect: '/tool/gen',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '系统工具',
+  //     icon: 'component',
+  //     roles: ['admin', 'user']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'gen',
+  //       component: () => import('@/views/moyu/tool/gen/index'),
+  //       name: 'GenCode',
+  //       meta: { title: '代码生成', icon: 'list', noCache: true }
+  //     }
+  //   ]
+  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
