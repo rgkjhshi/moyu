@@ -76,9 +76,6 @@ public class SysMenuServiceImpl implements SysMenuService {
         if (request.getHidden() != null) {
             query.setHidden(request.getHidden());
         }
-        if (request.getLink() != null) {
-            query.setLink(request.getLink());
-        }
         if (request.getStatus() != null) {
             query.setStatus(request.getStatus());
         }
@@ -136,9 +133,6 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         if (request.getHidden() != null) {
             query.setHidden(request.getHidden());
-        }
-        if (request.getLink() != null) {
-            query.setLink(request.getLink());
         }
         if (request.getStatus() != null) {
             query.setStatus(request.getStatus());
@@ -204,9 +198,6 @@ public class SysMenuServiceImpl implements SysMenuService {
         if (request.getHidden() != null) {
             add.setHidden(request.getHidden());
         }
-        if (request.getLink() != null) {
-            add.setLink(request.getLink());
-        }
         if (request.getStatus() != null) {
             add.setStatus(request.getStatus());
         }
@@ -264,9 +255,6 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         if (request.getHidden() != null) {
             update.setHidden(request.getHidden());
-        }
-        if (request.getLink() != null) {
-            update.setLink(request.getLink());
         }
         if (request.getStatus() != null) {
             update.setStatus(request.getStatus());

@@ -64,11 +64,6 @@ public class SysMenu {
         private Integer hidden;
 
         /**
-         * 是否外链,0:非外链,1:外链
-         */
-        private Integer link;
-
-        /**
          * 菜单状态,0:正常,1:停用
          */
         private Integer status;
