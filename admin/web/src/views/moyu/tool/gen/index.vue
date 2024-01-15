@@ -65,7 +65,7 @@
 <script>
 
 import clipboard from '@/directive/clipboard/index.js'
-import GenFromSql from '@/views/moyu/tool/genFromSql'
+import GenFromSql from '@/views/moyu/tool/gen/genFromSql'
 import hljs from 'highlight.js' // 导入代码高亮文件
 import 'highlight.js/styles/github.css' // 代码高亮风格，选择更多风格需导入 node_modules/hightlight.js/styles/ 目录下其它css文件
 hljs.registerLanguage('vue', require('highlight.js/lib/languages/xml'))
