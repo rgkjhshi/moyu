@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author shisong02
@@ -23,6 +24,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         // 有些异常已经在LoginService中处理过了，未处理的异常将在此处处理
         response.setStatus(HttpServletResponse.SC_OK);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().print(Constants.gson.toJson(new BaseResponse<>(Constants.ErrorCode.TOKEN_INVALID, "认证失败，无法访问系统资源")));
     }
