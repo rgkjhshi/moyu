@@ -77,7 +77,7 @@ public interface ${entity.className}Dao {
     int updateBy${entity.pkColumn.javaName?cap_first}(${entity.className} ${entity.className?uncap_first});
 
     /**
-     * 查询所有
+     * 查询所有记录
      *
      * @return 查询到的结果, 无结果将返回null
      */
