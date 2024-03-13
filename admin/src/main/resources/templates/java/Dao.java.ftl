@@ -87,7 +87,7 @@ public interface ${entity.className}Dao {
         </#list>
     })
     @Select("SELECT * FROM ${entity.tableName}")
-    ${entity.className} selectAll();
+    List<${entity.className}> selectAll();
 
     /**
      * 通过主键查询

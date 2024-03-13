@@ -23,10 +23,10 @@ public class ${entity.className}Request extends PageRequest {
 
 <#if columnList??>
     <#list columnList as column>
-        /**
-         * ${column.comment!}
-         */
-        private ${column.javaType} ${column.javaName};
+    /**
+     * ${column.comment!}
+     */
+    private ${column.javaType} ${column.javaName};
 
     </#list>
 </#if>

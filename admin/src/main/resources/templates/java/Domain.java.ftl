@@ -15,10 +15,10 @@ public class ${entity.className} {
 
 <#if columnList??>
     <#list columnList as column>
-        /**
-         * ${column.comment!}
-         */
-        private ${column.javaType} ${column.javaName};
+    /**
+     * ${column.comment!}
+     */
+    private ${column.javaType} ${column.javaName};
 
     </#list>
 </#if>
