@@ -10,7 +10,8 @@ server:
 logging:
   file:
     # 日志文件位置, 如:/tmp/logs, 默认是当前路径
-    path: /data/logs
+#    path: /data/logs
+    path: /tmp/logs
 
 # spring配置
 spring:
