@@ -58,8 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 // 设置会话会话创建策略为无状态, 基于token，不使用session
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                // 过滤请求
+                // 认证请求配置
                 .and().authorizeRequests()
+                // 监控管理请求放行
+                .antMatchers("/actuator/**").permitAll()//.hasRole("ACTUATOR")
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问
                 .antMatchers("/api/login", "/api/register", "/api/captchaImage", "/test/**").permitAll()
                 // 静态资源，可匿名访问
