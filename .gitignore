@@ -31,13 +31,6 @@ Thumbs.db
 *.tar.gz
 *.rar
 
-# node ignore
-node_modules/
-dist/
-
-package-lock.json
-yarn.lock
-
 # Editor directories and files
 .vscode
 *.suo
@@ -46,3 +39,9 @@ yarn.lock
 *.sln
 *.local
 
+# node ignore
+node_modules/
+dist/
+
+package-lock.json
+yarn.lock
