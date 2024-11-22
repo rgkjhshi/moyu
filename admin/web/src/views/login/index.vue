@@ -124,8 +124,9 @@ export default {
     loginClick(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.handleLogin()
           // 打开滑块验证
-          this.dialogVisible = true
+          // this.dialogVisible = true
         } else {
           return false
         }
