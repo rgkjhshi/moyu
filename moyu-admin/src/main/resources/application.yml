@@ -16,13 +16,10 @@ management:
 
 # spring配置
 spring:
-  # 数据源配置
-  datasource:
-    url: jdbc:mysql://127.0.0.1/moyu?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8
-    username: shisong
-    password: shisong
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
+  application:
+    name: moyu-admin
+  profiles:
+    active: local
   # mvc配置
   mvc:
     # json转换器
@@ -32,19 +29,9 @@ spring:
   gson:
     serialize-nulls: false
     date-format: yyyy-MM-dd HH:mm:ss
-  # freemarker配置
-  freemarker:
-    # 模板文件目录, 默认为 [classpath:/templates/]
-    template-loader-path: [ classpath:/templates/ ]
 
 # mybatis配置 参考：https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/zh/index.html
 mybatis:
   type-aliases-package: com.dodoyd.moyu.admin.domain
   mapper-locations: mapper/*.xml
   #  config-location: classpath:mybatis-config.xml
-
-# 分页框架，可参考：https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
