@@ -30,17 +30,11 @@ spring:
     serialize-nulls: false
     date-format: yyyy-MM-dd HH:mm:ss
 
-# mybatis配置 参考：https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/zh/index.html
-mybatis:
-  type-aliases-package: com.dodoyd.moyu.admin.domain
-  mapper-locations: mapper/*.xml
-  #  config-location: classpath:mybatis-config.xml
-
-# MyBatis Plus配置
+# MyBatis Plus配置 参考：https://baomidou.com/reference/
 mybatis-plus:
-  # 搜索指定包别名
-  typeAliasesPackage: com.moyu.domain
-  # 配置mapper的扫描，找到所有的mapper.xml映射文件
-  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  # 别名包扫描路径，用于给包中的类注册别名。注册后可以直接使用类名，无需使用全限定类名。
+  type-aliases-package: com.moyu.domain
+  # 配置mapper的扫描，如果在 Mapper 中有自定义方法，需要配置此项。 默认值：["classpath*:/mapper/**/*.xml"]
+  mapper-locations: classpath*:mapper/**/*.xml
   # 加载全局的配置文件
-  configLocation: classpath:mybatis/mybatis-config.xml
+#  config-location: classpath:mybatis-config.xml

@@ -15,9 +15,3 @@ spring:
     password: shisong
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-
-# mybatis配置 参考：https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/zh/index.html
-mybatis:
-  type-aliases-package: com.dodoyd.moyu.admin.domain
-  mapper-locations: mapper/*.xml
-  #  config-location: classpath:mybatis-config.xml

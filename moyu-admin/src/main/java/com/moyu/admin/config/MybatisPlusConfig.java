@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -16,19 +17,20 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author shisong
  * @since 2024-11-24
  */
-@EnableTransactionManagement(proxyTargetClass = true)
+@MapperScan("com.moyu.admin.mapper")
+//@EnableTransactionManagement(proxyTargetClass = true)
 @Configuration
 public class MybatisPlusConfig {
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        // 分页插件
-        interceptor.addInnerInterceptor(paginationInnerInterceptor());
-        // 乐观锁插件
-        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
-        // 阻断插件
-        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
+//        // 分页插件
+//        interceptor.addInnerInterceptor(paginationInnerInterceptor());
+//        // 乐观锁插件
+//        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
+//        // 阻断插件
+//        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         return interceptor;
     }
 
@@ -38,7 +40,6 @@ public class MybatisPlusConfig {
     public PaginationInnerInterceptor paginationInnerInterceptor() {
         PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
         // 设置数据库类型为mysql
-        // 如果有多数据源可以不配具体类型, 否则都建议配上具体的 DbType
         paginationInnerInterceptor.setDbType(DbType.MYSQL);
         // 设置最大单页限制数量，默认 500 条，-1 不受限制
         paginationInnerInterceptor.setMaxLimit(-1L);
