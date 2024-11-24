@@ -18,19 +18,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @since 2024-11-24
  */
 @MapperScan("com.moyu.admin.mapper")
-//@EnableTransactionManagement(proxyTargetClass = true)
+@EnableTransactionManagement(proxyTargetClass = true)
 @Configuration
 public class MybatisPlusConfig {
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-//        // 分页插件
-//        interceptor.addInnerInterceptor(paginationInnerInterceptor());
-//        // 乐观锁插件
-//        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
-//        // 阻断插件
-//        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
+        // 分页插件
+        interceptor.addInnerInterceptor(paginationInnerInterceptor());
+        // 乐观锁插件
+        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
+        // 阻断插件
+        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         return interceptor;
     }
 
