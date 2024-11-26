@@ -25,6 +25,11 @@
             <artifactId>moyu-common</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.moyu</groupId>
+            <artifactId>moyu-system</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
 
         <!-- 开源工具 -->
         <dependency>

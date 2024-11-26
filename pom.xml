@@ -8,6 +8,7 @@
     <artifactId>moyu</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>moyu-common</module>
         <module>moyu-admin</module>
