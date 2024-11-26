@@ -11,6 +11,7 @@
     <modules>
         <module>moyu-common</module>
         <module>moyu-admin</module>
+        <module>moyu-system</module>
     </modules>
 
     <parent>
