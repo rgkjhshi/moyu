@@ -1,0 +1,174 @@
+-- 1. 组织机构表
+DROP TABLE IF EXISTS `sys_org`;
+CREATE TABLE `sys_org`
+(
+    `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `pid`         BIGINT(20)   NOT NULL DEFAULT 0 COMMENT '父id',
+    `parent_name` VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '父名称',
+    `parent_code` VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '父编码',
+
+    `name`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '名称',
+    `code`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '编码',
+    `category`    TINYINT(5)   NULL     DEFAULT NULL COMMENT '组织机构类别(字典 0公司组织 1部门机构 2虚拟节点)',
+    `org_level`   TINYINT(5)   NOT NULL DEFAULT 1 COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
+
+    `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
+    `delete_flag` TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
+    `remark`      VARCHAR(200) NOT NULL DEFAULT '' comment '备注',
+    `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
+    `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
+    `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
+    `update_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '修改用户',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 200 COMMENT = '组织机构表';
+
+-- 2. 用户信息表
+drop table if exists sys_user;
+create table sys_user
+(
+    `id`               BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+    `account`          VARCHAR(20)  NULL     DEFAULT NULL COMMENT '账号',
+    `password`         VARCHAR(20)  NULL     DEFAULT NULL COMMENT '密码',
+    `nick_name`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '昵称',
+    `avatar`           VARCHAR(255) NULL     DEFAULT NULL COMMENT '头像',
+    `name`             VARCHAR(20)  NULL     DEFAULT NULL COMMENT '姓名',
+    `gender`           TINYINT(4)   NOT NULL DEFAULT 0 COMMENT '性别(字典 0未知 1男 2女)',
+    `birthday`         DATE         NULL     DEFAULT NULL COMMENT '生日',
+    `email`            VARCHAR(20)  NULL     DEFAULT NULL COMMENT '邮箱',
+    `phone`            VARCHAR(20)  NULL     DEFAULT NULL COMMENT '手机',
+    `id_no`            VARCHAR(20)  NULL     DEFAULT NULL COMMENT '身份证号',
+    `address`          VARCHAR(100) NULL     DEFAULT NULL COMMENT '联系地址',
+
+    `staff_code`       varchar(20)  NULL     DEFAULT NULL COMMENT '员工编码',
+    `staff_org_code`   varchar(20)  NULL     DEFAULT NULL COMMENT '员工机构编码',
+    `staff_org_name`   varchar(20)  NULL     DEFAULT NULL COMMENT '员工机构名称',
+    `staff_dept_code`  varchar(20)  NULL     DEFAULT NULL COMMENT '员工部门编码',
+    `staff_dept_name`  varchar(20)  NULL     DEFAULT NULL COMMENT '员工部门名称',
+    `staff_entry_date` varchar(20)  NULL     DEFAULT NULL COMMENT '员工入职日期',
+
+    `login_ip`         VARCHAR(20)  NULL     DEFAULT NULL COMMENT '登陆IP',
+    `login_time`       DATETIME     NULL     DEFAULT NULL COMMENT '登陆时间',
+    `last_login_ip`    VARCHAR(20)  NULL     DEFAULT NULL COMMENT '上次登陆IP',
+    `last_login_time`  DATETIME     NULL     DEFAULT NULL COMMENT '上次登陆时间',
+    `pwd_update_time`  DATETIME     NULL     DEFAULT NULL COMMENT '上次密码更新时间',
+
+    `sort_num`         INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
+    `status`           TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
+    `delete_flag`      TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `ext_json`         LONGTEXT     NULL COMMENT '扩展信息',
+    `remark`           VARCHAR(200) NOT NULL DEFAULT '' comment '备注',
+    `create_time`      DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
+    `create_user`      VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
+    `update_time`      DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
+    `update_user`      VARCHAR(20)  NULL     DEFAULT NULL COMMENT '修改用户',
+    PRIMARY KEY (`id`),
+    INDEX `idx_account` (`account`)
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '用户信息表';
+
+-- 3. 岗位信息表
+drop table if exists sys_post;
+create table sys_post
+(
+    `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '岗位ID',
+    `name`        varchar(100) NOT NULL COMMENT '名称',
+    `code`        varchar(50)  NOT NULL COMMENT '编码',
+    `org_code`    varchar(20)  NOT NULL DEFAULT '' COMMENT '组织机构',
+    `app_code`    varchar(20)  NOT NULL DEFAULT '' COMMENT '应用标识',
+
+    `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `delete_flag` TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
+    `remark`      VARCHAR(200) NOT NULL DEFAULT '' comment '备注',
+    `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
+    `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
+    `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
+    `update_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '修改用户',
+    primary key (`id`)
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '岗位信息表';
+
+-- 4. 角色信息表
+drop table if exists sys_role;
+create table sys_role
+(
+    `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+    `name`        VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '名称',
+    `code`        VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '编码',
+    `app_code`    VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '应用标识',
+    `data_scope`  TINYINT(5)   NOT NULL DEFAULT 0 comment '数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）',
+
+    `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `delete_flag` TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
+    `remark`      VARCHAR(200) NOT NULL DEFAULT '' comment '备注',
+    `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
+    `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
+    `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
+    `update_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '修改用户',
+    primary key (`id`)
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 100 COMMENT = '角色信息表';
+
+-- 5. 菜单权限表
+drop table if exists sys_menu;
+create table sys_menu
+(
+    `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `pid`         BIGINT(20)            DEFAULT 0 COMMENT '父菜单ID',
+    `name`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '名称',
+    `code`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '编码',
+    `category`    TINYINT(5)   NOT NULL DEFAULT 1 COMMENT '菜单类别（字典 0目录 1菜单 2按钮）',
+    `icon`        VARCHAR(20)  NOT NULL DEFAULT '#' COMMENT '图标',
+    `component`   VARCHAR(20)  NULL     DEFAULT NULL COMMENT '组件地址',
+    `router`      VARCHAR(20)  NULL     DEFAULT NULL COMMENT '路由地址',
+    `permission`  VARCHAR(20)  NULL     DEFAULT NULL COMMENT '权限标识',
+    `open_type`   TINYINT(4)   NOT NULL DEFAULT 0 COMMENT '打开方式（字典 0无 1组件 2内链 3外链）',
+    `visible`     TINYINT(5)   NOT NULL DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
+    `link`        VARCHAR(255) NULL     DEFAULT NULL COMMENT '链接地址',
+    `app_code`    VARCHAR(20)  NULL     DEFAULT NULL COMMENT '应用标识',
+
+    `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `delete_flag` TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
+    `remark`      VARCHAR(200) NOT NULL DEFAULT '' comment '备注',
+    `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
+    `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
+    `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
+    `update_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '修改用户',
+    primary key (`id`)
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 2000 COMMENT = '菜单权限表';
+
+-- 6. 用户角色权限关系表
+DROP TABLE IF EXISTS `SYS_RELATION`;
+CREATE TABLE `SYS_RELATION`
+(
+    `id`        BIGINT(20)   not null auto_increment comment '主键id',
+    `app_code`  VARCHAR(20)  NULL DEFAULT NULL COMMENT '应用标识',
+    `object_id` VARCHAR(100) NULL DEFAULT NULL COMMENT '对象ID',
+    `target_id` VARCHAR(255) NULL DEFAULT NULL COMMENT '目标ID',
+    `category`  VARCHAR(50)  NULL DEFAULT NULL COMMENT '分类(group_has_user,group_has_role,role_has_menu)',
+    `ext_json`  LONGTEXT     NULL COMMENT '扩展信息',
+    PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '用户角色权限关系表'
+  ROW_FORMAT = DYNAMIC;
+
+
+
