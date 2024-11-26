@@ -67,22 +67,28 @@ export const constantRoutes = [
     },
     children: [
       {
+        path: 'org',
+        component: () => import('@/views/table/index'),
+        name: 'Org',
+        meta: { title: '组织机构', icon: 'list', noCache: true }
+      },
+      {
         path: 'user',
         component: () => import('@/views/table/index'),
         name: 'User',
-        meta: {title: '用户管理', icon: 'list', noCache: true}
+        meta: { title: '用户管理', icon: 'list', noCache: true }
       },
       {
         path: 'role',
         component: () => import('@/views/table/index'),
         name: 'Role',
-        meta: {title: '角色管理', icon: 'list', noCache: true}
+        meta: { title: '角色管理', icon: 'list', noCache: true }
       },
       {
         path: 'menu',
         component: () => import('@/views/table/index'),
         name: 'Menu',
-        meta: {title: '菜单管理', icon: 'list', noCache: true}
+        meta: { title: '菜单管理', icon: 'list', noCache: true }
       }
     ]
   },
@@ -127,7 +133,7 @@ export const constantRoutes = [
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes= [
+export const asyncRoutes = [
   {
     path: '/nested',
     component: Layout,
