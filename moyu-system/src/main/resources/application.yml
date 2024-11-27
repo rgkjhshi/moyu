@@ -14,12 +14,11 @@ spring:
     active: local
   # mvc配置
   mvc:
-    # json转换器
+    # json转换器，默认为jackson
     converters:
-      preferred-json-mapper: gson
-  # gson格式配置
-  gson:
-    serialize-nulls: false
+      preferred-json-mapper: jackson
+  # jackson格式配置
+  jackson:
     date-format: yyyy-MM-dd HH:mm:ss
 
 # MyBatis Plus配置 参考：https://baomidou.com/reference/
