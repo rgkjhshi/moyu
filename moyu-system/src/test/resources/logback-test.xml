@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- 日志存放路径 -->
-    <property name="log.path" value="logs"/>
-    <!-- 日志输出格式 -->
-    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{39} [%method:%line] - %m%n"/>
-
     <!-- 这里面定义了 CONSOLE_LOG_PATTERN, FILE_LOG_PATTERN 等日志格式, 可参考 DefaultLogbackConfiguration 类 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
@@ -14,7 +9,6 @@
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
-
 
     <!-- 业务日志级别 -->
     <logger name="com.moyu" level="INFO"/>
