@@ -1,10 +1,17 @@
 package com.moyu.system.sys.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.entity.SysOrg;
 import com.moyu.system.sys.mapper.SysOrgMapper;
 import com.moyu.system.sys.service.SysOrgService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author shisong
@@ -13,6 +20,53 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
+
+    /**
+     * 部门树形下拉选项
+     */
+    @Override
+    public List<Option<?>> listTreeOptions() {
+        // 查询所有组织结构
+        List<SysOrg> orgList = this.list(new LambdaQueryWrapper<SysOrg>()
+                .eq(SysOrg::getDeleteFlag, 0)
+                .select(SysOrg::getId, SysOrg::getPid, SysOrg::getName)
+                .orderByAsc(SysOrg::getSortNum)
+        );
+        // 所有的父节点
+        Set<Long> parentIds = orgList.stream().map(SysOrg::getPid).collect(Collectors.toSet());
+        // 所有的子节点
+        Set<Long> deptIds = orgList.stream().map(SysOrg::getId).collect(Collectors.toSet());
+        // 集合差，根结点
+        List<Long> rootIds = CollectionUtil.subtractToList(parentIds, deptIds);
+        // 遍历根结点
+        List<Option<?>> rootList = orgList.stream()
+                .filter(org -> rootIds.contains(org.getId()))
+                .map(org -> {
+                    Option<Long> root = new Option<>(org.getId(), org.getName());
+                    root.setChildren(recursionBuildOrgTree(root.getValue(), orgList));
+                    return root;
+                })
+                .collect(Collectors.toList());
+        return rootList;
+    }
+
+    /**
+     * 递归生成部门层级
+     */
+    public static List<Option<Long>> recursionBuildOrgTree(Long parentId, List<SysOrg> orgList) {
+        List<Option<Long>> list = CollectionUtil.emptyIfNull(orgList).stream()
+                .filter(org -> org.getPid().equals(parentId))
+                .map(org -> {
+                    Option<Long> option = new Option<>(org.getId(), org.getName());
+                    List<Option<Long>> children = recursionBuildOrgTree(org.getId(), orgList);
+                    if (CollectionUtil.isNotEmpty(children)) {
+                        option.setChildren(children);
+                    }
+                    return option;
+                })
+                .collect(Collectors.toList());
+        return list;
+    }
 
 }
 

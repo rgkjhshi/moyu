@@ -2,6 +2,7 @@ package com.moyu.common.web.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @since 2024-11-27
  */
 @Data
+@NoArgsConstructor
 public class Option<T> {
 
     /**
@@ -29,4 +31,16 @@ public class Option<T> {
      */
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private List<Option<T>> children;
+
+    public Option(T value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
+    public Option(T value, String label, List<Option<T>> children) {
+        this.value = value;
+        this.label = label;
+        this.children = children;
+    }
+
 }

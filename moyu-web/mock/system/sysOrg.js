@@ -2,7 +2,7 @@
 module.exports = [
   // sysOrg/treeData
   {
-    url: '/api/sysOrg/treeData',
+    url: '/api/sysOrg/treeOptions',
     type: 'post',
     response: _ => {
       return {
