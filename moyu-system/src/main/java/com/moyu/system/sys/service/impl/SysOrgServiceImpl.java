@@ -43,7 +43,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .filter(org -> rootIds.contains(org.getId()))
                 .map(org -> {
                     Option<Long> root = new Option<>(org.getId(), org.getName());
-                    root.setChildren(recursionBuildOrgTree(root.getValue(), orgList));
+                    root.setChildren(recursionBuildChildren(org.getId(), orgList));
                     return root;
                 })
                 .collect(Collectors.toList());
@@ -51,14 +51,14 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     }
 
     /**
-     * 递归生成部门层级
+     * 递归生成部门子层级
      */
-    public static List<Option<Long>> recursionBuildOrgTree(Long parentId, List<SysOrg> orgList) {
+    public static List<Option<Long>> recursionBuildChildren(Long parentId, List<SysOrg> orgList) {
         List<Option<Long>> list = CollectionUtil.emptyIfNull(orgList).stream()
                 .filter(org -> org.getPid().equals(parentId))
                 .map(org -> {
                     Option<Long> option = new Option<>(org.getId(), org.getName());
-                    List<Option<Long>> children = recursionBuildOrgTree(org.getId(), orgList);
+                    List<Option<Long>> children = recursionBuildChildren(org.getId(), orgList);
                     if (CollectionUtil.isNotEmpty(children)) {
                         option.setChildren(children);
                     }
