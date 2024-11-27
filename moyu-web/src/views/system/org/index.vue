@@ -9,7 +9,7 @@
           <el-tree
             ref="orgTreeRef"
             :data="orgTreeData"
-            :props="{ children: 'children', label: 'name', disabled: '' }"
+            :props="{ children: 'children', label: 'label', disabled: '' }"
             :expand-on-click-node="false"
             :filter-node-method="filterNode"
             node-key="id"
@@ -87,7 +87,7 @@
 <script>
 
 import { listSysUser, addSysUser, editSysUser, deleteSysUser } from '@/api/system/sysUser'
-import { getOrgTreeData } from '@/api/system/sysOrg'
+import { getOrgTreeOptions } from '@/api/system/sysOrg'
 
 export default {
   name: 'SysOrg',
@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       dataLoading: false,
-      // org过滤文本
+      // 部门名称，用于过滤
       deptName: undefined,
       // 组织机构树
       orgTreeData: [
@@ -270,7 +270,7 @@ export default {
     this.getDataList()
   },
   mounted() {
-    this.getOrgTree()
+    this.getOrgTreeData()
   },
   methods: {
     // 获取表格内的数据列表
@@ -335,8 +335,8 @@ export default {
     },
 
     /** 查询部门下拉树结构 */
-    getOrgTree() {
-      getOrgTreeData().then(response => {
+    getOrgTreeData() {
+      getOrgTreeOptions().then(response => {
         this.orgTreeData = response.data
       }).catch(err => {
         console.log(err)
@@ -348,7 +348,7 @@ export default {
       if (!value) {
         return true
       }
-      return data.name.indexOf(value) !== -1
+      return data.label.indexOf(value) !== -1
     },
 
     /** 点击部门树节点*/

@@ -1,6 +1,9 @@
 import request from '@/utils/request'
 
-// 查询组织机构树
-export function getOrgTreeData(data) {
-  return request.postJson('/api/sysOrg/treeData', data)
+// 获取组织机构树形选项
+export function getOrgTreeOptions() {
+  return request({
+    url: '/api/sysOrg/treeOptions',
+    method: 'get'
+  })
 }
