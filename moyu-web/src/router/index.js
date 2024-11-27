@@ -68,25 +68,25 @@ export const constantRoutes = [
     children: [
       {
         path: 'org',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/system/user/index'),
         name: 'Org',
         meta: { title: '组织机构', icon: 'list', noCache: true }
       },
       {
         path: 'user',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/system/user/index'),
         name: 'User',
         meta: { title: '用户管理', icon: 'list', noCache: true }
       },
       {
         path: 'role',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/system/role/index'),
         name: 'Role',
         meta: { title: '角色管理', icon: 'list', noCache: true }
       },
       {
         path: 'menu',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/system/menu/index'),
         name: 'Menu',
         meta: { title: '菜单管理', icon: 'list', noCache: true }
       }
