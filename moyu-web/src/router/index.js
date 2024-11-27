@@ -68,7 +68,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'org',
-        component: () => import('@/views/system/user/index'),
+        component: () => import('@/views/system/org/index'),
         name: 'Org',
         meta: { title: '组织机构', icon: 'list', noCache: true }
       },

@@ -1,65 +1,91 @@
 <template>
   <div class="app-container">
-    <!-- 上方选择框   -->
-    <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small" label-width="80px">
-      <el-form-item label="用户ID:" prop="userId">
-        <el-input v-model="queryRequest.userId" placeholder="请输入用户唯一ID" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
-        <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <!-- 选中数据操作   -->
-    <el-row :gutter="10" style="margin-bottom: 10px">
-      <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
+    <el-row :gutter="4">
+      <!-- 部门树 -->
+      <el-col :span="4">
+        <el-card>
+          <el-input v-model="filterText" placeholder="部门名称" prefix-icon="el-icon-search" size="small" style="margin-bottom:10px;" />
+
+          <el-tree
+            ref="orgTreeRef"
+            :data="orgTreeData"
+            :props="{ children: 'children', label: 'name', disabled: '' }"
+            :expand-on-click-node="false"
+            :filter-node-method="filterNode"
+            default-expand-all
+            @node-click="handleNodeClick"
+          />
+        </el-card>
       </el-col>
-      <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleEdit">修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multi" @click="handleDelete">删除</el-button>
+      <!-- 数据 -->
+      <el-col :span="20">
+        <el-card>
+          <!-- 上方选择框   -->
+          <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small" label-width="60px">
+            <el-form-item label="用户ID:" prop="userId">
+              <el-input v-model="queryRequest.userId" placeholder="请输入用户唯一ID" clearable @keyup.enter.native="handleQuery" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
+              <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+        <el-card>
+          <!-- 选中数据操作   -->
+          <el-row :gutter="10" style="margin-bottom: 10px">
+            <el-col :span="1.5">
+              <el-button type="success" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="primary" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleEdit">修改</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multi" @click="handleDelete">删除</el-button>
+            </el-col>
+          </el-row>
+          <!-- 表格数据 -->
+          <el-table v-loading="dataLoading" :data="dataList" size="small" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" align="center" width="55" />
+            <el-table-column label="序号" type="index" width="60px" align="center" />
+            <el-table-column prop="userId" label="用户ID" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="username" label="用户账号" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="nickname" label="用户昵称" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="gender" label="性别,0:未知,1:男,2:女" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="email" label="用户邮箱" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="mobile" label="手机号码" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="loginIp" label="最后登录IP" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="loginTime" label="最后登录时间" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column label="操作" fixed="right" align="center" min-width="200">
+              <template v-slot="{row}">
+                <el-button type="success" plain size="small" icon="el-icon-edit" @click="handleEdit(row)">修改</el-button>
+                <el-button type="danger" plain size="small" icon="el-icon-delete" @click="handleDelete(row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            style="padding-top: 10px; text-align: right;"
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            :current-page.sync="queryRequest.pageNum"
+            :page-size.sync="queryRequest.pageSize"
+            @size-change="getDataList"
+            @current-change="getDataList"
+          />
+        </el-card>
       </el-col>
     </el-row>
-    <!-- 表格数据 -->
-    <el-table v-loading="dataLoading" :data="dataList" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" align="center" width="55" />
-      <el-table-column label="序号" type="index" width="60px" align="center" />
-      <el-table-column prop="userId" label="用户ID" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="username" label="用户账号" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="nickname" label="用户昵称" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="gender" label="性别,0:未知,1:男,2:女" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="email" label="用户邮箱" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="mobile" label="手机号码" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="loginIp" label="最后登录IP" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="loginTime" label="最后登录时间" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
-      <el-table-column label="操作" fixed="right" align="center" min-width="200">
-        <template v-slot="{row}">
-          <el-button type="success" plain size="small" icon="el-icon-edit" @click="handleEdit(row)">修改</el-button>
-          <el-button type="danger" plain size="small" icon="el-icon-delete" @click="handleDelete(row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      style="padding-top: 10px; text-align: right;"
-      background
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      :current-page.sync="queryRequest.pageNum"
-      :page-size.sync="queryRequest.pageSize"
-      @size-change="getDataList"
-      @current-change="getDataList"
-    />
   </div>
 </template>
 
 <script>
 
 import { listSysUser, addSysUser, editSysUser, deleteSysUser } from '@/api/system/sysUser'
+import { getOrgTreeData } from '@/api/system/sysOrg'
 
 export default {
   name: 'SysOrg',
@@ -69,6 +95,152 @@ export default {
   data() {
     return {
       dataLoading: false,
+      // org过滤文本
+      filterText: '',
+      // 组织机构树
+      orgTreeData: [
+        {
+          'id': '1543842934270394368',
+          'parentId': '0',
+          'name': '大家科技有限公司',
+          'children': [
+            {
+              'id': '1543842934270394369',
+              'parentId': '1543842934270394368',
+              'name': '领导班子'
+            },
+            {
+              'id': '1543842934270394370',
+              'parentId': '1543842934270394368',
+              'name': '工会办公室'
+            },
+            {
+              'id': '1543842934270394371',
+              'parentId': '1543842934270394368',
+              'name': '综合管理部'
+            },
+            {
+              'id': '1543842934270394372',
+              'parentId': '1543842934270394368',
+              'name': '财务资产部'
+            },
+            {
+              'id': '1543842934270394373',
+              'parentId': '1543842934270394368',
+              'name': '人力资源部'
+            },
+            {
+              'id': '1543842934270394374',
+              'parentId': '1543842934270394368',
+              'name': '党群工作部'
+            },
+            {
+              'id': '1543842934270394375',
+              'parentId': '1543842934270394368',
+              'name': '纪检监督部'
+            },
+            {
+              'id': '1543842934270394376',
+              'parentId': '1543842934270394368',
+              'name': '生产技术部'
+            },
+            {
+              'id': '1543842934270394377',
+              'parentId': '1543842934270394368',
+              'name': '计划营销部'
+            },
+            {
+              'id': '1543842934270394378',
+              'parentId': '1543842934270394368',
+              'name': '后勤保卫部'
+            },
+            {
+              'id': '1543842934270394379',
+              'parentId': '1543842934270394368',
+              'name': '西南分公司',
+              'children': [
+                {
+                  'id': '1543842934270394380',
+                  'parentId': '1543842934270394379',
+                  'name': '综管部'
+                },
+                {
+                  'id': '1543842934270394381',
+                  'parentId': '1543842934270394379',
+                  'name': '研发部'
+                },
+                {
+                  'id': '1543842934270394382',
+                  'parentId': '1543842934270394379',
+                  'name': '销售部'
+                },
+                {
+                  'id': '1543842934270394383',
+                  'parentId': '1543842934270394379',
+                  'name': '人事部'
+                },
+                {
+                  'id': '1543842934270394384',
+                  'parentId': '1543842934270394379',
+                  'name': '采购部'
+                },
+                {
+                  'id': '1543842934270394385',
+                  'parentId': '1543842934270394379',
+                  'name': '技术部'
+                },
+                {
+                  'id': '1543842934270394386',
+                  'parentId': '1543842934270394379',
+                  'name': '质检部'
+                }
+              ]
+            },
+            {
+              'id': '1543842934270394379',
+              'parentId': '1543842934270394368',
+              'name': '东南分公司',
+              'children': [
+                {
+                  'id': '1543842934270394380',
+                  'parentId': '1543842934270394379',
+                  'name': '综管部'
+                },
+                {
+                  'id': '1543842934270394381',
+                  'parentId': '1543842934270394379',
+                  'name': '研发部'
+                },
+                {
+                  'id': '1543842934270394382',
+                  'parentId': '1543842934270394379',
+                  'name': '销售部'
+                },
+                {
+                  'id': '1543842934270394383',
+                  'parentId': '1543842934270394379',
+                  'name': '人事部'
+                },
+                {
+                  'id': '1543842934270394384',
+                  'parentId': '1543842934270394379',
+                  'name': '采购部'
+                },
+                {
+                  'id': '1543842934270394385',
+                  'parentId': '1543842934270394379',
+                  'name': '技术部'
+                },
+                {
+                  'id': '1543842934270394386',
+                  'parentId': '1543842934270394379',
+                  'name': '质检部'
+                }
+              ]
+            }
+          ]
+        }
+      ],
       dataList: [],
       // 选中数组
       idList: [],
@@ -86,13 +258,21 @@ export default {
       }
     }
   },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
+    }
+  },
   created() {
     this.getDataList()
+  },
+  mounted() {
+    this.getOrgTree()
   },
   methods: {
     // 获取表格内的数据列表
     getDataList() {
-      this.dataLoading = true
+      this.dataLoading = false
       // 查询数据
       listSysUser(this.queryRequest).then(response => {
         if (response.code === 0) {
@@ -149,7 +329,32 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+
+    /**
+     * 获取到机构树，展开顶级下树节点，考虑到后期数据量变大，不建议全部展开
+     */
+    getOrgTree() {
+      getOrgTreeData().then(response => {
+        this.orgTreeData.value = response.data
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+
+    /** 部门筛选 */
+    filterNode(value, data) {
+      if (!value) {
+        return true
+      }
+      return data.label.indexOf(value) !== -1
+    },
+
+    /** 部门树节点 Click */
+    handleNodeClick(data) {
+      console.log(data.name)
     }
+
   }
 }
 </script>
