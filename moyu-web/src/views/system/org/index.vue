@@ -5,18 +5,7 @@
       <el-col :span="4">
         <el-card>
           <el-input v-model="deptName" placeholder="部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom:10px;" />
-
-          <el-tree
-            ref="orgTreeRef"
-            :data="orgTreeData"
-            :props="{ children: 'children', label: 'label', disabled: '' }"
-            :expand-on-click-node="false"
-            :filter-node-method="filterNode"
-            node-key="id"
-            default-expand-all
-            highlight-current
-            @node-click="handleNodeClick"
-          />
+          <el-tree ref="orgTreeRef" :data="orgTreeData" :props="{ children: 'children', label: 'label', disabled: '' }" :expand-on-click-node="false" :filter-node-method="filterNode" node-key="id" default-expand-all highlight-current @node-click="handleNodeClick" />
         </el-card>
       </el-col>
       <!-- 数据 -->
