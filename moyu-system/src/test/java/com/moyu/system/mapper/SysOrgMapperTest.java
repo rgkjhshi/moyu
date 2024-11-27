@@ -1,8 +1,8 @@
 package com.moyu.system.mapper;
 
 import com.moyu.system.BaseTest;
-import com.moyu.system.modular.org.entity.SysOrg;
-import com.moyu.system.modular.org.mapper.SysOrgMapper;
+import com.moyu.system.sys.entity.SysOrg;
+import com.moyu.system.sys.mapper.SysOrgMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

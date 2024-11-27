@@ -1,9 +1,9 @@
-package com.moyu.system.modular.org.service.impl;
+package com.moyu.system.sys.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.moyu.system.modular.org.entity.SysOrg;
-import com.moyu.system.modular.org.mapper.SysOrgMapper;
-import com.moyu.system.modular.org.service.SysOrgService;
+import com.moyu.system.sys.entity.SysOrg;
+import com.moyu.system.sys.mapper.SysOrgMapper;
+import com.moyu.system.sys.service.SysOrgService;
 import org.springframework.stereotype.Service;
 
 /**

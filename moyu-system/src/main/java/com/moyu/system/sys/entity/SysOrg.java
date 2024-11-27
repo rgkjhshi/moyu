@@ -1,10 +1,10 @@
-package com.moyu.system.modular.org.entity;
+package com.moyu.system.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.moyu.system.core.base.entity.BaseEntity;
+import com.moyu.common.mybatis.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

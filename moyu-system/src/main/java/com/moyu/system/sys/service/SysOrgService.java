@@ -1,6 +1,6 @@
-package com.moyu.system.modular.org.service;
+package com.moyu.system.sys.service;
 
-import com.moyu.system.modular.org.entity.SysOrg;
+import com.moyu.system.sys.entity.SysOrg;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

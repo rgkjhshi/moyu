@@ -1,4 +1,4 @@
-package com.moyu.admin;
+package com.moyu.system;
 
 import com.moyu.common.annotation.EnableCommonLog;
 import org.springframework.boot.SpringApplication;
@@ -9,11 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2023-02-21
  */
 @EnableCommonLog
+//@MapperScan(basePackages = {"com.moyu.system.**.mapper"})
 @SpringBootApplication
-public class BootApplication {
+public class SystemApplication {
 
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(BootApplication.class);
+        SpringApplication application = new SpringApplication(SystemApplication.class);
         application.run(args);
     }
 }

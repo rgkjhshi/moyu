@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @since 2024-11-25
  */
 @Slf4j
-@SpringBootTest(classes = TestBootApplication.class)
+@SpringBootTest(classes = SystemApplication.class)
 public class BaseTest {
 
     @Test

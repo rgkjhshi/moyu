@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.moyu.system.modular.org.mapper.SysOrgMapper">
+<mapper namespace="com.moyu.system.sys.mapper.SysOrgMapper">
 
-    <resultMap id="BaseResultMap" type="com.moyu.system.modular.org.entity.SysOrg">
+    <resultMap id="BaseResultMap" type="com.moyu.system.sys.entity.SysOrg">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="pid" column="pid" jdbcType="BIGINT"/>
             <result property="parentName" column="parent_name" jdbcType="VARCHAR"/>

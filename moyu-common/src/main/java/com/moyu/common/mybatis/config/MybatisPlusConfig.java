@@ -1,10 +1,11 @@
-package com.moyu.system.config;
+package com.moyu.common.mybatis.config;
 
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author shisong
  * @since 2024-11-24
  */
-@MapperScan(basePackages = {"com.moyu.**.mapper"})
 @EnableTransactionManagement(proxyTargetClass = true)
 @Configuration
 public class MybatisPlusConfig {
@@ -23,6 +23,10 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        // 乐观锁插件
+        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
+        // 阻断插件
+        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         // 分页插件
         interceptor.addInnerInterceptor(paginationInnerInterceptor());
         return interceptor;
@@ -40,4 +44,17 @@ public class MybatisPlusConfig {
         return paginationInnerInterceptor;
     }
 
+    /**
+     * 乐观锁插件 https://baomidou.com/plugins/optimistic-locker/
+     */
+    public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
+        return new OptimisticLockerInnerInterceptor();
+    }
+
+    /**
+     * 如果是对全表的删除或更新操作，就会终止该操作 https://baomidou.com/plugins/block-attack/
+     */
+    public BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
+        return new BlockAttackInnerInterceptor();
+    }
 }

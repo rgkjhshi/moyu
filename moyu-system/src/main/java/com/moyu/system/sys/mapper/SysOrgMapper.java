@@ -1,7 +1,8 @@
-package com.moyu.system.modular.org.mapper;
+package com.moyu.system.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.moyu.system.modular.org.entity.SysOrg;
+import com.moyu.system.sys.entity.SysOrg;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author shisong
@@ -9,6 +10,7 @@ import com.moyu.system.modular.org.entity.SysOrg;
  * @createDate 2024-11-26 09:55:33
  * @Entity com.moyu.system.modular.org.domain.SysOrg
  */
+@Mapper
 public interface SysOrgMapper extends BaseMapper<SysOrg> {
 
 }

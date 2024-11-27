@@ -1,4 +1,4 @@
-package com.moyu.system.core.base.entity;
+package com.moyu.common.mybatis.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;

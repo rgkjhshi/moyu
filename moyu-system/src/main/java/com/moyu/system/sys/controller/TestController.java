@@ -1,6 +1,5 @@
-package com.moyu.admin.controller;
+package com.moyu.system.sys.controller;
 
-import com.moyu.common.annotation.EnableCommonLog;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
