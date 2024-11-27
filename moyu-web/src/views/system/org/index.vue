@@ -4,7 +4,7 @@
       <!-- 部门树 -->
       <el-col :span="4">
         <el-card>
-          <el-input v-model="filterText" placeholder="部门名称" prefix-icon="el-icon-search" size="small" style="margin-bottom:10px;" />
+          <el-input v-model="deptName" placeholder="部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom:10px;" />
 
           <el-tree
             ref="orgTreeRef"
@@ -12,7 +12,9 @@
             :props="{ children: 'children', label: 'name', disabled: '' }"
             :expand-on-click-node="false"
             :filter-node-method="filterNode"
+            node-key="id"
             default-expand-all
+            highlight-current
             @node-click="handleNodeClick"
           />
         </el-card>
@@ -96,7 +98,7 @@ export default {
     return {
       dataLoading: false,
       // org过滤文本
-      filterText: '',
+      deptName: undefined,
       // 组织机构树
       orgTreeData: [
         {
@@ -259,8 +261,9 @@ export default {
     }
   },
   watch: {
-    filterText(val) {
-      this.$refs.tree.filter(val)
+    // 根据名称筛选部门树
+    deptName(val) {
+      this.$refs.orgTreeRef.filter(val)
     }
   },
   created() {
@@ -331,12 +334,10 @@ export default {
       })
     },
 
-    /**
-     * 获取到机构树，展开顶级下树节点，考虑到后期数据量变大，不建议全部展开
-     */
+    /** 查询部门下拉树结构 */
     getOrgTree() {
       getOrgTreeData().then(response => {
-        this.orgTreeData.value = response.data
+        this.orgTreeData = response.data
       }).catch(err => {
         console.log(err)
       })
@@ -347,11 +348,13 @@ export default {
       if (!value) {
         return true
       }
-      return data.label.indexOf(value) !== -1
+      return data.name.indexOf(value) !== -1
     },
 
-    /** 部门树节点 Click */
+    /** 点击部门树节点*/
     handleNodeClick(data) {
+      // this.queryParams.deptId = data.id
+      // this.handleQuery()
       console.log(data.name)
     }
 
