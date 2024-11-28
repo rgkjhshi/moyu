@@ -4,19 +4,19 @@ CREATE TABLE `sys_org`
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `pid`         BIGINT(20)   NOT NULL DEFAULT 0 COMMENT '父id',
-    `parent_name` VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '父名称',
+    `parent_name` VARCHAR(20)  NULL     DEFAULT '' COMMENT '父名称',
     `parent_code` VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '父编码',
 
     `name`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '编码',
     `category`    TINYINT(5)   NULL     DEFAULT NULL COMMENT '组织机构类别(字典 0公司组织 1部门机构 2虚拟节点)',
-    `org_level`   TINYINT(5)   NOT NULL DEFAULT 1 COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
+    `org_level`   TINYINT(5)   NULL     DEFAULT 1 COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
 
     `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
     `delete_flag` TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
-    `remark`      VARCHAR(200) NOT NULL DEFAULT '' comment '备注',
+    `remark`      VARCHAR(200) NULL     DEFAULT NULL comment '备注',
     `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
     `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
     `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
@@ -169,6 +169,3 @@ CREATE TABLE `SYS_RELATION`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '用户角色权限关系表'
   ROW_FORMAT = DYNAMIC;
-
-
-
