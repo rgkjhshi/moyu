@@ -1,5 +1,6 @@
 package com.moyu.common.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -8,19 +9,18 @@ import java.util.StringJoiner;
  * @author shisong02
  * @since 2023-12-28
  */
-public class PageResult<T> {
+public class PageResult<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 总数量
      */
     private Long total;
-    /**
-     * 当前页码
-     */
-    private Integer pageNum;
+
     /**
      * 当前页内数据
      */
-    private List<T> pageData;
+    private List<T> rows;
 
     public Long getTotal() {
         return total;
@@ -30,39 +30,34 @@ public class PageResult<T> {
         this.total = total;
     }
 
-    public Integer getPageNum() {
-        return pageNum;
+    public List<T> getRows() {
+        return rows;
     }
 
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public List<T> getPageData() {
-        return pageData;
-    }
-
-    public void setPageData(List<T> pageData) {
-        this.pageData = pageData;
+    public void setRows(List<T> rows) {
+        this.rows = rows;
     }
 
     /**
      * 返回一个无数据的空结果页
      */
     public static <T> PageResult<T> emptyPage() {
-        PageResult<T> pageResult = new PageResult<>();
-        pageResult.setTotal(0L);
-        pageResult.setPageNum(1);
-        pageResult.setPageData(new ArrayList<>());
-        return pageResult;
+        return new PageResult<>(0L, new ArrayList<>());
+    }
+
+    /**
+     * 构造方法
+     */
+    public PageResult(Long total, List<T> rows) {
+        this.total = total;
+        this.rows = rows;
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", PageResult.class.getSimpleName() + "[", "]")
                 .add("total=" + total)
-                .add("pageNum=" + pageNum)
-                .add("pageData=" + pageData)
+                .add("rows=" + rows)
                 .toString();
     }
 }

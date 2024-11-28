@@ -2,6 +2,7 @@ package com.moyu.system.sys.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.moyu.common.model.PageResult;
 import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
@@ -18,7 +19,7 @@ public interface SysOrgService extends IService<SysOrg> {
     /**
      * 分页获取组织列表
      */
-    PageDTO<SysOrg> pageList(SysOrgParam sysOrgParam);
+    PageResult<SysOrg> pageList(SysOrgParam sysOrgParam);
 
     /**
      * 部门树形下拉选项

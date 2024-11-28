@@ -19,7 +19,7 @@ import java.util.StringJoiner;
  * @since 2018-07-31
  */
 public class BaseResponse<T> implements Serializable {
-    private static final long serialVersionUID = -4887606088067040646L;
+    private static final long serialVersionUID = 1L;
 
     public static final int SUCCESS_CODE = 0;
 

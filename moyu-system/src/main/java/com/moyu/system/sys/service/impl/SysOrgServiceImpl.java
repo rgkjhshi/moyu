@@ -5,8 +5,9 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.moyu.common.model.PageResult;
 import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.mapper.SysOrgMapper;
 import com.moyu.system.sys.model.entity.SysOrg;
@@ -30,18 +31,18 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      * 获取组织分页
      */
     @Override
-    public PageDTO<SysOrg> pageList(SysOrgParam sysOrgParam) {
+    public PageResult<SysOrg> pageList(SysOrgParam orgParam) {
         QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
                 // 关键词搜索
-                .like(StrUtil.isNotBlank(sysOrgParam.getKeywords()), SysOrg::getName, sysOrgParam.getKeywords())
+                .like(StrUtil.isNotBlank(orgParam.getKeywords()), SysOrg::getName, orgParam.getKeywords())
                 // 指定父节点
-                .eq(ObjectUtil.isNotEmpty(sysOrgParam.getPid()), SysOrg::getPid, sysOrgParam.getPid())
+                .eq(ObjectUtil.isNotEmpty(orgParam.getPid()), SysOrg::getPid, orgParam.getPid())
                 .orderByAsc(SysOrg::getSortNum);
-        // 翻页对象
-        PageDTO<SysOrg> pageDTO = new PageDTO<>(sysOrgParam.getPageNum(), sysOrgParam.getPageSize());
-        return this.page(pageDTO, queryWrapper);
+        // 分页查询
+        Page<SysOrg> page = this.page(new Page<>(orgParam.getPageNum(), orgParam.getPageSize()), queryWrapper);
+        return new PageResult<>(page.getTotal(), page.getRecords());
     }
 
     /**

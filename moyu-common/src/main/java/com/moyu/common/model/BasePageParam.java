@@ -1,5 +1,6 @@
 package com.moyu.common.model;
 
+import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
@@ -8,11 +9,14 @@ import java.util.StringJoiner;
  * @author shisong02
  * @since 2022-10-24
  */
-public class BasePageParam {
+public class BasePageParam implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 当前页码，当前第几页
      */
     private Integer pageNum = 1;
+
     /**
      * 每页大小
      */
@@ -37,8 +41,8 @@ public class BasePageParam {
     @Override
     public String toString() {
         return new StringJoiner(", ", BasePageParam.class.getSimpleName() + "[", "]")
-                .add("current=" + pageNum)
-                .add("size=" + pageSize)
+                .add("pageNum=" + pageNum)
+                .add("pageSize=" + pageSize)
                 .toString();
     }
 }

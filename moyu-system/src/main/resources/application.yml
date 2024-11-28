@@ -20,6 +20,7 @@ spring:
   # jackson格式配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+    locale: zh_CN
 
 # MyBatis Plus配置 参考：https://baomidou.com/reference/
 mybatis-plus:

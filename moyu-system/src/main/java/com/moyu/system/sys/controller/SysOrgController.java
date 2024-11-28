@@ -4,6 +4,7 @@ package com.moyu.system.sys.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
+import com.moyu.common.model.PageResult;
 import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
@@ -43,8 +44,8 @@ public class SysOrgController {
      * 分页获取组织列表
      */
     @PostMapping("/list")
-    public BaseResponse<PageDTO<SysOrg>> pageList(SysOrgParam sysOrgParam) {
-        PageDTO<SysOrg> page = sysOrgService.pageList(sysOrgParam);
+    public BaseResponse<PageResult<SysOrg>> pageList(SysOrgParam sysOrgParam) {
+        PageResult<SysOrg> page = sysOrgService.pageList(sysOrgParam);
         return BaseResponse.getSuccessResponse(page);
     }
 
