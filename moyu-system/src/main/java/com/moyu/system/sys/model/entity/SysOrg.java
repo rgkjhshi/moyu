@@ -1,4 +1,4 @@
-package com.moyu.system.sys.entity;
+package com.moyu.system.sys.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

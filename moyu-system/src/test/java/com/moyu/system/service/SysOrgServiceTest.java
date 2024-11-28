@@ -1,7 +1,7 @@
 package com.moyu.system.service;
 
 import com.moyu.system.BaseTest;
-import com.moyu.system.sys.entity.SysOrg;
+import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.service.SysOrgService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

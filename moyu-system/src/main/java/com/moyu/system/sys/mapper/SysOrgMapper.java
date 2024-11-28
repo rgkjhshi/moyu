@@ -1,7 +1,7 @@
 package com.moyu.system.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.moyu.system.sys.entity.SysOrg;
+import com.moyu.system.sys.model.entity.SysOrg;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

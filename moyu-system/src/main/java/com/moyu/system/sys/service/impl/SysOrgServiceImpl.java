@@ -1,11 +1,16 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.common.web.model.Option;
-import com.moyu.system.sys.entity.SysOrg;
 import com.moyu.system.sys.mapper.SysOrgMapper;
+import com.moyu.system.sys.model.entity.SysOrg;
+import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +27,33 @@ import java.util.stream.Collectors;
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
 
     /**
+     * 获取组织分页
+     */
+    @Override
+    public PageDTO<SysOrg> page(SysOrgParam sysOrgParam) {
+        QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
+        // 查询条件
+        queryWrapper.lambda()
+                // 关键词搜索
+                .like(StrUtil.isNotBlank(sysOrgParam.getKeywords()), SysOrg::getName, sysOrgParam.getKeywords())
+                // 指定父节点
+                .eq(ObjectUtil.isNotEmpty(sysOrgParam.getPid()), SysOrg::getPid, sysOrgParam.getPid())
+                .orderByAsc(SysOrg::getSortNum);
+        // 翻页对象
+        PageDTO<SysOrg> pageDTO = new PageDTO<>(sysOrgParam.getCurrent(), sysOrgParam.getSize());
+        return this.page(pageDTO, queryWrapper);
+    }
+
+    /**
      * 部门树形下拉选项
      */
     @Override
     public List<Option<?>> listTreeOptions() {
         // 查询所有组织结构
         List<SysOrg> orgList = this.list(new LambdaQueryWrapper<SysOrg>()
-                .eq(SysOrg::getDeleteFlag, 0)
+                // 查询部分字段
                 .select(SysOrg::getId, SysOrg::getPid, SysOrg::getName)
+                .eq(SysOrg::getDeleteFlag, 0)
                 .orderByAsc(SysOrg::getSortNum)
         );
         // 所有的父节点

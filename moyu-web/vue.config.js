@@ -36,21 +36,21 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    // 开发时使用mock
+    // 开发时未就绪的接口可以使用mock
     before: require('./mock/mock-server.js'),
     // 开发时做转发，可以转发到mock服务上，也可以转发到自己的服务上
     // 若有登陆问题，可在浏览器里输入转发到的服务上种下token
-    // proxy: {
-    //   // change xxx-api/login => mock/login
-    //   // detail: https://cli.vuejs.org/zh/config/index.html#devserver-proxy
-    //   [process.env.VUE_APP_BASE_API]: {
-    //     target: `http://localhost:8080/`,
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       ['^' + process.env.VUE_APP_BASE_API]: ''
-    //     }
-    //   }
-    // },
+    proxy: {
+      // change xxx-api/login => mock/login
+      // detail: https://cli.vuejs.org/zh/config/index.html#devserver-proxy
+      [process.env.VUE_APP_BASE_API]: {
+        target: `http://localhost:8080/`,
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
+      }
+    },
     disableHostCheck: true
   },
   configureWebpack: {
