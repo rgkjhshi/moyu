@@ -6,7 +6,7 @@ module.exports = [
     type: 'get',
     response: _ => {
       return {
-        code: 20000,
+        code: 0,
         message: '',
         data: [
           {

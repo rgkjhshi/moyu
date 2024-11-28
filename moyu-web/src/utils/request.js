@@ -35,7 +35,7 @@ service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
    * Please return  response => response
-  */
+   */
 
   /**
    * Determine the request status by custom code
@@ -43,10 +43,14 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    // 二进制数据则直接返回
+    if (response.request.responseType === 'blob') {
+      return response
+    }
     const res = response.data
 
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    // if the custom code is not 0, it is judged as an error.
+    if (res.code !== 0) {
       Message({
         message: res.message || 'Error',
         type: 'error',
@@ -56,7 +60,7 @@ service.interceptors.response.use(
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
+        MessageBox.confirm('登录状态已失效，请重新登录', '提示', {
           confirmButtonText: '重新登陆',
           cancelButtonText: '取消',
           type: 'warning'
@@ -81,5 +85,57 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+// 自定义的通用下载方法
+service.download = function download(config) {
+  return service({
+    responseType: 'blob',
+    ...config
+  }).then(async response => {
+    if (response.data.type === 'application/json') {
+      const resText = await response.data.text()
+      const res = JSON.parse(resText)
+      Message.error(res.message)
+      return
+    }
+    // 创建一个链接元素用于下载
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    // 设置下载文件名
+    link.setAttribute('download', 'moyu.zip')
+    document.body.appendChild(link)
+    link.click()
+    // 清理并移除链接元素
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  }).catch(err => {
+    console.error(err)
+    Message.error('下载文件失败！')
+  })
+}
+
+// 提交表单
+service.postForm = function postForm(url, data, config) {
+  // 删除所有的null属性和未定义属性
+  const formData = new FormData()
+  for (const key in data) {
+    if (data[key] != null && typeof (data[key]) !== 'undefined') {
+      formData.append(key, data[key])
+    }
+  }
+  return service.post(url, formData, config)
+}
+
+// 提交Json
+service.postJson = function postJson(url, data, config) {
+  // 删除所有的null属性和未定义属性
+  for (const key in data) {
+    if (data[key] == null || typeof (data[key]) === 'undefined') {
+      delete data[key]
+    }
+  }
+  return service.post(url, data, config)
+}
 
 export default service
