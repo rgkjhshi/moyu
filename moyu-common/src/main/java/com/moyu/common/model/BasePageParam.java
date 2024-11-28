@@ -8,15 +8,15 @@ import java.util.StringJoiner;
  * @author shisong02
  * @since 2022-10-24
  */
-public class PageRequest {
+public class BasePageParam {
     /**
-     * 页码，第几页
+     * 当前页码，当前第几页
      */
-    private Integer pageNum;
+    private Integer pageNum = 1;
     /**
-     * 页大小
+     * 每页大小
      */
-    private Integer pageSize;
+    private Integer pageSize = 10;
 
     public Integer getPageNum() {
         return pageNum;
@@ -36,9 +36,9 @@ public class PageRequest {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", PageRequest.class.getSimpleName() + "[", "]")
-                .add("pageNum=" + pageNum)
-                .add("pageSize=" + pageSize)
+        return new StringJoiner(", ", BasePageParam.class.getSimpleName() + "[", "]")
+                .add("current=" + pageNum)
+                .add("size=" + pageSize)
                 .toString();
     }
 }

@@ -75,8 +75,8 @@
 
 <script>
 
-import { listSysUser, addSysUser, editSysUser, deleteSysUser } from '@/api/system/sysUser'
-import { getOrgTreeOptions } from '@/api/system/sysOrg'
+import { addSysUser, editSysUser, deleteSysUser } from '@/api/system/sysUser'
+import { getOrgTreeOptions, listSysOrg } from '@/api/system/sysOrg'
 
 export default {
   name: 'SysOrg',
@@ -100,7 +100,7 @@ export default {
       total: 0,
       queryRequest: {
         // 页码
-        pageNum: 1,
+        current: 1,
         // 页面大小
         pageSize: 10,
         tableName: null
@@ -124,7 +124,7 @@ export default {
     getDataList() {
       this.dataLoading = false
       // 查询数据
-      listSysUser(this.queryRequest).then(response => {
+      listSysOrg(this.queryRequest).then(response => {
         if (response.code === 0) {
           this.total = response.data.total
           this.dataList = response.data.pageData

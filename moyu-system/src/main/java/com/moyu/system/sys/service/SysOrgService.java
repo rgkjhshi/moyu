@@ -18,7 +18,7 @@ public interface SysOrgService extends IService<SysOrg> {
     /**
      * 分页获取组织列表
      */
-    PageDTO<SysOrg> page(SysOrgParam sysOrgParam);
+    PageDTO<SysOrg> pageList(SysOrgParam sysOrgParam);
 
     /**
      * 部门树形下拉选项

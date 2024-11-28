@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row type="flex" align="middle">
       <el-col :offset="2" :span="12">
-        <el-image fit="contain" :src="loginPng" class="image"/>
+        <el-image fit="contain" :src="loginPng" class="image" />
       </el-col>
       <el-col :offset="1" :span="10">
         <div class="login-container">
@@ -12,12 +12,22 @@
             </div>
             <el-form ref="loginForm" :model="loginForm" :rules="loginRules">
               <el-form-item prop="username">
-                <el-input v-model="loginForm.username" placeholder="账号" prefix-icon="el-icon-user" type="text"
-                          auto-complete="off"/>
+                <el-input
+                  v-model="loginForm.username"
+                  placeholder="账号"
+                  prefix-icon="el-icon-user"
+                  type="text"
+                  auto-complete="off"
+                />
               </el-form-item>
               <el-form-item prop="password">
-                <el-input v-model="loginForm.password" placeholder="密码" prefix-icon="el-icon-lock" show-password
-                          type="password"/>
+                <el-input
+                  v-model="loginForm.password"
+                  placeholder="密码"
+                  prefix-icon="el-icon-lock"
+                  show-password
+                  type="password"
+                />
               </el-form-item>
               <el-form-item prop="rememberMe">
                 <el-checkbox v-model="loginForm.rememberMe">记住密码</el-checkbox>
@@ -36,7 +46,7 @@
 <script>
 import loginPng from '@/assets/login_images/login.png'
 import Cookies from 'js-cookie'
-import {encrypt, decrypt} from '@/utils/jsencrypt'
+import { encrypt, decrypt } from '@/utils/jsencrypt'
 
 export default {
   name: 'Login',
@@ -48,11 +58,11 @@ export default {
       loginForm: {
         username: 'admin',
         password: '111111',
-        rememberMe: false,
+        rememberMe: false
       },
       loginRules: {
-        username: [{required: true, trigger: "blur", message: "请输入您的账号"}],
-        password: [{required: true, trigger: "blur", message: "请输入您的密码"}],
+        username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
+        password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }]
       },
       loading: false,
       // 验证码开关
@@ -65,8 +75,8 @@ export default {
 
   watch: {
     $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
@@ -103,15 +113,15 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           if (this.loginForm.rememberMe) {
-            Cookies.set("username", this.loginForm.username, {expires: 30});
-            Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
-            Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
+            Cookies.set('username', this.loginForm.username, { expires: 30 })
+            Cookies.set('password', encrypt(this.loginForm.password), { expires: 30 })
+            Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 })
           } else {
-            Cookies.remove("username");
-            Cookies.remove("password");
-            Cookies.remove('rememberMe');
+            Cookies.remove('username')
+            Cookies.remove('password')
+            Cookies.remove('rememberMe')
           }
           // 会到src/store/modules/user.js中请求login方法。
           this.$store.dispatch('user/login', this.loginForm).then(() => {
@@ -120,14 +130,14 @@ export default {
           }).catch(() => {
             this.loading = false
             if (this.captchaEnabled) {
-              this.getCode();
+              this.getCode()
             }
           })
         } else {
           console.log('error submit!!')
           return false
         }
-      });
+      })
     }
   }
 }

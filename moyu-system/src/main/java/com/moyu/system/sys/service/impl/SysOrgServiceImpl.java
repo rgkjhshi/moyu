@@ -30,7 +30,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      * 获取组织分页
      */
     @Override
-    public PageDTO<SysOrg> page(SysOrgParam sysOrgParam) {
+    public PageDTO<SysOrg> pageList(SysOrgParam sysOrgParam) {
         QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
@@ -40,7 +40,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .eq(ObjectUtil.isNotEmpty(sysOrgParam.getPid()), SysOrg::getPid, sysOrgParam.getPid())
                 .orderByAsc(SysOrg::getSortNum);
         // 翻页对象
-        PageDTO<SysOrg> pageDTO = new PageDTO<>(sysOrgParam.getCurrent(), sysOrgParam.getSize());
+        PageDTO<SysOrg> pageDTO = new PageDTO<>(sysOrgParam.getPageNum(), sysOrgParam.getPageSize());
         return this.page(pageDTO, queryWrapper);
     }
 

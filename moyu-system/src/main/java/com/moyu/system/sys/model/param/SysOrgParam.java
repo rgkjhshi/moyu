@@ -1,6 +1,7 @@
 package com.moyu.system.sys.model.param;
 
 
+import com.moyu.common.model.BasePageParam;
 import lombok.Data;
 
 /**
@@ -10,18 +11,7 @@ import lombok.Data;
  * @since 2024-11-28
  */
 @Data
-public class SysOrgParam {
-
-    /**
-     * 当前页
-     */
-    private Integer current;
-
-    /**
-     * 每页条数
-     */
-    private Integer size;
-
+public class SysOrgParam extends BasePageParam {
     /**
      * 父id
      */

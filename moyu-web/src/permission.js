@@ -1,17 +1,17 @@
 import router from './router'
 import store from './store'
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import {getToken} from '@/utils/auth' // get token from cookie
+import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
-NProgress.configure({showSpinner: false}) // NProgress Configuration
+NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 // 白名单
 const whiteList = ['/login', '/register'] // no redirect whitelist
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
 
@@ -25,7 +25,7 @@ router.beforeEach(async (to, from, next) => {
   if (hasToken) {
     if (to.path === '/login') {
       // 如果要前往的路径是 '/login' 则重定向到首页
-      next({path: '/'})
+      next({ path: '/' })
       NProgress.done()
     } else {
       // 从store中取得用户的 roles, 也就是用户的权限。用户是否已经通过 getInfo 获取了权限角色
@@ -39,7 +39,7 @@ router.beforeEach(async (to, from, next) => {
            * 在这个地方获取信息并进行判断 从获取到的所有信息userInfo 中获取 角色值 或者进行判断
            * 要注意 roles 一定要是一个数组 这涉及到 之后的 .some() 方法
            */
-          const {roles} = await store.dispatch('user/getInfo')
+          const { roles } = await store.dispatch('user/getInfo')
 
           // 基于角色生成可访问路由
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
