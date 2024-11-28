@@ -18,17 +18,26 @@ import java.util.List;
  * @since 2024-11-28
  */
 @RestController
-@RequestMapping("/api/sysOrg")
+@RequestMapping("/api/system/org")
 public class SysOrgController {
 
     @Resource
     private SysOrgService sysOrgService;
 
     /**
-     * 获取部门下拉选项树
+     * 获取组织树下拉选项
      */
-    @GetMapping("/treeOptions")
-    public BaseResponse<List<Option<?>>> listTreeOptions() {
+    @GetMapping("/tree")
+    public BaseResponse<List<Option<?>>> tree() {
+        List<Option<?>> list = sysOrgService.listTreeOptions();
+        return BaseResponse.getSuccessResponse(list);
+    }
+
+    /**
+     * 分页获取组织列表
+     */
+    @GetMapping("/page")
+    public BaseResponse<List<Option<?>>> page() {
         List<Option<?>> list = sysOrgService.listTreeOptions();
         return BaseResponse.getSuccessResponse(list);
     }
