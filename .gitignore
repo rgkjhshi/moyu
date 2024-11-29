@@ -4,6 +4,7 @@
 *.iml
 *.ipr
 out
+logs
 
 # Compiled class file
 *.class
