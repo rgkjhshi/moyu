@@ -4,12 +4,11 @@ CREATE TABLE `sys_org`
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `pid`         BIGINT(20)   NOT NULL DEFAULT 0 COMMENT '父id',
-    `parent_name` VARCHAR(20)  NULL     DEFAULT '' COMMENT '父名称',
-    `parent_code` VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '父编码',
+    `parent_code` VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '父编码',
 
-    `name`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '编码',
-    `category`    TINYINT(5)   NULL     DEFAULT NULL COMMENT '组织机构类别(字典 0公司组织 1部门机构 2虚拟节点)',
+    `name`        VARCHAR(64)  NOT NULL DEFAULT '' COMMENT '名称',
+    `code`        VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '编码',
+    `category`    TINYINT(5)   NULL     DEFAULT 0 COMMENT '组织机构类别(字典 0公司组织 1部门机构 2虚拟节点)',
     `org_level`   TINYINT(5)   NULL     DEFAULT 1 COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
 
     `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
