@@ -39,14 +39,11 @@
           <el-table v-loading="dataLoading" :data="dataList" size="small" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
             <el-table-column type="selection" align="center" width="55" />
             <el-table-column label="序号" type="index" width="60px" align="center" />
-            <el-table-column prop="userId" label="用户ID" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="username" label="用户账号" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="nickname" label="用户昵称" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="gender" label="性别,0:未知,1:男,2:女" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="email" label="用户邮箱" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="mobile" label="手机号码" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="loginIp" label="最后登录IP" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="loginTime" label="最后登录时间" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="name" label="机构名称" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="category" label="机构类别" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="orgLevel" label="组织层级" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="sortNum" label="排序顺序" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="status" label="状态" width="200px" show-overflow-tooltip align="center" />
             <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
             <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
             <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
@@ -127,7 +124,7 @@ export default {
       listSysOrg(this.queryRequest).then(response => {
         if (response.code === 0) {
           this.total = response.data.total
-          this.dataList = response.data.pageData
+          this.dataList = response.data.rows
         }
         this.dataLoading = false
       }).catch(err => {
@@ -203,7 +200,7 @@ export default {
     handleNodeClick(data) {
       // this.queryParams.deptId = data.id
       // this.handleQuery()
-      console.log(data.name)
+      console.log(data)
     }
 
   }

@@ -30,12 +30,6 @@ public class SysOrg extends BaseEntity {
     private Long pid;
 
     /**
-     * 父名称
-     */
-    @TableField(value = "parent_name")
-    private String parentName;
-
-    /**
      * 父编码
      */
     @TableField(value = "parent_code")

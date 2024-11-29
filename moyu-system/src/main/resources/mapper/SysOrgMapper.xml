@@ -7,7 +7,6 @@
     <resultMap id="BaseResultMap" type="com.moyu.system.sys.model.entity.SysOrg">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="pid" column="pid" jdbcType="BIGINT"/>
-            <result property="parentName" column="parent_name" jdbcType="VARCHAR"/>
             <result property="parentCode" column="parent_code" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="code" column="code" jdbcType="VARCHAR"/>
@@ -25,8 +24,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,pid,parent_name,
-        parent_code,name,code,
+        id,pid,parent_code,`name`,code,
         category,org_level,sort_num,
         status,delete_flag,ext_json,
         remark,create_time,create_user,

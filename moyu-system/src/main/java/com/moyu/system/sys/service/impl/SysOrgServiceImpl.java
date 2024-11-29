@@ -13,8 +13,10 @@ import com.moyu.system.sys.mapper.SysOrgMapper;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
  * @createDate 2024-11-26 09:55:33
  */
 @Service
+@RequiredArgsConstructor
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
 
     /**
@@ -41,8 +44,9 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .eq(ObjectUtil.isNotEmpty(orgParam.getPid()), SysOrg::getPid, orgParam.getPid())
                 .orderByAsc(SysOrg::getSortNum);
         // 分页查询
-        Page<SysOrg> page = this.page(new Page<>(orgParam.getPageNum(), orgParam.getPageSize()), queryWrapper);
-        return new PageResult<>(page.getTotal(), page.getRecords());
+        Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
+        Page<SysOrg> orgPage = this.page(page, queryWrapper);
+        return new PageResult<>(orgPage.getTotal(), new ArrayList<>());
     }
 
     /**
