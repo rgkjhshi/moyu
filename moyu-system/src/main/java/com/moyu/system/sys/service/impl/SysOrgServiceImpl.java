@@ -41,7 +41,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(orgParam.getKeywords()), SysOrg::getName, orgParam.getKeywords())
                 // 指定父节点
-                .eq(ObjectUtil.isNotEmpty(orgParam.getPid()), SysOrg::getPid, orgParam.getPid())
+                .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
                 .orderByAsc(SysOrg::getSortNum);
         // 分页查询
         Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
@@ -57,41 +57,33 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 查询所有组织结构
         List<SysOrg> orgList = this.list(new LambdaQueryWrapper<SysOrg>()
                 // 查询部分字段
-                .select(SysOrg::getId, SysOrg::getPid, SysOrg::getName)
+                .select(SysOrg::getParentCode, SysOrg::getCode, SysOrg::getName)
                 .eq(SysOrg::getDeleteFlag, 0)
                 .orderByAsc(SysOrg::getSortNum)
         );
         // 所有的父节点
-        Set<Long> parentIds = orgList.stream().map(SysOrg::getPid).collect(Collectors.toSet());
+        Set<String> parentIds = orgList.stream().map(SysOrg::getParentCode).collect(Collectors.toSet());
         // 所有的节点id
-        Set<Long> deptIds = orgList.stream().map(SysOrg::getId).collect(Collectors.toSet());
+        Set<String> deptIds = orgList.stream().map(SysOrg::getCode).collect(Collectors.toSet());
         // 集合差，根结点
-        List<Long> rootIds = CollectionUtil.subtractToList(parentIds, deptIds);
+        List<String> rootIds = CollectionUtil.subtractToList(parentIds, deptIds);
         // 遍历根结点
         List<Option<?>> rootList = new ArrayList<>();
-        for (Long rootId : rootIds) {
+        for (String rootId : rootIds) {
             rootList.addAll(recursionBuildChildren(rootId, orgList));
         }
-//        List<Option<?>> rootList = orgList.stream()
-//                .filter(org -> rootIds.contains(org.getId()))
-//                .map(org -> {
-//                    Option<Long> root = new Option<>(org.getId(), org.getName());
-//                    root.setChildren(recursionBuildChildren(org.getId(), orgList));
-//                    return root;
-//                })
-//                .collect(Collectors.toList());
         return rootList;
     }
 
     /**
      * 递归生成部门子层级
      */
-    public static List<Option<Long>> recursionBuildChildren(Long parentId, List<SysOrg> orgList) {
-        List<Option<Long>> list = CollectionUtil.emptyIfNull(orgList).stream()
-                .filter(org -> org.getPid().equals(parentId))
+    public static List<Option<String>> recursionBuildChildren(String parentCode, List<SysOrg> orgList) {
+        List<Option<String>> list = CollectionUtil.emptyIfNull(orgList).stream()
+                .filter(org -> org.getParentCode().equals(parentCode))
                 .map(org -> {
-                    Option<Long> option = new Option<>(org.getId(), org.getName());
-                    List<Option<Long>> children = recursionBuildChildren(org.getId(), orgList);
+                    Option<String> option = new Option<>(org.getCode(), org.getName());
+                    List<Option<String>> children = recursionBuildChildren(org.getCode(), orgList);
                     if (CollectionUtil.isNotEmpty(children)) {
                         option.setChildren(children);
                     }

@@ -13,9 +13,9 @@ import lombok.Data;
 @Data
 public class SysOrgParam extends BasePageParam {
     /**
-     * 父id
+     * 父节点code
      */
-    private Long pid;
+    private String parentCode;
 
     /**
      * 名称关键词

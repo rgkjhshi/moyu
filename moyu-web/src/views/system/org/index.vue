@@ -14,10 +14,10 @@
         <el-card>
           <!-- 上方选择框   -->
           <el-form ref="queryFormRef" :model="queryRequest" :inline="true" size="small">
-            <el-form-item label="关键字" prop="keywords">
-              <el-input v-model="queryRequest.keywords" placeholder="部门名称" @keyup.enter="handleQuery" />
+            <el-form-item label="关键字" prop="keywords" style="margin-bottom: 0">
+              <el-input v-model="queryRequest.keywords" placeholder="部门名称" clearable @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item>
+            <el-form-item style="margin-bottom: 0">
               <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>
               <el-button icon="el-icon-refresh" @click="resetQuery"> 重置 </el-button>
             </el-form-item>
@@ -102,9 +102,9 @@ export default {
         // 页面大小
         pageSize: 10,
         // 父节点
-        pid: undefined,
+        parentCode: undefined,
         // 关键词
-        keywords: ''
+        keywords: undefined
       }
     }
   },
@@ -201,7 +201,7 @@ export default {
 
     /** 点击部门树节点*/
     handleNodeClick(data) {
-      this.queryRequest.pid = data.value
+      this.queryRequest.parentCode = data.value
       this.handleQuery()
       // console.log(data)
     }

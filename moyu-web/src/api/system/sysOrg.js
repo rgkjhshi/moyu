@@ -10,7 +10,6 @@ export function getOrgTreeOptions() {
 
 // 分页获取组织列表
 export function listSysOrg(data) {
-  console.log(data)
   return request.postJson('/api/system/org/list', data)
 }
 
