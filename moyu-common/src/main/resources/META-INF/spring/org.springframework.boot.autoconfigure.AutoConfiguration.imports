@@ -1,1 +1,2 @@
 com.moyu.common.mybatis.config.MybatisPlusConfig
+com.moyu.common.web.config.WebMvcConfig

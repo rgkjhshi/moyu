@@ -15,7 +15,7 @@ public class SysOrgParam extends BasePageParam {
     /**
      * 父id
      */
-    private String pid;
+    private Long pid;
 
     /**
      * 名称关键词

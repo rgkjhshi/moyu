@@ -4,7 +4,8 @@
       <!-- 部门树 -->
       <el-col :span="4">
         <el-card>
-          <el-input v-model="deptName" placeholder="部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom:10px;" />
+          <!-- 部门树上面的搜索框 -->
+<!--          <el-input v-model="deptName" placeholder="部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom:10px;" />-->
           <el-tree ref="orgTreeRef" :data="orgTreeData" :props="{ children: 'children', label: 'label', disabled: '' }" :expand-on-click-node="false" :filter-node-method="filterNode" node-key="id" default-expand-all highlight-current @node-click="handleNodeClick" />
         </el-card>
       </el-col>
@@ -12,13 +13,13 @@
       <el-col :span="20">
         <el-card>
           <!-- 上方选择框   -->
-          <el-form ref="queryForm" :model="queryRequest" :inline="true" size="small" label-width="60px">
-            <el-form-item label="用户ID:" prop="userId">
-              <el-input v-model="queryRequest.userId" placeholder="请输入用户唯一ID" clearable @keyup.enter.native="handleQuery" />
+          <el-form ref="queryFormRef" :model="queryRequest" :inline="true" size="small">
+            <el-form-item label="关键字" prop="keywords">
+              <el-input v-model="queryRequest.keywords" placeholder="部门名称" @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
-              <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
+              <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>
+              <el-button icon="el-icon-refresh" @click="resetQuery"> 重置 </el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -39,10 +40,10 @@
           <el-table v-loading="dataLoading" :data="dataList" size="mini" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
             <el-table-column type="selection" align="center" width="55" />
             <el-table-column label="序号" type="index" width="60px" align="center" />
-            <el-table-column prop="name" label="机构名称" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="category" label="机构类别" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="orgLevel" label="组织层级" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="sortNum" label="排序顺序" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="name" label="组织名称" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="category" label="类别" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="orgLevel" label="层级" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="sortNum" label="排序" width="200px" show-overflow-tooltip align="center" />
             <el-table-column prop="status" label="状态" width="200px" show-overflow-tooltip align="center" />
             <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
             <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
@@ -97,10 +98,13 @@ export default {
       total: 0,
       queryRequest: {
         // 页码
-        current: 1,
+        pageNum: 1,
         // 页面大小
         pageSize: 10,
-        tableName: null
+        // 父节点
+        pid: undefined,
+        // 关键词
+        keywords: ''
       }
     }
   },
@@ -134,12 +138,11 @@ export default {
     },
     /** 查询按钮操作 */
     handleQuery() {
-      this.queryRequest.pageNum = 1
       this.getDataList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.$refs['queryForm'].resetFields()
+      this.$refs['queryFormRef'].resetFields()
       this.handleQuery()
     },
     // 多选框选中数据
@@ -198,9 +201,9 @@ export default {
 
     /** 点击部门树节点*/
     handleNodeClick(data) {
-      // this.queryParams.deptId = data.id
-      // this.handleQuery()
-      console.log(data)
+      this.queryRequest.pid = data.value
+      this.handleQuery()
+      // console.log(data)
     }
 
   }

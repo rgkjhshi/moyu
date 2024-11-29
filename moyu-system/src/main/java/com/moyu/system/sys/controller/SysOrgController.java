@@ -1,7 +1,6 @@
 package com.moyu.system.sys.controller;
 
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
@@ -9,10 +8,7 @@ import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -44,7 +40,7 @@ public class SysOrgController {
      * 分页获取组织列表
      */
     @PostMapping("/list")
-    public BaseResponse<PageResult<SysOrg>> pageList(SysOrgParam sysOrgParam) {
+    public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam sysOrgParam) {
         PageResult<SysOrg> page = sysOrgService.pageList(sysOrgParam);
         return BaseResponse.getSuccessResponse(page);
     }

@@ -68,14 +68,18 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 集合差，根结点
         List<Long> rootIds = CollectionUtil.subtractToList(parentIds, deptIds);
         // 遍历根结点
-        List<Option<?>> rootList = orgList.stream()
-                .filter(org -> rootIds.contains(org.getId()))
-                .map(org -> {
-                    Option<Long> root = new Option<>(org.getId(), org.getName());
-                    root.setChildren(recursionBuildChildren(org.getId(), orgList));
-                    return root;
-                })
-                .collect(Collectors.toList());
+        List<Option<?>> rootList = new ArrayList<>();
+        for (Long rootId : rootIds) {
+            rootList.addAll(recursionBuildChildren(rootId, orgList));
+        }
+//        List<Option<?>> rootList = orgList.stream()
+//                .filter(org -> rootIds.contains(org.getId()))
+//                .map(org -> {
+//                    Option<Long> root = new Option<>(org.getId(), org.getName());
+//                    root.setChildren(recursionBuildChildren(org.getId(), orgList));
+//                    return root;
+//                })
+//                .collect(Collectors.toList());
         return rootList;
     }
 
