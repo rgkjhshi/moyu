@@ -63,7 +63,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         );
         // 所有的父节点
         Set<Long> parentIds = orgList.stream().map(SysOrg::getPid).collect(Collectors.toSet());
-        // 所有的子节点
+        // 所有的节点id
         Set<Long> deptIds = orgList.stream().map(SysOrg::getId).collect(Collectors.toSet());
         // 集合差，根结点
         List<Long> rootIds = CollectionUtil.subtractToList(parentIds, deptIds);
