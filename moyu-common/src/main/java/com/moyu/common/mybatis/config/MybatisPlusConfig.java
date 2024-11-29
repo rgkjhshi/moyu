@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author shisong
  * @since 2024-11-24
  */
-@EnableTransactionManagement(proxyTargetClass = true)
 @Configuration
+@EnableTransactionManagement(proxyTargetClass = true)
 public class MybatisPlusConfig {
 
     @Bean
@@ -29,7 +29,6 @@ public class MybatisPlusConfig {
         interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         // 分页插件
         interceptor.addInnerInterceptor(paginationInnerInterceptor());
-        System.out.println("---init MybatisPlusConfig");
         return interceptor;
     }
 

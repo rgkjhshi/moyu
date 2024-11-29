@@ -46,7 +46,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 分页查询
         Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
         Page<SysOrg> orgPage = this.page(page, queryWrapper);
-        return new PageResult<>(orgPage.getTotal(), new ArrayList<>());
+        return new PageResult<>(orgPage.getTotal(), orgPage.getRecords());
     }
 
     /**

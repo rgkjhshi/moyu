@@ -36,7 +36,7 @@
             </el-col>
           </el-row>
           <!-- 表格数据 -->
-          <el-table v-loading="dataLoading" :data="dataList" size="small" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
+          <el-table v-loading="dataLoading" :data="dataList" size="mini" border :header-cell-style="{background:'#f5f7fa',color:'#606266'}" @selection-change="handleSelectionChange">
             <el-table-column type="selection" align="center" width="55" />
             <el-table-column label="序号" type="index" width="60px" align="center" />
             <el-table-column prop="name" label="机构名称" width="200px" show-overflow-tooltip align="center" />
