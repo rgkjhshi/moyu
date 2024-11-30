@@ -35,6 +35,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         objectMapper.registerModule(simpleModule);
 
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
+        // 使用converters.add(xxx)会放在最低优先级（List的尾部）
         converters.add(jackson2HttpMessageConverter);
     }
 }
