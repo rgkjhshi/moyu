@@ -1,8 +1,10 @@
 package com.moyu.common.aop;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.common.annotation.Log;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,7 +30,16 @@ import java.util.Arrays;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 20)
 public class LogAspect {
-    private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    static {
+        // 未知字段忽略
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // 不使用科学计数
+        MAPPER.configure(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN, true);
+        // null 值不输出(节省内存)
+        MAPPER.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+    }
 
     /**
      * 拦截方法上的注解
@@ -61,7 +72,7 @@ public class LogAspect {
         // 请求参数
         String request = "";
         if (Boolean.TRUE.equals(log.jsonLog())) {
-            request = gson.toJson(joinPoint.getArgs());
+            request = MAPPER.writeValueAsString(joinPoint.getArgs());
         } else {
             request = Arrays.toString(joinPoint.getArgs());
         }
@@ -82,9 +93,9 @@ public class LogAspect {
         // 打印响应结果
         if (Boolean.TRUE.equals(log.response()) && !Boolean.TRUE.equals(log.exceptionOnly())) {
             if (Boolean.TRUE.equals(log.jsonLog())) {
-                logger.info("{}返回结果为:{}", signature, gson.toJson(returnObject));
+                logger.info("{}返回结果为:{}", signature, MAPPER.writeValueAsString((returnObject)));
             } else {
-                logger.info("{}返回结果为:{}", signature, String.valueOf(returnObject));
+                logger.info("{}返回结果为:{}", signature, returnObject);
             }
         }
         // 打印运行时间
