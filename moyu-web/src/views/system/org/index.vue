@@ -2,15 +2,27 @@
   <div class="app-container">
     <el-row :gutter="4">
       <!-- 部门树 -->
-      <el-col :span="4">
-        <el-card>
-          <!-- 部门树上面的搜索框 -->
-          <!-- <el-input v-model="deptName" placeholder="部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom:10px;" />-->
-          <el-tree ref="orgTreeRef" :data="orgTreeData" :props="{ children: 'children', label: 'label', disabled: '' }" :expand-on-click-node="false" :filter-node-method="filterNode" node-key="id" default-expand-all highlight-current @node-click="handleNodeClick" />
+      <el-col :span="5">
+        <el-card style="height: calc(100vh - 128px)">
+          <div v-if="orgTreeData" style="height: calc(100vh - 160px); overflow: auto">
+            <!-- 部门树上面的搜索框 -->
+            <!-- <el-input v-model="deptName" placeholder="部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom:10px;" />-->
+            <el-tree
+              ref="orgTreeRef"
+              :data="orgTreeData"
+              :props="{ children: 'children', label: 'label'}"
+              :expand-on-click-node="false"
+              :filter-node-method="filterNode"
+              node-key="id"
+              empty-text="正在加载数据"
+              default-expand-all
+              highlight-current
+              @node-click="handleNodeClick"/>
+          </div>
         </el-card>
       </el-col>
       <!-- 数据 -->
-      <el-col :span="20">
+      <el-col :span="19">
         <el-card>
           <!-- 上方选择框   -->
           <el-form ref="queryFormRef" :model="queryRequest" :inline="true" size="small">
@@ -41,10 +53,10 @@
             <el-table-column type="selection" align="center" width="55" />
             <el-table-column label="序号" type="index" width="60px" align="center" />
             <el-table-column prop="name" label="组织名称" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="category" label="类别" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="orgLevel" label="层级" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="sortNum" label="排序" width="200px" show-overflow-tooltip align="center" />
-            <el-table-column prop="status" label="状态" width="200px" show-overflow-tooltip align="center" />
+            <el-table-column prop="category" label="类别" width="100px" show-overflow-tooltip align="center" />
+            <el-table-column prop="orgLevel" label="层级" width="100px" show-overflow-tooltip align="center" />
+            <el-table-column prop="sortNum" label="排序" width="100px" show-overflow-tooltip align="center" />
+            <el-table-column prop="status" label="状态" width="100px" show-overflow-tooltip align="center" />
             <el-table-column prop="createTime" label="创建时间" width="200px" show-overflow-tooltip align="center" />
             <el-table-column prop="updateTime" label="更新时间" width="200px" show-overflow-tooltip align="center" />
             <el-table-column prop="remark" label="备注" width="200px" show-overflow-tooltip align="center" />
