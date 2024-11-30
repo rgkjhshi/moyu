@@ -3,7 +3,7 @@
     <el-row :gutter="4">
       <!-- 部门树 -->
       <el-col :span="5">
-        <el-card style="height: calc(100vh - 128px)">
+        <el-card style="height: calc(100vh - 120px)">
           <div v-if="orgTreeData" style="height: calc(100vh - 160px); overflow: auto">
             <!-- 部门树上面的搜索框 -->
             <!-- <el-input v-model="deptName" placeholder="部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom:10px;" />-->
@@ -17,7 +17,8 @@
               empty-text="正在加载数据"
               default-expand-all
               highlight-current
-              @node-click="handleNodeClick"/>
+              @node-click="handleNodeClick"
+            />
           </div>
         </el-card>
       </el-col>
