@@ -31,6 +31,7 @@ public class SysOrgController {
     /**
      * 获取组织树
      */
+    @Log(jsonLog = true, response = false)
     @GetMapping("/tree")
     public BaseResponse<List<Tree<String>>> tree() {
         List<Tree<String>> list = sysOrgService.tree();
@@ -40,6 +41,7 @@ public class SysOrgController {
     /**
      * 获取组织树下拉选项
      */
+    @Log(jsonLog = true, response = false)
     @GetMapping("/treeList")
     public BaseResponse<List<Option<?>>> treeList() {
         List<Option<?>> list = sysOrgService.listTreeOptions();

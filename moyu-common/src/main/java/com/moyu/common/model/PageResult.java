@@ -20,7 +20,7 @@ public class PageResult<T> implements Serializable {
     /**
      * 当前页内数据
      */
-    private List<T> rows;
+    private List<T> records;
 
     public Long getTotal() {
         return total;
@@ -30,12 +30,12 @@ public class PageResult<T> implements Serializable {
         this.total = total;
     }
 
-    public List<T> getRows() {
-        return rows;
+    public List<T> getRecords() {
+        return records;
     }
 
-    public void setRows(List<T> rows) {
-        this.rows = rows;
+    public void setRecords(List<T> records) {
+        this.records = records;
     }
 
     /**
@@ -48,16 +48,16 @@ public class PageResult<T> implements Serializable {
     /**
      * 构造方法
      */
-    public PageResult(Long total, List<T> rows) {
+    public PageResult(Long total, List<T> records) {
         this.total = total;
-        this.rows = rows;
+        this.records = records;
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", PageResult.class.getSimpleName() + "[", "]")
                 .add("total=" + total)
-                .add("rows=" + rows)
+                .add("records=" + records)
                 .toString();
     }
 }
