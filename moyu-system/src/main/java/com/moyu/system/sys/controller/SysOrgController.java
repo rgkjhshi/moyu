@@ -1,6 +1,7 @@
 package com.moyu.system.sys.controller;
 
 
+import cn.hutool.core.lang.tree.Tree;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
@@ -28,9 +29,18 @@ public class SysOrgController {
     private SysOrgService sysOrgService;
 
     /**
-     * 获取组织树下拉选项
+     * 获取组织树
      */
     @GetMapping("/tree")
+    public BaseResponse<List<Tree<String>>> tree() {
+        List<Tree<String>> list = sysOrgService.tree();
+        return BaseResponse.getSuccessResponse(list);
+    }
+
+    /**
+     * 获取组织树下拉选项
+     */
+    @GetMapping("/treeList")
     public BaseResponse<List<Option<?>>> treeList() {
         List<Option<?>> list = sysOrgService.listTreeOptions();
         return BaseResponse.getSuccessResponse(list);

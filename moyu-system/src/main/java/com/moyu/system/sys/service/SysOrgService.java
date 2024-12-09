@@ -1,6 +1,6 @@
 package com.moyu.system.sys.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.common.model.PageResult;
 import com.moyu.common.web.model.Option;
@@ -17,9 +17,11 @@ import java.util.List;
 public interface SysOrgService extends IService<SysOrg> {
 
     /**
-     * 分页获取组织列表
+     * 部门树(借助hutool的树结构)
+     *
+     * @return 部门树List集合
      */
-    PageResult<SysOrg> pageList(SysOrgParam sysOrgParam);
+    List<Tree<String>> tree();
 
     /**
      * 部门树形下拉选项
@@ -27,5 +29,10 @@ public interface SysOrgService extends IService<SysOrg> {
      * @return 部门下拉List集合
      */
     List<Option<?>> listTreeOptions();
+
+    /**
+     * 分页获取组织列表
+     */
+    PageResult<SysOrg> pageList(SysOrgParam sysOrgParam);
 
 }

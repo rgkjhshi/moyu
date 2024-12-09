@@ -1,6 +1,9 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -31,22 +34,23 @@ import java.util.stream.Collectors;
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
 
     /**
-     * 获取组织分页
+     * 部门树(树太大需要加缓存)
      */
     @Override
-    public PageResult<SysOrg> pageList(SysOrgParam orgParam) {
-        QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
-        // 查询条件
-        queryWrapper.lambda()
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(orgParam.getKeywords()), SysOrg::getName, orgParam.getKeywords())
-                // 指定父节点
-                .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
-                .orderByAsc(SysOrg::getSortNum);
-        // 分页查询
-        Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
-        Page<SysOrg> orgPage = this.page(page, queryWrapper);
-        return new PageResult<>(orgPage.getTotal(), orgPage.getRecords());
+    public List<Tree<String>> tree() {
+        // 查询所有组织结构
+        List<SysOrg> orgList = this.list(new LambdaQueryWrapper<SysOrg>()
+                // 查询部分字段
+                .select(SysOrg::getCode, SysOrg::getParentCode, SysOrg::getName, SysOrg::getSortNum)
+                .eq(SysOrg::getDeleteFlag, 0)
+                .orderByAsc(SysOrg::getSortNum)
+        );
+        // 结构转换
+        List<TreeNode<String>> treeNodeList = orgList.stream()
+                .map(org -> new TreeNode<>(org.getCode(), org.getParentCode(), org.getName(), org.getSortNum()))
+                .collect(Collectors.toList());
+        // 构建树
+        return TreeUtil.build(treeNodeList, "0");
     }
 
     /**
@@ -73,6 +77,25 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             rootList.addAll(recursionBuildChildren(rootId, orgList));
         }
         return rootList;
+    }
+
+    /**
+     * 获取组织分页
+     */
+    @Override
+    public PageResult<SysOrg> pageList(SysOrgParam orgParam) {
+        QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
+        // 查询条件
+        queryWrapper.lambda()
+                // 关键词搜索
+                .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
+                // 指定父节点
+                .eq(ObjectUtil.isNotEmpty(orgParam.getParentId()), SysOrg::getParentCode, orgParam.getParentId())
+                .orderByAsc(SysOrg::getSortNum);
+        // 分页查询
+        Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
+        Page<SysOrg> orgPage = this.page(page, queryWrapper);
+        return new PageResult<>(orgPage.getTotal(), orgPage.getRecords());
     }
 
     /**

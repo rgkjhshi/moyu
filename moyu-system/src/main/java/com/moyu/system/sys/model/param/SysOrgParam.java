@@ -13,12 +13,12 @@ import lombok.Data;
 @Data
 public class SysOrgParam extends BasePageParam {
     /**
-     * 父节点code
+     * 父节点id
      */
-    private String parentCode;
+    private String parentId;
 
     /**
      * 名称关键词
      */
-    private String keywords;
+    private String searchKey;
 }
