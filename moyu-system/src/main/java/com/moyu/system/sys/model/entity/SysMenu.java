@@ -44,6 +44,8 @@ public class SysMenu implements Serializable {
 
     /**
      * 菜单类别（字典 0模块 1目录 2菜单 3按钮 4外链）
+     *
+     * @see com.moyu.system.sys.enums.MenuTypeEnum
      */
     @TableField(value = "menu_type")
     private Integer menuType;
