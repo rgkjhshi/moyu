@@ -128,7 +128,7 @@ create table sys_menu
     `pid`         BIGINT(20)            DEFAULT 0 COMMENT '父菜单ID',
     `name`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '编码',
-    `menu_type`   TINYINT(5)   NOT NULL DEFAULT 1 COMMENT '菜单类别（字典 0模块 1目录 2菜单 3按钮 4外链）',
+    `menu_type`   TINYINT(5)   NULL     DEFAULT NULL COMMENT '菜单类别（字典 1模块 2目录 3菜单 4按钮 5外链）',
     `path`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '路由地址',
     `component`   VARCHAR(20)  NULL     DEFAULT NULL COMMENT '组件地址',
     `icon`        VARCHAR(20)  NULL     DEFAULT '#' COMMENT '图标',
