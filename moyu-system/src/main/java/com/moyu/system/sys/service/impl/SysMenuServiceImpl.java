@@ -42,7 +42,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         );
         // 结构转换
         List<TreeNode<String>> treeNodeList = menuList.stream()
-                .map(org -> new TreeNode<>(org.getCode(), String.valueOf(org.getPid()), org.getName(), org.getSortNum()))
+                .map(menu -> new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum()))
                 .collect(Collectors.toList());
         // 构建树
         return TreeUtil.build(treeNodeList, "0");

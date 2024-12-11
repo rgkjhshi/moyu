@@ -35,6 +35,12 @@ public class SysMenu extends BaseEntity {
     private Long pid;
 
     /**
+     * 父编码
+     */
+    @TableField(value = "parent_code")
+    private String parentCode;
+
+    /**
      * 名称
      */
     @TableField(value = "name")
