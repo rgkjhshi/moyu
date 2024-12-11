@@ -1,8 +1,9 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.lang.tree.parser.NodeParser;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -12,14 +13,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.mapper.SysMenuMapper;
 import com.moyu.system.sys.model.entity.SysMenu;
-import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.service.SysMenuService;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author shisong
@@ -40,12 +38,30 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum)
         );
-        // 结构转换
-        List<TreeNode<String>> treeNodeList = menuList.stream()
-                .map(menu -> new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum()))
-                .collect(Collectors.toList());
+        // 自定义转换器
+        NodeParser<SysMenu, String> nodeParser = (menu, tree) -> {
+            tree.setId(menu.getCode());
+            tree.setName(menu.getName());
+            tree.setParentId(menu.getParentCode());
+            tree.setWeight(menu.getSortNum());
+            // 扩展属性
+            tree.put("menuType", menu.getMenuType());
+            tree.put("path", menu.getPath());
+            tree.put("component", menu.getComponent());
+            tree.put("icon", menu.getIcon());
+            tree.put("permission", menu.getPermission());
+            tree.put("visible", menu.getVisible());
+            tree.put("link", menu.getLink());
+            tree.put("module", menu.getModule());
+            tree.put("status", menu.getStatus());
+            tree.put("remark", menu.getRemark());
+            tree.put("createTime", menu.getCreateTime());
+            tree.put("updateTime", menu.getUpdateTime());
+            tree.put("createUser", menu.getCreateUser());
+            tree.put("updateUser", menu.getUpdateUser());
+        };
         // 构建树
-        return TreeUtil.build(treeNodeList, "0");
+        return TreeUtil.build(menuList, "0", TreeNodeConfig.DEFAULT_CONFIG, nodeParser);
     }
 
     @Override
