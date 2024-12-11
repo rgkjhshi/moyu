@@ -126,7 +126,7 @@ create table sys_menu
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `pid`         BIGINT(20)            DEFAULT 0 COMMENT '父菜单ID',
-    `parent_code` VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '父编码',
+    `parent_code` VARCHAR(32)  NULL     DEFAULT '' COMMENT '父编码',
     `name`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(20)  NULL     DEFAULT NULL COMMENT '编码',
     `menu_type`   TINYINT(5)   NULL     DEFAULT NULL COMMENT '菜单类别（字典 1模块 2目录 3菜单 4按钮 5外链）',
@@ -152,9 +152,6 @@ create table sys_menu
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 2000 COMMENT = '菜单权限表';
-
-INSERT INTO moyu.sys_menu (id, pid, parent_code, name, code, menu_type, path, component, icon, permission, visible, link, module, sort_num, status, delete_flag, ext_json, remark, create_time, create_user, update_time, update_user) VALUES (2002, 0, '0', '开源版功能', 'system', 1, null, null, 'appstore-add-outlined', null, 1, null, null, 1, 0, 0, null, '', '2024-12-11 13:00:33', null, '2024-12-11 13:00:36', null);
-INSERT INTO moyu.sys_menu (id, pid, parent_code, name, code, menu_type, path, component, icon, permission, visible, link, module, sort_num, status, delete_flag, ext_json, remark, create_time, create_user, update_time, update_user) VALUES (2003, 0, '0', '企业版功能', 'system2', 1, null, null, 'profile-outlined', null, 1, null, null, 2, 0, 0, null, '', '2024-12-11 13:00:33', null, '2024-12-11 13:00:36', null);
 
 -- 6. 用户角色权限关系表
 DROP TABLE IF EXISTS `SYS_RELATION`;
