@@ -29,4 +29,8 @@ public class SysMenuParam extends BasePageParam {
      */
     private Integer menuType;
 
+    /**
+     * 模块归属
+     */
+    private String module;
 }

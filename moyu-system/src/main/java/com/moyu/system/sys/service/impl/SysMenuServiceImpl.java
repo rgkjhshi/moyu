@@ -1,8 +1,11 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author shisong
@@ -26,8 +30,22 @@ import java.util.List;
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 
     @Override
-    public List<Tree<String>> tree() {
-        return Collections.emptyList();
+    public List<Tree<String>> tree(SysMenuParam menuParam) {
+        // 查询所有组织结构
+        List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
+                // 关键词搜索
+                .like(StrUtil.isNotBlank(menuParam.getSearchKey()), SysMenu::getName, menuParam.getSearchKey())
+                // 指定模块
+                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
+                .eq(SysMenu::getDeleteFlag, 0)
+                .orderByAsc(SysMenu::getSortNum)
+        );
+        // 结构转换
+        List<TreeNode<String>> treeNodeList = menuList.stream()
+                .map(org -> new TreeNode<>(org.getCode(), String.valueOf(org.getPid()), org.getName(), org.getSortNum()))
+                .collect(Collectors.toList());
+        // 构建树
+        return TreeUtil.build(treeNodeList, "0");
     }
 
     @Override

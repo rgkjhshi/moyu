@@ -20,7 +20,7 @@ public interface SysMenuService extends IService<SysMenu> {
      *
      * @return 菜单树List集合
      */
-    List<Tree<String>> tree();
+    List<Tree<String>> tree(SysMenuParam menuParam);
 
     /**
      * 获取菜单列表

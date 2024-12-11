@@ -1,16 +1,14 @@
 package com.moyu.system.sys.controller;
 
 
+import cn.hutool.core.lang.tree.Tree;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.service.SysMenuService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -47,4 +45,15 @@ public class SysMenuController {
         PageResult<SysMenu> list = sysMenuService.pageList(sysMenuParam);
         return BaseResponse.getSuccessResponse(list);
     }
+
+    /**
+     * 获取菜单树
+     */
+    @Log(jsonLog = true, response = false)
+    @PostMapping("/tree")
+    public BaseResponse<List<Tree<String>>> tree(@RequestBody SysMenuParam sysMenuParam) {
+        List<Tree<String>> treeList = sysMenuService.tree(sysMenuParam);
+        return BaseResponse.getSuccessResponse(treeList);
+    }
+
 }
