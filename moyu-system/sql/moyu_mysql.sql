@@ -81,10 +81,10 @@ create table sys_post
     `app_code`    varchar(20)  NOT NULL DEFAULT '' COMMENT '应用标识',
 
     `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
-    `delete_flag` TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `status`      TINYINT(5)   NULL     DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `delete_flag` TINYINT(5)   NULL     DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
-    `remark`      VARCHAR(200) NOT NULL DEFAULT '' comment '备注',
+    `remark`      VARCHAR(200) NULL     DEFAULT NULL comment '备注',
     `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
     `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
     `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
@@ -105,10 +105,10 @@ create table sys_role
     `data_scope`  TINYINT(5)   NOT NULL DEFAULT 0 comment '数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）',
 
     `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
-    `delete_flag` TINYINT(5)   NOT NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `status`      TINYINT(5)   NULL     DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `delete_flag` TINYINT(5)   NULL     DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
-    `remark`      VARCHAR(200) NOT NULL DEFAULT '' comment '备注',
+    `remark`      VARCHAR(200) NULL     DEFAULT NULL comment '备注',
     `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
     `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
     `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
@@ -156,7 +156,7 @@ create table sys_menu
 DROP TABLE IF EXISTS `SYS_RELATION`;
 CREATE TABLE `SYS_RELATION`
 (
-    `id`        BIGINT(20)   not null auto_increment comment '主键id',
+    `id`        BIGINT(20)   NOT NULL auto_increment comment '主键id',
     `app_code`  VARCHAR(20)  NULL DEFAULT NULL COMMENT '应用标识',
     `object_id` VARCHAR(100) NULL DEFAULT NULL COMMENT '对象ID',
     `target_id` VARCHAR(255) NULL DEFAULT NULL COMMENT '目标ID',
