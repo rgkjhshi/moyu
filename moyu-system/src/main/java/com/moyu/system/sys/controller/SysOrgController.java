@@ -51,7 +51,7 @@ public class SysOrgController {
     /**
      * 分页获取组织列表
      */
-    @PostMapping("/list")
+    @PostMapping("/page")
     public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam sysOrgParam) {
         PageResult<SysOrg> page = sysOrgService.pageList(sysOrgParam);
         return BaseResponse.getSuccessResponse(page);

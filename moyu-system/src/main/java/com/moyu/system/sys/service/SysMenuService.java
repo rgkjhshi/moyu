@@ -2,6 +2,7 @@ package com.moyu.system.sys.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.param.SysMenuParam;
 
@@ -25,4 +26,9 @@ public interface SysMenuService extends IService<SysMenu> {
      * 获取菜单列表
      */
     List<SysMenu> list(SysMenuParam menuParam);
+
+    /**
+     * 分页获取菜单列表
+     */
+    PageResult<SysMenu> pageList(SysMenuParam menuParam);
 }

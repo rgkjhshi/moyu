@@ -3,6 +3,7 @@ package com.moyu.system.sys.controller;
 
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
+import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.service.SysMenuService;
@@ -38,4 +39,12 @@ public class SysMenuController {
         return BaseResponse.getSuccessResponse(list);
     }
 
+    /**
+     * 分页菜单列表
+     */
+    @PostMapping("/page")
+    public BaseResponse<PageResult<SysMenu>> pageList(@RequestBody SysMenuParam sysMenuParam) {
+        PageResult<SysMenu> list = sysMenuService.pageList(sysMenuParam);
+        return BaseResponse.getSuccessResponse(list);
+    }
 }
