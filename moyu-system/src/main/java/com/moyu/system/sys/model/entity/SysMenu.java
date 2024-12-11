@@ -43,7 +43,7 @@ public class SysMenu implements Serializable {
     private String code;
 
     /**
-     * 菜单类别（字典 0模块 1目录 2菜单 3按钮 4外链）
+     * 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
      *
      * @see com.moyu.system.sys.enums.MenuTypeEnum
      */

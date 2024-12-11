@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/system/org")
+@RequestMapping("/api/sys/org")
 public class SysOrgController {
 
     @Resource

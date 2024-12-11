@@ -17,7 +17,7 @@ import java.util.Objects;
 public enum MenuTypeEnum {
 
     /**
-     * 菜单类别（字典 1模块 2目录 3菜单 4按钮 5外链）
+     * 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
      */
     INVALID(0, null),
     MODULE(1, "模块"),
