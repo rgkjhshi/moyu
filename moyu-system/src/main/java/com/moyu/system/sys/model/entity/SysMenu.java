@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.moyu.common.mybatis.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,9 +16,11 @@ import java.util.Date;
  *
  * @TableName sys_menu
  */
-@TableName(value = "sys_menu")
 @Data
-public class SysMenu implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@TableName(value = "sys_menu")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SysMenu extends BaseEntity {
     /**
      * 主键id
      * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
