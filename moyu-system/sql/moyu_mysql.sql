@@ -30,11 +30,11 @@ drop table if exists sys_user;
 create table sys_user
 (
     `id`               BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-    `account`          VARCHAR(20)  NULL DEFAULT NULL COMMENT '账号',
-    `password`         VARCHAR(20)  NULL DEFAULT NULL COMMENT '密码',
-    `nick_name`        VARCHAR(20)  NULL DEFAULT NULL COMMENT '昵称',
+    `account`          VARCHAR(32)  NULL DEFAULT NULL COMMENT '账号',
+    `password`         VARCHAR(64)  NULL DEFAULT NULL COMMENT '密码',
+    `nick_name`        VARCHAR(32)  NULL DEFAULT NULL COMMENT '昵称',
     `avatar`           VARCHAR(255) NULL DEFAULT NULL COMMENT '头像',
-    `name`             VARCHAR(20)  NULL DEFAULT NULL COMMENT '姓名',
+    `name`             VARCHAR(32)  NULL DEFAULT NULL COMMENT '姓名',
     `gender`           TINYINT(4)   NULL DEFAULT 0 COMMENT '性别(字典 0未知 1男 2女)',
     `birthday`         DATE         NULL DEFAULT NULL COMMENT '生日',
     `email`            VARCHAR(20)  NULL DEFAULT NULL COMMENT '邮箱',
@@ -42,12 +42,12 @@ create table sys_user
     `id_no`            VARCHAR(20)  NULL DEFAULT NULL COMMENT '身份证号',
     `address`          VARCHAR(100) NULL DEFAULT NULL COMMENT '联系地址',
 
-    `staff_code`       varchar(20)  NULL DEFAULT NULL COMMENT '员工编码',
-    `staff_org_code`   varchar(20)  NULL DEFAULT NULL COMMENT '员工机构编码',
-    `staff_org_name`   varchar(20)  NULL DEFAULT NULL COMMENT '员工机构名称',
-    `staff_dept_code`  varchar(20)  NULL DEFAULT NULL COMMENT '员工部门编码',
-    `staff_dept_name`  varchar(20)  NULL DEFAULT NULL COMMENT '员工部门名称',
-    `staff_entry_date` varchar(20)  NULL DEFAULT NULL COMMENT '员工入职日期',
+    `staff_code`       VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工编码',
+    `staff_org_code`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工机构编码',
+    `staff_org_name`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工机构名称',
+    `staff_dept_code`  VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工部门编码',
+    `staff_dept_name`  VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工部门名称',
+    `staff_entry_date` VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工入职日期',
 
     `login_ip`         VARCHAR(20)  NULL DEFAULT NULL COMMENT '登陆IP',
     `login_time`       DATETIME     NULL DEFAULT NULL COMMENT '登陆时间',
@@ -61,9 +61,9 @@ create table sys_user
     `ext_json`         LONGTEXT     NULL COMMENT '扩展信息',
     `remark`           VARCHAR(200) NULL DEFAULT NULL comment '备注',
     `create_time`      DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user`      VARCHAR(20)  NULL DEFAULT NULL COMMENT '创建用户',
+    `create_user`      VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建用户',
     `update_time`      DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user`      VARCHAR(20)  NULL DEFAULT NULL COMMENT '修改用户',
+    `update_user`      VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改用户',
     PRIMARY KEY (`id`),
     INDEX `idx_account` (`account`)
 ) ENGINE = InnoDB
@@ -76,9 +76,9 @@ create table sys_post
 (
     `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '岗位ID',
     `name`        varchar(100) NOT NULL COMMENT '名称',
-    `code`        varchar(50)  NOT NULL COMMENT '编码',
-    `org_code`    varchar(20)  NOT NULL DEFAULT '' COMMENT '组织机构',
-    `app_code`    varchar(20)  NOT NULL DEFAULT '' COMMENT '应用标识',
+    `code`        VARCHAR(32)  NOT NULL COMMENT '编码',
+    `org_code`    VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '组织机构',
+    `app_code`    VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '应用标识',
 
     `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NULL     DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
@@ -86,9 +86,9 @@ create table sys_post
     `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
     `remark`      VARCHAR(200) NULL     DEFAULT NULL comment '备注',
     `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
+    `create_user` VARCHAR(32)  NULL     DEFAULT NULL COMMENT '创建用户',
     `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '修改用户',
+    `update_user` VARCHAR(32)  NULL     DEFAULT NULL COMMENT '修改用户',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -99,9 +99,9 @@ drop table if exists sys_role;
 create table sys_role
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '角色ID',
-    `name`        VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '名称',
-    `code`        VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '编码',
-    `app_code`    VARCHAR(20)  NOT NULL DEFAULT '' COMMENT '应用标识',
+    `name`        VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '名称',
+    `code`        VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '编码',
+    `app_code`    VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '应用标识',
     `data_scope`  TINYINT(5)   NOT NULL DEFAULT 0 comment '数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）',
 
     `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
@@ -110,9 +110,9 @@ create table sys_role
     `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
     `remark`      VARCHAR(200) NULL     DEFAULT NULL comment '备注',
     `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '创建用户',
+    `create_user` VARCHAR(32)  NULL     DEFAULT NULL COMMENT '创建用户',
     `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(20)  NULL     DEFAULT NULL COMMENT '修改用户',
+    `update_user` VARCHAR(32)  NULL     DEFAULT NULL COMMENT '修改用户',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -126,16 +126,16 @@ create table sys_menu
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `parent_code` VARCHAR(32)  NULL DEFAULT '' COMMENT '父编码',
 
-    `name`        VARCHAR(20)  NULL DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(20)  NULL DEFAULT NULL COMMENT '编码',
+    `name`        VARCHAR(32)  NULL DEFAULT NULL COMMENT '名称',
+    `code`        VARCHAR(32)  NULL DEFAULT NULL COMMENT '编码',
     `menu_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '菜单类别（字典 1模块 2目录 3菜单 4按钮 5外链）',
-    `path`        VARCHAR(50)  NULL DEFAULT NULL COMMENT '路由地址',
-    `component`   VARCHAR(50)  NULL DEFAULT NULL COMMENT '组件地址',
-    `icon`        VARCHAR(50)  NULL DEFAULT NULL COMMENT '图标',
-    `permission`  VARCHAR(50)  NULL DEFAULT NULL COMMENT '权限标识',
+    `path`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '路由地址',
+    `component`   VARCHAR(64)  NULL DEFAULT NULL COMMENT '组件地址',
+    `icon`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '图标',
+    `permission`  VARCHAR(64)  NULL DEFAULT NULL COMMENT '权限标识',
     `visible`     TINYINT(5)   NULL DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
     `link`        VARCHAR(255) NULL DEFAULT NULL COMMENT '链接地址',
-    `module`      VARCHAR(50)  NULL DEFAULT NULL COMMENT '归属模块',
+    `module`      VARCHAR(32)  NULL DEFAULT NULL COMMENT '归属模块',
 
     `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
@@ -143,9 +143,9 @@ create table sys_menu
     `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
     `remark`      VARCHAR(200) NULL DEFAULT NULL comment '备注',
     `create_time` DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(20)  NULL DEFAULT NULL COMMENT '创建用户',
+    `create_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建用户',
     `update_time` DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(20)  NULL DEFAULT NULL COMMENT '修改用户',
+    `update_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改用户',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -157,10 +157,10 @@ DROP TABLE IF EXISTS `SYS_RELATION`;
 CREATE TABLE `SYS_RELATION`
 (
     `id`        BIGINT(20)   NOT NULL auto_increment comment '主键id',
-    `app_code`  VARCHAR(20)  NULL DEFAULT NULL COMMENT '应用标识',
+    `app_code`  VARCHAR(32)  NULL DEFAULT NULL COMMENT '应用标识',
     `object_id` VARCHAR(100) NULL DEFAULT NULL COMMENT '对象ID',
     `target_id` VARCHAR(255) NULL DEFAULT NULL COMMENT '目标ID',
-    `category`  VARCHAR(50)  NULL DEFAULT NULL COMMENT '分类(group_has_user,group_has_role,role_has_menu)',
+    `category`  VARCHAR(64)  NULL DEFAULT NULL COMMENT '分类(group_has_user,group_has_role,role_has_menu)',
     `ext_json`  LONGTEXT     NULL COMMENT '扩展信息',
     PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB
