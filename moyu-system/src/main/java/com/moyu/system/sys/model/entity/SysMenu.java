@@ -29,12 +29,6 @@ public class SysMenu extends BaseEntity {
     private Long id;
 
     /**
-     * 父菜单ID
-     */
-    @TableField(value = "pid")
-    private Long pid;
-
-    /**
      * 父编码
      */
     @TableField(value = "parent_code")
@@ -132,27 +126,4 @@ public class SysMenu extends BaseEntity {
     @TableField(value = "remark")
     private String remark;
 
-    /**
-     * 创建时间
-     */
-    @TableField(value = "create_time")
-    private Date createTime;
-
-    /**
-     * 创建用户
-     */
-    @TableField(value = "create_user")
-    private String createUser;
-
-    /**
-     * 修改时间
-     */
-    @TableField(value = "update_time")
-    private Date updateTime;
-
-    /**
-     * 修改用户
-     */
-    @TableField(value = "update_user")
-    private String updateUser;
 }

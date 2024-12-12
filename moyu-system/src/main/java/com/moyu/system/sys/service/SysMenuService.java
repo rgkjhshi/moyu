@@ -31,4 +31,25 @@ public interface SysMenuService extends IService<SysMenu> {
      * 分页获取菜单列表
      */
     PageResult<SysMenu> pageList(SysMenuParam menuParam);
+
+    /**
+     * 获取菜单详情
+     */
+    SysMenu detail(SysMenuParam menuParam);
+
+    /**
+     * 添加菜单
+     */
+    SysMenu add(SysMenuParam menuParam);
+
+    /**
+     * 删除菜单
+     */
+    SysMenu delete(SysMenuParam menuParam);
+
+    /**
+     * 修改菜单
+     */
+    SysMenu edit(SysMenuParam menuParam);
+
 }

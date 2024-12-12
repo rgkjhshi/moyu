@@ -56,4 +56,40 @@ public class SysMenuController {
         return BaseResponse.getSuccessResponse(treeList);
     }
 
+    /**
+     * 获取菜单详情
+     */
+    @PostMapping("/detail")
+    public BaseResponse<SysMenu> detail(SysMenuParam sysMenuParam) {
+        return BaseResponse.getSuccessResponse(sysMenuService.detail(sysMenuParam));
+    }
+
+    /**
+     * 添加菜单
+     */
+    @PostMapping("/add")
+    public BaseResponse<String> add(SysMenuParam sysMenuParam) {
+        sysMenuService.add(sysMenuParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 删除菜单
+     */
+    @PostMapping("/delete")
+    public BaseResponse<String> delete(SysMenuParam sysMenuParam) {
+        sysMenuService.delete(sysMenuParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 编辑菜单
+     */
+    @PostMapping("/edit")
+    public BaseResponse<String> edit(SysMenuParam sysMenuParam) {
+        sysMenuService.edit(sysMenuParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+
 }
