@@ -113,7 +113,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public SysMenu detail(SysMenuParam menuParam) {
-        SysMenu sysMenu = this.getById(Long.valueOf(menuParam.getId()));
+        // code为唯一标识
+        SysMenu sysMenu = this.getOne(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getCode, menuParam.getCode()));
         return sysMenu;
     }
 
