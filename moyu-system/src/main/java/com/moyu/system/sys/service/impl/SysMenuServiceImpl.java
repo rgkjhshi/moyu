@@ -1,6 +1,7 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
@@ -184,6 +185,23 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public SysMenu edit(SysMenuParam menuParam) {
         return null;
+    }
+
+    @Override
+    public List<Tree<String>> menuTreeSelector(SysMenuParam menuParam) {
+        // 查询所有组织结构
+        List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
+                // 指定模块
+                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
+                .eq(SysMenu::getDeleteFlag, 0)
+                .orderByAsc(SysMenu::getSortNum)
+        );
+        // 结构转换
+        List<TreeNode<String>> treeNodeList = menuList.stream()
+                .map(org -> new TreeNode<>(org.getCode(), org.getParentCode(), org.getName(), org.getSortNum()))
+                .collect(Collectors.toList());
+        // 构建树
+        return TreeUtil.build(treeNodeList, "0");
     }
 
     /**

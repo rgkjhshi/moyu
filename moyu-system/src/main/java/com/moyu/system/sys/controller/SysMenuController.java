@@ -8,7 +8,10 @@ import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.service.SysMenuService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -91,5 +94,11 @@ public class SysMenuController {
         return BaseResponse.getSuccessResponse();
     }
 
-
+    /**
+     * 获取菜单树选择器
+     */
+    @PostMapping("/sys/menu/treeSelector")
+    public BaseResponse<List<Tree<String>>> menuTreeSelector(@RequestBody SysMenuParam sysMenuParam) {
+        return BaseResponse.getSuccessResponse(sysMenuService.menuTreeSelector(sysMenuParam));
+    }
 }
