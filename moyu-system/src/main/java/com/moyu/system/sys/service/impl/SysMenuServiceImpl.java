@@ -4,8 +4,8 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -135,8 +135,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 不使用beanCopy是为了效率
         SysMenu menu = buildSysMenu(menuParam);
         menu.setId(null);
-        // 24位唯一code
-        menu.setCode(IdUtil.objectId());
+        // 唯一code IdUtil.objectId()24位
+        menu.setCode(RandomUtil.randomString(10));
         this.save(menu);
         return null;
     }
