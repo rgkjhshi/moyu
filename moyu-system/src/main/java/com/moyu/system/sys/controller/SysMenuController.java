@@ -63,7 +63,7 @@ public class SysMenuController {
      * 获取菜单详情
      */
     @PostMapping("/detail")
-    public BaseResponse<SysMenu> detail(SysMenuParam sysMenuParam) {
+    public BaseResponse<SysMenu> detail(@RequestBody SysMenuParam sysMenuParam) {
         return BaseResponse.getSuccessResponse(sysMenuService.detail(sysMenuParam));
     }
 
@@ -71,7 +71,7 @@ public class SysMenuController {
      * 添加菜单
      */
     @PostMapping("/add")
-    public BaseResponse<String> add(SysMenuParam sysMenuParam) {
+    public BaseResponse<String> add(@RequestBody SysMenuParam sysMenuParam) {
         sysMenuService.add(sysMenuParam);
         return BaseResponse.getSuccessResponse();
     }

@@ -1,7 +1,7 @@
 package com.moyu.system.sys.model.param;
 
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.moyu.common.model.BasePageParam;
 import lombok.Data;
 
@@ -16,11 +16,6 @@ import java.util.List;
 @Data
 public class SysMenuParam extends BasePageParam {
     //********** 查询用到的额外字段 **********//
-    /**
-     * 主键id
-     */
-    private String id;
-
     /**
      * 要删除的主键列表
      */
@@ -37,6 +32,12 @@ public class SysMenuParam extends BasePageParam {
     private String searchKey;
 
     //********** 新增用到的字段 **********//
+    /**
+     * 主键id
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long id;
+
     /**
      * 父编码
      */
