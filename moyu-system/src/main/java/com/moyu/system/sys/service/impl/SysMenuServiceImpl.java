@@ -119,7 +119,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public SysMenu add(SysMenuParam menuParam) {
+    public void add(SysMenuParam menuParam) {
         // 判断父节点(目录、菜单、按钮、外链的父节点都存在，只有模块的父节点不存在)
         if (!"0".equals(menuParam.getParentCode())) {
             // 查询所选父节点
@@ -140,28 +140,28 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
         menu.setCode(IdUtil.objectId());
         this.save(menu);
-        return null;
     }
 
     @Override
-    public SysMenu delete(SysMenuParam menuParam) {
+    public void delete(SysMenuParam menuParam) {
         // 要集联删除，子节点也要全部删除
         QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>().checkSqlInjection();
         // 查询所有的菜单(包括目录、按钮等)
         queryWrapper.lambda()
                 // 查询部分字段
                 .select(SysMenu::getId, SysMenu::getCode, SysMenu::getParentCode)
-                // 指定模块
+                // 指定模块(有模块的情况下要过滤)
                 .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
                 .eq(SysMenu::getDeleteFlag, 0);
         // 所有的菜单
         List<SysMenu> menuList = this.list(queryWrapper);
-        // 待删除的id集合
-        Set<Long> idSet = menuParam.getIds().stream().map(Long::valueOf).collect(Collectors.toSet());
         // 待删除节点的code集合
-        Set<String> codeSet = menuList.stream()
-                .filter(menu -> idSet.contains(menu.getId()))
-                .map(SysMenu::getCode)
+        Set<String> codeSet = menuParam.getCodeSet();
+
+        // 待删除的id集合(先把指定节点加入集合)
+        Set<Long> idSet = menuList.stream()
+                .filter(menu -> codeSet.contains(menu.getCode()))
+                .map(SysMenu::getId)
                 .collect(Collectors.toSet());
         // 循环查找子节点,并加入到待删除集合
         while (!CollectionUtils.isEmpty(codeSet)) {
@@ -180,12 +180,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         UpdateWrapper<SysMenu> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", idSet).set("delete_flag", 1);
         this.update(updateWrapper);
-        return null;
     }
 
     @Override
-    public SysMenu edit(SysMenuParam menuParam) {
-        return null;
+    public void edit(SysMenuParam menuParam) {
+        SysMenu oldMenu = this.getOne(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getCode, menuParam.getCode()));
     }
 
     @Override
@@ -213,9 +212,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return null;
         }
         SysMenu sysMenu = new SysMenu();
-        if (menuParam.getId() != null) {
-            sysMenu.setId(Long.valueOf(menuParam.getId()));
-        }
         sysMenu.setParentCode(menuParam.getParentCode());
         sysMenu.setName(menuParam.getName());
         sysMenu.setCode(menuParam.getCode());

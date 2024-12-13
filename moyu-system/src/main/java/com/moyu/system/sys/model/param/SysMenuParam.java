@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.moyu.common.model.BasePageParam;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单查询参数
@@ -15,16 +15,11 @@ import java.util.List;
  */
 @Data
 public class SysMenuParam extends BasePageParam {
-    //********** 查询用到的额外字段 **********//
+    //********** 额外字段 **********//
     /**
-     * 要删除的主键列表
+     * 待删除菜单。是从菜单tree中获取的id，因此均为code
      */
-    private List<String> ids;
-
-    /**
-     * 父节点id
-     */
-    private String parentId;
+    private Set<String> codeSet;
 
     /**
      * 名称关键词
@@ -32,11 +27,6 @@ public class SysMenuParam extends BasePageParam {
     private String searchKey;
 
     //********** 新增用到的字段 **********//
-    /**
-     * 主键id
-     */
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long id;
 
     /**
      * 父编码

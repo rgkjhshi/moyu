@@ -40,17 +40,17 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 添加菜单
      */
-    SysMenu add(SysMenuParam menuParam);
+    void add(SysMenuParam menuParam);
 
     /**
      * 删除菜单
      */
-    SysMenu delete(SysMenuParam menuParam);
+    void delete(SysMenuParam menuParam);
 
     /**
      * 修改菜单
      */
-    SysMenu edit(SysMenuParam menuParam);
+    void edit(SysMenuParam menuParam);
 
     /**
      * 获取菜单树选择器(字段少)

@@ -80,7 +80,7 @@ public class SysMenuController {
      * 删除菜单
      */
     @PostMapping("/delete")
-    public BaseResponse<String> delete(SysMenuParam sysMenuParam) {
+    public BaseResponse<String> delete(@RequestBody SysMenuParam sysMenuParam) {
         sysMenuService.delete(sysMenuParam);
         return BaseResponse.getSuccessResponse();
     }
@@ -89,7 +89,7 @@ public class SysMenuController {
      * 编辑菜单
      */
     @PostMapping("/edit")
-    public BaseResponse<String> edit(SysMenuParam sysMenuParam) {
+    public BaseResponse<String> edit(@RequestBody SysMenuParam sysMenuParam) {
         sysMenuService.edit(sysMenuParam);
         return BaseResponse.getSuccessResponse();
     }
