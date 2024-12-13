@@ -115,15 +115,18 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public SysMenu detail(SysMenuParam menuParam) {
-        // code为唯一标识
-        SysMenu sysMenu = this.getOne(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getCode, menuParam.getCode()));
+        LambdaQueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>().checkSqlInjection().lambda()
+                .eq(ObjectUtil.isNotEmpty(menuParam.getId()), SysMenu::getId, menuParam.getId())
+                .eq(ObjectUtil.isNotEmpty(menuParam.getCode()), SysMenu::getCode, menuParam.getCode());
+        // id、code均为唯一标识
+        SysMenu sysMenu = this.getOne(queryWrapper);
         return sysMenu;
     }
 
     @Override
     public void add(SysMenuParam menuParam) {
-        // 判断父节点(目录、菜单、按钮、外链的父节点都存在，只有模块的父节点不存在)
-        if (!"0".equals(menuParam.getParentCode())) {
+        // 目录、菜单、按钮、外链都应该与上层节点的module一致, 只有模块的module字段可以为空
+        if (!Objects.equals(MenuTypeEnum.MODULE.getCode(), menuParam.getMenuType())) {
             // 查询所选父节点
             SysMenu parentMenu = this.getOne(new LambdaQueryWrapper<SysMenu>()
                     .eq(SysMenu::getCode, menuParam.getParentCode())
@@ -146,7 +149,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public void delete(SysMenuParam menuParam) {
+    public void deleteByIds(SysMenuParam menuParam) {
+        // 待删除的id集合
+        Set<Long> idSet = menuParam.getIds();
+        // 逻辑删除
+        UpdateWrapper<SysMenu> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        this.update(updateWrapper);
+    }
+
+    @Override
+    public void deleteByCodes(SysMenuParam menuParam) {
         // 要集联删除，子节点也要全部删除
         QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>().checkSqlInjection();
         // 查询所有的菜单(包括目录、按钮等)
@@ -159,7 +172,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 所有的菜单
         List<SysMenu> menuList = this.list(queryWrapper);
         // 待删除节点的code集合
-        Set<String> codeSet = menuParam.getCodeSet();
+        Set<String> codeSet = menuParam.getCodes();
 
         // 待删除的id集合(先把指定节点加入集合)
         Set<Long> idSet = menuList.stream()

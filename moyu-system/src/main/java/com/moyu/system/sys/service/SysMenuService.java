@@ -43,9 +43,14 @@ public interface SysMenuService extends IService<SysMenu> {
     void add(SysMenuParam menuParam);
 
     /**
-     * 删除菜单
+     * 通过ids删除，且不会集联删除
      */
-    void delete(SysMenuParam menuParam);
+    void deleteByIds(SysMenuParam menuParam);
+
+    /**
+     * 通过codes删除，会集联删除
+     */
+    void deleteByCodes(SysMenuParam menuParam);
 
     /**
      * 修改菜单

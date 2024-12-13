@@ -81,7 +81,16 @@ public class SysMenuController {
      */
     @PostMapping("/delete")
     public BaseResponse<String> delete(@RequestBody SysMenuParam sysMenuParam) {
-        sysMenuService.delete(sysMenuParam);
+        sysMenuService.deleteByIds(sysMenuParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 删除菜单树,会集联删除
+     */
+    @PostMapping("/deleteTree")
+    public BaseResponse<String> deleteTree(@RequestBody SysMenuParam sysMenuParam) {
+        sysMenuService.deleteByCodes(sysMenuParam);
         return BaseResponse.getSuccessResponse();
     }
 

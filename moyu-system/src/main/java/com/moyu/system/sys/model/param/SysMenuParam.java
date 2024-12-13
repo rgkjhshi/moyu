@@ -1,7 +1,6 @@
 package com.moyu.system.sys.model.param;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.moyu.common.model.BasePageParam;
 import lombok.Data;
 
@@ -19,7 +18,12 @@ public class SysMenuParam extends BasePageParam {
     /**
      * 待删除菜单。是从菜单tree中获取的id，因此均为code
      */
-    private Set<String> codeSet;
+    private Set<String> codes;
+
+    /**
+     * 待删除模块。只有模块通过id删除
+     */
+    private Set<Long> ids;
 
     /**
      * 名称关键词
@@ -30,7 +34,6 @@ public class SysMenuParam extends BasePageParam {
     /**
      * 主键id
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     /**
