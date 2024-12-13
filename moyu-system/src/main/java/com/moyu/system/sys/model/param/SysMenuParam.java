@@ -26,7 +26,12 @@ public class SysMenuParam extends BasePageParam {
      */
     private String searchKey;
 
-    //********** 新增用到的字段 **********//
+    //********** db中存在的字段 **********//
+    /**
+     * 主键id
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long id;
 
     /**
      * 父编码

@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.system.sys.enums.MenuTypeEnum;
 import com.moyu.system.sys.mapper.SysMenuMapper;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.param.SysMenuParam;
@@ -25,6 +26,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -136,6 +138,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
         // 不使用beanCopy是为了效率
         SysMenu menu = buildSysMenu(menuParam);
+        fillEmptyByType(menu);
         menu.setId(null);
         // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
         menu.setCode(IdUtil.objectId());
@@ -185,6 +188,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public void edit(SysMenuParam menuParam) {
         SysMenu oldMenu = this.getOne(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getCode, menuParam.getCode()));
+        // 不使用beanCopy是为了效率
+        SysMenu updateMenu = buildSysMenu(menuParam);
+        fillEmptyByType(updateMenu);
+        updateMenu.setId(oldMenu.getId());
+        this.updateById(updateMenu);
     }
 
     @Override
@@ -212,6 +220,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return null;
         }
         SysMenu sysMenu = new SysMenu();
+        sysMenu.setId(menuParam.getId());
         sysMenu.setParentCode(menuParam.getParentCode());
         sysMenu.setName(menuParam.getName());
         sysMenu.setCode(menuParam.getCode());
@@ -227,6 +236,37 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         sysMenu.setExtJson(menuParam.getExtJson());
         sysMenu.setRemark(menuParam.getRemark());
         return sysMenu;
+    }
+
+    /**
+     * 根据menu的类型为某些字段填充空字符串
+     */
+    private void fillEmptyByType(SysMenu menu) {
+        if (menu == null) {
+            return;
+        }
+        // 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
+        if (Objects.equals(MenuTypeEnum.MODULE.getCode(), menu.getMenuType())) {
+            // 模块的路径、组件、权限为空
+            menu.setPath("");
+            menu.setComponent("");
+            menu.setPermission("");
+        } else if (Objects.equals(MenuTypeEnum.DIRECTORY.getCode(), menu.getMenuType())) {
+            // 目录的组件、权限为空
+            menu.setComponent("");
+            menu.setPermission("");
+        } else if (Objects.equals(MenuTypeEnum.MENU.getCode(), menu.getMenuType())) {
+            // 菜单的权限为空
+            menu.setPermission("");
+        } else if (Objects.equals(MenuTypeEnum.BUTTON.getCode(), menu.getMenuType())) {
+            // 按钮的路径、组件为空，忽略可见性
+            menu.setPath("");
+            menu.setComponent("");
+        } else if (Objects.equals(MenuTypeEnum.LINK.getCode(), menu.getMenuType())) {
+            // 链接的组件、权限为空，忽略可见性
+            menu.setComponent("");
+            menu.setPermission("");
+        }
     }
 }
 
