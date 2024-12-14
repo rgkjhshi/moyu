@@ -186,6 +186,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .filter(menu -> codeSet.contains(menu.getCode()))
                 .map(SysMenu::getId)
                 .collect(Collectors.toSet());
+        if (CollectionUtils.isEmpty(idSet)) {
+            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "删除失败,未查到指定数据");
+        }
         // 循环查找子节点,并加入到待删除集合
         while (!CollectionUtils.isEmpty(codeSet)) {
             Set<String> childrenSet = new HashSet<>();
