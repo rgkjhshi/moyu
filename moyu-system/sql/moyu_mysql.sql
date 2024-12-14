@@ -3,12 +3,12 @@ DROP TABLE IF EXISTS `sys_org`;
 CREATE TABLE `sys_org`
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `parent_code` VARCHAR(32)  NULL DEFAULT '' COMMENT '父编码',
+    `parent_code` VARCHAR(64)  NULL DEFAULT '' COMMENT '父编码',
 
     `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(32)  NULL DEFAULT NULL COMMENT '编码',
-    `category`    TINYINT(5)   NULL DEFAULT 0 COMMENT '组织机构类别(字典 0公司组织 1部门机构 2虚拟节点)',
-    `org_level`   TINYINT(5)   NULL DEFAULT 1 COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
+    `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
+    `org_type`    TINYINT(5)   NULL DEFAULT NULL COMMENT '组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)',
+    `org_level`   TINYINT(5)   NULL DEFAULT NULL COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
 
     `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
@@ -124,10 +124,10 @@ drop table if exists sys_menu;
 create table sys_menu
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `parent_code` VARCHAR(32)  NULL DEFAULT '' COMMENT '父编码',
+    `parent_code` VARCHAR(64)  NULL DEFAULT '' COMMENT '父编码',
 
-    `name`        VARCHAR(32)  NULL DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(32)  NULL DEFAULT NULL COMMENT '编码',
+    `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
+    `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
     `menu_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '菜单类别（字典 1模块 2目录 3菜单 4按钮 5外链）',
     `path`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '路由地址',
     `component`   VARCHAR(64)  NULL DEFAULT NULL COMMENT '组件地址',
@@ -135,7 +135,7 @@ create table sys_menu
     `permission`  VARCHAR(64)  NULL DEFAULT NULL COMMENT '权限标识',
     `visible`     TINYINT(5)   NULL DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
     `link`        VARCHAR(255) NULL DEFAULT NULL COMMENT '链接地址',
-    `module`      VARCHAR(32)  NULL DEFAULT NULL COMMENT '归属模块',
+    `module`      VARCHAR(64)  NULL DEFAULT NULL COMMENT '归属模块',
 
     `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',

@@ -55,10 +55,12 @@ public class SysOrg extends BaseEntity {
     private String code;
 
     /**
-     * 组织机构类别(字典 0公司组织 1部门机构 2虚拟节点)
+     * 组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)
+     *
+     * @see com.moyu.system.sys.enums.OrgTypeEnum
      */
     @TableField(value = "category")
-    private Integer category;
+    private Integer orgType;
 
     /**
      * 组织层级(字典 1一级公司 2二级公司 3三级公司)
