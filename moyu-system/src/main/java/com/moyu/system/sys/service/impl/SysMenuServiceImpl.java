@@ -1,9 +1,11 @@
 package com.moyu.system.sys.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
-import cn.hutool.core.lang.tree.parser.NodeParser;
+import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -48,35 +50,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum)
         );
-        // 自定义树结构的字段名，其他都用默认值
-        TreeNodeConfig nodeConfig = new TreeNodeConfig();
-        nodeConfig.setIdKey("code");
-        nodeConfig.setParentIdKey("parentCode");
-        // 自定义转换器
-        NodeParser<SysMenu, String> nodeParser = (menu, tree) -> {
-            tree.setId(menu.getCode());
-            tree.setName(menu.getName());
-            tree.setParentId(menu.getParentCode());
-            tree.setWeight(menu.getSortNum());
-            // 扩展属性
-            tree.put("id", menu.getId());
-            tree.put("menuType", menu.getMenuType());
-            tree.put("path", menu.getPath());
-            tree.put("component", menu.getComponent());
-            tree.put("icon", menu.getIcon());
-            tree.put("permission", menu.getPermission());
-            tree.put("visible", menu.getVisible());
-            tree.put("link", menu.getLink());
-            tree.put("module", menu.getModule());
-            tree.put("status", menu.getStatus());
-            tree.put("remark", menu.getRemark());
-            tree.put("createTime", menu.getCreateTime());
-            tree.put("updateTime", menu.getUpdateTime());
-            tree.put("createUser", menu.getCreateUser());
-            tree.put("updateUser", menu.getUpdateUser());
-        };
-        // 构建树
-        return TreeUtil.build(menuList, "0", nodeConfig, nodeParser);
+        // 构建树中包含记录的所有字段
+        return buildTree(menuList);
     }
 
     @Override
@@ -229,21 +204,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum)
         );
-        // 自定义树结构的字段名，其他都用默认值
-        TreeNodeConfig nodeConfig = new TreeNodeConfig();
-        nodeConfig.setIdKey("code");
-        nodeConfig.setParentIdKey("parentCode");
-        // 自定义转换器
-        NodeParser<SysMenu, String> nodeParser = (menu, tree) -> {
-            tree.setId(menu.getCode());
-            tree.setName(menu.getName());
-            tree.setParentId(menu.getParentCode());
-            tree.setWeight(menu.getSortNum());
-            // 扩展属性
-            tree.put("id", menu.getId());
-        };
-        // 构建树
-        return TreeUtil.build(menuList, "0", nodeConfig, nodeParser);
+        // 构建的树中仅包含部分字段
+        return buildTree(menuList);
     }
 
     /**
@@ -301,6 +263,26 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menu.setComponent("");
             menu.setPermission("");
         }
+    }
+
+
+    /**
+     * 构建树结构(code, parentCode, children, weight, extra)
+     */
+    private List<Tree<String>> buildTree(List<SysMenu> menuList) {
+        // 配置TreeNode使用指定的字段名
+        TreeNodeConfig nodeConfig = new TreeNodeConfig();
+        nodeConfig.setIdKey("code");
+        nodeConfig.setParentIdKey("parentCode");
+        // 结构转换
+        List<TreeNode<String>> treeNodeList = menuList.stream()
+                .map(menu -> {
+                    TreeNode<String> node = new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum());
+                    node.setExtra(BeanUtil.beanToMap(menu, false, true));
+                    return node;
+                }).collect(Collectors.toList());
+        // 构建树
+        return TreeUtil.build(treeNodeList, "0", nodeConfig, new DefaultNodeParser<>());
     }
 }
 
