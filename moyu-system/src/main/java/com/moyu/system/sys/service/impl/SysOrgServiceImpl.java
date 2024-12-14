@@ -1,10 +1,12 @@
 package com.moyu.system.sys.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
-import cn.hutool.core.lang.tree.parser.NodeParser;
+import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -74,21 +76,19 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .eq(SysOrg::getDeleteFlag, 0)
                 .orderByAsc(SysOrg::getSortNum)
         );
-        // 自定义树结构的字段名，其他都用默认值
+        // 配置TreeNode使用指定的字段名
         TreeNodeConfig nodeConfig = new TreeNodeConfig();
         nodeConfig.setIdKey("code");
         nodeConfig.setParentIdKey("parentCode");
-        // 自定义转换器
-        NodeParser<SysOrg, String> nodeParser = (org, tree) -> {
-            tree.setId(org.getCode());
-            tree.setName(org.getName());
-            tree.setParentId(org.getParentCode());
-            tree.setWeight(org.getSortNum());
-            // 扩展属性
-            tree.put("orgType", org.getOrgType());
-        };
+        // 结构转换
+        List<TreeNode<String>> treeNodeList = orgList.stream()
+                .map(org -> {
+                    TreeNode<String> node = new TreeNode<>(org.getCode(), org.getParentCode(), org.getName(), org.getSortNum());
+                    node.setExtra(BeanUtil.beanToMap(org, false, true));
+                    return node;
+                }).collect(Collectors.toList());
         // 构建树
-        return TreeUtil.build(orgList, "0", nodeConfig, nodeParser);
+        return TreeUtil.build(treeNodeList, "0", nodeConfig, new DefaultNodeParser<>());
     }
 
     /**
@@ -172,28 +172,31 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     public void deleteByCodes(SysOrgParam orgParam) {
         // 要集联删除，子节点也要全部删除
         QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
-        // 查询所有的菜单(包括目录、按钮等)
+        // 查询所有的记录
         queryWrapper.lambda()
                 // 查询部分字段
                 .select(SysOrg::getId, SysOrg::getCode, SysOrg::getParentCode)
                 .eq(SysOrg::getDeleteFlag, 0);
-        // 所有的菜单
+        // 查询所有记录
         List<SysOrg> orgList = this.list(queryWrapper);
         // 待删除节点的code集合
         Set<String> codeSet = orgParam.getCodes();
 
         // 待删除的id集合(先把指定节点加入集合)
         Set<Long> idSet = orgList.stream()
-                .filter(menu -> codeSet.contains(menu.getCode()))
+                .filter(org -> codeSet.contains(org.getCode()))
                 .map(SysOrg::getId)
                 .collect(Collectors.toSet());
+        if (CollectionUtils.isEmpty(idSet)) {
+            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "删除失败,未查到指定数据");
+        }
         // 循环查找子节点,并加入到待删除集合
         while (!CollectionUtils.isEmpty(codeSet)) {
             Set<String> childrenSet = new HashSet<>();
-            orgList.forEach(menu -> {
-                if (codeSet.contains(menu.getParentCode())) {
-                    childrenSet.add(menu.getCode());
-                    idSet.add(menu.getId());
+            orgList.forEach(org -> {
+                if (codeSet.contains(org.getParentCode())) {
+                    childrenSet.add(org.getCode());
+                    idSet.add(org.getId());
                 }
             });
             // 子节点将变为新的父节点
@@ -235,6 +238,25 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         sysOrg.setExtJson(orgParam.getExtJson());
         sysOrg.setRemark(orgParam.getRemark());
         return sysOrg;
+    }
+
+    /**
+     * 构建树结构
+     */
+    private List<Tree<String>> buildTree(List<SysOrg> orgList) {
+        // 配置TreeNode使用指定的字段名
+        TreeNodeConfig nodeConfig = new TreeNodeConfig();
+        nodeConfig.setIdKey("code");
+        nodeConfig.setParentIdKey("parentCode");
+        // 结构转换
+        List<TreeNode<String>> treeNodeList = orgList.stream()
+                .map(org -> {
+                    TreeNode<String> node = new TreeNode<>(org.getCode(), org.getParentCode(), org.getName(), org.getSortNum());
+                    node.setExtra(BeanUtil.beanToMap(org, false, true));
+                    return node;
+                }).collect(Collectors.toList());
+        // 构建树
+        return TreeUtil.build(treeNodeList, "0", nodeConfig, new DefaultNodeParser<>());
     }
 }
 
