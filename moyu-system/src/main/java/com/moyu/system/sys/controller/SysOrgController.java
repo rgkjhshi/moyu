@@ -91,7 +91,7 @@ public class SysOrgController {
      */
     @PostMapping("/deleteTree")
     public BaseResponse<String> deleteTree(@RequestBody SysOrgParam sysOrgParam) {
-        sysOrgService.deleteByCodes(sysOrgParam);
+        sysOrgService.deleteTree(sysOrgParam);
         return BaseResponse.getSuccessResponse();
     }
 

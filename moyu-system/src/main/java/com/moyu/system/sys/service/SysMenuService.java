@@ -48,9 +48,9 @@ public interface SysMenuService extends IService<SysMenu> {
     void deleteByIds(SysMenuParam menuParam);
 
     /**
-     * 通过codes删除，会集联删除
+     * 通过codes删除，会集联删除树的所有节点
      */
-    void deleteByCodes(SysMenuParam menuParam);
+    void deleteTree(SysMenuParam menuParam);
 
     /**
      * 修改菜单

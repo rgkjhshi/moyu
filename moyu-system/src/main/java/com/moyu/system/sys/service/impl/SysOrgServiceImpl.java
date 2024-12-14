@@ -158,7 +158,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     }
 
     @Override
-    public void deleteByCodes(SysOrgParam orgParam) {
+    public void deleteTree(SysOrgParam orgParam) {
         // 要集联删除，子节点也要全部删除
         QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
         // 查询所有的记录

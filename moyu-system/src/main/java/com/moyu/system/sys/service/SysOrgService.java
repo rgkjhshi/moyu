@@ -4,9 +4,7 @@ import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.common.model.PageResult;
 import com.moyu.common.web.model.Option;
-import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.entity.SysOrg;
-import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.model.param.SysOrgParam;
 
 import java.util.List;
@@ -53,9 +51,9 @@ public interface SysOrgService extends IService<SysOrg> {
     void deleteByIds(SysOrgParam orgParam);
 
     /**
-     * 通过codes删除，会集联删除
+     * 通过codes删除，会集联删除树的所有节点
      */
-    void deleteByCodes(SysOrgParam orgParam);
+    void deleteTree(SysOrgParam orgParam);
 
     /**
      * 修改组织机构

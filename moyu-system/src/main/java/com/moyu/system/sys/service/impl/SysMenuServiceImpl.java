@@ -141,7 +141,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public void deleteByCodes(SysMenuParam menuParam) {
+    public void deleteTree(SysMenuParam menuParam) {
         // 要集联删除，子节点也要全部删除
         QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>().checkSqlInjection();
         // 查询所有的菜单(包括目录、按钮等)

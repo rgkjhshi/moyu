@@ -90,7 +90,7 @@ public class SysMenuController {
      */
     @PostMapping("/deleteTree")
     public BaseResponse<String> deleteTree(@RequestBody SysMenuParam sysMenuParam) {
-        sysMenuService.deleteByCodes(sysMenuParam);
+        sysMenuService.deleteTree(sysMenuParam);
         return BaseResponse.getSuccessResponse();
     }
 
