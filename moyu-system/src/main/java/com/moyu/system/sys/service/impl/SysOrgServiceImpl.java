@@ -181,21 +181,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         }
 
         // 循环查找子节点,并加入到待删除集合
-//        List<Tree<String>> treeList = buildTree(orgList);
-//        treeList.forEach(tree -> {
-//            // 递归树并处理子树下的节点
-//            tree.walk(node -> {
-//                // 如果节点的父节点在待删除的集合中，则此节点也应该被删除
-//                if (codeSet.contains(node.getParentId())) {
-//                    // 将当前节点的code加入集合
-//                    codeSet.add(node.getId());
-//                    // id放在了extra中
-//                    idSet.add((Long) node.get("id"));
-//                }
-//            });
-//        });
-
-        // 循环查找子节点,并加入到待删除集合
         while (!CollectionUtils.isEmpty(codeSet)) {
             Set<String> childrenSet = new HashSet<>();
             orgList.forEach(org -> {
