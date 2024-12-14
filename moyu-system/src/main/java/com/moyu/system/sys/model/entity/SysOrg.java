@@ -59,7 +59,7 @@ public class SysOrg extends BaseEntity {
      *
      * @see com.moyu.system.sys.enums.OrgTypeEnum
      */
-    @TableField(value = "category")
+    @TableField(value = "org_type")
     private Integer orgType;
 
     /**
