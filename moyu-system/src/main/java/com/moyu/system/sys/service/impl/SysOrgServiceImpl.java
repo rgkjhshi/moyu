@@ -3,7 +3,9 @@ package com.moyu.system.sys.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.lang.tree.parser.NodeParser;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -13,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.common.model.PageResult;
 import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.mapper.SysOrgMapper;
+import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
@@ -41,16 +44,29 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 查询所有组织结构
         List<SysOrg> orgList = this.list(new LambdaQueryWrapper<SysOrg>()
                 // 查询部分字段
-                .select(SysOrg::getCode, SysOrg::getParentCode, SysOrg::getName, SysOrg::getSortNum)
+                .select(SysOrg::getCode, SysOrg::getParentCode, SysOrg::getName, SysOrg::getSortNum, SysOrg::getOrgType)
                 .eq(SysOrg::getDeleteFlag, 0)
                 .orderByAsc(SysOrg::getSortNum)
         );
+        // 自定义树结构的字段名，其他都用默认值
+        TreeNodeConfig nodeConfig = new TreeNodeConfig();
+        nodeConfig.setIdKey("code");
+        nodeConfig.setParentIdKey("parentCode");
+        // 自定义转换器
+        NodeParser<SysOrg, String> nodeParser = (org, tree) -> {
+            tree.setId(org.getCode());
+            tree.setName(org.getName());
+            tree.setParentId(org.getParentCode());
+            tree.setWeight(org.getSortNum());
+            // 扩展属性
+            tree.put("orgType", org.getOrgType());
+        };
         // 结构转换
         List<TreeNode<String>> treeNodeList = orgList.stream()
                 .map(org -> new TreeNode<>(org.getCode(), org.getParentCode(), org.getName(), org.getSortNum()))
                 .collect(Collectors.toList());
         // 构建树
-        return TreeUtil.build(treeNodeList, "0");
+        return TreeUtil.build(orgList, "0", nodeConfig, nodeParser);
     }
 
     /**
@@ -91,6 +107,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
                 // 指定父节点
                 .eq(ObjectUtil.isNotEmpty(orgParam.getParentId()), SysOrg::getParentCode, orgParam.getParentId())
+                // 指定状态
+                .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
                 .eq(SysOrg::getDeleteFlag, 0)
                 .orderByAsc(SysOrg::getSortNum);
         // 分页查询

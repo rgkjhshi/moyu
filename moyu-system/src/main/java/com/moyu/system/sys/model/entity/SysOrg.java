@@ -30,13 +30,6 @@ public class SysOrg extends BaseEntity {
     private Long id;
 
     /**
-     * 父id
-     */
-    @TableField(value = "pid")
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long pid;
-
-    /**
      * 父编码
      */
     @TableField(value = "parent_code")

@@ -1,7 +1,6 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
@@ -49,6 +48,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum)
         );
+        // 自定义树结构的字段名，其他都用默认值
+        TreeNodeConfig nodeConfig = new TreeNodeConfig();
+        nodeConfig.setIdKey("code");
+        nodeConfig.setParentIdKey("parentCode");
         // 自定义转换器
         NodeParser<SysMenu, String> nodeParser = (menu, tree) -> {
             tree.setId(menu.getCode());
@@ -56,6 +59,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             tree.setParentId(menu.getParentCode());
             tree.setWeight(menu.getSortNum());
             // 扩展属性
+            tree.put("id", menu.getId());
             tree.put("menuType", menu.getMenuType());
             tree.put("path", menu.getPath());
             tree.put("component", menu.getComponent());
@@ -72,7 +76,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             tree.put("updateUser", menu.getUpdateUser());
         };
         // 构建树
-        return TreeUtil.build(menuList, "0", TreeNodeConfig.DEFAULT_CONFIG, nodeParser);
+        return TreeUtil.build(menuList, "0", nodeConfig, nodeParser);
     }
 
     @Override
@@ -212,17 +216,28 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<Tree<String>> menuTreeSelector(SysMenuParam menuParam) {
         // 查询所有组织结构
         List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
+                // 查询部分字段
+                .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getId)
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum)
         );
-        // 结构转换
-        List<TreeNode<String>> treeNodeList = menuList.stream()
-                .map(org -> new TreeNode<>(org.getCode(), org.getParentCode(), org.getName(), org.getSortNum()))
-                .collect(Collectors.toList());
+        // 自定义树结构的字段名，其他都用默认值
+        TreeNodeConfig nodeConfig = new TreeNodeConfig();
+        nodeConfig.setIdKey("code");
+        nodeConfig.setParentIdKey("parentCode");
+        // 自定义转换器
+        NodeParser<SysMenu, String> nodeParser = (menu, tree) -> {
+            tree.setId(menu.getCode());
+            tree.setName(menu.getName());
+            tree.setParentId(menu.getParentCode());
+            tree.setWeight(menu.getSortNum());
+            // 扩展属性
+            tree.put("id", menu.getId());
+        };
         // 构建树
-        return TreeUtil.build(treeNodeList, "0");
+        return TreeUtil.build(menuList, "0", nodeConfig, nodeParser);
     }
 
     /**
