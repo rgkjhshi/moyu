@@ -29,6 +29,15 @@ public class SysOrgController {
     private SysOrgService sysOrgService;
 
     /**
+     * 分页获取组织列表
+     */
+    @PostMapping("/page")
+    public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam sysOrgParam) {
+        PageResult<SysOrg> page = sysOrgService.pageList(sysOrgParam);
+        return BaseResponse.getSuccessResponse(page);
+    }
+
+    /**
      * 获取组织树
      */
     @Log(jsonLog = true, response = false)
@@ -49,12 +58,47 @@ public class SysOrgController {
     }
 
     /**
-     * 分页获取组织列表
+     * 获取详情
      */
-    @PostMapping("/page")
-    public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam sysOrgParam) {
-        PageResult<SysOrg> page = sysOrgService.pageList(sysOrgParam);
-        return BaseResponse.getSuccessResponse(page);
+    @PostMapping("/detail")
+    public BaseResponse<SysOrg> detail(@RequestBody SysOrgParam sysOrgParam) {
+        return BaseResponse.getSuccessResponse(sysOrgService.detail(sysOrgParam));
+    }
+
+    /**
+     * 添加
+     */
+    @PostMapping("/add")
+    public BaseResponse<String> add(@RequestBody SysOrgParam sysOrgParam) {
+        sysOrgService.add(sysOrgParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 删除
+     */
+    @PostMapping("/delete")
+    public BaseResponse<String> delete(@RequestBody SysOrgParam sysOrgParam) {
+        sysOrgService.deleteByIds(sysOrgParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 删除树,会集联删除
+     */
+    @PostMapping("/deleteTree")
+    public BaseResponse<String> deleteTree(@RequestBody SysOrgParam sysOrgParam) {
+        sysOrgService.deleteByCodes(sysOrgParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 编辑
+     */
+    @PostMapping("/edit")
+    public BaseResponse<String> edit(@RequestBody SysOrgParam sysOrgParam) {
+        sysOrgService.edit(sysOrgParam);
+        return BaseResponse.getSuccessResponse();
     }
 
 }

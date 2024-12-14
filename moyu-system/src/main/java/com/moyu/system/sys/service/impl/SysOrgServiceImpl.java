@@ -2,27 +2,31 @@ package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.NodeParser;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.moyu.common.enums.ExceptionEnum;
+import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.mapper.SysOrgMapper;
-import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,6 +39,28 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
+
+    /**
+     * 获取组织分页
+     */
+    @Override
+    public PageResult<SysOrg> pageList(SysOrgParam orgParam) {
+        QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
+        // 查询条件
+        queryWrapper.lambda()
+                // 关键词搜索
+                .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
+                // 指定父节点
+                .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
+                // 指定状态
+                .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
+                .eq(SysOrg::getDeleteFlag, 0)
+                .orderByAsc(SysOrg::getSortNum);
+        // 分页查询
+        Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
+        Page<SysOrg> orgPage = this.page(page, queryWrapper);
+        return new PageResult<>(orgPage.getTotal(), orgPage.getRecords());
+    }
 
     /**
      * 部门树(树太大需要加缓存)
@@ -92,28 +118,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     }
 
     /**
-     * 获取组织分页
-     */
-    @Override
-    public PageResult<SysOrg> pageList(SysOrgParam orgParam) {
-        QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
-        // 查询条件
-        queryWrapper.lambda()
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
-                // 指定父节点
-                .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
-                .eq(SysOrg::getDeleteFlag, 0)
-                .orderByAsc(SysOrg::getSortNum);
-        // 分页查询
-        Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
-        Page<SysOrg> orgPage = this.page(page, queryWrapper);
-        return new PageResult<>(orgPage.getTotal(), orgPage.getRecords());
-    }
-
-    /**
      * 递归生成部门子层级
      */
     public static List<Option<String>> recursionBuildChildren(String parentCode, List<SysOrg> orgList) {
@@ -131,6 +135,107 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         return list;
     }
 
+    @Override
+    public SysOrg detail(SysOrgParam orgParam) {
+        LambdaQueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection().lambda()
+                .eq(ObjectUtil.isNotEmpty(orgParam.getId()), SysOrg::getId, orgParam.getId())
+                .eq(ObjectUtil.isNotEmpty(orgParam.getCode()), SysOrg::getCode, orgParam.getCode());
+        // id、code均为唯一标识
+        SysOrg sysOrg = this.getOne(queryWrapper);
+        if (sysOrg == null) {
+            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "未查到指定数据");
+        }
+        return sysOrg;
+    }
+
+    @Override
+    public void add(SysOrgParam orgParam) {
+        // 不使用beanCopy是为了效率
+        SysOrg org = buildSysOrg(orgParam);
+        org.setId(null);
+        // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
+        org.setCode(IdUtil.objectId());
+        this.save(org);
+    }
+
+    @Override
+    public void deleteByIds(SysOrgParam orgParam) {
+        // 待删除的id集合
+        Set<Long> idSet = orgParam.getIds();
+        // 逻辑删除
+        UpdateWrapper<SysOrg> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        this.update(updateWrapper);
+    }
+
+    @Override
+    public void deleteByCodes(SysOrgParam orgParam) {
+        // 要集联删除，子节点也要全部删除
+        QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
+        // 查询所有的菜单(包括目录、按钮等)
+        queryWrapper.lambda()
+                // 查询部分字段
+                .select(SysOrg::getId, SysOrg::getCode, SysOrg::getParentCode)
+                .eq(SysOrg::getDeleteFlag, 0);
+        // 所有的菜单
+        List<SysOrg> orgList = this.list(queryWrapper);
+        // 待删除节点的code集合
+        Set<String> codeSet = orgParam.getCodes();
+
+        // 待删除的id集合(先把指定节点加入集合)
+        Set<Long> idSet = orgList.stream()
+                .filter(menu -> codeSet.contains(menu.getCode()))
+                .map(SysOrg::getId)
+                .collect(Collectors.toSet());
+        // 循环查找子节点,并加入到待删除集合
+        while (!CollectionUtils.isEmpty(codeSet)) {
+            Set<String> childrenSet = new HashSet<>();
+            orgList.forEach(menu -> {
+                if (codeSet.contains(menu.getParentCode())) {
+                    childrenSet.add(menu.getCode());
+                    idSet.add(menu.getId());
+                }
+            });
+            // 子节点将变为新的父节点
+            codeSet.clear();
+            codeSet.addAll(childrenSet);
+        }
+        // 逻辑删除
+        UpdateWrapper<SysOrg> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        this.update(updateWrapper);
+    }
+
+    @Override
+    public void edit(SysOrgParam orgParam) {
+        SysOrg oldMenu = this.detail(orgParam);
+        // 不使用beanCopy是为了效率
+        SysOrg updateOrg = buildSysOrg(orgParam);
+        updateOrg.setId(oldMenu.getId());
+        this.updateById(updateOrg);
+    }
+
+    /**
+     * SysOrgParam -> SysOrg
+     */
+    SysOrg buildSysOrg(SysOrgParam orgParam) {
+        if (orgParam == null) {
+            return null;
+        }
+        SysOrg sysOrg = new SysOrg();
+        sysOrg.setId(orgParam.getId());
+        sysOrg.setParentCode(orgParam.getParentCode());
+        sysOrg.setName(orgParam.getName());
+        sysOrg.setCode(orgParam.getCode());
+        sysOrg.setOrgType(orgParam.getOrgType());
+        sysOrg.setOrgLevel(orgParam.getOrgLevel());
+        sysOrg.setSortNum(orgParam.getSortNum());
+        sysOrg.setStatus(orgParam.getStatus());
+        sysOrg.setDeleteFlag(orgParam.getDeleteFlag());
+        sysOrg.setExtJson(orgParam.getExtJson());
+        sysOrg.setRemark(orgParam.getRemark());
+        return sysOrg;
+    }
 }
 
 

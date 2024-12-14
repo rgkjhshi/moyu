@@ -124,6 +124,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .eq(ObjectUtil.isNotEmpty(menuParam.getCode()), SysMenu::getCode, menuParam.getCode());
         // id、code均为唯一标识
         SysMenu sysMenu = this.getOne(queryWrapper);
+        if (sysMenu == null) {
+            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "未查到指定数据");
+        }
         return sysMenu;
     }
 
