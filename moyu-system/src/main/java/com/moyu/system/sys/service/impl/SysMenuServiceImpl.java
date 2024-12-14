@@ -204,7 +204,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public void edit(SysMenuParam menuParam) {
-        SysMenu oldMenu = this.getOne(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getCode, menuParam.getCode()));
+        SysMenu oldMenu = this.detail(menuParam);
         // 不使用beanCopy是为了效率
         SysMenu updateMenu = buildSysMenu(menuParam);
         fillEmptyByType(updateMenu);

@@ -16,12 +16,12 @@ import java.util.Set;
 public class SysMenuParam extends BasePageParam {
     //********** 额外字段 **********//
     /**
-     * 待删除菜单。是从菜单tree中获取的id，因此均为code
+     * 待删除的code列表，通常会集联删除
      */
     private Set<String> codes;
 
     /**
-     * 待删除模块。只有模块通过id删除
+     * 待删除的id列表，通常不会集联删除
      */
     private Set<Long> ids;
 

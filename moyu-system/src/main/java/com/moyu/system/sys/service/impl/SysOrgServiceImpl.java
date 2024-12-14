@@ -61,10 +61,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             // 扩展属性
             tree.put("orgType", org.getOrgType());
         };
-        // 结构转换
-        List<TreeNode<String>> treeNodeList = orgList.stream()
-                .map(org -> new TreeNode<>(org.getCode(), org.getParentCode(), org.getName(), org.getSortNum()))
-                .collect(Collectors.toList());
         // 构建树
         return TreeUtil.build(orgList, "0", nodeConfig, nodeParser);
     }
@@ -106,7 +102,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
                 // 指定父节点
-                .eq(ObjectUtil.isNotEmpty(orgParam.getParentId()), SysOrg::getParentCode, orgParam.getParentId())
+                .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
                 .eq(SysOrg::getDeleteFlag, 0)

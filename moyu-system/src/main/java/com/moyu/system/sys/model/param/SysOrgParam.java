@@ -4,6 +4,8 @@ package com.moyu.system.sys.model.param;
 import com.moyu.common.model.BasePageParam;
 import lombok.Data;
 
+import java.util.Set;
+
 /**
  * 组织查询参数
  *
@@ -12,10 +14,16 @@ import lombok.Data;
  */
 @Data
 public class SysOrgParam extends BasePageParam {
+    //********** 额外字段 **********//
     /**
-     * 父节点id
+     * 待删除的code列表，通常会集联删除
      */
-    private String parentId;
+    private Set<String> codes;
+
+    /**
+     * 待删除的id列表，通常不会集联删除
+     */
+    private Set<Long> ids;
 
     /**
      * 名称关键词
