@@ -9,7 +9,10 @@ import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -41,7 +44,7 @@ public class SysOrgController {
      * 获取组织树
      */
     @Log(jsonLog = true, response = false)
-    @GetMapping("/tree")
+    @PostMapping("/tree")
     public BaseResponse<List<Tree<String>>> tree() {
         List<Tree<String>> list = sysOrgService.tree();
         return BaseResponse.getSuccessResponse(list);
@@ -51,7 +54,7 @@ public class SysOrgController {
      * 获取组织树下拉选项
      */
     @Log(jsonLog = true, response = false)
-    @GetMapping("/treeList")
+    @PostMapping("/treeList")
     public BaseResponse<List<Option<?>>> treeList() {
         List<Option<?>> list = sysOrgService.listTreeOptions();
         return BaseResponse.getSuccessResponse(list);
