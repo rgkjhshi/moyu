@@ -76,19 +76,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .eq(SysOrg::getDeleteFlag, 0)
                 .orderByAsc(SysOrg::getSortNum)
         );
-        // 配置TreeNode使用指定的字段名
-        TreeNodeConfig nodeConfig = new TreeNodeConfig();
-        nodeConfig.setIdKey("code");
-        nodeConfig.setParentIdKey("parentCode");
-        // 结构转换
-        List<TreeNode<String>> treeNodeList = orgList.stream()
-                .map(org -> {
-                    TreeNode<String> node = new TreeNode<>(org.getCode(), org.getParentCode(), org.getName(), org.getSortNum());
-                    node.setExtra(BeanUtil.beanToMap(org, false, true));
-                    return node;
-                }).collect(Collectors.toList());
         // 构建树
-        return TreeUtil.build(treeNodeList, "0", nodeConfig, new DefaultNodeParser<>());
+        return buildTree(orgList);
     }
 
     /**
@@ -241,7 +230,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     }
 
     /**
-     * 构建树结构
+     * 构建树结构(code, parentCode, children, weight, extra)
      */
     private List<Tree<String>> buildTree(List<SysOrg> orgList) {
         // 配置TreeNode使用指定的字段名
