@@ -1,25 +1,16 @@
 package com.moyu.system.sys.model.param;
 
-
 import com.moyu.common.model.BasePageParam;
 import lombok.Data;
 
 import java.util.Set;
 
 /**
- * 组织查询参数
- *
- * @author shisong
- * @since 2024-11-28
+ * 角色信息查询参数
  */
 @Data
-public class SysOrgParam extends BasePageParam {
+public class SysRoleParam extends BasePageParam {
     //********** 额外字段 **********//
-    /**
-     * 待删除的code列表，通常会集联删除
-     */
-    private Set<String> codes;
-
     /**
      * 待删除的id列表，通常不会集联删除
      */
@@ -32,14 +23,9 @@ public class SysOrgParam extends BasePageParam {
 
     //********** db中存在的字段 **********//
     /**
-     * 主键id
+     * 主键ID
      */
     private Long id;
-
-    /**
-     * 父节点编码
-     */
-    private String parentCode;
 
     /**
      * 名称
@@ -52,16 +38,14 @@ public class SysOrgParam extends BasePageParam {
     private String code;
 
     /**
-     * 组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)
-     *
-     * @see com.moyu.system.sys.enums.OrgTypeEnum
+     * 归属模块
      */
-    private Integer orgType;
+    private String module;
 
     /**
-     * 组织层级(字典 1一级公司 2二级公司 3三级公司)
+     * 数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）
      */
-    private Integer orgLevel;
+    private Integer dataScope;
 
     /**
      * 排序顺序
@@ -69,7 +53,7 @@ public class SysOrgParam extends BasePageParam {
     private Integer sortNum;
 
     /**
-     * 状态（0正常 1停用）
+     * 使用状态（0正常 1停用）
      */
     private Integer status;
 
@@ -82,4 +66,5 @@ public class SysOrgParam extends BasePageParam {
      * 备注
      */
     private String remark;
+
 }

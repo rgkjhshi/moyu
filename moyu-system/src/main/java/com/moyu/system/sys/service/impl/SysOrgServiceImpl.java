@@ -224,7 +224,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         sysOrg.setOrgLevel(orgParam.getOrgLevel());
         sysOrg.setSortNum(orgParam.getSortNum());
         sysOrg.setStatus(orgParam.getStatus());
-        sysOrg.setDeleteFlag(orgParam.getDeleteFlag());
         sysOrg.setExtJson(orgParam.getExtJson());
         sysOrg.setRemark(orgParam.getRemark());
         return sysOrg;
