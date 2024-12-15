@@ -201,10 +201,10 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     @Override
     public void edit(SysOrgParam orgParam) {
-        SysOrg oldMenu = this.detail(orgParam);
+        SysOrg oldOrg = this.detail(orgParam);
         // 不使用beanCopy是为了效率
         SysOrg updateOrg = buildSysOrg(orgParam);
-        updateOrg.setId(oldMenu.getId());
+        updateOrg.setId(oldOrg.getId());
         this.updateById(updateOrg);
     }
 
