@@ -99,20 +99,20 @@ drop table if exists sys_role;
 create table sys_role
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '角色ID',
-    `name`        VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '名称',
-    `code`        VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '编码',
-    `app_code`    VARCHAR(32)  NOT NULL DEFAULT '' COMMENT '应用标识',
-    `data_scope`  TINYINT(5)   NOT NULL DEFAULT 0 comment '数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）',
+    `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
+    `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
+    `module`      VARCHAR(64)  NULL DEFAULT NULL COMMENT '归属模块',
+    `data_scope`  TINYINT(5)   NULL DEFAULT 0 comment '数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）',
 
-    `sort_num`    INT(10)      NULL     DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)   NULL     DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
-    `delete_flag` TINYINT(5)   NULL     DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `delete_flag` TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
-    `remark`      VARCHAR(200) NULL     DEFAULT NULL comment '备注',
-    `create_time` DATETIME     NULL     DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(32)  NULL     DEFAULT NULL COMMENT '创建用户',
-    `update_time` DATETIME     NULL     DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(32)  NULL     DEFAULT NULL COMMENT '修改用户',
+    `remark`      VARCHAR(200) NULL DEFAULT NULL comment '备注',
+    `create_time` DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
+    `create_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建用户',
+    `update_time` DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
+    `update_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改用户',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
