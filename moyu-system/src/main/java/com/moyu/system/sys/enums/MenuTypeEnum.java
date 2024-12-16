@@ -21,7 +21,7 @@ public enum MenuTypeEnum {
      */
     INVALID(0, null),
     MODULE(1, "模块"),
-    DIRECTORY(2, "目录"),
+    DIR(2, "目录"),
     MENU(3, "菜单"),
     BUTTON(4, "按钮"),
     LINK(5, "外链");

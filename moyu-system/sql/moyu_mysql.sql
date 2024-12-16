@@ -156,13 +156,14 @@ create table sys_menu
 DROP TABLE IF EXISTS `SYS_RELATION`;
 CREATE TABLE `SYS_RELATION`
 (
-    `id`        BIGINT(20)   NOT NULL auto_increment comment '主键id',
-    `app_code`  VARCHAR(32)  NULL DEFAULT NULL COMMENT '应用标识',
-    `object_id` VARCHAR(100) NULL DEFAULT NULL COMMENT '对象ID',
-    `target_id` VARCHAR(255) NULL DEFAULT NULL COMMENT '目标ID',
-    `category`  VARCHAR(64)  NULL DEFAULT NULL COMMENT '分类(group_has_user,group_has_role,role_has_menu)',
-    `ext_json`  LONGTEXT     NULL COMMENT '扩展信息',
-    PRIMARY KEY (`ID`) USING BTREE
+    `id`            BIGINT(20)  NOT NULL auto_increment comment '主键id',
+    `app_code`      VARCHAR(64) NULL DEFAULT NULL COMMENT '应用标识',
+    `object_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '对象ID',
+    `target_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '目标ID',
+    `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)',
+    `create_time`   DATETIME    NULL DEFAULT NULL COMMENT '创建时间',
+    `create_user`   VARCHAR(32) NULL DEFAULT NULL COMMENT '创建用户',
+    PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '用户角色权限关系表'

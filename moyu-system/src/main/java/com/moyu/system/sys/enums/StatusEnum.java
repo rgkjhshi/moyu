@@ -17,10 +17,10 @@ import java.util.Objects;
 public enum StatusEnum {
 
     /**
-     * 组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)
+     * 使用状态(字典 0正常 1停用)
      */
-    IN_USE(0, "正常使用"),
-    NOT_USE(1, "已停用");
+    ENABLE(0, "正常"),
+    DISABLE(1, "停用");
 
     //  Mybatis-Plus 提供注解表示插入数据库时插入该值
     @EnumValue

@@ -27,10 +27,7 @@ import com.moyu.system.sys.service.SysMenuService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +40,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<Tree<String>> tree(SysMenuParam menuParam) {
-        // 查询所有组织结构
+        // 查询所有菜单
         List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
@@ -215,14 +212,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<Tree<String>> menuTreeSelector(SysMenuParam menuParam) {
-        // 查询所有组织结构
+        // 查询所有菜单
         List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
                 // 查询部分字段
                 .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getSortNum, SysMenu::getId)
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
                 // 不能已停用
-                .ne(SysMenu::getStatus, StatusEnum.NOT_USE.getCode())
+                .ne(SysMenu::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮
                 .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .eq(SysMenu::getDeleteFlag, 0)
@@ -231,6 +228,26 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 构建的树中仅包含部分字段
         String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? "0" : menuParam.getModule();
         return buildTree(menuList, rootId);
+    }
+
+    @Override
+    public List<Tree<String>> grantMenuTree(SysMenuParam menuParam) {
+        // 查询所有菜单
+        List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
+                // 查询部分字段
+                .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getSortNum, SysMenu::getId)
+                // 指定模块
+                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
+                // 不能已停用
+                .ne(SysMenu::getStatus, StatusEnum.DISABLE.getCode())
+                .eq(SysMenu::getDeleteFlag, 0)
+        );
+        // 过滤出所有的button
+        Map<String, SysMenu> buttonMap = new HashMap<>();
+        menuList.stream().filter(e -> MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
+                .forEach(e -> buttonMap.put(e.getCode(), e));
+
+        return Collections.emptyList();
     }
 
     /**
@@ -272,7 +289,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menu.setPath("");
             menu.setComponent("");
             menu.setPermission("");
-        } else if (Objects.equals(MenuTypeEnum.DIRECTORY.getCode(), menu.getMenuType())) {
+        } else if (Objects.equals(MenuTypeEnum.DIR.getCode(), menu.getMenuType())) {
             // 目录的组件、权限为空
             menu.setComponent("");
             menu.setPermission("");
