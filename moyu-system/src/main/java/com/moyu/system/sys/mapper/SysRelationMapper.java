@@ -2,6 +2,7 @@ package com.moyu.system.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.moyu.system.sys.model.entity.SysRelation;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author shisong
@@ -9,6 +10,7 @@ import com.moyu.system.sys.model.entity.SysRelation;
  * @createDate 2024-12-16 21:15:35
  * @Entity com.moyu.system.sys.model.entity.SysRelation
  */
+@Mapper
 public interface SysRelationMapper extends BaseMapper<SysRelation> {
 
 }

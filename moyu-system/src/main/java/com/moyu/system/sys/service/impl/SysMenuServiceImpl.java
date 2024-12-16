@@ -15,18 +15,24 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.enums.MenuTypeEnum;
+import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.mapper.SysMenuMapper;
 import com.moyu.system.sys.model.entity.SysMenu;
+import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.service.SysMenuService;
+import com.moyu.system.sys.service.SysRelationService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +43,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
+
+    @Resource
+    private SysRelationService relationService;
 
     @Override
     public List<Tree<String>> tree(SysMenuParam menuParam) {
@@ -231,23 +240,66 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<Tree<String>> grantMenuTree(SysMenuParam menuParam) {
+    public List<Tree<String>> menuGrantTree(SysMenuParam menuParam) {
+        // 模块编码
+        String moduleCode = menuParam.getModule();
         // 查询所有菜单
         List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
                 // 查询部分字段
-                .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getSortNum, SysMenu::getId)
+                .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getSortNum)
                 // 指定模块
-                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
+                .eq(ObjectUtil.isNotEmpty(moduleCode), SysMenu::getModule, moduleCode)
                 // 不能已停用
                 .ne(SysMenu::getStatus, StatusEnum.DISABLE.getCode())
                 .eq(SysMenu::getDeleteFlag, 0)
         );
-        // 过滤出所有的button
-        Map<String, SysMenu> buttonMap = new HashMap<>();
-        menuList.stream().filter(e -> MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
-                .forEach(e -> buttonMap.put(e.getCode(), e));
 
-        return Collections.emptyList();
+        // 所有的role-menu关系(menu.code->menu)
+        Map<String, SysRelation> rmMap = new HashMap<>();
+        relationService.list(new LambdaQueryWrapper<SysRelation>()
+                        // 指定关系类型
+                        .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_MENU.getCode())
+                        // 指定哪个role
+                        .eq(SysRelation::getObjectId, menuParam.getRoleCode()))
+                .forEach(e -> rmMap.put(e.getTargetId(), e));
+
+        // 过滤出button，转为 parentCode->button 格式的的 multimap
+        Multimap<String, Map<String, Object>> multimap = HashMultimap.create();
+        menuList.stream().filter(e -> MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
+                .forEach(e -> {
+                    // button元素
+                    Map<String, Object> btnMap = new HashMap<>();
+                    btnMap.put("code", e.getCode());
+                    btnMap.put("name", e.getName());
+                    if (rmMap.containsKey(e.getCode())) {
+                        btnMap.put("checked", true);
+                    }
+                    multimap.put(e.getParentCode(), btnMap);
+                });
+
+        // 过滤出menu转为treeNode
+        List<TreeNode<String>> nodeList = new ArrayList<>();
+        menuList.stream()
+                .filter(e -> !MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
+                .forEach(e -> {
+                    // menu元素
+                    TreeNode<String> node = new TreeNode<>(e.getCode(), e.getParentCode(), e.getName(), e.getSortNum());
+                    Map<String, Object> extMap = new HashMap<>();
+                    // rm关系中存在，表示有权限
+                    extMap.put("checked", rmMap.containsKey(e.getCode()));
+                    // 将把包含的按钮加进来
+                    extMap.put("buttonList", multimap.get(e.getCode()));
+                    node.setExtra(extMap);
+                    nodeList.add(node);
+                });
+
+        // 配置TreeNode使用指定的字段名
+        TreeNodeConfig nodeConfig = new TreeNodeConfig();
+        nodeConfig.setIdKey("code");
+        nodeConfig.setParentIdKey("parentCode");
+
+        // 构建树
+        return TreeUtil.build(nodeList, moduleCode, nodeConfig, new DefaultNodeParser<>());
     }
 
     /**

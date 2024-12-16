@@ -26,6 +26,11 @@ public class SysMenuParam extends BasePageParam {
     private Set<Long> ids;
 
     /**
+     * 角色code
+     */
+    private String roleCode;
+
+    /**
      * 名称关键词
      */
     private String searchKey;
