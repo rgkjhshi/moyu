@@ -111,11 +111,4 @@ public class SysMenuController {
         return BaseResponse.getSuccessResponse(sysMenuService.menuTreeSelector(sysMenuParam));
     }
 
-    /**
-     * 获取菜单授权树,包含某模块的所有菜单及是否已授权
-     */
-    @PostMapping("/treeSelector")
-    public BaseResponse<List<Tree<String>>> menuGrantTree(@RequestBody SysMenuParam sysMenuParam) {
-        return BaseResponse.getSuccessResponse(sysMenuService.menuGrantTree(sysMenuParam));
-    }
 }

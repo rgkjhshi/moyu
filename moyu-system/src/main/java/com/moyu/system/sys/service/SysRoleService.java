@@ -1,8 +1,10 @@
 package com.moyu.system.sys.service;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
 
 import java.util.List;
@@ -44,4 +46,8 @@ public interface SysRoleService extends IService<SysRole> {
      */
     void edit(SysRoleParam roleParam);
 
+    /**
+     * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
+     */
+    List<Tree<String>> treeForGrant(SysRoleParam roleParam);
 }

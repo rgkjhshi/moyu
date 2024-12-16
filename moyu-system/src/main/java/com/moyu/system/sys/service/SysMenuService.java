@@ -62,8 +62,4 @@ public interface SysMenuService extends IService<SysMenu> {
      */
     List<Tree<String>> menuTreeSelector(SysMenuParam menuParam);
 
-    /**
-     * 查询角色的授权树(授权树中按钮列表为节点的一个属性)
-     */
-    List<Tree<String>> menuGrantTree(SysMenuParam menuParam);
 }

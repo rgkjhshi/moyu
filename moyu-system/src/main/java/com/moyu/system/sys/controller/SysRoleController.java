@@ -1,6 +1,7 @@
 package com.moyu.system.sys.controller;
 
 
+import cn.hutool.core.lang.tree.Tree;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 角色信息控制器
@@ -72,4 +74,11 @@ public class SysRoleController {
         return BaseResponse.getSuccessResponse();
     }
 
+    /**
+     * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
+     */
+    @PostMapping("/menuTreeForGrant")
+    public BaseResponse<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam sysRoleParam) {
+        return BaseResponse.getSuccessResponse(sysRoleService.treeForGrant(sysRoleParam));
+    }
 }

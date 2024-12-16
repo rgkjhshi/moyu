@@ -1,6 +1,11 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
+import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -10,17 +15,27 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.system.sys.enums.MenuTypeEnum;
+import com.moyu.system.sys.enums.RelationTypeEnum;
+import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.mapper.SysRoleMapper;
+import com.moyu.system.sys.model.entity.SysMenu;
+import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
+import com.moyu.system.sys.service.SysMenuService;
+import com.moyu.system.sys.service.SysRelationService;
 import com.moyu.system.sys.service.SysRoleService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * @author shisong
@@ -29,6 +44,12 @@ import java.util.Set;
  */
 @Service
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
+
+    @Resource
+    private SysRelationService relationService;
+
+    @Resource
+    private SysMenuService sysMenuService;
 
     @Override
     public List<SysRole> list(SysRoleParam roleParam) {
@@ -123,6 +144,62 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         updateOrg.setId(oldRole.getId());
         this.updateById(updateOrg);
     }
+
+    @Override
+    public List<Tree<String>> treeForGrant(SysRoleParam roleParam) {
+        // 模块编码
+        SysMenuParam menuParam = new SysMenuParam();
+        menuParam.setModule(roleParam.getModule());
+        menuParam.setStatus(StatusEnum.ENABLE.getCode());
+        // 查询所有菜单
+        List<SysMenu> menuList = sysMenuService.list(menuParam);
+
+        // 所有的role-menu关系(menu.code->menu)
+        Map<String, SysRelation> rmMap = new HashMap<>();
+        relationService.list(new LambdaQueryWrapper<SysRelation>()
+                        // 指定关系类型
+                        .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_MENU.getCode())
+                        // 指定哪个role
+                        .eq(SysRelation::getObjectId, roleParam.getCode()))
+                .forEach(e -> rmMap.put(e.getTargetId(), e));
+
+        // 过滤出button，转为 parentCode->button 格式的的 multimap
+        Multimap<String, Map<String, Object>> multimap = HashMultimap.create();
+        menuList.stream().filter(e -> MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
+                .forEach(e -> {
+                    Map<String, Object> btnMap = new HashMap<>();
+                    btnMap.put("code", e.getCode());
+                    btnMap.put("name", e.getName());
+                    if (rmMap.containsKey(e.getCode())) {
+                        btnMap.put("checked", true);
+                    }
+                    multimap.put(e.getParentCode(), btnMap);
+                });
+
+        // 过滤出menu转为treeNode
+        List<TreeNode<String>> nodeList = new ArrayList<>();
+        menuList.stream()
+                .filter(e -> !MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
+                .forEach(e -> {
+                    TreeNode<String> node = new TreeNode<>(e.getCode(), e.getParentCode(), e.getName(), e.getSortNum());
+                    Map<String, Object> extMap = new HashMap<>();
+                    // rm关系中存在，表示有权限
+                    extMap.put("checked", rmMap.containsKey(e.getCode()));
+                    // 将把包含的按钮加进来
+                    extMap.put("buttonList", multimap.get(e.getCode()));
+                    node.setExtra(extMap);
+                    nodeList.add(node);
+                });
+
+        // 配置TreeNode使用指定的字段名
+        TreeNodeConfig nodeConfig = new TreeNodeConfig();
+        nodeConfig.setIdKey("code");
+        nodeConfig.setParentIdKey("parentCode");
+
+        // 构建树
+        return TreeUtil.build(nodeList, roleParam.getModule(), nodeConfig, new DefaultNodeParser<>());
+    }
+
 }
 
 
