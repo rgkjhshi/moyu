@@ -157,7 +157,6 @@ DROP TABLE IF EXISTS `SYS_RELATION`;
 CREATE TABLE `SYS_RELATION`
 (
     `id`            BIGINT(20)  NOT NULL auto_increment comment '主键id',
-    `app_code`      VARCHAR(64) NULL DEFAULT NULL COMMENT '应用标识',
     `object_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '对象ID',
     `target_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '目标ID',
     `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)',
