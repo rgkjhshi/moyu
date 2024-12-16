@@ -58,7 +58,7 @@ public interface SysMenuService extends IService<SysMenu> {
     void edit(SysMenuParam menuParam);
 
     /**
-     * 获取菜单树选择器(字段少)
+     * 获取菜单树选择器(字段少，不包含按钮)
      */
     List<Tree<String>> menuTreeSelector(SysMenuParam menuParam);
 

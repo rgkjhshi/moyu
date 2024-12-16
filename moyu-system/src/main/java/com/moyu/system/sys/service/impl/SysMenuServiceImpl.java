@@ -19,6 +19,7 @@ import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.enums.MenuTypeEnum;
+import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.mapper.SysMenuMapper;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.param.SysMenuParam;
@@ -44,15 +45,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<Tree<String>> tree(SysMenuParam menuParam) {
         // 查询所有组织结构
         List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(menuParam.getSearchKey()), SysMenu::getName, menuParam.getSearchKey())
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
+                // 使用状态
+                .eq(ObjectUtil.isNotEmpty(menuParam.getStatus()), SysMenu::getStatus, menuParam.getStatus())
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum)
         );
         // 构建树中包含记录的所有字段
-        return buildTree(menuList);
+        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? "0" : menuParam.getModule();
+        return buildTree(menuList, rootId);
     }
 
     @Override
@@ -219,13 +221,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getSortNum, SysMenu::getId)
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
+                // 不能已停用
+                .ne(SysMenu::getStatus, StatusEnum.NOT_USE.getCode())
                 // 不能是按钮
                 .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum)
         );
         // 构建的树中仅包含部分字段
-        return buildTree(menuList);
+        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? "0" : menuParam.getModule();
+        return buildTree(menuList, rootId);
     }
 
     /**
@@ -289,7 +294,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 构建树结构(code, parentCode, children, weight, extra)
      */
-    private List<Tree<String>> buildTree(List<SysMenu> menuList) {
+    private List<Tree<String>> buildTree(List<SysMenu> menuList, String rootId) {
         // 配置TreeNode使用指定的字段名
         TreeNodeConfig nodeConfig = new TreeNodeConfig();
         nodeConfig.setIdKey("code");
@@ -302,7 +307,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                     return node;
                 }).collect(Collectors.toList());
         // 构建树
-        return TreeUtil.build(treeNodeList, "0", nodeConfig, new DefaultNodeParser<>());
+        return TreeUtil.build(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }
 }
 
