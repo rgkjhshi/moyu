@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
@@ -139,11 +140,24 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     @Override
     public void add(SysOrgParam orgParam) {
+        // 若指定了唯一编码code，则必须全局唯一
+        if (!Strings.isNullOrEmpty(orgParam.getCode())) {
+            // 查询指定code
+            SysOrg org = this.getOne(new LambdaQueryWrapper<SysOrg>()
+                    .eq(SysOrg::getCode, orgParam.getCode())
+                    .eq(SysOrg::getDeleteFlag, 0));
+            if (org != null) {
+                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+            }
+        }
         // 不使用beanCopy是为了效率
         SysOrg org = buildSysOrg(orgParam);
         org.setId(null);
-        // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-        org.setCode(IdUtil.objectId());
+        // 若未指定唯一编码code，则自动生成
+        if (Strings.isNullOrEmpty(org.getCode())) {
+            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
+            org.setCode(IdUtil.objectId());
+        }
         this.save(org);
     }
 

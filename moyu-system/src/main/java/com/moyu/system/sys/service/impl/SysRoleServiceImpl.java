@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
@@ -83,11 +84,24 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public void add(SysRoleParam roleParam) {
+        // 若指定了唯一编码code，则必须全局唯一
+        if (!Strings.isNullOrEmpty(roleParam.getCode())) {
+            // 查询指定code
+            SysRole role = this.getOne(new LambdaQueryWrapper<SysRole>()
+                    .eq(SysRole::getCode, roleParam.getCode())
+                    .eq(SysRole::getDeleteFlag, 0));
+            if (role != null) {
+                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+            }
+        }
         // 属性复制
         SysRole role = BeanUtil.copyProperties(roleParam, SysRole.class);
         role.setId(null);
-        // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-        role.setCode(IdUtil.objectId());
+        // 若未指定唯一编码code，则自动生成
+        if (Strings.isNullOrEmpty(role.getCode())) {
+            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
+            role.setCode(IdUtil.objectId());
+        }
         this.save(role);
     }
 
