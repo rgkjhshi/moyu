@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
@@ -111,7 +112,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public void add(SysMenuParam menuParam) {
-        // 目录、菜单、按钮、外链都应该与上层节点的module一致, 只有模块的module字段可以为空
+        // 若指定了唯一编码code，则必须全局唯一
+        if (!Strings.isNullOrEmpty(menuParam.getCode())) {
+            // 查询指定code
+            SysMenu menu = this.getOne(new LambdaQueryWrapper<SysMenu>()
+                    .eq(SysMenu::getCode, menuParam.getCode())
+                    .eq(SysMenu::getDeleteFlag, 0));
+            if (menu != null) {
+                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+            }
+        }
+        // 非root节点的parent必须存在(module为root节点)
         if (!Objects.equals(MenuTypeEnum.MODULE.getCode(), menuParam.getMenuType())) {
             // 查询所选父节点
             SysMenu parentMenu = this.getOne(new LambdaQueryWrapper<SysMenu>()
@@ -129,8 +140,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         SysMenu menu = buildSysMenu(menuParam);
         fillEmptyByType(menu);
         menu.setId(null);
-        // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-        menu.setCode(IdUtil.objectId());
+        // 若未指定唯一编码code，则自动生成
+        if (Strings.isNullOrEmpty(menuParam.getCode())) {
+            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
+            menu.setCode(IdUtil.objectId());
+        }
         this.save(menu);
     }
 
@@ -202,9 +216,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 查询所有组织结构
         List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
                 // 查询部分字段
-                .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getId)
+                .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getSortNum, SysMenu::getId)
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
+                // 不能是按钮
+                .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum)
         );
