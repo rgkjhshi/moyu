@@ -153,10 +153,10 @@ create table sys_menu
   AUTO_INCREMENT = 2000 COMMENT = '菜单权限表';
 
 -- 6. 用户角色权限关系表
-DROP TABLE IF EXISTS `SYS_RELATION`;
-CREATE TABLE `SYS_RELATION`
+DROP TABLE IF EXISTS `sys_relation`;
+CREATE TABLE `sys_relation`
 (
-    `id`            BIGINT(20)  NOT NULL auto_increment comment '主键id',
+    `id`            BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `object_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '对象ID',
     `target_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '目标ID',
     `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)',
@@ -165,5 +165,4 @@ CREATE TABLE `SYS_RELATION`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = '用户角色权限关系表'
-  ROW_FORMAT = DYNAMIC;
+  COLLATE = utf8mb4_general_ci COMMENT = '用户角色权限关系表';
