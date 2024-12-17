@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `sys_org`;
 CREATE TABLE `sys_org`
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `parent_code` VARCHAR(64)  NULL DEFAULT '' COMMENT '父编码',
+    `parent_code` VARCHAR(64)  NULL DEFAULT '0' COMMENT '父编码',
 
     `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
@@ -124,7 +124,7 @@ drop table if exists sys_menu;
 create table sys_menu
 (
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `parent_code` VARCHAR(64)  NULL DEFAULT '' COMMENT '父编码',
+    `parent_code` VARCHAR(64)  NULL DEFAULT '0' COMMENT '父编码',
 
     `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',

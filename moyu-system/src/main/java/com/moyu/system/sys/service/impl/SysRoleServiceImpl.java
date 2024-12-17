@@ -32,6 +32,7 @@ import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.service.SysMenuService;
 import com.moyu.system.sys.service.SysRelationService;
 import com.moyu.system.sys.service.SysRoleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,6 +43,7 @@ import java.util.*;
  * @description 针对表【sys_role(角色信息表)】的数据库操作Service实现
  * @createDate 2024-12-15 20:49:43
  */
+@Slf4j
 @Service
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
@@ -182,12 +184,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .filter(e -> !MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
                     TreeNode<String> node = new TreeNode<>(e.getCode(), e.getParentCode(), e.getName(), e.getSortNum());
-                    Map<String, Object> extMap = new HashMap<>();
-                    // rm关系中存在，表示有权限
-                    extMap.put("checked", rmMap.containsKey(e.getCode()));
-                    // 将把包含的按钮加进来
-                    extMap.put("buttonList", multimap.get(e.getCode()));
-                    node.setExtra(extMap);
+                    if (!MenuTypeEnum.MODULE.getCode().equals(e.getMenuType())) {
+                        Map<String, Object> extMap = new HashMap<>();
+                        // rm关系中存在，表示有权限
+                        extMap.put("checked", rmMap.containsKey(e.getCode()));
+                        // 将把包含的按钮加进来
+                        extMap.put("buttonList", multimap.get(e.getCode()));
+                        node.setExtra(extMap);
+                    }
                     nodeList.add(node);
                 });
 
@@ -195,9 +199,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         TreeNodeConfig nodeConfig = new TreeNodeConfig();
         nodeConfig.setIdKey("code");
         nodeConfig.setParentIdKey("parentCode");
-
+        // 指定rootId
+        String rootId = ObjectUtil.isEmpty(roleParam.getModule()) ? "0" : roleParam.getModule();
         // 构建树
-        return TreeUtil.build(nodeList, roleParam.getModule(), nodeConfig, new DefaultNodeParser<>());
+        return TreeUtil.build(nodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }
 
 }
