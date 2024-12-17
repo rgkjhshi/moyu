@@ -166,16 +166,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .forEach(e -> rmMap.put(e.getTargetId(), e));
 
         // 过滤出button，转为 parentCode->button 格式的的 multimap
-        Multimap<String, Map<String, Object>> multimap = HashMultimap.create();
+        Multimap<String, SysMenu> allButtonMap = HashMultimap.create();
+        Multimap<String, String> grantButtonMap = HashMultimap.create();
         menuList.stream().filter(e -> MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
-                    Map<String, Object> btnMap = new HashMap<>();
-                    btnMap.put("code", e.getCode());
-                    btnMap.put("name", e.getName());
+                    allButtonMap.put(e.getParentCode(), e);
                     if (rmMap.containsKey(e.getCode())) {
-                        btnMap.put("checked", true);
+                        grantButtonMap.put(e.getParentCode(), e.getCode());
                     }
-                    multimap.put(e.getParentCode(), btnMap);
                 });
 
         // 过滤出menu转为treeNode
@@ -191,10 +189,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                         node.setExtra(extMap);
                     } else {
                         Map<String, Object> extMap = new HashMap<>();
+                        extMap.put("menuType", e.getMenuType());
                         // rm关系中存在，表示有权限
                         extMap.put("checked", rmMap.containsKey(e.getCode()));
                         // 将把包含的按钮加进来
-                        extMap.put("buttonList", multimap.get(e.getCode()));
+                        extMap.put("allButtonList", allButtonMap.get(e.getCode()));
+                        extMap.put("grantButtonList", grantButtonMap.get(e.getCode()));
                         node.setExtra(extMap);
                     }
                     nodeList.add(node);
