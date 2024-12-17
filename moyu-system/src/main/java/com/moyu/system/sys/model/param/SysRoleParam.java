@@ -15,6 +15,10 @@ public class SysRoleParam extends BasePageParam {
      * 待删除的id列表，通常不会集联删除
      */
     private Set<Long> ids;
+    /**
+     * 角色授权时的菜单code列表
+     */
+    private Set<String> grantMenuList;
 
     /**
      * 名称关键词

@@ -208,6 +208,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return TreeUtil.build(nodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }
 
+    @Override
+    public void grantMenu(SysRoleParam roleParam) {
+
+    }
 }
 
 
