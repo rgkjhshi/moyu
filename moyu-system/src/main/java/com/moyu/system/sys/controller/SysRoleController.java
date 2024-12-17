@@ -81,4 +81,13 @@ public class SysRoleController {
     public BaseResponse<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam sysRoleParam) {
         return BaseResponse.getSuccessResponse(sysRoleService.treeForGrant(sysRoleParam));
     }
+
+    /**
+     * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
+     */
+    @PostMapping("/grantMenu")
+    public BaseResponse<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam sysRoleParam) {
+        return BaseResponse.getSuccessResponse(sysRoleService.treeForGrant(sysRoleParam));
+    }
+
 }

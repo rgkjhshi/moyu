@@ -182,21 +182,19 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .filter(e -> !MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
                     TreeNode<String> node = new TreeNode<>(e.getCode(), e.getParentCode(), e.getName(), e.getSortNum());
+                    Map<String, Object> extMap = new HashMap<>();
                     if (MenuTypeEnum.MODULE.getCode().equals(e.getMenuType())) {
-                        Map<String, Object> extMap = new HashMap<>();
-                        // rm关系中存在，表示有权限
+                        // 模块只放图标
                         extMap.put("icon", e.getIcon());
-                        node.setExtra(extMap);
                     } else {
-                        Map<String, Object> extMap = new HashMap<>();
                         extMap.put("menuType", e.getMenuType());
                         // rm关系中存在，表示有权限
                         extMap.put("checked", rmMap.containsKey(e.getCode()));
                         // 将把包含的按钮加进来
                         extMap.put("allButtonList", allButtonMap.get(e.getCode()));
                         extMap.put("grantButtonList", grantButtonMap.get(e.getCode()));
-                        node.setExtra(extMap);
                     }
+                    node.setExtra(extMap);
                     nodeList.add(node);
                 });
 
