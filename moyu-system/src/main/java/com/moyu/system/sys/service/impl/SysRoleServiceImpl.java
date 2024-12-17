@@ -184,7 +184,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .filter(e -> !MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
                     TreeNode<String> node = new TreeNode<>(e.getCode(), e.getParentCode(), e.getName(), e.getSortNum());
-                    if (!MenuTypeEnum.MODULE.getCode().equals(e.getMenuType())) {
+                    if (MenuTypeEnum.MODULE.getCode().equals(e.getMenuType())) {
+                        Map<String, Object> extMap = new HashMap<>();
+                        // rm关系中存在，表示有权限
+                        extMap.put("icon", e.getIcon());
+                        node.setExtra(extMap);
+                    } else {
                         Map<String, Object> extMap = new HashMap<>();
                         // rm关系中存在，表示有权限
                         extMap.put("checked", rmMap.containsKey(e.getCode()));
