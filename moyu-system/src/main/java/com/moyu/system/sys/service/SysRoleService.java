@@ -55,7 +55,7 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
      *
-     * @param roleParam 角色code必须传
+     * @param roleParam 角色code，授权module必须传
      */
     void grantMenu(SysRoleParam roleParam);
 

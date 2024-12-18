@@ -87,7 +87,8 @@ public class SysRoleController {
      */
     @PostMapping("/grantMenu")
     public BaseResponse<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam sysRoleParam) {
-        return BaseResponse.getSuccessResponse(sysRoleService.treeForGrant(sysRoleParam));
+        sysRoleService.grantMenu(sysRoleParam);
+        return BaseResponse.getSuccessResponse();
     }
 
 }

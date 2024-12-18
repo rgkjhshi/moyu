@@ -34,9 +34,11 @@ import com.moyu.system.sys.service.SysRelationService;
 import com.moyu.system.sys.service.SysRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author shisong
@@ -46,6 +48,9 @@ import java.util.*;
 @Slf4j
 @Service
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
+
+    @Resource
+    private TransactionTemplate transactionTemplate;
 
     @Resource
     private SysRelationService relationService;
@@ -210,7 +215,44 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public void grantMenu(SysRoleParam roleParam) {
+        // 查询指定模块的可授权内容(菜单、按钮、链接)
+        QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>().checkSqlInjection();
+        queryWrapper.lambda().select(SysMenu::getCode)
+                // 指定模块
+                .eq(SysMenu::getModule, roleParam.getModule())
+                // 指定菜单类型
+                .in(SysMenu::getMenuType, MenuTypeEnum.MENU.getCode(), MenuTypeEnum.BUTTON.getCode(), MenuTypeEnum.LINK.getCode())
+                .eq(SysMenu::getDeleteFlag, 0);
+        List<SysMenu> menuList = sysMenuService.list(queryWrapper);
+        // 本模块的所有权限
+        List<String> allMenuCode = menuList.stream().map(SysMenu::getCode).collect(Collectors.toList());
+        // 本次授权内容
+        Set<String> grantMenuSet = roleParam.getGrantMenuList();
+        // 本次授权内容中，仅保留可授权部分(目录不可授权)
+        grantMenuSet.retainAll(allMenuCode);
 
+        // 删除旧权限和添加新权限放在一个事务中，有异常会自动回滚(使用模板事物精确控制粒度)
+        transactionTemplate.execute((transactionStatus) -> {
+            // TransactionCallbackWithoutResult 有异常则会自动回滚
+
+            // 清空角色在本模块的所有权限
+            QueryWrapper<SysRelation> wrapper = new QueryWrapper<SysRelation>().checkSqlInjection();
+            wrapper.lambda().eq(SysRelation::getObjectId, roleParam.getCode()).in(SysRelation::getTargetId, allMenuCode);
+            relationService.remove(wrapper);
+            // 非空则新加权限
+            if (ObjectUtil.isNotEmpty(grantMenuSet)) {
+                List<SysRelation> addList = new ArrayList<>();
+                grantMenuSet.forEach(code -> {
+                    SysRelation relation = new SysRelation();
+                    relation.setObjectId(roleParam.getCode());
+                    relation.setTargetId(code);
+                    relation.setRelationType(RelationTypeEnum.ROLE_HAS_MENU.getCode());
+                    addList.add(relation);
+                });
+                relationService.saveBatch(addList);
+            }
+            return null;
+        });
     }
 }
 

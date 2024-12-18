@@ -62,10 +62,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
-                // 不能已停用
-                .ne(SysMenu::getStatus, StatusEnum.DISABLE.getCode())
-                .eq(SysMenu::getDeleteFlag, 0)
-
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(menuParam.getSearchKey()), SysMenu::getName, menuParam.getSearchKey())
                 // 指定菜单类型
