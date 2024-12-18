@@ -15,8 +15,10 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
@@ -171,7 +173,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .forEach(e -> rmMap.put(e.getTargetId(), e));
 
         // 过滤出button，转为 parentCode->button 格式的的 multimap
-        Multimap<String, SysMenu> allButtonMap = HashMultimap.create();
+        Multimap<String, SysMenu> allButtonMap = ArrayListMultimap.create();
         Multimap<String, String> grantButtonMap = HashMultimap.create();
         menuList.stream().filter(e -> MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
