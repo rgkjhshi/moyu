@@ -43,15 +43,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<Tree<String>> tree(SysMenuParam menuParam) {
+        SysMenuParam queryParam = new SysMenuParam();
+        queryParam.setModule(menuParam.getModule());
+        queryParam.setStatus(menuParam.getStatus());
         // 查询所有菜单
-        List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
-                // 指定模块
-                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
-                // 使用状态
-                .eq(ObjectUtil.isNotEmpty(menuParam.getStatus()), SysMenu::getStatus, menuParam.getStatus())
-                .eq(SysMenu::getDeleteFlag, 0)
-                .orderByAsc(SysMenu::getSortNum)
-        );
+        List<SysMenu> menuList = this.list(menuParam);
         // 构建树中包含记录的所有字段
         String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? "0" : menuParam.getModule();
         return buildTree(menuList, rootId);
