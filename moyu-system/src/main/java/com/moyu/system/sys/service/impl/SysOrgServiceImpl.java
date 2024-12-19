@@ -43,6 +43,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
 
+    @Override
+    public List<SysOrg> list(SysOrgParam orgParam) {
+        QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
+        // 查询条件
+        queryWrapper.lambda()
+                // 关键词搜索
+                .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
+                // 指定父节点
+                .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
+                // 指定状态
+                .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
+                .eq(SysOrg::getDeleteFlag, 0)
+                .orderByAsc(SysOrg::getSortNum);
+        // 查询
+        List<SysOrg> orgList = this.list(queryWrapper);
+        return orgList;
+    }
+
     /**
      * 获取组织分页
      */
@@ -66,10 +84,15 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     }
 
     /**
-     * 部门树(树太大需要加缓存)
+     * 组织机构(树太大需要加缓存)
      */
     @Override
     public List<Tree<String>> tree() {
+        return singleTree("0").getChildren();
+    }
+
+    @Override
+    public Tree<String> singleTree(String rootId) {
         // 查询所有组织结构
         List<SysOrg> orgList = this.list(new LambdaQueryWrapper<SysOrg>()
                 // 查询部分字段
@@ -78,7 +101,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .orderByAsc(SysOrg::getSortNum)
         );
         // 构建树
-        return buildTree(orgList);
+        return buildSingleTree(orgList, rootId);
     }
 
     /**
@@ -246,7 +269,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     /**
      * 构建树结构(code, parentCode, children, weight, extra)
      */
-    private List<Tree<String>> buildTree(List<SysOrg> orgList) {
+    private Tree<String> buildSingleTree(List<SysOrg> orgList, String rootId) {
         // 配置TreeNode使用指定的字段名
         TreeNodeConfig nodeConfig = new TreeNodeConfig();
         nodeConfig.setIdKey("code");
@@ -259,7 +282,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                     return node;
                 }).collect(Collectors.toList());
         // 构建树
-        return TreeUtil.build(treeNodeList, "0", nodeConfig, new DefaultNodeParser<>());
+        return TreeUtil.buildSingle(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }
 }
 

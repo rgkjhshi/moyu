@@ -17,16 +17,29 @@ import java.util.List;
 public interface SysOrgService extends IService<SysOrg> {
 
     /**
+     * 查询组织列表
+     */
+    List<SysOrg> list(SysOrgParam sysOrgParam);
+
+    /**
      * 分页获取组织列表
      */
     PageResult<SysOrg> pageList(SysOrgParam sysOrgParam);
 
     /**
-     * 部门树(借助hutool的树结构)
+     * 组织机构树（会有多颗树）
      *
-     * @return 部门树List集合
+     * @return 组织机构树List集合
      */
     List<Tree<String>> tree();
+
+    /**
+     * 指定根结点的组织机构树（只有一颗树）
+     *
+     * @param rootId 指定的根节点
+     * @return 组织机构树
+     */
+    Tree<String> singleTree(String rootId);
 
     /**
      * 部门树形下拉选项

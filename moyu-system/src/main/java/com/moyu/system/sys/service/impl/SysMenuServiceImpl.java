@@ -86,6 +86,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .eq(ObjectUtil.isNotEmpty(menuParam.getMenuType()), SysMenu::getMenuType, menuParam.getMenuType())
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysMenu::getModule, menuParam.getModule())
+                // 指定状态
+                .eq(ObjectUtil.isNotEmpty(menuParam.getStatus()), SysMenu::getStatus, menuParam.getStatus())
                 .eq(SysMenu::getDeleteFlag, 0)
                 .orderByAsc(SysMenu::getSortNum);
 
