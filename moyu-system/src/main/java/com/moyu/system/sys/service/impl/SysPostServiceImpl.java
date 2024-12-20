@@ -1,0 +1,133 @@
+package com.moyu.system.sys.service.impl;
+
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.base.Strings;
+import com.moyu.common.enums.ExceptionEnum;
+import com.moyu.common.exception.BaseException;
+import com.moyu.common.model.PageResult;
+import com.moyu.system.sys.mapper.SysPostMapper;
+import com.moyu.system.sys.model.entity.SysPost;
+import com.moyu.system.sys.model.param.SysPostParam;
+import com.moyu.system.sys.service.SysPostService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+
+/**
+ * @author shisong
+ * @description 针对表【sys_pos(岗位信息表)】的数据库操作Service实现
+ * @createDate 2024-12-20 14:29:15
+ */
+@Service
+public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> implements SysPostService {
+
+    @Override
+    public List<SysPost> list(SysPostParam postParam) {
+        QueryWrapper<SysPost> queryWrapper = new QueryWrapper<SysPost>().checkSqlInjection();
+        // 查询条件
+        queryWrapper.lambda()
+                // 查询部分字段
+//                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
+                // 关键词搜索
+                .like(StrUtil.isNotBlank(postParam.getSearchKey()), SysPost::getName, postParam.getSearchKey())
+                // 模糊搜索所属组织
+                .like(StrUtil.isNotBlank(postParam.getOrgs()), SysPost::getOrgs, postParam.getOrgs())
+                // 指定类型
+                .eq(ObjectUtil.isNotEmpty(postParam.getPosType()), SysPost::getPostType, postParam.getPosType())
+                // 指定状态
+                .eq(ObjectUtil.isNotEmpty(postParam.getStatus()), SysPost::getStatus, postParam.getStatus())
+                .eq(SysPost::getDeleteFlag, 0)
+                .orderByAsc(SysPost::getSortNum);
+        // 查询
+        List<SysPost> roleList = this.list(queryWrapper);
+        return roleList;
+    }
+
+    @Override
+    public PageResult<SysPost> pageList(SysPostParam postParam) {
+        QueryWrapper<SysPost> queryWrapper = new QueryWrapper<SysPost>().checkSqlInjection();
+        // 查询条件
+        queryWrapper.lambda()
+                // 关键词搜索
+                .like(StrUtil.isNotBlank(postParam.getSearchKey()), SysPost::getName, postParam.getSearchKey())
+                // 模糊搜索所属组织
+                .like(StrUtil.isNotBlank(postParam.getOrgs()), SysPost::getOrgs, postParam.getOrgs())
+                // 指定状态
+                .eq(ObjectUtil.isNotEmpty(postParam.getStatus()), SysPost::getStatus, postParam.getStatus())
+                .eq(SysPost::getDeleteFlag, 0)
+                .orderByAsc(SysPost::getSortNum);
+        // 分页查询
+        Page<SysPost> page = new Page<>(postParam.getPageNum(), postParam.getPageSize());
+        Page<SysPost> rolePage = this.page(page, queryWrapper);
+        return new PageResult<>(rolePage.getTotal(), rolePage.getRecords());
+    }
+
+    @Override
+    public SysPost detail(SysPostParam postParam) {
+        LambdaQueryWrapper<SysPost> queryWrapper = new QueryWrapper<SysPost>().checkSqlInjection().lambda()
+                .eq(ObjectUtil.isNotEmpty(postParam.getId()), SysPost::getId, postParam.getId())
+                .eq(ObjectUtil.isNotEmpty(postParam.getCode()), SysPost::getCode, postParam.getCode());
+        // id、code均为唯一标识
+        SysPost SysPost = this.getOne(queryWrapper);
+        if (SysPost == null) {
+            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "未查到指定数据");
+        }
+        return SysPost;
+    }
+
+    @Override
+    public void add(SysPostParam postParam) {
+        // 若指定了唯一编码code，则必须全局唯一
+        if (!Strings.isNullOrEmpty(postParam.getCode())) {
+            // 查询指定code
+            SysPost role = this.getOne(new LambdaQueryWrapper<SysPost>()
+                    .eq(SysPost::getCode, postParam.getCode())
+                    .eq(SysPost::getDeleteFlag, 0));
+            if (role != null) {
+                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+            }
+        }
+        // 属性复制
+        SysPost role = BeanUtil.copyProperties(postParam, SysPost.class);
+        role.setId(null);
+        // 若未指定唯一编码code，则自动生成
+        if (Strings.isNullOrEmpty(role.getCode())) {
+            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
+            role.setCode(IdUtil.objectId());
+        }
+        this.save(role);
+    }
+
+    @Override
+    public void deleteByIds(SysPostParam postParam) {
+        // 待删除的id集合
+        Set<Long> idSet = postParam.getIds();
+        // 逻辑删除
+        UpdateWrapper<SysPost> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        this.update(updateWrapper);
+    }
+
+    @Override
+    public void edit(SysPostParam postParam) {
+        SysPost oldRole = this.detail(postParam);
+        // 属性复制
+        SysPost updateOrg = BeanUtil.copyProperties(postParam, SysPost.class);
+        updateOrg.setId(oldRole.getId());
+        this.updateById(updateOrg);
+    }
+
+}
+
+
+
+

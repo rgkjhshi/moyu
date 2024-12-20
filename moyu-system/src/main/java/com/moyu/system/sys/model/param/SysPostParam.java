@@ -1,24 +1,24 @@
 package com.moyu.system.sys.model.param;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.common.model.BasePageParam;
 import lombok.Data;
 
 import java.util.Set;
 
 /**
- * 角色信息查询参数
+ * 岗位信息表
+ *
+ * @TableName sys_pos
  */
 @Data
-public class SysRoleParam extends BasePageParam {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SysPostParam extends BasePageParam {
     //********** 额外字段 **********//
     /**
      * 待删除的id列表
      */
     private Set<Long> ids;
-    /**
-     * 角色授权时的菜单code列表
-     */
-    private Set<String> grantMenuList;
 
     /**
      * 名称关键词
@@ -27,7 +27,7 @@ public class SysRoleParam extends BasePageParam {
 
     //********** db中存在的字段 **********//
     /**
-     * 主键ID
+     * 主键id
      */
     private Long id;
 
@@ -42,14 +42,19 @@ public class SysRoleParam extends BasePageParam {
     private String code;
 
     /**
-     * 归属模块
+     * 岗位类型(字典 1特有 2通用 3自建)
      */
-    private String module;
+    private Integer posType;
 
     /**
-     * 数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）
+     * 直属组织
      */
-    private Integer dataScope;
+    private String orgCode;
+
+    /**
+     * 所属组织,逗号分隔
+     */
+    private String orgs;
 
     /**
      * 排序顺序
@@ -57,9 +62,14 @@ public class SysRoleParam extends BasePageParam {
     private Integer sortNum;
 
     /**
-     * 使用状态（0正常 1停用）
+     * 状态（0正常 1停用）
      */
     private Integer status;
+
+    /**
+     * 删除标志（0未删除  1已删除）
+     */
+    private Integer deleteFlag;
 
     /**
      * 扩展信息
