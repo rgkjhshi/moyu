@@ -48,8 +48,8 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
                 .eq(SysPost::getDeleteFlag, 0)
                 .orderByAsc(SysPost::getSortNum);
         // 查询
-        List<SysPost> roleList = this.list(queryWrapper);
-        return roleList;
+        List<SysPost> postList = this.list(queryWrapper);
+        return postList;
     }
 
     @Override
@@ -67,8 +67,8 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
                 .orderByAsc(SysPost::getSortNum);
         // 分页查询
         Page<SysPost> page = new Page<>(postParam.getPageNum(), postParam.getPageSize());
-        Page<SysPost> rolePage = this.page(page, queryWrapper);
-        return new PageResult<>(rolePage.getTotal(), rolePage.getRecords());
+        Page<SysPost> postPage = this.page(page, queryWrapper);
+        return new PageResult<>(postPage.getTotal(), postPage.getRecords());
     }
 
     @Override
@@ -89,22 +89,22 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
         // 若指定了唯一编码code，则必须全局唯一
         if (!Strings.isNullOrEmpty(postParam.getCode())) {
             // 查询指定code
-            SysPost role = this.getOne(new LambdaQueryWrapper<SysPost>()
+            SysPost post = this.getOne(new LambdaQueryWrapper<SysPost>()
                     .eq(SysPost::getCode, postParam.getCode())
                     .eq(SysPost::getDeleteFlag, 0));
-            if (role != null) {
+            if (post != null) {
                 throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
         }
         // 属性复制
-        SysPost role = BeanUtil.copyProperties(postParam, SysPost.class);
-        role.setId(null);
+        SysPost post = BeanUtil.copyProperties(postParam, SysPost.class);
+        post.setId(null);
         // 若未指定唯一编码code，则自动生成
-        if (Strings.isNullOrEmpty(role.getCode())) {
+        if (Strings.isNullOrEmpty(post.getCode())) {
             // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-            role.setCode(IdUtil.objectId());
+            post.setCode(IdUtil.objectId());
         }
-        this.save(role);
+        this.save(post);
     }
 
     @Override
@@ -119,10 +119,10 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
 
     @Override
     public void edit(SysPostParam postParam) {
-        SysPost oldRole = this.detail(postParam);
+        SysPost oldPost = this.detail(postParam);
         // 属性复制
         SysPost updateOrg = BeanUtil.copyProperties(postParam, SysPost.class);
-        updateOrg.setId(oldRole.getId());
+        updateOrg.setId(oldPost.getId());
         this.updateById(updateOrg);
     }
 
