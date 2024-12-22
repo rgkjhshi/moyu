@@ -103,7 +103,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
             post.setCode(IdUtil.objectId());
         }
         // 若指定了直属组织，则设置所属组织
-        if (Strings.isNullOrEmpty(post.getOrgCode())) {
+        if (ObjectUtil.isNotEmpty(post.getOrgCode())) {
             // 获取组织结构树
             Tree<String> orgTree = sysOrgService.singleTree("0");
             Tree<String> orgNode = orgTree.getNode(post.getOrgCode());
@@ -130,7 +130,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
         SysPost updateOrg = BeanUtil.copyProperties(postParam, SysPost.class);
         updateOrg.setId(oldPost.getId());
         // 若指定了直属组织，则设置所属组织
-        if (Strings.isNullOrEmpty(updateOrg.getOrgCode())) {
+        if (ObjectUtil.isNotEmpty(updateOrg.getOrgCode())) {
             // 获取组织结构树
             Tree<String> orgTree = sysOrgService.singleTree("0");
             Tree<String> orgNode = orgTree.getNode(updateOrg.getOrgCode());
