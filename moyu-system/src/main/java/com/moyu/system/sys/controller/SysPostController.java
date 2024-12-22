@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * 岗位分组控制器
+ * 分组(角色组、岗位)控制器
  *
  * @author shisong
  * @since 2024-12-20

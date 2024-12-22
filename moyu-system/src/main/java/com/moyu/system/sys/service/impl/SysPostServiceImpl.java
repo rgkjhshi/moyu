@@ -42,7 +42,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
                 // 模糊搜索所属组织
                 .like(StrUtil.isNotBlank(postParam.getOrgs()), SysPost::getOrgs, postParam.getOrgs())
                 // 指定类型
-                .eq(ObjectUtil.isNotEmpty(postParam.getPosType()), SysPost::getPostType, postParam.getPosType())
+                .eq(ObjectUtil.isNotEmpty(postParam.getPostType()), SysPost::getPostType, postParam.getPostType())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(postParam.getStatus()), SysPost::getStatus, postParam.getStatus())
                 .eq(SysPost::getDeleteFlag, 0)

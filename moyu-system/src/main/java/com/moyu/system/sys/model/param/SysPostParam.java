@@ -44,7 +44,7 @@ public class SysPostParam extends BasePageParam {
     /**
      * 岗位类型(字典 1特有 2通用 3自建)
      */
-    private Integer posType;
+    private Integer postType;
 
     /**
      * 直属组织
