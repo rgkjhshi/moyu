@@ -1,6 +1,8 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -9,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
@@ -16,9 +19,11 @@ import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.mapper.SysPostMapper;
 import com.moyu.system.sys.model.entity.SysPost;
 import com.moyu.system.sys.model.param.SysPostParam;
+import com.moyu.system.sys.service.SysOrgService;
 import com.moyu.system.sys.service.SysPostService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +34,9 @@ import java.util.Set;
  */
 @Service
 public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> implements SysPostService {
+
+    @Resource
+    private SysOrgService sysOrgService;
 
     @Override
     public List<SysPost> list(SysPostParam postParam) {
@@ -86,16 +94,6 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
 
     @Override
     public void add(SysPostParam postParam) {
-        // 若指定了唯一编码code，则必须全局唯一
-        if (!Strings.isNullOrEmpty(postParam.getCode())) {
-            // 查询指定code
-            SysPost post = this.getOne(new LambdaQueryWrapper<SysPost>()
-                    .eq(SysPost::getCode, postParam.getCode())
-                    .eq(SysPost::getDeleteFlag, 0));
-            if (post != null) {
-                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
-            }
-        }
         // 属性复制
         SysPost post = BeanUtil.copyProperties(postParam, SysPost.class);
         post.setId(null);
@@ -103,6 +101,14 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
         if (Strings.isNullOrEmpty(post.getCode())) {
             // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
             post.setCode(IdUtil.objectId());
+        }
+        // 若指定了直属组织，则设置所属组织
+        if (Strings.isNullOrEmpty(post.getOrgCode())) {
+            // 获取组织结构树
+            Tree<String> orgTree = sysOrgService.singleTree("0");
+            Tree<String> orgNode = orgTree.getNode(post.getOrgCode());
+            List<String> list = TreeUtil.getParentsId(orgNode, true);
+            post.setOrgs(Joiner.on(",").join(list));
         }
         this.save(post);
     }
@@ -123,6 +129,14 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
         // 属性复制
         SysPost updateOrg = BeanUtil.copyProperties(postParam, SysPost.class);
         updateOrg.setId(oldPost.getId());
+        // 若指定了直属组织，则设置所属组织
+        if (Strings.isNullOrEmpty(updateOrg.getOrgCode())) {
+            // 获取组织结构树
+            Tree<String> orgTree = sysOrgService.singleTree("0");
+            Tree<String> orgNode = orgTree.getNode(updateOrg.getOrgCode());
+            List<String> list = TreeUtil.getParentsId(orgNode, true);
+            updateOrg.setOrgs(Joiner.on(",").join(list));
+        }
         this.updateById(updateOrg);
     }
 
