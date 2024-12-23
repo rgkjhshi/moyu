@@ -55,6 +55,12 @@ public class SysPost extends BaseEntity implements Serializable {
     private String orgCode;
 
     /**
+     * 直属组织名称
+     */
+    @TableField(value = "org_name")
+    private String orgName;
+
+    /**
      * 所属组织,逗号分隔
      */
     @TableField(value = "orgs")

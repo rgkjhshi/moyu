@@ -107,6 +107,9 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
             // 获取组织结构树
             Tree<String> orgTree = sysOrgService.singleTree("0");
             Tree<String> orgNode = orgTree.getNode(post.getOrgCode());
+            // 设置直属机构名称
+            post.setOrgName(orgNode.getName().toString());
+            // 所属机构列表
             List<String> list = TreeUtil.getParentsId(orgNode, true);
             post.setOrgs(Joiner.on(",").join(list));
         }

@@ -79,6 +79,7 @@ create table sys_post
     `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
     `post_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '岗位类型(字典 1特有 2通用 3自建)',
     `org_code`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织',
+    `org_name`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织名称',
     `orgs`        VARCHAR(256) NULL DEFAULT NULL COMMENT '所属组织,逗号分隔',
 
     `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
