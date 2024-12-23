@@ -4,7 +4,6 @@ package com.moyu.common.mybatis.handler;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.ReflectionException;
 
 import java.util.Date;
 
@@ -41,29 +40,15 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        // setFieldValByName方法会判断db中是否有对应的字段,无需判断 (metaObject.getOriginalObject() instanceof BaseEntity)
         try {
-            // 为空则设置deleteFlag为0
-            if (metaObject.getValue(DELETE_FLAG) == null) {
-                setFieldValByName(DELETE_FLAG, 0, metaObject);
-            }
-            // 为空则设置createTime
-            if (metaObject.getValue(CREATE_TIME) == null) {
-                setFieldValByName(CREATE_TIME, new Date(), metaObject);
-            }
-            // 为空则设置createUser
-            if (metaObject.getValue(CREATE_USER) == null) {
-                setFieldValByName(CREATE_USER, this.getUserId(), metaObject);
-            }
-            // 为空则设置updateTime
-            if (metaObject.getValue(UPDATE_TIME) == null) {
-                setFieldValByName(UPDATE_TIME, new Date(), metaObject);
-            }
-            // 为空则设置updateUser
-            if (metaObject.getValue(UPDATE_USER) == null) {
-                setFieldValByName(UPDATE_USER, this.getUserId(), metaObject);
-            }
-        } catch (ReflectionException e) {
+            log.info("调用了insertFill");
+            // 严格模式的插入填充，只有当字段为空时才进行填充，避免覆盖已有的值。
+            this.strictInsertFill(metaObject, DELETE_FLAG, Integer.class, 0);
+            this.strictInsertFill(metaObject, CREATE_TIME, Date.class, new Date());
+            this.strictInsertFill(metaObject, CREATE_USER, String.class, getUserId());
+            this.strictInsertFill(metaObject, UPDATE_TIME, Date.class, new Date());
+            this.strictInsertFill(metaObject, UPDATE_USER, String.class, getUserId());
+        } catch (Exception e) {
             log.warn("CustomMetaObjectHandler自动填充字段失败，可不做处理");
         }
     }
@@ -71,15 +56,12 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         try {
-            // 为空则设置updateTime
-            if (metaObject.getValue(UPDATE_TIME) == null) {
-                setFieldValByName(UPDATE_TIME, new Date(), metaObject);
-            }
-            // 为空则设置updateUser
-            if (metaObject.getValue(UPDATE_USER) == null) {
-                setFieldValByName(UPDATE_USER, this.getUserId(), metaObject);
-            }
-        } catch (ReflectionException e) {
+            // setFieldValByName方法会判断db中是否有对应的字段,无需判断 (metaObject.getOriginalObject() instanceof BaseEntity)
+            log.info("调用了updateFill");
+            // 更新时不使用严格模式,不管原来是否有值,都更新
+            setFieldValByName(UPDATE_TIME, new Date(), metaObject);
+            setFieldValByName(UPDATE_USER, this.getUserId(), metaObject);
+        } catch (Exception e) {
             log.warn("CustomMetaObjectHandler.updateFill自动填充字段失败，可不做处理");
         }
     }
