@@ -1,7 +1,6 @@
 package com.moyu.system.sys.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,19 +31,16 @@ public class SysOrg extends BaseEntity {
     /**
      * 父编码
      */
-    @TableField(value = "parent_code")
     private String parentCode;
 
     /**
      * 名称
      */
-    @TableField(value = "name")
     private String name;
 
     /**
      * 编码
      */
-    @TableField(value = "code")
     private String code;
 
     /**
@@ -52,43 +48,31 @@ public class SysOrg extends BaseEntity {
      *
      * @see com.moyu.system.sys.enums.OrgTypeEnum
      */
-    @TableField(value = "org_type")
     private Integer orgType;
 
     /**
      * 组织层级(字典 1一级公司 2二级公司 3三级公司)
      */
-    @TableField(value = "org_level")
     private Integer orgLevel;
 
     /**
      * 排序顺序
      */
-    @TableField(value = "sort_num")
     private Integer sortNum;
 
     /**
      * 状态（0正常 1停用）
      */
-    @TableField(value = "status")
     private Integer status;
-
-    /**
-     * 删除标志（0未删除  1已删除）
-     */
-    @TableField(value = "delete_flag")
-    private Integer deleteFlag;
 
     /**
      * 扩展信息
      */
-    @TableField(value = "ext_json")
     private String extJson;
 
     /**
      * 备注
      */
-    @TableField(value = "remark")
     private String remark;
 
 }

@@ -1,7 +1,6 @@
 package com.moyu.system.sys.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,31 +30,26 @@ public class SysRelation {
     /**
      * 对象ID
      */
-    @TableField(value = "object_id")
     private String objectId;
 
     /**
      * 目标ID
      */
-    @TableField(value = "target_id")
     private String targetId;
 
     /**
      * 关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)
      */
-    @TableField(value = "relation_type")
     private Integer relationType;
 
     /**
      * 创建时间
      */
-    @TableField(value = "create_time")
     private Date createTime;
 
     /**
      * 创建用户
      */
-    @TableField(value = "create_user")
     private String createUser;
 
 }
