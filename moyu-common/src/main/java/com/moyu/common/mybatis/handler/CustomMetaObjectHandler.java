@@ -41,7 +41,6 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         try {
-            log.info("调用了insertFill");
             // 严格模式的插入填充，只有当字段为空时才进行填充，避免覆盖已有的值。
             this.strictInsertFill(metaObject, DELETE_FLAG, Integer.class, 0);
             this.strictInsertFill(metaObject, CREATE_TIME, Date.class, new Date());
@@ -57,7 +56,6 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         try {
             // setFieldValByName方法会判断db中是否有对应的字段,无需判断 (metaObject.getOriginalObject() instanceof BaseEntity)
-            log.info("调用了updateFill");
             // 更新时不使用严格模式,不管原来是否有值,都更新
             setFieldValByName(UPDATE_TIME, new Date(), metaObject);
             setFieldValByName(UPDATE_USER, this.getUserId(), metaObject);
