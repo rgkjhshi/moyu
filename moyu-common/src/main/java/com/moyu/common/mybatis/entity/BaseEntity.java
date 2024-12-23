@@ -1,5 +1,6 @@
 package com.moyu.common.mybatis.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
@@ -14,30 +15,37 @@ import java.util.Date;
  */
 @Data
 public class BaseEntity implements Serializable {
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
     /**
+     * 删除标志（0未删除  1已删除）
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Integer deleteFlag;
+
+    /**
      * 创建时间
      */
-    @TableField(value = "create_time")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 创建用户
      */
-    @TableField(value = "create_user")
+    @TableField(fill = FieldFill.INSERT)
     private String createUser;
 
     /**
      * 修改时间
      */
-    @TableField(value = "update_time")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     /**
      * 修改用户
      */
-    @TableField(value = "update_user")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateUser;
 }

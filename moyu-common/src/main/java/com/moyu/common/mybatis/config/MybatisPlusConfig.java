@@ -2,10 +2,12 @@ package com.moyu.common.mybatis.config;
 
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.moyu.common.mybatis.handler.CustomMetaObjectHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -40,7 +42,7 @@ public class MybatisPlusConfig {
         // 设置数据库类型为mysql
         paginationInnerInterceptor.setDbType(DbType.MYSQL);
         // 设置最大单页限制数量，默认 500 条，-1 不受限制
-        paginationInnerInterceptor.setMaxLimit(500L);
+        paginationInnerInterceptor.setMaxLimit(100L);
         return paginationInnerInterceptor;
     }
 
@@ -56,5 +58,15 @@ public class MybatisPlusConfig {
      */
     public BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
         return new BlockAttackInnerInterceptor();
+    }
+
+    /**
+     * 自定义公共字段自动填充
+     *
+     * @see com.moyu.common.mybatis.entity.BaseEntity
+     */
+    @Bean
+    public MetaObjectHandler metaObjectHandler() {
+        return new CustomMetaObjectHandler();
     }
 }
