@@ -20,8 +20,8 @@ public enum OrgTypeEnum {
      * 组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)
      */
     INVALID(0, null),
-    COMPANY(1, "公司组织"),
-    DEPARTMENT(2, "部门机构"),
+    ORG(1, "公司组织"),
+    DEPT(2, "部门机构"),
     NODE(3, "虚拟节点");
 
     //  Mybatis-Plus 提供注解表示插入数据库时插入该值
