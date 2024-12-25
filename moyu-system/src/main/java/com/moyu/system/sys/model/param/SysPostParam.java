@@ -67,11 +67,6 @@ public class SysPostParam extends BasePageParam {
     private Integer status;
 
     /**
-     * 删除标志（0未删除  1已删除）
-     */
-    private Integer deleteFlag;
-
-    /**
      * 扩展信息
      */
     private String extJson;
