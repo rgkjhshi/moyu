@@ -30,23 +30,22 @@ drop table if exists sys_user;
 create table sys_user
 (
     `id`               BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `account`          VARCHAR(32)  NULL DEFAULT NULL COMMENT '账号',
+    `account`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '账号',
     `password`         VARCHAR(64)  NULL DEFAULT NULL COMMENT '密码',
-    `nick_name`        VARCHAR(32)  NULL DEFAULT NULL COMMENT '昵称',
+    `nick_name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '昵称',
     `avatar`           VARCHAR(255) NULL DEFAULT NULL COMMENT '头像',
-    `name`             VARCHAR(32)  NULL DEFAULT NULL COMMENT '姓名',
+    `name`             VARCHAR(64)  NULL DEFAULT NULL COMMENT '姓名',
     `gender`           TINYINT(4)   NULL DEFAULT NULL COMMENT '性别(字典 0未知 1男 2女)',
     `birthday`         DATETIME     NULL DEFAULT NULL COMMENT '生日',
-    `email`            VARCHAR(20)  NULL DEFAULT NULL COMMENT '邮箱',
+    `email`            VARCHAR(64)  NULL DEFAULT NULL COMMENT '邮箱',
     `phone`            VARCHAR(20)  NULL DEFAULT NULL COMMENT '手机',
     `id_no`            VARCHAR(20)  NULL DEFAULT NULL COMMENT '身份证号',
-    `address`          VARCHAR(100) NULL DEFAULT NULL COMMENT '联系地址',
+    `address`          VARCHAR(200) NULL DEFAULT NULL COMMENT '联系地址',
 
-    `staff_code`       VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工编码',
-    `staff_org_code`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工机构编码',
-    `staff_org_name`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工机构名称',
-    `staff_dept_code`  VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工部门编码',
-    `staff_dept_name`  VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工部门名称',
+    `staff_code`       VARCHAR(64)  NULL DEFAULT NULL COMMENT '员工编码',
+    `org_code`         VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织编码',
+    `org_name`         VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织名称',
+    `org_chain`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
     `staff_entry_date` VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工入职日期',
 
     `login_ip`         VARCHAR(20)  NULL DEFAULT NULL COMMENT '登陆IP',
@@ -63,7 +62,7 @@ create table sys_user
     `update_time`      DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
     `update_user`      VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改用户',
     PRIMARY KEY (`id`),
-    INDEX `idx_account` (`account`)
+    UNIQUE INDEX `uniq_account` (`account`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '用户信息表';
@@ -76,9 +75,9 @@ create table sys_post
     `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
     `post_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '岗位类型(字典 1特有 2通用 3自建)',
-    `org_code`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织',
+    `org_code`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织名称',
-    `orgs`        VARCHAR(256) NULL DEFAULT NULL COMMENT '所属组织,逗号分隔',
+    `org_chain`   VARCHAR(256) NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
 
     `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
