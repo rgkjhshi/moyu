@@ -46,7 +46,6 @@ create table sys_user
     `org_code`         VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织编码',
     `org_name`         VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织名称',
     `org_chain`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
-    `staff_entry_date` VARCHAR(32)  NULL DEFAULT NULL COMMENT '员工入职日期',
 
     `login_ip`         VARCHAR(20)  NULL DEFAULT NULL COMMENT '登陆IP',
     `login_time`       DATETIME     NULL DEFAULT NULL COMMENT '登陆时间',
