@@ -5,8 +5,11 @@ import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysPost;
+import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysPostParam;
+import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.SysPostService;
+import com.moyu.system.sys.service.SysUserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +31,15 @@ public class SysUserController {
     @Resource
     private SysPostService sysPostService;
 
+    @Resource
+    private SysUserService sysUserService;
+
     /**
      * 分页获取角色列表
      */
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysPost>> pageList(@RequestBody SysPostParam sysPostParam) {
-        PageResult<SysPost> page = sysPostService.pageList(sysPostParam);
+    public BaseResponse<PageResult<SysUser>> pageList(@RequestBody SysUserParam sysUserParam) {
+        PageResult<SysUser> page = sysUserService.pageList(sysUserParam);
         return BaseResponse.getSuccessResponse(page);
     }
 
@@ -41,16 +47,16 @@ public class SysUserController {
      * 获取详情
      */
     @PostMapping("/detail")
-    public BaseResponse<SysPost> detail(@RequestBody SysPostParam sysPostParam) {
-        return BaseResponse.getSuccessResponse(sysPostService.detail(sysPostParam));
+    public BaseResponse<SysUser> detail(@RequestBody SysUserParam sysUserParam) {
+        return BaseResponse.getSuccessResponse(sysUserService.detail(sysUserParam));
     }
 
     /**
      * 添加
      */
     @PostMapping("/add")
-    public BaseResponse<String> add(@RequestBody SysPostParam sysPostParam) {
-        sysPostService.add(sysPostParam);
+    public BaseResponse<String> add(@RequestBody SysUserParam sysUserParam) {
+        sysUserService.add(sysUserParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -58,8 +64,8 @@ public class SysUserController {
      * 删除
      */
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysPostParam sysPostParam) {
-        sysPostService.deleteByIds(sysPostParam);
+    public BaseResponse<String> delete(@RequestBody SysUserParam sysUserParam) {
+        sysUserService.deleteByIds(sysUserParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -67,8 +73,8 @@ public class SysUserController {
      * 编辑
      */
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@RequestBody SysPostParam sysPostParam) {
-        sysPostService.edit(sysPostParam);
+    public BaseResponse<String> edit(@RequestBody SysUserParam sysUserParam) {
+        sysUserService.edit(sysUserParam);
         return BaseResponse.getSuccessResponse();
     }
 
