@@ -47,8 +47,8 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
 //                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(postParam.getSearchKey()), SysPost::getName, postParam.getSearchKey())
-                // 模糊搜索所属组织
-                .like(StrUtil.isNotBlank(postParam.getOrgs()), SysPost::getOrgs, postParam.getOrgs())
+                // 模糊搜索所属组织(选的是一个code，搜的是所有code)
+                .like(StrUtil.isNotBlank(postParam.getOrgCode()), SysPost::getOrgs, postParam.getOrgCode())
                 // 指定类型
                 .eq(ObjectUtil.isNotEmpty(postParam.getPostType()), SysPost::getPostType, postParam.getPostType())
                 // 指定状态
@@ -67,8 +67,8 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
         queryWrapper.lambda()
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(postParam.getSearchKey()), SysPost::getName, postParam.getSearchKey())
-                // 模糊搜索所属组织
-                .like(StrUtil.isNotBlank(postParam.getOrgs()), SysPost::getOrgs, postParam.getOrgs())
+                // 模糊搜索所属组织(选的是一个code，搜的是所有code)
+                .like(StrUtil.isNotBlank(postParam.getOrgCode()), SysPost::getOrgs, postParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(postParam.getStatus()), SysPost::getStatus, postParam.getStatus())
                 .eq(SysPost::getDeleteFlag, 0)
