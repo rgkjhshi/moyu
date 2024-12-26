@@ -1,5 +1,6 @@
 package com.moyu.system.sys.model.param;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.common.model.BasePageParam;
 import lombok.Data;
@@ -60,6 +61,7 @@ public class SysUserParam extends BasePageParam {
     /**
      * 生日
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     /**
@@ -86,6 +88,12 @@ public class SysUserParam extends BasePageParam {
      * 员工编码
      */
     private String staffCode;
+
+    /**
+     * 员工入职日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date entryDate;
 
     /**
      * 直属组织编码
