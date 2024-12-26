@@ -118,6 +118,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             List<String> list = TreeUtil.getParentsId(orgNode, true);
             user.setOrgChain(Joiner.on(",").join(list));
         }
+        // 初始密码为系统默认
+        if (ObjectUtil.isEmpty(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(SysConstants.DEFAULT_PASSWORD));
+        }
         this.save(user);
     }
 

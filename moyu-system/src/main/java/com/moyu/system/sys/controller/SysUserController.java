@@ -4,9 +4,7 @@ package com.moyu.system.sys.controller;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
-import com.moyu.system.sys.model.entity.SysPost;
 import com.moyu.system.sys.model.entity.SysUser;
-import com.moyu.system.sys.model.param.SysPostParam;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.SysPostService;
 import com.moyu.system.sys.service.SysUserService;
@@ -79,7 +77,16 @@ public class SysUserController {
     }
 
     /**
-     * 重置用户密码
+     * 修改密码
+     **/
+    @PostMapping("/updatePwd")
+    public BaseResponse<?> updatePassword(@RequestBody SysUserParam sysUserParam) {
+        sysUserService.updatePassword(sysUserParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 重置密码
      **/
     @PostMapping("/resetPwd")
     public BaseResponse<?> resetPassword(@RequestBody SysUserParam sysUserParam) {
