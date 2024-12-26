@@ -48,7 +48,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(postParam.getSearchKey()), SysPost::getName, postParam.getSearchKey())
                 // 模糊搜索所属组织(选的是一个code，搜的是所有code)
-                .like(StrUtil.isNotBlank(postParam.getOrgCode()), SysPost::getOrgs, postParam.getOrgCode())
+                .like(StrUtil.isNotBlank(postParam.getOrgCode()), SysPost::getOrgChain, postParam.getOrgCode())
                 // 指定类型
                 .eq(ObjectUtil.isNotEmpty(postParam.getPostType()), SysPost::getPostType, postParam.getPostType())
                 // 指定状态
@@ -68,7 +68,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(postParam.getSearchKey()), SysPost::getName, postParam.getSearchKey())
                 // 模糊搜索所属组织(选的是一个code，搜的是所有code)
-                .like(StrUtil.isNotBlank(postParam.getOrgCode()), SysPost::getOrgs, postParam.getOrgCode())
+                .like(StrUtil.isNotBlank(postParam.getOrgCode()), SysPost::getOrgChain, postParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(postParam.getStatus()), SysPost::getStatus, postParam.getStatus())
                 .eq(SysPost::getDeleteFlag, 0)
@@ -111,7 +111,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
             post.setOrgName(orgNode.getName().toString());
             // 所属机构列表
             List<String> list = TreeUtil.getParentsId(orgNode, true);
-            post.setOrgs(Joiner.on(",").join(list));
+            post.setOrgChain(Joiner.on(",").join(list));
         }
         this.save(post);
     }
@@ -138,7 +138,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
             Tree<String> orgTree = sysOrgService.singleTree("0");
             Tree<String> orgNode = orgTree.getNode(updateOrg.getOrgCode());
             List<String> list = TreeUtil.getParentsId(orgNode, true);
-            updateOrg.setOrgs(Joiner.on(",").join(list));
+            updateOrg.setOrgChain(Joiner.on(",").join(list));
         }
         this.updateById(updateOrg);
     }

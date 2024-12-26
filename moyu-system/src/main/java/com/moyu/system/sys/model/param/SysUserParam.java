@@ -93,11 +93,6 @@ public class SysUserParam extends BasePageParam {
     private String orgCode;
 
     /**
-     * 所属组织链,逗号分隔
-     */
-    private String orgChain;
-
-    /**
      * 状态（0正常 1停用）
      */
     private Integer status;

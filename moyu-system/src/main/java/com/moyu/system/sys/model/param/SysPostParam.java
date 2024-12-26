@@ -52,11 +52,6 @@ public class SysPostParam extends BasePageParam {
     private String orgCode;
 
     /**
-     * 所属组织,逗号分隔
-     */
-    private String orgs;
-
-    /**
      * 排序顺序
      */
     private Integer sortNum;

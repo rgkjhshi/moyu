@@ -46,8 +46,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 //                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(userParam.getSearchKey()), SysUser::getName, userParam.getSearchKey())
-                // 模糊搜索所属组织
-                .like(StrUtil.isNotBlank(userParam.getOrgChain()), SysUser::getOrgChain, userParam.getOrgChain())
+                // 模糊搜索所属组织(选的是一个code，搜的是所有code)
+                .like(StrUtil.isNotBlank(userParam.getOrgCode()), SysUser::getOrgChain, userParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
                 .eq(SysUser::getDeleteFlag, 0);
@@ -63,8 +63,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         queryWrapper.lambda()
                 // 关键词搜索(name nickname staff_code)
                 .like(StrUtil.isNotBlank(userParam.getSearchKey()), SysUser::getName, userParam.getSearchKey())
-                // 模糊搜索所属组织
-                .like(StrUtil.isNotBlank(userParam.getOrgChain()), SysUser::getOrgChain, userParam.getOrgChain())
+                // 模糊搜索所属组织(选的是一个code，搜的是所有code)
+                .like(StrUtil.isNotBlank(userParam.getOrgCode()), SysUser::getOrgChain, userParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
                 .eq(SysUser::getDeleteFlag, 0);
