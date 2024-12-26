@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,11 +16,13 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysUserMapper;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.SysOrgService;
 import com.moyu.system.sys.service.SysUserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,6 +39,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private SysOrgService sysOrgService;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<SysUser> list(SysUserParam userParam) {
@@ -104,7 +110,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(user.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree("0");
+            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_ID);
             Tree<String> orgNode = orgTree.getNode(user.getOrgCode());
             // 设置直属机构名称
             user.setOrgName(orgNode.getName().toString());
@@ -127,14 +133,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public void edit(SysUserParam userParam) {
-        SysUser oldPost = this.detail(userParam);
+        SysUser oldUser = this.detail(userParam);
         // 属性复制
         SysUser updateUser = BeanUtil.copyProperties(userParam, SysUser.class);
-        updateUser.setId(oldPost.getId());
+        updateUser.setId(oldUser.getId());
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(updateUser.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree("0");
+            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_ID);
             Tree<String> orgNode = orgTree.getNode(userParam.getOrgCode());
             // 设置直属机构名称
             updateUser.setOrgName(orgNode.getName().toString());
@@ -145,6 +151,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         this.updateById(updateUser);
     }
 
+    @Override
+    public void updatePassword(SysUserParam userParam) {
+        // 先查原有数据
+        SysUser oldUser = this.detail(userParam);
+        this.update(new LambdaUpdateWrapper<SysUser>()
+                .eq(SysUser::getId, oldUser.getId())
+                .set(SysUser::getPassword, passwordEncoder.encode(userParam.getPassword())));
+    }
+
+    @Override
+    public void resetPassword(SysUserParam userParam) {
+        // 先查原有数据
+        SysUser oldUser = this.detail(userParam);
+        this.update(new LambdaUpdateWrapper<SysUser>()
+                .eq(SysUser::getId, oldUser.getId())
+                .set(SysUser::getPassword, passwordEncoder.encode(SysConstants.DEFAULT_PASSWORD)));
+    }
 }
 
 

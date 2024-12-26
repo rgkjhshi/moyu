@@ -18,10 +18,10 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.TreeMultimap;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.MenuTypeEnum;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
@@ -210,7 +210,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         nodeConfig.setIdKey("code");
         nodeConfig.setParentIdKey("parentCode");
         // 指定rootId
-        String rootId = ObjectUtil.isEmpty(roleParam.getModule()) ? "0" : roleParam.getModule();
+        String rootId = ObjectUtil.isEmpty(roleParam.getModule()) ? SysConstants.ROOT_ID : roleParam.getModule();
         // 构建树
         return TreeUtil.build(nodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }

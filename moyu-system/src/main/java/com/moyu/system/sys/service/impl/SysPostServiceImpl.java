@@ -16,6 +16,7 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysPostMapper;
 import com.moyu.system.sys.model.entity.SysPost;
 import com.moyu.system.sys.model.param.SysPostParam;
@@ -105,7 +106,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(post.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree("0");
+            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_ID);
             Tree<String> orgNode = orgTree.getNode(post.getOrgCode());
             // 设置直属机构名称
             post.setOrgName(orgNode.getName().toString());
@@ -135,7 +136,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostMapper, SysPost> impl
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(updateOrg.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree("0");
+            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_ID);
             Tree<String> orgNode = orgTree.getNode(updateOrg.getOrgCode());
             List<String> list = TreeUtil.getParentsId(orgNode, true);
             updateOrg.setOrgChain(Joiner.on(",").join(list));

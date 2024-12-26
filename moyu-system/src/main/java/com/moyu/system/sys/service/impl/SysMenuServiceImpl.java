@@ -18,6 +18,7 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.MenuTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.mapper.SysMenuMapper;
@@ -49,7 +50,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 查询所有菜单
         List<SysMenu> menuList = this.list(menuParam);
         // 构建树中包含记录的所有字段
-        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? "0" : menuParam.getModule();
+        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_ID : menuParam.getModule();
         return buildTree(menuList, rootId);
     }
 
@@ -227,7 +228,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .orderByAsc(SysMenu::getSortNum)
         );
         // 构建的树中仅包含部分字段
-        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? "0" : menuParam.getModule();
+        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_ID : menuParam.getModule();
         return buildTree(menuList, rootId);
     }
 

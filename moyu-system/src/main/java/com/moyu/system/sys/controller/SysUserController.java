@@ -73,8 +73,17 @@ public class SysUserController {
      * 编辑
      */
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@RequestBody SysUserParam sysUserParam) {
+    public BaseResponse<?> edit(@RequestBody SysUserParam sysUserParam) {
         sysUserService.edit(sysUserParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 重置用户密码
+     **/
+    @PostMapping("/resetPwd")
+    public BaseResponse<?> resetPassword(@RequestBody SysUserParam sysUserParam) {
+        sysUserService.resetPassword(sysUserParam);
         return BaseResponse.getSuccessResponse();
     }
 

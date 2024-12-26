@@ -44,4 +44,14 @@ public interface SysUserService extends IService<SysUser> {
      */
     void edit(SysUserParam userParam);
 
+    /**
+     * 重置用户密码
+     **/
+    void updatePassword(SysUserParam userParam);
+
+    /**
+     * 重置用户密码
+     **/
+    void resetPassword(SysUserParam userParam);
+
 }

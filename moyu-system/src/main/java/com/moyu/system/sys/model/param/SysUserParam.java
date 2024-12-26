@@ -39,6 +39,11 @@ public class SysUserParam extends BasePageParam {
     private String account;
 
     /**
+     * 密码
+     */
+    private String password;
+
+    /**
      * 昵称
      */
     private String nickName;

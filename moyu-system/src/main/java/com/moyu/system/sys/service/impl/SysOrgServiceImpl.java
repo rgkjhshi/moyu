@@ -20,6 +20,7 @@ import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.common.web.model.Option;
+import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysOrgMapper;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
@@ -88,7 +89,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      */
     @Override
     public List<Tree<String>> tree() {
-        return singleTree("0").getChildren();
+        return singleTree(SysConstants.ROOT_ID).getChildren();
     }
 
     @Override
