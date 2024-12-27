@@ -1,9 +1,12 @@
 package com.moyu.system.auth.config;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import com.moyu.system.auth.constant.SecurityConstants;
 import com.moyu.system.auth.security.filter.JwtTokenAuthenticationFilter;
 import com.moyu.system.auth.security.handle.AuthenticationEntryPointImpl;
 import com.moyu.system.auth.security.handle.LogoutSuccessHandlerImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -43,6 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private LogoutSuccessHandlerImpl logoutSuccessHandler;
 
+
+    @Value("${spring.security.enable:true}")
+    private Boolean enable;
 
     /**
      * 跨域配置
@@ -101,19 +106,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // 放行白名单
-        List<String> whiteList = Arrays.asList("/api/login", "/api/register", "/test/**");
+        List<String> whiteList = Arrays.asList(SecurityConstants.WHITE_LIST);
         // 如果没有开启认证，则全放行
-//        if (config != null && !config.isEnabled()) {
-        if (CollectionUtils.isEmpty(whiteList)) {
+        if (ObjectUtil.notEqual(enable, true)) {
             whiteList.add("/**");
         }
         // 白名单放行
         httpSecurity.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
-
-        // 监控管理请求放行
-        httpSecurity.authorizeRequests().antMatchers("/actuator/**").permitAll();
         // 静态资源放行
-        httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/static/**", "/public/**", "/**/*.css", "/**/*.js").permitAll();
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/static/**", "/public/**", "/**/*.ico").permitAll();
 
         // 其他的都需要授权访问
         httpSecurity.authorizeRequests().anyRequest().authenticated();
