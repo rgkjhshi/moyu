@@ -27,6 +27,27 @@
             <artifactId>moyu-common</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
+        <!-- 本工程的其它模块 -->
+        <dependency>
+            <groupId>com.moyu</groupId>
+            <artifactId>common-core</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.moyu</groupId>
+            <artifactId>common-web</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.moyu</groupId>
+            <artifactId>common-mybatis</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.moyu</groupId>
+            <artifactId>common-security</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
 
         <!-- 开源工具 -->
         <dependency>
