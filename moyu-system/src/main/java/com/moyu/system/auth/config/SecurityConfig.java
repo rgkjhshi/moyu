@@ -15,11 +15,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author shisong
@@ -90,34 +93,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 允许跨域访问
         httpSecurity.cors();
 
-        //不使用默认退出，自定义退出
-        httpSecurity.logout().disable();
+        // 认证失败处理(如未授权时访问资源)
+        httpSecurity.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+        // 禁用HTTP响应头的缓存控制，以确保敏感数据不会被缓存。默认情况下，会添加一些缓存控制头部，如no-store和private
+        httpSecurity.headers().cacheControl().disable().frameOptions().sameOrigin();
+        // 设置会话会话创建策略为无状态, 基于token，不使用session
+        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        httpSecurity
-                .cors()
-                // 表单登录处理器地址
-//                .and().formLogin().loginProcessingUrl("/api/login")
-                // 禁用HTTP响应头的缓存控制。默认情况下，会添加一些缓存控制头部，如no-store和private，以确保敏感数据不会被缓存。
-                .and().headers().cacheControl().disable()
-                // 认证失败处理
-                .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
-                // 设置会话会话创建策略为无状态, 基于token，不使用session
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                // 认证请求配置
-                .and().authorizeRequests()
-                // 监控管理请求放行
-                .antMatchers("/actuator/**").permitAll()//.hasRole("ACTUATOR")
-                // 对于登录login 注册register 验证码captchaImage 允许匿名访问
-                .antMatchers("/api/login", "/api/register", "/api/captchaImage", "/test/**").permitAll()
-                // 静态资源，可匿名访问
-                .antMatchers(HttpMethod.GET, "/static/**", "/public/**", "/**/*.css", "/**/*.js").permitAll()
-//                .antMatchers("/api/**").authenticated()
-                // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().authenticated();
+        // 放行白名单
+        List<String> whiteList = Arrays.asList("/api/login", "/api/register", "/test/**");
+        // 如果没有开启认证，则全放行
+//        if (config != null && !config.isEnabled()) {
+        if (CollectionUtils.isEmpty(whiteList)) {
+            whiteList.add("/**");
+        }
+        // 白名单放行
+        httpSecurity.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
+
+        // 监控管理请求放行
+        httpSecurity.authorizeRequests().antMatchers("/actuator/**").permitAll();
+        // 静态资源放行
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/static/**", "/public/**", "/**/*.css", "/**/*.js").permitAll();
+
+        // 其他的都需要授权访问
+        httpSecurity.authorizeRequests().anyRequest().authenticated();
+
+        // 不使用默认退出，自定义退出 httpSecurity.logout().disable();
         // 添加Logout处理器
         httpSecurity.logout().logoutUrl("/api/logout").logoutSuccessHandler(logoutSuccessHandler);
         // 添加JWT filter
         httpSecurity.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // 添加CORS filter
+        httpSecurity.addFilterBefore(corsFilter(), JwtTokenAuthenticationFilter.class);
     }
 
     /**
