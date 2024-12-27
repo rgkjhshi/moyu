@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 是否启用springSecurity的鉴权功能
      */
     @Value("${custom.security.enable:true}")
-    private Boolean enable;
+    private Boolean enabled;
 
     /**
      * 跨域配置
@@ -110,7 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 放行白名单
         List<String> whiteList = Arrays.asList(SecurityConstants.WHITE_LIST);
         // 如果没有开启认证，则全放行
-        if (ObjectUtil.notEqual(enable, true)) {
+        if (ObjectUtil.notEqual(enabled, true)) {
             whiteList.add("/**");
         }
         // 白名单放行
