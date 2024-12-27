@@ -45,8 +45,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private LogoutSuccessHandlerImpl logoutSuccessHandler;
 
-
-    @Value("${spring.security.enable:true}")
+    /**
+     * 是否启用springSecurity的鉴权功能
+     */
+    @Value("${custom.security.enable:true}")
     private Boolean enable;
 
     /**
