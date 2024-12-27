@@ -4,8 +4,10 @@ package com.moyu.system.auth.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.moyu.system.sys.model.entity.SysUser;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,6 +22,8 @@ import java.util.Set;
  */
 @Getter
 @Setter
+@ToString
+@Builder
 public class LoginUser implements UserDetails {
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +40,7 @@ public class LoginUser implements UserDetails {
     /**
      * 用户信息
      */
-    private SysUser user;
+    private SysUser sysUser;
 
     /**
      * 默认字段
@@ -74,15 +78,4 @@ public class LoginUser implements UserDetails {
      */
     @JsonIgnore
     private boolean enabled;
-
-    public LoginUser(SysUser user, Set<String> permissions) {
-        this.user = user;
-        this.perms = permissions;
-    }
-
-    public LoginUser(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
 }

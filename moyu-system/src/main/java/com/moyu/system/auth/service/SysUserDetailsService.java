@@ -30,12 +30,14 @@ public class SysUserDetailsService implements UserDetailsService {
     @Resource
     private SysUserService sysUserService;
 
+    /**
+     * SpringSecurity权限认证时(AuthenticationProvider.authenticate)会调用此方法
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("加载{}的用户信息", username);
         // 从数据库获取用户
-        SysUserParam userParam = SysUserParam.builder().account(username).build();
-        SysUser sysUser = sysUserService.detail(userParam);
+        SysUser sysUser = sysUserService.detail(SysUserParam.builder().account(username).build());
         if (sysUser == null) {
             log.info("登录用户:{}不存在", username);
             throw new UsernameNotFoundException("用户不存在");
@@ -48,7 +50,6 @@ public class SysUserDetailsService implements UserDetailsService {
         }
         // 创建 UserDetails
         String password = new BCryptPasswordEncoder().encode("admin");
-        LoginUser loginUser = new LoginUser(sysUser, null);
-        return loginUser;
+        return LoginUser.builder().username(username).sysUser(sysUser).build();
     }
 }
