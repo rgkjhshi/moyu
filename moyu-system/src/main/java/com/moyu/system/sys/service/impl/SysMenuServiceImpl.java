@@ -44,11 +44,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<Tree<String>> tree(SysMenuParam menuParam) {
-        SysMenuParam queryParam = new SysMenuParam();
-        queryParam.setModule(menuParam.getModule());
-        queryParam.setStatus(menuParam.getStatus());
+        // 模块编码
+        SysMenuParam query = SysMenuParam.builder().module(menuParam.getModule()).status(menuParam.getStatus()).build();
         // 查询所有菜单
-        List<SysMenu> menuList = this.list(menuParam);
+        List<SysMenu> menuList = this.list(query);
         // 构建树中包含记录的所有字段
         String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_ID : menuParam.getModule();
         return buildTree(menuList, rootId);

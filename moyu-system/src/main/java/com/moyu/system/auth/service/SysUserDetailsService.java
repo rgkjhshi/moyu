@@ -34,8 +34,7 @@ public class SysUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("加载{}的用户信息", username);
         // 从数据库获取用户
-        SysUserParam userParam = new SysUserParam();
-        userParam.setAccount(username);
+        SysUserParam userParam = SysUserParam.builder().account(username).build();
         SysUser sysUser = sysUserService.detail(userParam);
         if (sysUser == null) {
             log.info("登录用户:{}不存在", username);

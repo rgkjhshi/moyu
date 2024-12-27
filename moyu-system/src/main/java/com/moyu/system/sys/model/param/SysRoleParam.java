@@ -1,14 +1,18 @@
 package com.moyu.system.sys.model.param;
 
 import com.moyu.common.model.BasePageParam;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 
 /**
- * 角色信息查询参数
+ * 角色信息参数
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class SysRoleParam extends BasePageParam {
     //********** 额外字段 **********//
     /**

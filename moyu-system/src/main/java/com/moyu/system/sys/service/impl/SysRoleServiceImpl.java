@@ -157,11 +157,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<Tree<String>> treeForGrant(SysRoleParam roleParam) {
         // 模块编码
-        SysMenuParam menuParam = new SysMenuParam();
-        menuParam.setModule(roleParam.getModule());
-        menuParam.setStatus(StatusEnum.ENABLE.getCode());
+        SysMenuParam query = SysMenuParam.builder().module(roleParam.getModule()).status(StatusEnum.ENABLE.getCode()).build();
         // 查询所有菜单
-        List<SysMenu> menuList = sysMenuService.list(menuParam);
+        List<SysMenu> menuList = sysMenuService.list(query);
 
         // 所有的role-menu关系(menu.code->menu)
         Map<String, SysRelation> rmMap = new HashMap<>();

@@ -3,17 +3,21 @@ package com.moyu.system.sys.model.param;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.common.model.BasePageParam;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 import java.util.Set;
 
 /**
- * 岗位信息表
- *
- * @TableName sys_pos
+ * 用户信息参数
  */
-@Data
+@Getter
+@Setter
+@ToString
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysUserParam extends BasePageParam {
     //********** 额外字段 **********//

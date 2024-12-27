@@ -2,16 +2,18 @@ package com.moyu.system.sys.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.common.model.BasePageParam;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 
 /**
- * 岗位信息表
- *
- * @TableName sys_pos
+ * 岗位信息参数
  */
-@Data
+@Getter
+@Setter
+@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysPostParam extends BasePageParam {
     //********** 额外字段 **********//
