@@ -1,7 +1,7 @@
 package com.moyu.system.auth.service;
 
 
-import com.moyu.system.auth.model.LoginUser;
+import com.moyu.system.auth.model.LoginUserDetails;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
@@ -36,7 +36,7 @@ public class SysUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("加载{}的用户信息", username);
-        // 从数据库获取用户
+        // 这里应该通过远程调用获取用户信息
         SysUser sysUser = sysUserService.detail(SysUserParam.builder().account(username).build());
         if (sysUser == null) {
             log.info("登录用户:{}不存在", username);
@@ -50,6 +50,6 @@ public class SysUserDetailsService implements UserDetailsService {
         }
         // 创建 UserDetails
         String password = new BCryptPasswordEncoder().encode("admin");
-        return LoginUser.builder().username(username).sysUser(sysUser).build();
+        return LoginUserDetails.builder().username(username).sysUser(sysUser).build();
     }
 }

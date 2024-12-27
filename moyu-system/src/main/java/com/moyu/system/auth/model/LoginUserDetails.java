@@ -24,7 +24,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Builder
-public class LoginUser implements UserDetails {
+public class LoginUserDetails implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     /**
