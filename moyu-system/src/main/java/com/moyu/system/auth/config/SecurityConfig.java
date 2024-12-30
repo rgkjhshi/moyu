@@ -2,6 +2,7 @@ package com.moyu.system.auth.config;
 
 
 import cn.hutool.core.util.ObjectUtil;
+import com.google.common.collect.Lists;
 import com.moyu.system.auth.constant.SecurityConstants;
 import com.moyu.system.auth.security.filter.JwtTokenAuthenticationFilter;
 import com.moyu.system.auth.security.handle.CustomAuthFailureHandler;
@@ -23,7 +24,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -99,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // 放行白名单
-        List<String> whiteList = Arrays.asList(SecurityConstants.WHITE_LIST);
+        List<String> whiteList = Lists.newArrayList(SecurityConstants.WHITE_LIST);
         // 如果没有开启认证，则全放行
         if (ObjectUtil.notEqual(enabled, true)) {
             whiteList.add("/**");
