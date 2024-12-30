@@ -4,7 +4,7 @@
 * SpringSecurity自动配置类
 
 ### 依赖
-本模块引入如下依赖
+本模块需要如下依赖
 
 ```xml
 <dependencies>
@@ -12,6 +12,11 @@
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <!-- spring web -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 </dependencies>
 ```
