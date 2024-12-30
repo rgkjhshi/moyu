@@ -124,6 +124,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 不使用默认退出，自定义退出 httpSecurity.logout().disable();
         // 添加Logout处理器
         httpSecurity.logout().logoutUrl("/api/logout").logoutSuccessHandler(logoutSuccessHandler);
+
         // 添加JWT filter
         httpSecurity.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         // 添加CORS filter
