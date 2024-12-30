@@ -4,12 +4,12 @@ package com.moyu.system.auth.config;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.system.auth.constant.SecurityConstants;
 import com.moyu.system.auth.security.filter.JwtTokenAuthenticationFilter;
-import com.moyu.system.auth.security.handle.AuthenticationEntryPointImpl;
-import com.moyu.system.auth.security.handle.LogoutSuccessHandlerImpl;
+import com.moyu.system.auth.security.handle.CustomAuthenticationFailureHandler;
+import com.moyu.system.auth.security.handle.CustomAuthenticationSuccessHandler;
+import com.moyu.system.auth.security.handle.CustomLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,10 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
     @Resource
-    private AuthenticationEntryPointImpl authenticationEntryPoint;
-
-    @Resource
-    private LogoutSuccessHandlerImpl logoutSuccessHandler;
+    private CustomLogoutSuccessHandler logoutSuccessHandler;
 
     /**
      * 是否启用springSecurity的鉴权功能
@@ -91,10 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // 注解标记允许匿名访问的url
-//        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity.authorizeRequests();
-//        permitAllUrl.getUrls().forEach(url -> registry.antMatchers(url).permitAll());
-
         // CSRF禁用，否则POST工具报403错误
         httpSecurity.csrf().disable();
         // 允许跨域访问
@@ -119,12 +112,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 其他的都需要授权访问
         httpSecurity.authorizeRequests().anyRequest().authenticated();
 
+        // 配置表单认证
+        httpSecurity.formLogin().loginProcessingUrl("/api/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                // 认证成功处理类
+                .successHandler(new CustomAuthenticationSuccessHandler())
+                // 认证失败处理类
+                .failureHandler(new CustomAuthenticationFailureHandler());
         // 不使用默认退出，自定义退出 httpSecurity.logout().disable();
-        // 添加Logout处理器
+        // 自定义注销登录处理器 logoutUrl指定了注销登录请求地址，默认路径为/logout
         httpSecurity.logout().logoutUrl("/api/logout").logoutSuccessHandler(logoutSuccessHandler);
-
-        // 认证失败处理(如未授权时访问资源)
-        httpSecurity.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
         // 添加JWT filter
         httpSecurity.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         // 添加CORS filter
@@ -137,16 +135,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 设置自定义身份认证接口进行身份认证，并使用BCryptPasswordEncoder进行密码加密。
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-    }
-
-    /**
-     * 身份认证管理器 AuthenticationManager作为Bean声明，使用时可直接注入
-     */
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        auth.userDetailsService(userDetailsService);//.passwordEncoder(bCryptPasswordEncoder());
     }
 
     /**

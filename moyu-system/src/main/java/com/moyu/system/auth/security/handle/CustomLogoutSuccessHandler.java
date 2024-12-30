@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 @Service
-public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
+public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Resource
     private TokenService tokenService;
