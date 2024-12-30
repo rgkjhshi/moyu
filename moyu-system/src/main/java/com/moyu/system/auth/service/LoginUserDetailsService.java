@@ -50,6 +50,6 @@ public class LoginUserDetailsService implements UserDetailsService {
         }
         // 创建 UserDetails
         String password = new BCryptPasswordEncoder().encode("admin");
-        return LoginUserDetails.builder().username(username).sysUser(sysUser).build();
+        return LoginUserDetails.withSysUser(sysUser).build();
     }
 }

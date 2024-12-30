@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -24,7 +26,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Builder
-public class LoginUserDetails implements UserDetails {
+public class LoginUserDetails implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -78,4 +80,55 @@ public class LoginUserDetails implements UserDetails {
      */
     @JsonIgnore
     private boolean enabled;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
+
+    public void setAuthorities(String... authorities) {
+        this.authorities = AuthorityUtils.createAuthorityList(authorities);
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    @Override
+    public void eraseCredentials() {
+        this.password = null;
+    }
+
+    public static LoginUserDetailsBuilder withSysUser(SysUser sysUser) {
+        return builder().sysUser(sysUser)
+                .username(sysUser.getAccount())
+                .password(sysUser.getPassword())
+                .enabled(sysUser.getStatus() == 0);
+    }
 }
