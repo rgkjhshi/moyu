@@ -110,5 +110,11 @@
             <artifactId>hutool-core</artifactId>
             <version>5.8.25</version>
         </dependency>
+        <!-- jwt的一个java版本实现 -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.3.0</version>
+        </dependency>
     </dependencies>
 </project>

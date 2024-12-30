@@ -100,8 +100,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 允许跨域访问
         httpSecurity.cors();
 
-        // 认证失败处理(如未授权时访问资源)
-        httpSecurity.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
         // 禁用HTTP响应头的缓存控制，以确保敏感数据不会被缓存。默认情况下，会添加一些缓存控制头部，如no-store和private
         httpSecurity.headers().cacheControl().disable().frameOptions().sameOrigin();
         // 设置会话会话创建策略为无状态, 基于token，不使用session
@@ -125,6 +123,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 添加Logout处理器
         httpSecurity.logout().logoutUrl("/api/logout").logoutSuccessHandler(logoutSuccessHandler);
 
+        // 认证失败处理(如未授权时访问资源)
+        httpSecurity.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
         // 添加JWT filter
         httpSecurity.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         // 添加CORS filter
