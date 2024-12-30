@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  * @author shisong
  * @since 2024-12-30
  */
-public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {

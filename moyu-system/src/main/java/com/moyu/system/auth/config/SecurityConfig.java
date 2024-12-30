@@ -4,8 +4,8 @@ package com.moyu.system.auth.config;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.system.auth.constant.SecurityConstants;
 import com.moyu.system.auth.security.filter.JwtTokenAuthenticationFilter;
-import com.moyu.system.auth.security.handle.CustomAuthenticationFailureHandler;
-import com.moyu.system.auth.security.handle.CustomAuthenticationSuccessHandler;
+import com.moyu.system.auth.security.handle.CustomAuthFailureHandler;
+import com.moyu.system.auth.security.handle.CustomAuthSuccessHandler;
 import com.moyu.system.auth.security.handle.CustomLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -117,9 +117,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 // 认证成功处理类
-                .successHandler(new CustomAuthenticationSuccessHandler())
+                .successHandler(new CustomAuthSuccessHandler())
                 // 认证失败处理类
-                .failureHandler(new CustomAuthenticationFailureHandler());
+                .failureHandler(new CustomAuthFailureHandler());
         // 不使用默认退出，自定义退出 httpSecurity.logout().disable();
         // 自定义注销登录处理器 logoutUrl指定了注销登录请求地址，默认路径为/logout
         httpSecurity.logout().logoutUrl("/api/logout").logoutSuccessHandler(logoutSuccessHandler);

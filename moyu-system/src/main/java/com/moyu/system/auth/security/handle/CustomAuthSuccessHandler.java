@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
  * @author shisong
  * @since 2024-12-30
  */
-public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
