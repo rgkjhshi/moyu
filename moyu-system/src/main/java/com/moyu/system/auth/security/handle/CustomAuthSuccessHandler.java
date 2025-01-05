@@ -3,6 +3,8 @@ package com.moyu.system.auth.security.handle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.common.model.BaseResponse;
+import com.moyu.system.auth.model.LoginUserDetails;
+import com.moyu.system.auth.service.TokenService;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -11,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -25,9 +28,13 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        // 认证成功直接返回json数据告诉前端登陆成功
+        LoginUserDetails principal = (LoginUserDetails) authentication.getPrincipal();
+        String token = TokenService.createToken(principal.getUsername());
+        // 认证成功直接返回json数据
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.getWriter().print(new ObjectMapper().writeValueAsString(BaseResponse.getSuccessResponse("登陆成功")));
+        PrintWriter printWriter = response.getWriter();
+        printWriter.print(new ObjectMapper().writeValueAsString(BaseResponse.getSuccessResponse(token)));
+        printWriter.flush();
     }
 }
