@@ -6,26 +6,25 @@ import com.moyu.common.model.BaseResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 自定义的认证失败处理类。认证失败时不需要页面跳转，只需要返回json数据告诉前端即可。
- * 与5.2中新增的AuthenticationEntryPointFailureHandler通过AuthenticationEntryPoint方式实现AuthenticationFailureHandler等效
- * <a href="https://blog.csdn.net/weixin_43831002/article/details/126131233">参考阅读</a>
+ * 未认证访问的情况处理
  *
  * @author shisong
- * @since 2024-12-30
+ * @since 2025-01-05
  */
-public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
+public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         // 认证失败直接返回json数据告诉前端
         response.setStatus(HttpServletResponse.SC_OK);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -33,6 +32,9 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
 
         int code = HttpStatus.UNAUTHORIZED.value();
         String message = "认证失败，无法访问：" + request.getRequestURI();
-        response.getWriter().print(new ObjectMapper().writeValueAsString(new BaseResponse<>(code, message)));
+        String responseBody = new ObjectMapper().writeValueAsString(new BaseResponse<>(code, message));
+        PrintWriter printWriter = response.getWriter();
+        printWriter.print(responseBody);
+        printWriter.flush();
     }
 }

@@ -5,15 +5,14 @@ import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Lists;
 import com.moyu.system.auth.constant.SecurityConstants;
 import com.moyu.system.auth.security.filter.JwtTokenAuthenticationFilter;
-import com.moyu.system.auth.security.handle.CustomAuthFailureHandler;
-import com.moyu.system.auth.security.handle.CustomAuthSuccessHandler;
-import com.moyu.system.auth.security.handle.CustomLogoutSuccessHandler;
+import com.moyu.system.auth.security.handle.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -71,7 +70,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Security配置
+     * WebSecurity配置
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        super.configure(web);
+    }
+
+    /**
+     * HttpSecurity配置
      * anyRequest          |   匹配所有请求路径
      * access              |   SpringEl表达式结果为true时可以访问
      * anonymous           |   匿名可以访问
@@ -127,6 +134,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         // 添加CORS filter
         httpSecurity.addFilterBefore(corsFilter(), JwtTokenAuthenticationFilter.class);
+
+        // 异常处理
+        httpSecurity.exceptionHandling()
+                // 未认证访问的情况处理
+                .authenticationEntryPoint(new CustomAuthEntryPoint())
+                // 访问权限不足时的处理
+                .accessDeniedHandler(new CustomAccessDeniedHandler());
     }
 
     /**
