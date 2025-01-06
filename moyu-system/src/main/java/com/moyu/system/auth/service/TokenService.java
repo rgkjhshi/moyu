@@ -30,6 +30,25 @@ public class TokenService {
      */
     public static final String LOGIN_TOKEN_KEY = "login_tokens:";
 
+    /**
+     * 获取用户身份信息
+     *
+     * @return 用户凭证
+     */
+    public LoginUserDetails getLoginUser(DecodedJWT jwt) {
+        LoginUserDetails user = null;
+        // 获取请求携带的令牌
+        if (ObjectUtil.isNotEmpty(jwt)) {
+            // 从 redis 中获取用户信息
+            String jwtId = jwt.getId();
+            String userKey = getUserKey(jwtId);
+            // 从缓存中获取用户(通过userKey) TODO
+//            user = redisCache.getCacheObject(userKey);
+            user = LoginUserDetails.builder().build();
+        }
+        return user;
+    }
+
 
     /**
      * 获取用户身份信息

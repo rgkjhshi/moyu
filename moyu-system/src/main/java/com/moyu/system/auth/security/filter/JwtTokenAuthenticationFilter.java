@@ -1,7 +1,9 @@
 package com.moyu.system.auth.security.filter;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.moyu.system.auth.model.LoginUserDetails;
+import com.moyu.system.auth.security.util.SecurityUtils;
 import com.moyu.system.auth.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,15 +35,20 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 从请求头中获取token进而获取用户信息
-        LoginUserDetails userDetails = tokenService.getLoginUser(request);
-        // 如果 loginUser 存在，进行验证并设置SecurityContext
-        if (ObjectUtil.isNotNull(userDetails) && ObjectUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
-            // 验证token
-            tokenService.verifyToken(userDetails);
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        // 获取请求携带的令牌
+        String token = TokenService.getToken(request);
+        if (ObjectUtil.isNotEmpty(token)) {
+            // 验证token，并解析为jwt对象
+            DecodedJWT jwt = TokenService.verifyToken(token);
+            // 从缓存中获取用户信息
+            LoginUserDetails userDetails = tokenService.getLoginUser(jwt);
+            // 如果 loginUser 存在，设置SecurityContext
+            if (ObjectUtil.isNotNull(userDetails) && ObjectUtil.isEmpty(SecurityUtils.getAuthentication())) {
+                // 设置认证对象
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         // 继续执行后续的过滤器链
         filterChain.doFilter(request, response);

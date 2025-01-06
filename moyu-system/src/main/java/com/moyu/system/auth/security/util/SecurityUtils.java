@@ -1,0 +1,60 @@
+package com.moyu.system.auth.security.util;
+
+
+import com.moyu.common.exception.BaseException;
+import com.moyu.system.auth.model.LoginUserDetails;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+/**
+ * SpringSecurity安全服务工具类
+ *
+ * @author shisong
+ * @since 2025-01-06
+ */
+public class SecurityUtils {
+
+    /**
+     * 获取Authentication
+     */
+    public static Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    /**
+     * 获取用户
+     **/
+    public static LoginUserDetails getLoginUser() {
+        try {
+            return (LoginUserDetails) getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "获取用户信息异常");
+        }
+    }
+
+    /**
+     * 生成BCryptPasswordEncoder密码
+     *
+     * @param password 密码
+     * @return 加密字符串
+     */
+    public static String encryptPassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
+
+    /**
+     * 判断密码是否相同
+     *
+     * @param rawPassword     未加密的原始密码
+     * @param encodedPassword 加密后的密码
+     * @return 是否匹配，true表示相同
+     */
+    public static boolean matchesPassword(String rawPassword, String encodedPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+}
