@@ -137,7 +137,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 异常处理
         httpSecurity.exceptionHandling()
-                // 未认证访问的情况处理
+                // 未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
                 .authenticationEntryPoint(new CustomAuthEntryPoint())
                 // 访问权限不足时的处理
                 .accessDeniedHandler(new CustomAccessDeniedHandler());

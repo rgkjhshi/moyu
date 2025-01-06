@@ -17,7 +17,7 @@ public interface SecurityConstants {
         /**
          * token在header中的标识(Authorization)
          */
-        public static final String HEADER = "X-Token";
+        public static final String HEADER = "Authorization";
         /**
          * token令牌前缀
          */
@@ -50,7 +50,7 @@ public interface SecurityConstants {
             "/api/captcha/**",
 
             // 监控管理请求
-            "/actuator/**",
+//            "/actuator/**",
             "/test/**",
             "/monitor/**",
 
