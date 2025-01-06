@@ -36,15 +36,13 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         // 从请求头中获取token进而获取用户信息
         LoginUserDetails userDetails = tokenService.getLoginUser(request);
         // 如果 loginUser 存在，进行验证并设置SecurityContext
-//        if (ObjectUtil.isNotNull(userDetails) && ObjectUtil.isEmpty(SecurityUtils.getAuthentication())) {
-        if (ObjectUtil.isNotNull(userDetails)) {
+        if (ObjectUtil.isNotNull(userDetails) && ObjectUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
             // 验证token
             tokenService.verifyToken(userDetails);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
         // 继续执行后续的过滤器链
         filterChain.doFilter(request, response);
     }

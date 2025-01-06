@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -49,7 +48,6 @@ public class LoginUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在");
         }
         // 创建 UserDetails
-        String password = new BCryptPasswordEncoder().encode("admin");
         return LoginUserDetails.withSysUser(sysUser).build();
     }
 }

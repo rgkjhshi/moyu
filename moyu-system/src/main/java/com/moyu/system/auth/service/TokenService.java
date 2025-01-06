@@ -1,6 +1,7 @@
 package com.moyu.system.auth.service;
 
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -36,22 +37,19 @@ public class TokenService {
      * @return 用户凭证
      */
     public LoginUserDetails getLoginUser(HttpServletRequest request) {
+        LoginUserDetails user = null;
         // 获取请求携带的令牌
         String token = getToken(request);
         if (ObjectUtil.isNotEmpty(token)) {
-            try {
-//                Claims claims = parseToken(token);
-                // 解析对应的权限以及用户信息
-//                String uuid = (String) claims.get(LOGIN_USER_KEY);
-//                String tokenKey = getTokenKey(uuid);
-                // 从缓存中获取用户(通过tokenKey) TODO
-                LoginUserDetails user = LoginUserDetails.builder().build();
-                return user;
-            } catch (Exception e) {
-                log.error("获取用户信息异常'{}'", e.getMessage());
-            }
+            DecodedJWT jwt = verifyToken(token);
+            // 从 redis 中获取用户信息
+            String jwtId = jwt.getId();
+            String userKey = getUserKey(jwtId);
+            // 从缓存中获取用户(通过userKey) TODO
+//            user = redisCache.getCacheObject(userKey);
+            user = LoginUserDetails.builder().build();
         }
-        return null;
+        return user;
     }
 
     /**
@@ -67,7 +65,7 @@ public class TokenService {
      */
     public void removeLoginUser(String token) {
         if (ObjectUtil.isNotEmpty(token)) {
-            String userKey = getTokenKey(token);
+            String userKey = getUserKey(token);
             // TODO 从redis中删除token
         }
     }
@@ -75,7 +73,7 @@ public class TokenService {
     /**
      * 从http请求中获取token
      */
-    private String getToken(HttpServletRequest request) {
+    public static String getToken(HttpServletRequest request) {
         String token = request.getHeader(SecurityConstants.Token.HEADER);
         if (ObjectUtil.isNotEmpty(token) && token.startsWith(SecurityConstants.Token.PREFIX)) {
             token = token.replace(SecurityConstants.Token.PREFIX, "");
@@ -83,7 +81,7 @@ public class TokenService {
         return token;
     }
 
-    private String getTokenKey(String uuid) {
+    private String getUserKey(String uuid) {
         return LOGIN_TOKEN_KEY + uuid;
     }
 
@@ -101,6 +99,7 @@ public class TokenService {
                 .withIssuedAt(now.toDate())
                 // 过期时间
                 .withExpiresAt(now.plusSeconds(SecurityConstants.Token.TOKEN_VALID_TIME).toDate())
+                .withJWTId(IdUtil.fastUUID())
                 .withClaim("userId", loginUser.getUsername())
                 .sign(SecurityConstants.Token.SIGNATURE_ALGORITHM);
         return token;
@@ -128,7 +127,7 @@ public class TokenService {
                 .withSubject(username)
                 .withIssuedAt(now.toDate())
                 .withExpiresAt(now.plusSeconds(SecurityConstants.Token.TOKEN_VALID_TIME).toDate())
-                .withJWTId(username)
+                .withJWTId(IdUtil.fastUUID())
                 .sign(SecurityConstants.Token.SIGNATURE_ALGORITHM);
         return token;
     }
@@ -136,7 +135,7 @@ public class TokenService {
     /**
      * 验证token并返回解密后的token
      */
-    public DecodedJWT verifyToken(String token) throws BaseException {
+    public static DecodedJWT verifyToken(String token) throws BaseException {
         JWTVerifier verifier = JWT.require(SecurityConstants.Token.SIGNATURE_ALGORITHM).build();
         DecodedJWT jwt;
         try {
