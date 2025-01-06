@@ -32,7 +32,7 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         int code = HttpStatus.UNAUTHORIZED.value();
-        String message = "认证失败，无法访问：" + request.getRequestURI();
+        String message = "认证失败";
         response.getWriter().print(new ObjectMapper().writeValueAsString(new BaseResponse<>(code, message)));
     }
 }

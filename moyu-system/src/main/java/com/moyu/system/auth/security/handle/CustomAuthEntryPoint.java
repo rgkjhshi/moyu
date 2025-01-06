@@ -31,7 +31,7 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         int code = HttpStatus.UNAUTHORIZED.value();
-        String message = "认证失败，无法访问：" + request.getRequestURI();
+        String message = "未认证，无法访问：" + request.getRequestURI();
         String responseBody = new ObjectMapper().writeValueAsString(new BaseResponse<>(code, message));
         PrintWriter printWriter = response.getWriter();
         printWriter.print(responseBody);
