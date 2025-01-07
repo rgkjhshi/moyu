@@ -55,7 +55,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private TransactionTemplate transactionTemplate;
 
     @Resource
-    private SysRelationService relationService;
+    private SysRelationService sysRelationService;
 
     @Resource
     private SysMenuService sysMenuService;
@@ -163,7 +163,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 所有的role-menu关系(menu.code->menu)
         Map<String, SysRelation> rmMap = new HashMap<>();
-        relationService.list(new LambdaQueryWrapper<SysRelation>()
+        sysRelationService.list(new LambdaQueryWrapper<SysRelation>()
                         // 指定关系类型
                         .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_MENU.getCode())
                         // 指定哪个role
@@ -238,7 +238,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // 清空角色在本模块的所有权限
             QueryWrapper<SysRelation> wrapper = new QueryWrapper<SysRelation>().checkSqlInjection();
             wrapper.lambda().eq(SysRelation::getObjectId, roleParam.getCode()).in(SysRelation::getTargetId, allMenuCode);
-            relationService.remove(wrapper);
+            sysRelationService.remove(wrapper);
             // 非空则新加权限
             if (ObjectUtil.isNotEmpty(grantMenuSet)) {
                 List<SysRelation> addList = new ArrayList<>();
@@ -249,7 +249,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     relation.setRelationType(RelationTypeEnum.ROLE_HAS_MENU.getCode());
                     addList.add(relation);
                 });
-                relationService.saveBatch(addList);
+                sysRelationService.saveBatch(addList);
             }
             return null;
         });

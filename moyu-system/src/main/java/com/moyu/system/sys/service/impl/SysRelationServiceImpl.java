@@ -1,10 +1,16 @@
 package com.moyu.system.sys.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.mapper.SysRelationMapper;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.service.SysRelationService;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author shisong
@@ -14,6 +20,54 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRelation> implements SysRelationService {
 
+    @Override
+    public Set<String> userRole(String account) {
+        // 用户所属分组
+        Set<String> groupSet = new HashSet<>();
+        // 查询用户归属的所有分组
+        list(new LambdaQueryWrapper<SysRelation>()
+                // 关系类型
+                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
+                // 查询group
+                .select(SysRelation::getObjectId)
+                // 指定用户
+                .eq(SysRelation::getTargetId, account)
+        ).forEach(e -> groupSet.add(e.getObjectId()));
+        // 角色集
+        Set<String> roleSet = new HashSet<>();
+        if (ObjectUtil.isNotEmpty(groupSet)) {
+            // 查询分组的所有角色
+            list(new LambdaQueryWrapper<SysRelation>()
+                    // 关系类型
+                    .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_ROLE.getCode())
+                    // 查询role
+                    .select(SysRelation::getTargetId)
+                    // 指定group
+                    .in(SysRelation::getObjectId, groupSet)
+            ).forEach(e -> roleSet.add(e.getTargetId()));
+        }
+        return roleSet;
+    }
+
+    @Override
+    public Set<String> userMenu(String account) {
+        // 用户的角色集
+        Set<String> roleSet = userRole(account);
+        // 权限集
+        Set<String> menuSet = new HashSet<>();
+        if (ObjectUtil.isNotEmpty(roleSet)) {
+            // 查询分组的所有角色
+            list(new LambdaQueryWrapper<SysRelation>()
+                    // 关系类型
+                    .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_MENU.getCode())
+                    // 查询menu
+                    .select(SysRelation::getTargetId)
+                    // 指定role
+                    .in(SysRelation::getObjectId, roleSet)
+            ).forEach(e -> menuSet.add(e.getTargetId()));
+        }
+        return menuSet;
+    }
 }
 
 

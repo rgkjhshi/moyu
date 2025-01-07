@@ -1,7 +1,6 @@
 package com.moyu.system.sys.service;
 
 import cn.hutool.core.lang.tree.Tree;
-import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.model.vo.UserInfo;
 
 import java.util.List;
@@ -21,6 +20,6 @@ public interface UserCenterService {
     /**
      * 获取用户菜单树
      */
-    List<Tree<String>> userMenu(SysUserParam param);
+    List<Tree<String>> userMenu(String account);
 
 }

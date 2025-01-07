@@ -44,7 +44,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<Tree<String>> tree(SysMenuParam menuParam) {
-        // 模块编码
+        // 查询条件(可指定module、status)
         SysMenuParam query = SysMenuParam.builder().module(menuParam.getModule()).status(menuParam.getStatus()).build();
         // 查询所有菜单
         List<SysMenu> menuList = this.list(query);
@@ -288,9 +288,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
     }
 
-
     /**
      * 构建树结构(code, parentCode, children, weight, extra)
+     *
+     * @param menuList menu的非空字段构会放到树节点中
+     * @param rootId   指定的根节点(从树中查找此rootId)
+     * @return 返回以rootId为根的树，可能是子树或多棵树
      */
     private List<Tree<String>> buildTree(List<SysMenu> menuList, String rootId) {
         // 配置TreeNode使用指定的字段名
