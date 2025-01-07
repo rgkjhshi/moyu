@@ -5,10 +5,13 @@ import com.moyu.common.exception.BaseException;
 import com.moyu.system.auth.model.LoginUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -41,7 +44,8 @@ public class SecurityUtils {
      * 获取用户角色集合
      */
     public static Set<String> getRoles() {
-        return AuthorityUtils.authorityListToSet(getLoginUser().getAuthorities());
+        Collection<GrantedAuthority> authorities = getLoginUser().getAuthorities();
+        return authorities == null ? new HashSet<>() : AuthorityUtils.authorityListToSet(authorities);
     }
 
     /**

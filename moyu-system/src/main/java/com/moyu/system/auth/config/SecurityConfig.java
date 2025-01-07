@@ -120,8 +120,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests().anyRequest().authenticated();
 
         // 配置表单认证
-        httpSecurity.formLogin().loginProcessingUrl("/api/login")
-                .usernameParameter("username")
+        httpSecurity.formLogin().loginProcessingUrl("/api/auth/login")
+                .usernameParameter("account")
                 .passwordParameter("password")
                 // 认证成功处理类
                 .successHandler(new CustomAuthSuccessHandler())

@@ -13,6 +13,7 @@ import com.moyu.system.auth.constant.SecurityConstants;
 import com.moyu.system.auth.model.LoginUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +45,7 @@ public class TokenService {
             String userKey = getUserKey(jwtId);
             // 从缓存中获取用户(通过userKey) TODO
 //            user = redisCache.getCacheObject(userKey);
-            user = LoginUserDetails.builder().build();
+            user = LoginUserDetails.builder().username(jwt.getSubject()).authorities(AuthorityUtils.NO_AUTHORITIES).build();
         }
         return user;
     }

@@ -3,6 +3,7 @@ package com.moyu.system.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.moyu.system.sys.model.dto.UserAuthInfo;
 import com.moyu.system.sys.model.entity.SysUser;
 import lombok.Builder;
 import lombok.Getter;
@@ -82,12 +83,16 @@ public class LoginUserDetails implements UserDetails, CredentialsContainer {
     private boolean enabled;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
 
     public void setAuthorities(String... authorities) {
         this.authorities = AuthorityUtils.createAuthorityList(authorities);
+    }
+
+    public void setAuthorities(Collection<String> authorities) {
+        this.authorities = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
     }
 
     @Override
@@ -130,5 +135,15 @@ public class LoginUserDetails implements UserDetails, CredentialsContainer {
                 .username(sysUser.getAccount())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0);
+    }
+
+    public static LoginUserDetails fromUserAuthInfo(UserAuthInfo user) {
+        LoginUserDetails loginUserDetails = builder()
+                .username(user.getAccount())
+                .password(user.getPassword())
+                .enabled(user.getStatus() == 0)
+                .build();
+        loginUserDetails.setAuthorities(user.getRoles());
+        return loginUserDetails;
     }
 }
