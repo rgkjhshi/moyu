@@ -83,7 +83,7 @@ public class SysRoleController {
     }
 
     /**
-     * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
+     * 给角色授权菜单
      */
     @PostMapping("/grantMenu")
     public BaseResponse<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam sysRoleParam) {
