@@ -5,8 +5,11 @@ import com.moyu.common.exception.BaseException;
 import com.moyu.system.auth.model.LoginUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Set;
 
 /**
  * SpringSecurity安全服务工具类
@@ -32,6 +35,20 @@ public class SecurityUtils {
         } catch (Exception e) {
             throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "获取用户信息异常");
         }
+    }
+
+    /**
+     * 获取用户角色集合
+     */
+    public static Set<String> getRoles() {
+        return AuthorityUtils.authorityListToSet(getLoginUser().getAuthorities());
+    }
+
+    /**
+     * 获取用户权限集合
+     */
+    public static Set<String> getPerms() {
+        return getLoginUser().getPerms();
     }
 
     /**
