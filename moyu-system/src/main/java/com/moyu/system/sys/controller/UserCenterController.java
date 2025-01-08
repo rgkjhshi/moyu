@@ -41,7 +41,7 @@ public class UserCenterController {
     /**
      * 获取当前登陆用户的菜单
      */
-    @PostMapping("/userMenu")
+    @RequestMapping("/userMenu")
     public BaseResponse<List<Tree<String>>> currentUserMenu() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
