@@ -120,7 +120,7 @@ public class SysPostController {
      */
     @PostMapping("/addUser")
     public BaseResponse<?> addUser(@RequestBody SysPostParam sysPostParam) {
-        relationService.groupAddRole(sysPostParam);
+        relationService.groupAddUser(sysPostParam);
         return BaseResponse.getSuccessResponse();
     }
 
