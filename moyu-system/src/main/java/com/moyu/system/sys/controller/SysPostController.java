@@ -5,8 +5,9 @@ import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysPost;
+import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysPostParam;
-import com.moyu.system.sys.model.vo.RelationVO;
 import com.moyu.system.sys.service.RelationService;
 import com.moyu.system.sys.service.SysPostService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,8 +83,8 @@ public class SysPostController {
      * 查询指定岗位的角色列表
      */
     @PostMapping("/roleList")
-    public BaseResponse<List<RelationVO>> roleList(@RequestBody SysPostParam sysPostParam) {
-        List<RelationVO> list = relationService.groupRoleList(sysPostParam);
+    public BaseResponse<List<SysRole>> roleList(@RequestBody SysPostParam sysPostParam) {
+        List<SysRole> list = relationService.groupRoleList(sysPostParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -109,9 +110,27 @@ public class SysPostController {
      * 查询指定岗位的角色列表
      */
     @PostMapping("/userList")
-    public BaseResponse<List<RelationVO>> userList(@RequestBody SysPostParam sysPostParam) {
-        List<RelationVO> list = relationService.groupUserList(sysPostParam);
+    public BaseResponse<List<SysUser>> userList(@RequestBody SysPostParam sysPostParam) {
+        List<SysUser> list = relationService.groupUserList(sysPostParam);
         return BaseResponse.getSuccessResponse(list);
+    }
+
+    /**
+     * 岗位内新增角色
+     */
+    @PostMapping("/addUser")
+    public BaseResponse<?> addUser(@RequestBody SysPostParam sysPostParam) {
+        relationService.groupAddRole(sysPostParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 岗位内移除角色
+     */
+    @PostMapping("/deleteUser")
+    public BaseResponse<?> deleteUser(@RequestBody SysPostParam sysPostParam) {
+        relationService.groupAddRole(sysPostParam);
+        return BaseResponse.getSuccessResponse();
     }
 
 }
