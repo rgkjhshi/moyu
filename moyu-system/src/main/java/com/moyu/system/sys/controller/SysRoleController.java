@@ -31,6 +31,15 @@ public class SysRoleController {
     private SysRoleService sysRoleService;
 
     /**
+     * 获取角色列表
+     */
+    @PostMapping("/list")
+    public BaseResponse<List<SysRole>> list(@RequestBody SysRoleParam sysRoleParam) {
+        List<SysRole> list = sysRoleService.list(sysRoleParam);
+        return BaseResponse.getSuccessResponse(list);
+    }
+
+    /**
      * 分页获取角色列表
      */
     @PostMapping("/page")
