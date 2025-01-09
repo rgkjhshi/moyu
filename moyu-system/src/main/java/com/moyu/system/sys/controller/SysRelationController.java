@@ -5,12 +5,11 @@ import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysPost;
-import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.param.SysPostParam;
 import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.model.vo.RelationVO;
+import com.moyu.system.sys.service.RelationService;
 import com.moyu.system.sys.service.SysPostService;
-import com.moyu.system.sys.service.SysRelationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,14 +33,14 @@ public class SysRelationController {
     private SysPostService sysPostService;
 
     @Resource
-    private SysRelationService sysRelationService;
+    private RelationService relationService;
 
     /**
      * 组内的角色列表
      */
     @PostMapping("/groupRoleList")
     public BaseResponse<List<RelationVO>> list(@RequestBody SysRelationParam param) {
-        List<RelationVO> list = sysRelationService.groupRoleList(param);
+        List<RelationVO> list = relationService.groupRoleList(param);
         return BaseResponse.getSuccessResponse(list);
     }
 
