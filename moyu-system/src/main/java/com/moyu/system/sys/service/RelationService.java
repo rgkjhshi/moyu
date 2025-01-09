@@ -20,4 +20,9 @@ public interface RelationService {
      */
     void groupAddRole(SysPostParam postParam);
 
+    /**
+     * group删除角色
+     */
+    void groupDeleteRole(SysPostParam postParam);
+
 }

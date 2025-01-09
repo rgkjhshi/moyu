@@ -96,4 +96,13 @@ public class SysPostController {
         return BaseResponse.getSuccessResponse();
     }
 
+    /**
+     * 岗位内移除角色
+     */
+    @PostMapping("/deleteRole")
+    public BaseResponse<?> deleteRole(@RequestBody SysPostParam sysPostParam) {
+        relationService.groupAddRole(sysPostParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
 }

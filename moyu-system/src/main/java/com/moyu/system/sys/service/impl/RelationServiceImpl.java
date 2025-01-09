@@ -83,4 +83,20 @@ public class RelationServiceImpl implements RelationService {
         });
         sysRelationService.saveBatch(addList);
     }
+
+    @Override
+    public void groupDeleteRole(SysPostParam postParam) {
+        if (ObjectUtil.isEmpty(postParam.getCodeSet())) {
+            return;
+        }
+        // 查询指定group的所有relation
+        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
+                .objectId(postParam.getCode()).targetSet(postParam.getCodeSet())
+                .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).build()
+        );
+        Set<Long> ids = list.stream().map(SysRelation::getId).collect(Collectors.toSet());
+        if (ObjectUtil.isNotEmpty(ids)) {
+            sysRelationService.removeByIds(ids);
+        }
+    }
 }
