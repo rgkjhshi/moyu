@@ -109,10 +109,11 @@ public class RelationServiceImpl implements RelationService {
         }
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
-        // 查询指定group的所有relation
+        // 查询指定group中存在的role，加入ids待删
         sysRelationService.list(SysRelationParam.builder().objectId(postParam.getCode()).targetSet(postParam.getCodeSet())
                 .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
+        // 删除
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
@@ -125,13 +126,12 @@ public class RelationServiceImpl implements RelationService {
         if (ObjectUtil.isEmpty(targetSet)) {
             return;
         }
-        // 查询指定group的所有relation
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .objectId(objectId).targetSet(targetSet)
+        Set<String> oldSet = new HashSet<>();
+        // 查询指定group包含的user，放入oldSet
+        sysRelationService.list(SysRelationParam.builder().objectId(objectId).targetSet(targetSet)
                 .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).build()
-        );
-        Set<String> oldSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
-        // 要新增的targetId集合
+        ).forEach(e -> oldSet.add(e.getTargetId()));
+        // 从target中删除已经存在的
         targetSet.removeAll(oldSet);
         // 再次判断要新增的内容为空则返回
         if (ObjectUtil.isEmpty(targetSet)) {
@@ -153,12 +153,13 @@ public class RelationServiceImpl implements RelationService {
         if (ObjectUtil.isEmpty(postParam.getCodeSet())) {
             return;
         }
-        // 查询指定group的已有的user
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .objectId(postParam.getCode()).targetSet(postParam.getCodeSet())
+        // 要删除的ids
+        Set<Long> ids = new HashSet<>();
+        // 查询指定group中存在的user，加入ids待删
+        sysRelationService.list(SysRelationParam.builder().objectId(postParam.getCode()).targetSet(postParam.getCodeSet())
                 .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).build()
-        );
-        Set<Long> ids = list.stream().map(SysRelation::getId).collect(Collectors.toSet());
+        ).forEach(e -> ids.add(e.getId()));
+        // 删除
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
