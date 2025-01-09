@@ -11,9 +11,14 @@ import java.util.List;
 public interface RelationService {
 
     /**
-     * 获取记录列表
+     * 岗位内角色列表
      */
     List<RelationVO> groupRoleList(SysPostParam postParam);
+
+    /**
+     * 岗位内用户列表
+     */
+    List<RelationVO> groupUserList(SysPostParam postParam);
 
     /**
      * group新增角色

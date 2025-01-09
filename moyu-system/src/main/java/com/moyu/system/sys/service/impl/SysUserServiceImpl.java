@@ -48,12 +48,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
-                // 查询部分字段
-//                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(userParam.getSearchKey()), SysUser::getName, userParam.getSearchKey())
                 // 模糊搜索所属组织(选的是一个code，搜的是所有code)
                 .like(StrUtil.isNotBlank(userParam.getOrgCode()), SysUser::getOrgChain, userParam.getOrgCode())
+                // 指定account集合
+                .in(ObjectUtil.isNotEmpty(userParam.getCodeSet()), SysUser::getAccount, userParam.getCodeSet())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
                 .eq(SysUser::getDeleteFlag, 0);

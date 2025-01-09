@@ -105,4 +105,13 @@ public class SysPostController {
         return BaseResponse.getSuccessResponse();
     }
 
+    /**
+     * 查询指定岗位的角色列表
+     */
+    @PostMapping("/userList")
+    public BaseResponse<List<RelationVO>> userList(@RequestBody SysPostParam sysPostParam) {
+        List<RelationVO> list = relationService.groupUserList(sysPostParam);
+        return BaseResponse.getSuccessResponse(list);
+    }
+
 }

@@ -25,7 +25,10 @@ public class SysUserParam extends BasePageParam {
      * 待删除的id列表
      */
     private Set<Long> ids;
-
+    /**
+     * 指定的account集合
+     */
+    private Set<String> codeSet;
     /**
      * 搜索关键词
      */

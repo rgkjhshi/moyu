@@ -21,11 +21,6 @@ import java.util.Date;
 public class RelationVO {
 
     /**
-     * 关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)
-     */
-    private Integer relationType;
-
-    /**
      * 唯一编码，对应objectId
      */
     private String code;

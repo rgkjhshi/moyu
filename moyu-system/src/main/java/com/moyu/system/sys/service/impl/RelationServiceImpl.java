@@ -6,13 +6,16 @@ import com.google.common.collect.Lists;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysPostParam;
 import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
+import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.model.vo.RelationVO;
 import com.moyu.system.sys.service.RelationService;
 import com.moyu.system.sys.service.SysRelationService;
 import com.moyu.system.sys.service.SysRoleService;
+import com.moyu.system.sys.service.SysUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,6 +38,9 @@ public class RelationServiceImpl implements RelationService {
     @Resource
     private SysRoleService sysRoleService;
 
+    @Resource
+    private SysUserService sysUserService;
+
 
     @Override
     public List<RelationVO> groupRoleList(SysPostParam postParam) {
@@ -49,6 +55,27 @@ public class RelationServiceImpl implements RelationService {
         List<SysRole> roleList = sysRoleService.list(SysRoleParam.builder().searchKey(postParam.getSearchKey()).codeSet(map.keySet()).build());
         roleList.forEach(role -> {
             map.get(role.getCode()).setName(role.getName());
+        });
+
+        return Lists.newArrayList(map.values().iterator());
+    }
+
+    @Override
+    public List<RelationVO> groupUserList(SysPostParam postParam) {
+        // 查询指定group的所有user
+        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
+                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).objectId(postParam.getCode()).build());
+        // 关联对象map(account->RelationVO)
+        LinkedHashMap<String, RelationVO> map = new LinkedHashMap<>();
+        list.forEach(e -> map.put(e.getTargetId(), RelationVO.builder().code(e.getTargetId())
+                .createTime(e.getCreateTime()).createUser(e.getCreateUser()).build()));
+        // 查询角色(可指定搜索词)
+        List<SysUser> userList = sysUserService.list(SysUserParam.builder()
+                .searchKey(postParam.getSearchKey())
+                .orgCode(postParam.getOrgCode())
+                .codeSet(map.keySet()).build());
+        userList.forEach(user -> {
+            map.get(user.getAccount()).setName(user.getName());
         });
 
         return Lists.newArrayList(map.values().iterator());
