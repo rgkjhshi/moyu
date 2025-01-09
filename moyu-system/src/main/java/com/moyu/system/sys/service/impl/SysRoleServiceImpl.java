@@ -65,8 +65,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         QueryWrapper<SysRole> queryWrapper = new QueryWrapper<SysRole>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
-                // 查询部分字段
-//                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(roleParam.getSearchKey()), SysRole::getName, roleParam.getSearchKey())
                 // 指定code集合
