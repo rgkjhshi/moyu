@@ -6,6 +6,8 @@ import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysPost;
 import com.moyu.system.sys.model.param.SysPostParam;
+import com.moyu.system.sys.model.vo.RelationVO;
+import com.moyu.system.sys.service.RelationService;
 import com.moyu.system.sys.service.SysPostService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 分组(角色组、岗位)控制器
@@ -27,6 +30,9 @@ public class SysPostController {
 
     @Resource
     private SysPostService sysPostService;
+
+    @Resource
+    private RelationService relationService;
 
     /**
      * 分页获取角色列表
@@ -43,6 +49,15 @@ public class SysPostController {
     @PostMapping("/detail")
     public BaseResponse<SysPost> detail(@RequestBody SysPostParam sysPostParam) {
         return BaseResponse.getSuccessResponse(sysPostService.detail(sysPostParam));
+    }
+
+    /**
+     * 查询指定岗位的角色列表
+     */
+    @PostMapping("/roleList")
+    public BaseResponse<List<RelationVO>> list(@RequestBody SysPostParam sysPostParam) {
+        List<RelationVO> list = relationService.groupRoleList(sysPostParam);
+        return BaseResponse.getSuccessResponse(list);
     }
 
     /**

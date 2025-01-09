@@ -1,5 +1,6 @@
 package com.moyu.system.sys.service;
 
+import com.moyu.system.sys.model.param.SysPostParam;
 import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.model.vo.RelationVO;
 
@@ -13,6 +14,6 @@ public interface RelationService {
     /**
      * 获取记录列表
      */
-    List<RelationVO> groupRoleList(SysRelationParam param);
+    List<RelationVO> groupRoleList(SysPostParam postParam);
 
 }
