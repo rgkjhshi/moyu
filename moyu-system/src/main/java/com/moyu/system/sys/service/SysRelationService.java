@@ -2,7 +2,10 @@ package com.moyu.system.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.system.sys.model.entity.SysRelation;
+import com.moyu.system.sys.model.param.SysRelationParam;
+import com.moyu.system.sys.model.vo.RelationVO;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,4 +24,10 @@ public interface SysRelationService extends IService<SysRelation> {
      * 通过(分组-用户、分组-角色、角色-权限)关系查询 用户->权限
      */
     Set<String> userMenu(String account);
+
+    /**
+     * 获取记录列表
+     */
+    List<RelationVO> groupRoleList(SysRelationParam param);
+
 }

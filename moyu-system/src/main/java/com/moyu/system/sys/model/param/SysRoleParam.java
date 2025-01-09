@@ -1,6 +1,7 @@
 package com.moyu.system.sys.model.param;
 
 import com.moyu.common.model.BasePageParam;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,12 +14,17 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@Builder
 public class SysRoleParam extends BasePageParam {
     //********** 额外字段 **********//
     /**
      * 待删除的id列表
      */
     private Set<Long> ids;
+    /**
+     * 指定要查询的code集合
+     */
+    private Set<String> codeSet;
     /**
      * 角色授权时的菜单code列表
      */

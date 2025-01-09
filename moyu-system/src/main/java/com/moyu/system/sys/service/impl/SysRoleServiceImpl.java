@@ -69,6 +69,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 //                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(roleParam.getSearchKey()), SysRole::getName, roleParam.getSearchKey())
+                // 指定code集合
+                .in(ObjectUtil.isNotEmpty(roleParam.getCodeSet()), SysRole::getCode, roleParam.getCodeSet())
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(roleParam.getModule()), SysRole::getModule, roleParam.getModule())
                 // 指定状态

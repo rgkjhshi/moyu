@@ -39,6 +39,8 @@ public class SysRelation {
 
     /**
      * 关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)
+     *
+     * @see com.moyu.system.sys.enums.RelationTypeEnum
      */
     private Integer relationType;
 
