@@ -21,7 +21,10 @@ public class SysPostParam extends BasePageParam {
      * 待删除的id列表
      */
     private Set<Long> ids;
-
+    /**
+     * 指定的code集合
+     */
+    private Set<String> codeSet;
     /**
      * 名称关键词
      */

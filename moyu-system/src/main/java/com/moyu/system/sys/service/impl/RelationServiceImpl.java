@@ -1,6 +1,7 @@
 package com.moyu.system.sys.service.impl;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Lists;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.model.entity.SysRelation;
@@ -15,8 +16,11 @@ import com.moyu.system.sys.service.SysRoleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author shisong
@@ -48,5 +52,35 @@ public class RelationServiceImpl implements RelationService {
         });
 
         return Lists.newArrayList(map.values().iterator());
+    }
+
+    @Override
+    public void groupAddRole(SysPostParam postParam) {
+        String objectId = postParam.getCode();
+        Set<String> targetSet = postParam.getCodeSet();
+        if (ObjectUtil.isEmpty(targetSet)) {
+            return;
+        }
+        // 查询指定group的所有relation
+        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
+                .objectId(objectId).targetSet(targetSet)
+                .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).build()
+        );
+        Set<String> oldSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
+        // 要新增的targetId集合
+        targetSet.removeAll(oldSet);
+        // 再次判断要新增的内容为空则返回
+        if (ObjectUtil.isEmpty(targetSet)) {
+            return;
+        }
+        List<SysRelation> addList = new ArrayList<>();
+        targetSet.forEach(code -> {
+            SysRelation entity = new SysRelation();
+            entity.setObjectId(objectId);
+            entity.setTargetId(code);
+            entity.setRelationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode());
+            addList.add(entity);
+        });
+        sysRelationService.saveBatch(addList);
     }
 }

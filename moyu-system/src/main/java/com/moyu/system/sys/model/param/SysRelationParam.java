@@ -24,7 +24,14 @@ public class SysRelationParam {
      * 待删除的id列表
      */
     private Set<Long> ids;
-
+    /**
+     * objectId的集合
+     */
+    private Set<String> objectSet;
+    /**
+     * targetId的集合
+     */
+    private Set<String> targetSet;
     /**
      * 名称关键词
      */

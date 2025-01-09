@@ -29,6 +29,8 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         queryWrapper.lambda()
                 .eq(ObjectUtil.isNotEmpty(param.getObjectId()), SysRelation::getObjectId, param.getObjectId())
                 .eq(ObjectUtil.isNotEmpty(param.getTargetId()), SysRelation::getTargetId, param.getTargetId())
+                .in(ObjectUtil.isNotEmpty(param.getObjectSet()), SysRelation::getObjectId, param.getObjectSet())
+                .in(ObjectUtil.isNotEmpty(param.getTargetSet()), SysRelation::getTargetId, param.getTargetSet())
                 .eq(ObjectUtil.isNotEmpty(param.getRelationType()), SysRelation::getRelationType, param.getRelationType());
         // 查询
         List<SysRelation> list = this.list(queryWrapper);

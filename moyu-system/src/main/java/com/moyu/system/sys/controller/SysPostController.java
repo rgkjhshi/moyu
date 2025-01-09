@@ -52,15 +52,6 @@ public class SysPostController {
     }
 
     /**
-     * 查询指定岗位的角色列表
-     */
-    @PostMapping("/roleList")
-    public BaseResponse<List<RelationVO>> list(@RequestBody SysPostParam sysPostParam) {
-        List<RelationVO> list = relationService.groupRoleList(sysPostParam);
-        return BaseResponse.getSuccessResponse(list);
-    }
-
-    /**
      * 添加
      */
     @PostMapping("/add")
@@ -84,6 +75,24 @@ public class SysPostController {
     @PostMapping("/edit")
     public BaseResponse<String> edit(@RequestBody SysPostParam sysPostParam) {
         sysPostService.edit(sysPostParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 查询指定岗位的角色列表
+     */
+    @PostMapping("/roleList")
+    public BaseResponse<List<RelationVO>> roleList(@RequestBody SysPostParam sysPostParam) {
+        List<RelationVO> list = relationService.groupRoleList(sysPostParam);
+        return BaseResponse.getSuccessResponse(list);
+    }
+
+    /**
+     * 岗位内新增角色
+     */
+    @PostMapping("/addRole")
+    public BaseResponse<?> addRole(@RequestBody SysPostParam sysPostParam) {
+        relationService.groupAddRole(sysPostParam);
         return BaseResponse.getSuccessResponse();
     }
 
