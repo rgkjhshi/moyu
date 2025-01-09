@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -79,13 +80,12 @@ public class RelationServiceImpl implements RelationService {
         if (ObjectUtil.isEmpty(targetSet)) {
             return;
         }
-        // 查询指定group的所有relation
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .objectId(objectId).targetSet(targetSet)
+        Set<String> oldSet = new HashSet<>();
+        // 查询指定group包含的role，放入oldSet
+        sysRelationService.list(SysRelationParam.builder().objectId(objectId).targetSet(targetSet)
                 .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).build()
-        );
-        Set<String> oldSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
-        // 要新增的targetId集合
+        ).forEach(e -> oldSet.add(e.getTargetId()));
+        // 从target中删除已经存在的
         targetSet.removeAll(oldSet);
         // 再次判断要新增的内容为空则返回
         if (ObjectUtil.isEmpty(targetSet)) {
@@ -107,12 +107,12 @@ public class RelationServiceImpl implements RelationService {
         if (ObjectUtil.isEmpty(postParam.getCodeSet())) {
             return;
         }
+        // 要删除的ids
+        Set<Long> ids = new HashSet<>();
         // 查询指定group的所有relation
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .objectId(postParam.getCode()).targetSet(postParam.getCodeSet())
+        sysRelationService.list(SysRelationParam.builder().objectId(postParam.getCode()).targetSet(postParam.getCodeSet())
                 .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).build()
-        );
-        Set<Long> ids = list.stream().map(SysRelation::getId).collect(Collectors.toSet());
+        ).forEach(e -> ids.add(e.getId()));
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
