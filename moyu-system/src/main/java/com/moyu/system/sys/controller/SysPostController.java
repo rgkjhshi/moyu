@@ -102,7 +102,7 @@ public class SysPostController {
      */
     @PostMapping("/deleteRole")
     public BaseResponse<?> deleteRole(@RequestBody SysPostParam sysPostParam) {
-        relationService.groupAddRole(sysPostParam);
+        relationService.groupDeleteRole(sysPostParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -129,7 +129,7 @@ public class SysPostController {
      */
     @PostMapping("/deleteUser")
     public BaseResponse<?> deleteUser(@RequestBody SysPostParam sysPostParam) {
-        relationService.groupAddRole(sysPostParam);
+        relationService.groupDeleteUser(sysPostParam);
         return BaseResponse.getSuccessResponse();
     }
 
