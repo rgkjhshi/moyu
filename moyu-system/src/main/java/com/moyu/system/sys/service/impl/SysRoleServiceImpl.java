@@ -226,6 +226,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         List<SysMenu> menuList = sysMenuService.list(queryWrapper);
         // 本模块的所有权限
         List<String> allMenuCode = menuList.stream().map(SysMenu::getCode).collect(Collectors.toList());
+        // 如果本模块无任何可用资源，则不用授权
+        if (ObjectUtil.isEmpty(allMenuCode)) {
+            return;
+        }
         // 本次授权内容
         Set<String> grantMenuSet = roleParam.getGrantMenuList();
         // 本次授权内容中，仅保留可授权部分(目录不可授权)
