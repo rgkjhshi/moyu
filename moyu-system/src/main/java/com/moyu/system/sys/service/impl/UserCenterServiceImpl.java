@@ -82,6 +82,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                 // 不能是按钮
                 .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .eq(SysMenu::getDeleteFlag, 0)
+                .orderByAsc(SysMenu::getSortNum)
         );
         // 用户有权限的菜单(不含按钮) + 所有模块、目录
         List<SysMenu> userMenuList = CollectionUtil.newArrayList();
@@ -117,7 +118,8 @@ public class UserCenterServiceImpl implements UserCenterService {
         List<TreeNode<String>> treeNodeList = menuList.stream()
                 .map(menu -> {
                     TreeNode<String> node = new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum());
-                    Map<String, Object> extra = BeanUtil.beanToMap(menu, false, true);
+                    // path、name、component、redirect、hidden
+                    Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
                     if (MenuTypeEnum.LINK.getCode().equals(menu.getMenuType())) {
