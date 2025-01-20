@@ -22,4 +22,9 @@ public interface UserCenterService {
      */
     List<Tree<String>> userMenu(String account);
 
+    /**
+     * 获取用户菜单树
+     */
+    List<Tree<String>> userOrgTree(String account);
+
 }

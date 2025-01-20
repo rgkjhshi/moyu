@@ -2,6 +2,7 @@ package com.moyu.system.sys.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.common.model.BasePageParam;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysPostParam extends BasePageParam {
     //********** 额外字段 **********//

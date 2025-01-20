@@ -116,7 +116,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             user.setOrgName(orgNode.getName().toString());
             // 所属机构列表
             List<String> list = TreeUtil.getParentsId(orgNode, true);
-            user.setOrgChain(Joiner.on(",").join(list));
+            user.setOrgChain(SysConstants.COMMA_JOINER.join(list));
         }
         // 初始密码为系统默认
         if (ObjectUtil.isEmpty(user.getPassword())) {
@@ -150,7 +150,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             updateUser.setOrgName(orgNode.getName().toString());
             // 所属机构列表
             List<String> list = TreeUtil.getParentsId(orgNode, true);
-            updateUser.setOrgChain(Joiner.on(",").join(list));
+            updateUser.setOrgChain(SysConstants.COMMA_JOINER.join(list));
         }
         this.updateById(updateUser);
     }

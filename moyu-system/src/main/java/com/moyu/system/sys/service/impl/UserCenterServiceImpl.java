@@ -1,7 +1,6 @@
 package com.moyu.system.sys.service.impl;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
@@ -12,25 +11,21 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.google.common.collect.Lists;
 import com.moyu.system.auth.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.MenuTypeEnum;
+import com.moyu.system.sys.enums.OrgTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.model.vo.UserInfo;
-import com.moyu.system.sys.service.SysMenuService;
-import com.moyu.system.sys.service.SysRelationService;
-import com.moyu.system.sys.service.SysUserService;
-import com.moyu.system.sys.service.UserCenterService;
+import com.moyu.system.sys.service.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +40,12 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Resource
     private SysMenuService sysMenuService;
+
+    @Resource
+    private SysOrgService sysOrgService;
+
+    @Resource
+    private SysPostService sysPostService;
 
     @Resource
     private SysRelationService sysRelationService;
@@ -102,6 +103,29 @@ public class UserCenterServiceImpl implements UserCenterService {
         return buildMenuTree(userMenuList, SysConstants.ROOT_ID);
     }
 
+    @Override
+    public List<Tree<String>> userOrgTree(String account) {
+        // 获取全部树
+        Tree<String> tree = sysOrgService.singleTree(SysConstants.ROOT_ID);
+//        // 获取用户所在分组
+//        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
+//                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).targetId(account).build());
+//        Set<String> groupSet = list.stream().map(SysRelation::getObjectId).collect(Collectors.toSet());
+//        // 收集用户分组归属的org
+//        Set<String> orgSet = new HashSet<>();
+//        // 不为空则查询group所属的org
+//        if (ObjectUtil.isNotEmpty(groupSet)) {
+//            sysPostService.list(SysPostParam.builder().codeSet(groupSet).build()).forEach(group -> orgSet.add(group.getOrgCode()));
+//        }
+        // 查询用户信息
+        SysUser user = sysUserService.detail(SysUserParam.builder().account(account).build());
+        // 获取用户所属的最近一级公司组织code
+        String orgCode = getOrgNode(tree, user);
+        // 获取用户有权限的所有公司
+        // 获取公司对应的tree
+        return Lists.newArrayList(tree.getNode(orgCode));
+    }
+
     /**
      * 构建菜单路由树结构(code, parentCode, children, weight, extra)
      *
@@ -139,5 +163,18 @@ public class UserCenterServiceImpl implements UserCenterService {
                 }).collect(Collectors.toList());
         // 构建树
         return TreeUtil.build(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
+    }
+
+    /**
+     * 获取给定code的最近一级公司组织
+     */
+    private String getOrgNode(Tree<String> tree, SysUser user) {
+        // 通过用户的orgChain获取用户的组织链接
+        List<String> orgChainList = TreeUtil.getParentsId(tree.getNode(user.getOrgCode()), true);
+        // 从前往后遍历，因组织链有顺序，所以遍历顺序不能变
+        String orgCode = orgChainList.stream()
+                .filter(code -> ObjectUtil.equal(OrgTypeEnum.ORG.getCode(), tree.getNode(code).get("orgType")))
+                .findFirst().orElse(user.getOrgCode());
+        return orgCode;
     }
 }

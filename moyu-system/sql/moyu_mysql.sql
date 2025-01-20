@@ -46,7 +46,7 @@ create table sys_user
     `entry_date`      DATETIME     NULL DEFAULT NULL COMMENT '员工入职日期',
     `org_code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织编码',
     `org_name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织名称',
-    `org_chain`       VARCHAR(64)  NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
+    `org_chain`       VARCHAR(512) NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
 
     `login_ip`        VARCHAR(20)  NULL DEFAULT NULL COMMENT '登陆IP',
     `login_time`      DATETIME     NULL DEFAULT NULL COMMENT '登陆时间',
@@ -77,7 +77,7 @@ create table sys_post
     `post_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '岗位类型(字典 1特有 2通用 3自建)',
     `org_code`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织名称',
-    `org_chain`   VARCHAR(256) NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
+    `org_chain`   VARCHAR(512) NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
 
     `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',

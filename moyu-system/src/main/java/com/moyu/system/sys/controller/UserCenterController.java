@@ -48,4 +48,16 @@ public class UserCenterController {
         return BaseResponse.getSuccessResponse(userCenterService.userMenu(username));
     }
 
+    /**
+     * 获取用户所属公司的组织树
+     */
+    @Log(jsonLog = true, response = false)
+    @PostMapping("/userOrgTree")
+    public BaseResponse<List<Tree<String>>> userOrgTree() {
+        // 当前登陆用户username
+        String username = SecurityUtils.getLoginUser().getUsername();
+        List<Tree<String>> list = userCenterService.userOrgTree(username);
+        return BaseResponse.getSuccessResponse(list);
+    }
+
 }
