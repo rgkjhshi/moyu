@@ -67,14 +67,14 @@ create table sys_user
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '用户信息表';
 
--- 3. 岗位信息表
-drop table if exists sys_post;
-create table sys_post
+-- 3. 分组信息表
+drop table if exists sys_group;
+create table sys_group
 (
     `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
-    `post_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '岗位类型(字典 1特有 2通用 3自建)',
+    `post_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '分组类型(字典 1特有 2通用 3自建)',
     `org_code`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织名称',
     `org_chain`   VARCHAR(512) NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
@@ -91,7 +91,7 @@ create table sys_post
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = '岗位信息表';
+  COLLATE = utf8mb4_general_ci COMMENT = '分组信息表';
 
 -- 4. 角色信息表
 drop table if exists sys_role;
