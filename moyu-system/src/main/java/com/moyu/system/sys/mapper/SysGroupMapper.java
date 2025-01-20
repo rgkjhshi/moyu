@@ -1,7 +1,7 @@
 package com.moyu.system.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.moyu.system.sys.model.entity.SysPost;
+import com.moyu.system.sys.model.entity.SysGroup;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @Entity com.moyu.system.sys.model.entity.SysPos
  */
 @Mapper
-public interface SysPostMapper extends BaseMapper<SysPost> {
+public interface SysGroupMapper extends BaseMapper<SysGroup> {
 
 }
 

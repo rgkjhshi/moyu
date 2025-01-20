@@ -4,12 +4,12 @@ package com.moyu.system.sys.controller;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
-import com.moyu.system.sys.model.entity.SysPost;
+import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
-import com.moyu.system.sys.model.param.SysPostParam;
+import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.service.RelationService;
-import com.moyu.system.sys.service.SysPostService;
+import com.moyu.system.sys.service.SysGroupService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +26,11 @@ import java.util.List;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/sys/post")
-public class SysPostController {
+@RequestMapping("/api/sys/group")
+public class SysGroupController {
 
     @Resource
-    private SysPostService sysPostService;
+    private SysGroupService sysGroupService;
 
     @Resource
     private RelationService relationService;
@@ -39,8 +39,8 @@ public class SysPostController {
      * 分页获取角色列表
      */
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysPost>> pageList(@RequestBody SysPostParam sysPostParam) {
-        PageResult<SysPost> page = sysPostService.pageList(sysPostParam);
+    public BaseResponse<PageResult<SysGroup>> pageList(@RequestBody SysGroupParam sysGroupParam) {
+        PageResult<SysGroup> page = sysGroupService.pageList(sysGroupParam);
         return BaseResponse.getSuccessResponse(page);
     }
 
@@ -48,16 +48,16 @@ public class SysPostController {
      * 获取详情
      */
     @PostMapping("/detail")
-    public BaseResponse<SysPost> detail(@RequestBody SysPostParam sysPostParam) {
-        return BaseResponse.getSuccessResponse(sysPostService.detail(sysPostParam));
+    public BaseResponse<SysGroup> detail(@RequestBody SysGroupParam sysGroupParam) {
+        return BaseResponse.getSuccessResponse(sysGroupService.detail(sysGroupParam));
     }
 
     /**
      * 添加
      */
     @PostMapping("/add")
-    public BaseResponse<String> add(@RequestBody SysPostParam sysPostParam) {
-        sysPostService.add(sysPostParam);
+    public BaseResponse<String> add(@RequestBody SysGroupParam sysGroupParam) {
+        sysGroupService.add(sysGroupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -65,8 +65,8 @@ public class SysPostController {
      * 删除
      */
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysPostParam sysPostParam) {
-        sysPostService.deleteByIds(sysPostParam);
+    public BaseResponse<String> delete(@RequestBody SysGroupParam sysGroupParam) {
+        sysGroupService.deleteByIds(sysGroupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -74,8 +74,8 @@ public class SysPostController {
      * 编辑
      */
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@RequestBody SysPostParam sysPostParam) {
-        sysPostService.edit(sysPostParam);
+    public BaseResponse<String> edit(@RequestBody SysGroupParam sysGroupParam) {
+        sysGroupService.edit(sysGroupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -83,8 +83,8 @@ public class SysPostController {
      * 查询指定岗位的角色列表
      */
     @PostMapping("/roleList")
-    public BaseResponse<List<SysRole>> roleList(@RequestBody SysPostParam sysPostParam) {
-        List<SysRole> list = relationService.groupRoleList(sysPostParam);
+    public BaseResponse<List<SysRole>> roleList(@RequestBody SysGroupParam sysGroupParam) {
+        List<SysRole> list = relationService.groupRoleList(sysGroupParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -92,8 +92,8 @@ public class SysPostController {
      * 岗位内新增角色
      */
     @PostMapping("/addRole")
-    public BaseResponse<?> addRole(@RequestBody SysPostParam sysPostParam) {
-        relationService.groupAddRole(sysPostParam);
+    public BaseResponse<?> addRole(@RequestBody SysGroupParam sysGroupParam) {
+        relationService.groupAddRole(sysGroupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -101,8 +101,8 @@ public class SysPostController {
      * 岗位内移除角色
      */
     @PostMapping("/deleteRole")
-    public BaseResponse<?> deleteRole(@RequestBody SysPostParam sysPostParam) {
-        relationService.groupDeleteRole(sysPostParam);
+    public BaseResponse<?> deleteRole(@RequestBody SysGroupParam sysGroupParam) {
+        relationService.groupDeleteRole(sysGroupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -110,8 +110,8 @@ public class SysPostController {
      * 查询指定岗位的角色列表
      */
     @PostMapping("/userList")
-    public BaseResponse<List<SysUser>> userList(@RequestBody SysPostParam sysPostParam) {
-        List<SysUser> list = relationService.groupUserList(sysPostParam);
+    public BaseResponse<List<SysUser>> userList(@RequestBody SysGroupParam sysGroupParam) {
+        List<SysUser> list = relationService.groupUserList(sysGroupParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -119,8 +119,8 @@ public class SysPostController {
      * 岗位内新增角色
      */
     @PostMapping("/addUser")
-    public BaseResponse<?> addUser(@RequestBody SysPostParam sysPostParam) {
-        relationService.groupAddUser(sysPostParam);
+    public BaseResponse<?> addUser(@RequestBody SysGroupParam sysGroupParam) {
+        relationService.groupAddUser(sysGroupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -128,8 +128,8 @@ public class SysPostController {
      * 岗位内移除角色
      */
     @PostMapping("/deleteUser")
-    public BaseResponse<?> deleteUser(@RequestBody SysPostParam sysPostParam) {
-        relationService.groupDeleteUser(sysPostParam);
+    public BaseResponse<?> deleteUser(@RequestBody SysGroupParam sysGroupParam) {
+        relationService.groupDeleteUser(sysGroupParam);
         return BaseResponse.getSuccessResponse();
     }
 

@@ -6,7 +6,7 @@ import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
-import com.moyu.system.sys.service.SysPostService;
+import com.moyu.system.sys.service.SysGroupService;
 import com.moyu.system.sys.service.SysUserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +27,7 @@ import javax.annotation.Resource;
 public class SysUserController {
 
     @Resource
-    private SysPostService sysPostService;
+    private SysGroupService sysGroupService;
 
     @Resource
     private SysUserService sysUserService;

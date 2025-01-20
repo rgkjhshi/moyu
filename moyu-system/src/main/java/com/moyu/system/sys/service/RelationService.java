@@ -2,7 +2,7 @@ package com.moyu.system.sys.service;
 
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
-import com.moyu.system.sys.model.param.SysPostParam;
+import com.moyu.system.sys.model.param.SysGroupParam;
 
 import java.util.List;
 
@@ -14,31 +14,31 @@ public interface RelationService {
     /**
      * group内角色列表
      */
-    List<SysRole> groupRoleList(SysPostParam postParam);
+    List<SysRole> groupRoleList(SysGroupParam groupParam);
 
     /**
      * group内用户列表
      */
-    List<SysUser> groupUserList(SysPostParam postParam);
+    List<SysUser> groupUserList(SysGroupParam groupParam);
 
     /**
      * group新增角色
      */
-    void groupAddRole(SysPostParam postParam);
+    void groupAddRole(SysGroupParam groupParam);
 
     /**
      * group删除角色
      */
-    void groupDeleteRole(SysPostParam postParam);
+    void groupDeleteRole(SysGroupParam groupParam);
 
     /**
      * group新增用户
      */
-    void groupAddUser(SysPostParam postParam);
+    void groupAddUser(SysGroupParam groupParam);
 
     /**
      * group删除用户
      */
-    void groupDeleteUser(SysPostParam postParam);
+    void groupDeleteUser(SysGroupParam groupParam);
 
 }

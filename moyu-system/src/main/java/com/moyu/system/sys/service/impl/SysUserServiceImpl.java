@@ -58,8 +58,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
                 .eq(SysUser::getDeleteFlag, 0);
         // 查询
-        List<SysUser> postList = this.list(queryWrapper);
-        return postList;
+        List<SysUser> groupList = this.list(queryWrapper);
+        return groupList;
     }
 
     @Override
@@ -76,8 +76,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .eq(SysUser::getDeleteFlag, 0);
         // 分页查询
         Page<SysUser> page = new Page<>(userParam.getPageNum(), userParam.getPageSize());
-        Page<SysUser> postPage = this.page(page, queryWrapper);
-        return new PageResult<>(postPage.getTotal(), postPage.getRecords());
+        Page<SysUser> groupPage = this.page(page, queryWrapper);
+        return new PageResult<>(groupPage.getTotal(), groupPage.getRecords());
     }
 
     @Override

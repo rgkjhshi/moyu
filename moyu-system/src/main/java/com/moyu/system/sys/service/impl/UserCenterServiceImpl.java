@@ -25,7 +25,10 @@ import com.moyu.system.sys.service.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +48,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     private SysOrgService sysOrgService;
 
     @Resource
-    private SysPostService sysPostService;
+    private SysGroupService sysGroupService;
 
     @Resource
     private SysRelationService sysRelationService;
@@ -115,7 +118,7 @@ public class UserCenterServiceImpl implements UserCenterService {
 //        Set<String> orgSet = new HashSet<>();
 //        // 不为空则查询group所属的org
 //        if (ObjectUtil.isNotEmpty(groupSet)) {
-//            sysPostService.list(SysPostParam.builder().codeSet(groupSet).build()).forEach(group -> orgSet.add(group.getOrgCode()));
+//            sysGroupService.list(SysGroupParam.builder().codeSet(groupSet).build()).forEach(group -> orgSet.add(group.getOrgCode()));
 //        }
         // 查询用户信息
         SysUser user = sysUserService.detail(SysUserParam.builder().account(account).build());

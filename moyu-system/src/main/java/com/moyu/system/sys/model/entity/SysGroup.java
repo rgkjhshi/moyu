@@ -15,13 +15,13 @@ import java.io.Serializable;
 /**
  * 岗位信息表
  *
- * @TableName sys_post
+ * @TableName sys_group
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName(value = "sys_post")
+@TableName(value = "sys_group")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysPost extends BaseEntity implements Serializable {
+public class SysGroup extends BaseEntity implements Serializable {
     /**
      * 主键id
      */
@@ -42,7 +42,7 @@ public class SysPost extends BaseEntity implements Serializable {
     /**
      * 岗位类型(字典 1特有 2通用 3自建)
      */
-    private Integer postType;
+    private Integer groupType;
 
     /**
      * 直属组织

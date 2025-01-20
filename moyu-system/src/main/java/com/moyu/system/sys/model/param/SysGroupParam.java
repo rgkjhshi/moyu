@@ -17,7 +17,7 @@ import java.util.Set;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysPostParam extends BasePageParam {
+public class SysGroupParam extends BasePageParam {
     //********** 额外字段 **********//
     /**
      * 待删除的id列表
@@ -51,7 +51,7 @@ public class SysPostParam extends BasePageParam {
     /**
      * 岗位类型(字典 1特有 2通用 3自建)
      */
-    private Integer postType;
+    private Integer groupType;
 
     /**
      * 直属组织

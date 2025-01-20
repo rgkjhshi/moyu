@@ -6,7 +6,7 @@ import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
-import com.moyu.system.sys.model.param.SysPostParam;
+import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.param.SysUserParam;
@@ -41,25 +41,25 @@ public class RelationServiceImpl implements RelationService {
 
 
     @Override
-    public List<SysRole> groupRoleList(SysPostParam postParam) {
+    public List<SysRole> groupRoleList(SysGroupParam groupParam) {
         // 查询指定group的所有role
         List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).objectId(postParam.getCode()).build());
+                .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).objectId(groupParam.getCode()).build());
         if (ObjectUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
         // roleSet
         Set<String> roleSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
         // 查询角色(可指定搜索词)
-        List<SysRole> roleList = sysRoleService.list(SysRoleParam.builder().searchKey(postParam.getSearchKey()).codeSet(roleSet).build());
+        List<SysRole> roleList = sysRoleService.list(SysRoleParam.builder().searchKey(groupParam.getSearchKey()).codeSet(roleSet).build());
         return roleList;
     }
 
     @Override
-    public List<SysUser> groupUserList(SysPostParam postParam) {
+    public List<SysUser> groupUserList(SysGroupParam groupParam) {
         // 查询指定group的所有user
         List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).objectId(postParam.getCode()).build());
+                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).objectId(groupParam.getCode()).build());
         if (ObjectUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
@@ -67,16 +67,16 @@ public class RelationServiceImpl implements RelationService {
         Set<String> roleSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
         // 查询角色(可指定搜索词)
         List<SysUser> userList = sysUserService.list(SysUserParam.builder()
-                .searchKey(postParam.getSearchKey())
-                .orgCode(postParam.getOrgCode())
+                .searchKey(groupParam.getSearchKey())
+                .orgCode(groupParam.getOrgCode())
                 .codeSet(roleSet).build());
         return userList;
     }
 
     @Override
-    public void groupAddRole(SysPostParam postParam) {
-        String objectId = postParam.getCode();
-        Set<String> targetSet = postParam.getCodeSet();
+    public void groupAddRole(SysGroupParam groupParam) {
+        String objectId = groupParam.getCode();
+        Set<String> targetSet = groupParam.getCodeSet();
         if (ObjectUtil.isEmpty(targetSet)) {
             return;
         }
@@ -103,14 +103,14 @@ public class RelationServiceImpl implements RelationService {
     }
 
     @Override
-    public void groupDeleteRole(SysPostParam postParam) {
-        if (ObjectUtil.isEmpty(postParam.getCodeSet())) {
+    public void groupDeleteRole(SysGroupParam groupParam) {
+        if (ObjectUtil.isEmpty(groupParam.getCodeSet())) {
             return;
         }
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
         // 查询指定group中存在的role，加入ids待删
-        sysRelationService.list(SysRelationParam.builder().objectId(postParam.getCode()).targetSet(postParam.getCodeSet())
+        sysRelationService.list(SysRelationParam.builder().objectId(groupParam.getCode()).targetSet(groupParam.getCodeSet())
                 .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
         // 删除
@@ -120,9 +120,9 @@ public class RelationServiceImpl implements RelationService {
     }
 
     @Override
-    public void groupAddUser(SysPostParam postParam) {
-        String objectId = postParam.getCode();
-        Set<String> targetSet = postParam.getCodeSet();
+    public void groupAddUser(SysGroupParam groupParam) {
+        String objectId = groupParam.getCode();
+        Set<String> targetSet = groupParam.getCodeSet();
         if (ObjectUtil.isEmpty(targetSet)) {
             return;
         }
@@ -149,14 +149,14 @@ public class RelationServiceImpl implements RelationService {
     }
 
     @Override
-    public void groupDeleteUser(SysPostParam postParam) {
-        if (ObjectUtil.isEmpty(postParam.getCodeSet())) {
+    public void groupDeleteUser(SysGroupParam groupParam) {
+        if (ObjectUtil.isEmpty(groupParam.getCodeSet())) {
             return;
         }
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
         // 查询指定group中存在的user，加入ids待删
-        sysRelationService.list(SysRelationParam.builder().objectId(postParam.getCode()).targetSet(postParam.getCodeSet())
+        sysRelationService.list(SysRelationParam.builder().objectId(groupParam.getCode()).targetSet(groupParam.getCodeSet())
                 .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
         // 删除
