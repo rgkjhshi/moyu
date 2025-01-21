@@ -119,7 +119,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 其他的都需要授权访问
         httpSecurity.authorizeRequests().anyRequest().authenticated();
 
-        // 配置表单认证
+        // 配置表单认证(会添加FormLoginConfigurer来生成UsernamePasswordAuthenticationFilter)
         httpSecurity.formLogin().loginProcessingUrl("/api/auth/login")
                 .usernameParameter("account")
                 .passwordParameter("password")
