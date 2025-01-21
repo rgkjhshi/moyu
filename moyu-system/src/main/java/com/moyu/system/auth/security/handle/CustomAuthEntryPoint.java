@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 未认证访问的情况处理
+ * 认证异常处理，未认证访问的情况处理
  *
  * @author shisong
  * @since 2025-01-05
