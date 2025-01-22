@@ -56,6 +56,6 @@ public class LoginService {
         }
         LoginUserDetails loginUser = (LoginUserDetails) authentication.getPrincipal();
         // 生成token
-        return tokenService.createToken(loginUser);
+        return TokenService.createToken(loginUser);
     }
 }
