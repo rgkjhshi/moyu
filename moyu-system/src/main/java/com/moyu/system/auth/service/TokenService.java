@@ -18,7 +18,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
 
@@ -186,7 +185,7 @@ public class TokenService {
     }
 
     /**
-     * 验证token并返回解密后的token
+     * 验证token并返回解密后的jwtClaims
      */
     public static JWTClaimsSet verifyToken(String token) throws BaseException {
         JWTClaimsSet claimsSet;
@@ -207,12 +206,6 @@ public class TokenService {
             throw new BaseException(SecurityConstants.Token.EXPIRED_ERROR_CODE, "token已失效, 请重新登录");
         }
         return claimsSet;
-    }
-
-    // 从 JWT 中解析 Claims
-    public static JWTClaimsSet parseToken(String token) throws ParseException {
-        SignedJWT jwt = SignedJWT.parse(token);
-        return jwt.getJWTClaimsSet();
     }
 
 }
