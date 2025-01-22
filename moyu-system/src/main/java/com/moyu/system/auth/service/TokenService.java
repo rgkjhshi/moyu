@@ -118,11 +118,10 @@ public class TokenService {
     /**
      * 创建jwtToken
      */
-    public String createToken(LoginUserDetails loginUser) {
+    public static String createToken(LoginUserDetails loginUser) {
         DateTime now = DateTime.now();
-        // 各个字段含义参考 http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                // 主题,即username
+                // 主题，即username
                 .subject(loginUser.getUsername())
                 // 签发时间
                 .issueTime(now.toDate())
@@ -137,22 +136,16 @@ public class TokenService {
 
     /**
      * 创建JwtToken
-     * JWT payload 是JWT的主体内容部分,也是一个JSON对象,包含需要传递的数据,在JWT中默认有一下七个字段供选择
-     * 这七个预定义字段并不要求强制使用,并且除以上默认字段外,我们还可以自定义私有字段,例如将包含用户信息的数据放到 payload 中
-     * 1. iss - 发行人
-     * 2. sub - 主题
-     * 3. aud - 用户
-     * 4. iat - JWT的签发时间
-     * 5. exp - JWT的过期时间
-     * 6. jti - JWT的唯一标识
-     * 7. nbf - 在此之前不可用
+     * JWT payload 是JWT的主体内容部分,也是一个JSON对象,包含需要传递的数据,在JWT中默认有七个字段供选择
+     * 各个字段含义参考 <a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html">这里</a>
+     * <p>
+     * 预定义字段并不要求强制使用,我们可以自定义私有字段,例如将包含用户信息的数据放到 payload 中
      */
     public static String createToken(String username) {
         DateTime now = DateTime.now();
-        // 各个字段含义参考 http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html
         // 声明
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                // 主题,即username
+                // 主题，即username
                 .subject(username)
                 // 签发时间
                 .issueTime(now.toDate())
