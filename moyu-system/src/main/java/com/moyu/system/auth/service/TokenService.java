@@ -192,8 +192,8 @@ public class TokenService {
             }
             claimsSet = jwt.getJWTClaimsSet();
         } catch (Exception e) {
-            log.error("token校验失败", e);
-            throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), "登录信息有误");
+            log.error("token解析失败", e);
+            throw new BaseException(ExceptionEnum.BUSINESS_ERROR, "token解析失败");
         }
         // 校验过期时间
         if (isExpired(token)) {
@@ -209,7 +209,7 @@ public class TokenService {
             SignedJWT jwt = SignedJWT.parse(token);
             claims = jwt.getJWTClaimsSet();
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new BaseException(ExceptionEnum.BUSINESS_ERROR, "token解析失败");
         }
         return claims;
     }
