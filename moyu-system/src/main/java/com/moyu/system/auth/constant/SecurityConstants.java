@@ -49,6 +49,9 @@ public interface SecurityConstants {
             "/api/register",
             "/api/captcha/**",
 
+            // 认证授权请求
+            "/api/auth/**",
+
             // 监控管理请求
 //            "/actuator/**",
             "/test/**",
