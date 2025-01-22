@@ -23,17 +23,18 @@ public interface SecurityConstants {
          */
         public static final String PREFIX = "Bearer ";
         /**
-         * jwt秘钥
+         * jwt秘钥，至少256-bit(32-byte)，如：7nPXLm0zLVdqKM5QTb03ahcRiWzoC2UC
+         * RandomUtil.randomString(32)
          */
-        public static final String SECRET = "jwt_secret";
+        public static final String SECRET = "7nPXLm0zLVdqKM5QTb03ahcRiWzoC2UC";
         /**
          * JWT签名算法
          */
         public static final Algorithm SIGNATURE_ALGORITHM = Algorithm.HMAC512(SECRET);
         /**
-         * JWT token有效期(100天)
+         * JWT token有效期(3天)
          */
-        public static final int TOKEN_VALID_TIME = 60 * 60 * 24 * 100;
+        public static final int TOKEN_VALID_TIME = 60 * 60 * 24 * 3;
         /**
          * token过期的错误码
          */

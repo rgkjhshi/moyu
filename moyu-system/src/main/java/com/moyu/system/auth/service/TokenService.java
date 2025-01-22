@@ -3,20 +3,24 @@ package com.moyu.system.auth.service;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.system.auth.constant.SecurityConstants;
 import com.moyu.system.auth.model.LoginUserDetails;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author shisong
@@ -32,16 +36,23 @@ public class TokenService {
     public static final String LOGIN_TOKEN_KEY = "login_tokens:";
 
     /**
+     * JWT header 是用来描述JWT元数据的JSON对象，包括两部分
+     * 1. alg - 签名使用的算法
+     * 2. typ - 表示令牌的类型，在JWT令牌统一写为JWT
+     */
+    private static final JWSHeader HEADER = new JWSHeader.Builder(JWSAlgorithm.HS256).type(JOSEObjectType.JWT).build();
+
+    /**
      * 获取用户身份信息
      *
      * @return 用户凭证
      */
-    public LoginUserDetails getLoginUser(DecodedJWT jwt) {
+    public LoginUserDetails getLoginUser(JWTClaimsSet jwt) {
         LoginUserDetails user = null;
         // 获取请求携带的令牌
         if (ObjectUtil.isNotEmpty(jwt)) {
             // 从 redis 中获取用户信息
-            String jwtId = jwt.getId();
+            String jwtId = jwt.getJWTID();
             String userKey = getUserKey(jwtId);
             // 从缓存中获取用户(通过userKey) TODO
 //            user = redisCache.getCacheObject(userKey);
@@ -61,9 +72,9 @@ public class TokenService {
         // 获取请求携带的令牌
         String token = getToken(request);
         if (ObjectUtil.isNotEmpty(token)) {
-            DecodedJWT jwt = verifyToken(token);
+            JWTClaimsSet jwt = verifyToken(token);
             // 从 redis 中获取用户信息
-            String jwtId = jwt.getId();
+            String jwtId = jwt.getJWTID();
             String userKey = getUserKey(jwtId);
             // 从缓存中获取用户(通过userKey) TODO
 //            user = redisCache.getCacheObject(userKey);
@@ -106,30 +117,27 @@ public class TokenService {
     }
 
     /**
-     * 创建jwtToken TODO
+     * 创建jwtToken
      */
     public String createToken(LoginUserDetails loginUser) {
-        String token = "";
         DateTime now = DateTime.now();
         // 各个字段含义参考 http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html
-        token = JWT.create()
+        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 // 主题,即username
-                .withSubject(loginUser.getUsername())
+                .subject(loginUser.getUsername())
                 // 签发时间
-                .withIssuedAt(now.toDate())
+                .issueTime(now.toDate())
                 // 过期时间
-                .withExpiresAt(now.plusSeconds(SecurityConstants.Token.TOKEN_VALID_TIME).toDate())
-                .withJWTId(IdUtil.fastUUID())
-                .withClaim("userId", loginUser.getUsername())
-                .sign(SecurityConstants.Token.SIGNATURE_ALGORITHM);
-        return token;
+                .expirationTime(now.plusSeconds(SecurityConstants.Token.TOKEN_VALID_TIME).toDate())
+                .jwtID(IdUtil.fastSimpleUUID())
+                // 自定义声明
+                .claim("claim", true)
+                .build();
+        return createToken(claimsSet);
     }
 
     /**
      * 创建JwtToken
-     * JWT header 是用来描述JWT元数据的JSON对象，包括两部分
-     * 1. alg - 签名使用的算法
-     * 2. typ - 表示令牌的类型，在JWT令牌统一写为JWT
      * JWT payload 是JWT的主体内容部分,也是一个JSON对象,包含需要传递的数据,在JWT中默认有一下七个字段供选择
      * 这七个预定义字段并不要求强制使用,并且除以上默认字段外,我们还可以自定义私有字段,例如将包含用户信息的数据放到 payload 中
      * 1. iss - 发行人
@@ -143,39 +151,68 @@ public class TokenService {
     public static String createToken(String username) {
         DateTime now = DateTime.now();
         // 各个字段含义参考 http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html
-        String token = JWT.create()
-                .withSubject(username)
-                .withIssuedAt(now.toDate())
-                .withExpiresAt(now.plusSeconds(SecurityConstants.Token.TOKEN_VALID_TIME).toDate())
-                .withJWTId(IdUtil.fastUUID())
-                .sign(SecurityConstants.Token.SIGNATURE_ALGORITHM);
+        // 声明
+        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                // 主题,即username
+                .subject(username)
+                // 签发时间
+                .issueTime(now.toDate())
+                // 过期时间
+                .expirationTime(now.plusSeconds(SecurityConstants.Token.TOKEN_VALID_TIME).toDate())
+                .jwtID(IdUtil.fastSimpleUUID())
+                .build();
+        return createToken(claimsSet);
+    }
+
+    /**
+     * 生成jwtToken
+     */
+    private static String createToken(JWTClaimsSet claimsSet) {
+        String token;
+        try {
+            // 签名器
+            JWSSigner jwsSigner = new MACSigner(SecurityConstants.Token.SECRET);
+            // 创建jwt对象
+            SignedJWT signedJWT = new SignedJWT(HEADER, claimsSet);
+            // 签名，根据header和payload生成签名
+            signedJWT.sign(jwsSigner);
+            // 生成token字符串
+            token = signedJWT.serialize();
+        } catch (JOSEException e) {
+            log.error("生成JWT失败", e);
+            throw new BaseException(ExceptionEnum.BUSINESS_ERROR, "生成jwtToken失败");
+        }
         return token;
     }
 
     /**
      * 验证token并返回解密后的token
      */
-    public static DecodedJWT verifyToken(String token) throws BaseException {
-        JWTVerifier verifier = JWT.require(SecurityConstants.Token.SIGNATURE_ALGORITHM).build();
-        DecodedJWT jwt;
+    public static JWTClaimsSet verifyToken(String token) throws BaseException {
+        JWTClaimsSet claimsSet;
         try {
-            jwt = verifier.verify(token);
-        } catch (TokenExpiredException exception) {
-            throw new BaseException(SecurityConstants.Token.EXPIRED_ERROR_CODE, "token已失效, 请重新登录");
+            // 验证器
+            JWSVerifier jwsVerifier = new MACVerifier(SecurityConstants.Token.SECRET);
+            SignedJWT jwt = SignedJWT.parse(token);
+            if (!jwt.verify(jwsVerifier)) {
+                throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), "token签名不合法！");
+            }
+            claimsSet = jwt.getJWTClaimsSet();
         } catch (Exception e) {
             log.error("token校验失败", e);
             throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), "登录信息有误");
         }
-        return jwt;
+        // 校验过期时间
+        if (Objects.nonNull(claimsSet.getExpirationTime()) && claimsSet.getExpirationTime().after(new Date())) {
+            throw new BaseException(SecurityConstants.Token.EXPIRED_ERROR_CODE, "token已失效, 请重新登录");
+        }
+        return claimsSet;
     }
 
-    public Long verifyAndGetUserId(String token) throws BaseException {
-        DecodedJWT jwt = verifyToken(token);
-        return jwt.getClaim("userId").asLong();
+    // 从 JWT 中解析 Claims
+    public static JWTClaimsSet parseToken(String token) throws ParseException {
+        SignedJWT jwt = SignedJWT.parse(token);
+        return jwt.getJWTClaimsSet();
     }
 
-    public String verifyAndGetSubject(String token) throws BaseException {
-        DecodedJWT jwt = verifyToken(token);
-        return jwt.getSubject();
-    }
 }
