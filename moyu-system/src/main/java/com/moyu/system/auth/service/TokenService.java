@@ -196,15 +196,27 @@ public class TokenService {
             throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), "登录信息有误");
         }
         // 校验过期时间
-        if (Objects.nonNull(claimsSet.getExpirationTime()) && claimsSet.getExpirationTime().after(new Date())) {
+        if (isExpired(token)) {
             throw new BaseException(SecurityConstants.Token.EXPIRED_ERROR_CODE, "token已失效, 请重新登录");
         }
         return claimsSet;
     }
 
     // 从 JWT 中解析 Claims
-    public static JWTClaimsSet parseToken(String token) throws ParseException {
-        SignedJWT jwt = SignedJWT.parse(token);
-        return jwt.getJWTClaimsSet();
+    public static JWTClaimsSet parseToken(String token) {
+        JWTClaimsSet claims;
+        try {
+            SignedJWT jwt = SignedJWT.parse(token);
+            claims = jwt.getJWTClaimsSet();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return claims;
+    }
+
+    // 检查 JWT 是否过期
+    private static boolean isExpired(String token) {
+        JWTClaimsSet claims = parseToken(token);
+        return Objects.nonNull(claims) && Objects.nonNull(claims.getExpirationTime()) && claims.getExpirationTime().before(new Date());
     }
 }
