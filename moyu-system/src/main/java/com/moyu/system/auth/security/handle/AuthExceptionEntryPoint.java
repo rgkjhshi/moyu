@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  * @author shisong
  * @since 2025-01-05
  */
-public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
+public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {

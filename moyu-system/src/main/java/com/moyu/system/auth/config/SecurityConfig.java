@@ -9,6 +9,7 @@ import com.moyu.system.auth.security.handle.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -120,13 +121,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests().anyRequest().authenticated();
 
         // 添加表单认证配置(会生成UsernamePasswordAuthenticationFilter)
-        httpSecurity.formLogin().loginProcessingUrl("/api/auth/login")
-                .usernameParameter("account")
-                .passwordParameter("password")
-                // 认证成功处理类
-                .successHandler(new CustomAuthSuccessHandler())
-                // 认证失败处理类
-                .failureHandler(new CustomAuthFailureHandler());
+//        httpSecurity.formLogin().loginProcessingUrl("/api/auth/login")
+//                .usernameParameter("account")
+//                .passwordParameter("password")
+//                // 认证成功处理类
+//                .successHandler(new CustomAuthSuccessHandler())
+//                // 认证失败处理类
+//                .failureHandler(new CustomAuthFailureHandler());
         // 不使用默认退出，自定义退出 httpSecurity.logout().disable();
         // 自定义注销登录处理器 logoutUrl指定了注销登录请求地址，默认路径为/logout
         httpSecurity.logout().logoutUrl("/api/logout").logoutSuccessHandler(logoutSuccessHandler);
@@ -138,7 +139,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 异常处理
         httpSecurity.exceptionHandling()
                 // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
-                .authenticationEntryPoint(new CustomAuthEntryPoint())
+                .authenticationEntryPoint(new AuthExceptionEntryPoint())
                 // 授权异常处理，访问权限不足时的处理
                 .accessDeniedHandler(new CustomAccessDeniedHandler());
     }
@@ -158,5 +159,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * 暴露 AuthenticationManager 供使用
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
