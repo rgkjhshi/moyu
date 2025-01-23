@@ -20,6 +20,12 @@
 
     <!--  common包中务必尽量减少jar包依赖  -->
     <dependencies>
+        <!-- 本工程的其它模块 -->
+        <dependency>
+            <groupId>com.moyu</groupId>
+            <artifactId>common-core</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- web依赖 -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
@@ -30,11 +36,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-
+        <!-- jwt库 nimbus-jos-jwt 参考：https://www.cnblogs.com/Peace123/p/15641889.html  -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
         <!-- lombok组件 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- hutool 工具组件 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>5.8.25</version>
         </dependency>
     </dependencies>
 </project>
