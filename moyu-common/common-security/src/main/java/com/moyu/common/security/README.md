@@ -18,5 +18,10 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    <!-- jwt库 nimbus-jos-jwt -->
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-oauth2-jose</artifactId>
+    </dependency>
 </dependencies>
 ```
