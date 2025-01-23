@@ -1,8 +1,5 @@
 package com.moyu.system.auth.constant;
 
-
-import com.auth0.jwt.algorithms.Algorithm;
-
 /**
  * 系统常量
  *
@@ -27,10 +24,6 @@ public interface SecurityConstants {
          * RandomUtil.randomString(32)
          */
         public static final String SECRET = "7nPXLm0zLVdqKM5QTb03ahcRiWzoC2UC";
-        /**
-         * JWT签名算法
-         */
-        public static final Algorithm SIGNATURE_ALGORITHM = Algorithm.HMAC512(SECRET);
         /**
          * JWT token有效期(3天)
          */
