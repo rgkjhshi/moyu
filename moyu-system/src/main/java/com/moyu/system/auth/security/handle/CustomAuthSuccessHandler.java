@@ -3,8 +3,8 @@ package com.moyu.system.auth.security.handle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.common.model.BaseResponse;
-import com.moyu.system.auth.model.LoginUserDetails;
-import com.moyu.system.auth.service.TokenService;
+import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.service.TokenService;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -28,8 +28,8 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        LoginUserDetails principal = (LoginUserDetails) authentication.getPrincipal();
-        String token = TokenService.createToken(principal.getUsername());
+        LoginUserDetails loginUser = (LoginUserDetails) authentication.getPrincipal();
+        String token = TokenService.generateToken(loginUser);
         // 认证成功直接返回json数据
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());

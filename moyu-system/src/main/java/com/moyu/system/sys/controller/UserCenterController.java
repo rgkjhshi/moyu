@@ -4,7 +4,7 @@ package com.moyu.system.sys.controller;
 import cn.hutool.core.lang.tree.Tree;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
-import com.moyu.system.auth.security.util.SecurityUtils;
+import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.model.vo.UserInfo;
 import com.moyu.system.sys.service.UserCenterService;
 import org.springframework.web.bind.annotation.PostMapping;

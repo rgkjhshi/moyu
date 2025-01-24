@@ -2,7 +2,8 @@ package com.moyu.system.auth.service;
 
 
 import com.moyu.common.exception.BaseException;
-import com.moyu.system.auth.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.service.TokenService;
 import com.moyu.system.auth.model.param.UserLoginParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,6 @@ import javax.annotation.Resource;
 @Slf4j
 @Service
 public class LoginService {
-
-    @Resource
-    private TokenService tokenService;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -56,6 +54,6 @@ public class LoginService {
         }
         LoginUserDetails loginUser = (LoginUserDetails) authentication.getPrincipal();
         // 生成token
-        return TokenService.createToken(loginUser);
+        return TokenService.generateToken(loginUser);
     }
 }

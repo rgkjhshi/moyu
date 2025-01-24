@@ -1,4 +1,4 @@
-package com.moyu.system.auth.constant;
+package com.moyu.common.security.constant;
 
 /**
  * 系统常量

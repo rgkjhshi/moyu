@@ -15,7 +15,7 @@ public class TokenService {
     /**
      * 生成token
      */
-    String generateToken(LoginUserDetails loginUser) {
+    public static String generateToken(LoginUserDetails loginUser) {
 
         return null;
     }

@@ -3,7 +3,7 @@ package com.moyu.system;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.google.common.base.CaseFormat;
-import com.moyu.system.auth.constant.SecurityConstants;
+import com.moyu.common.security.constant.SecurityConstants;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;

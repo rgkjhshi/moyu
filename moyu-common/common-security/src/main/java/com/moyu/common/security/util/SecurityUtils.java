@@ -1,8 +1,8 @@
-package com.moyu.system.auth.security.util;
+package com.moyu.common.security.util;
 
 
 import com.moyu.common.exception.BaseException;
-import com.moyu.system.auth.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

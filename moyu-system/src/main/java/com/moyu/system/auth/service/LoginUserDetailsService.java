@@ -1,7 +1,7 @@
 package com.moyu.system.auth.service;
 
 
-import com.moyu.system.auth.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUserDetails;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
@@ -48,6 +48,6 @@ public class LoginUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在");
         }
         // 创建 UserDetails TODO
-        return LoginUserDetails.withSysUser(sysUser).build();
+        return LoginUserDetails.builder().build();
     }
 }
