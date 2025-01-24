@@ -18,8 +18,7 @@ import java.io.IOException;
 /**
  * JWT令牌认证过滤器，用于从请求头中获取令牌并进行验证。
  *
- * @author shisong02
- * @link <a href="https://mikechen.cc/30272.html">Security工作流程参考这里</a>
+ * @author shisong
  * @since 2024-01-04
  */
 @Slf4j
