@@ -29,6 +29,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private SysUserService sysUserService;
 
+    @Resource
+    private SysUserService sysUserService;
+
     /**
      * SpringSecurity权限认证时(AuthenticationProvider.authenticate)会调用此方法
      */
@@ -49,5 +52,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         // 创建 UserDetails TODO
         return LoginUserDetails.builder().username(sysUser.getAccount()).password(sysUser.getPassword()).enabled(true).build();
+    }
+
+    private LoginUserDetails buildUserDetails(SysUser sysUser) {
+        LoginUserDetails loginUser = LoginUserDetails.builder()
+                .username(sysUser.getAccount())
+                .password(sysUser.getPassword())
+                .enabled(sysUser.getStatus() == 0)
+                .build();
+        // 添加权限
+
+        return loginUser;
     }
 }
