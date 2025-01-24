@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -52,10 +53,10 @@ public class JwtUtils {
         JWTClaimsSet claims = JwtUtils.verifyToken(token);
         // 根据token获取claims
         String username = claims.getSubject();
-        Set<String> perms = (Set<String>) claims.getClaim("perms");
+        List<String> perms = (List<String>) claims.getClaim("perms");
         // 转换成登录用户
         LoginUserDetails loginUser = LoginUserDetails.builder().enabled(true)
-                .username(username).perms(perms).build();
+                .username(username).build();
         loginUser.setAuthorities(perms);
         // 返回当前登陆用户
         return loginUser;
