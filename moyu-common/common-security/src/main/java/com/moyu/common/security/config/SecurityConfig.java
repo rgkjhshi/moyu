@@ -6,7 +6,6 @@ import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.filter.JwtTokenAuthenticationFilter;
 import com.moyu.common.security.handler.AuthExceptionEntryPoint;
 import com.moyu.common.security.handler.CustomAccessDeniedHandler;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,6 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -27,17 +27,8 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
-    /**
-     * 是否启用springSecurity的鉴权功能
-     */
-    @Value("${custom.security.enable:true}")
-    private Boolean enabled;
-
-    /**
-     * 白名单url
-     */
-    @Value("${custom.security.whiteList}")
-    private List<String> whiteList;
+    @Resource
+    private SecurityProperties properties;
 
     /**
      * 跨域配置
@@ -74,9 +65,9 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // 放行白名单 TODO
-        whiteList = SecurityConstants.WHITE_LIST;
+        List<String> whiteList = SecurityConstants.WHITE_LIST;
         // 如果没有开启认证，则全放行
-        if (ObjectUtil.notEqual(enabled, true)) {
+        if (ObjectUtil.notEqual(properties.getEnabled(), true)) {
             whiteList.add("/**");
         }
         // 白名单放行
