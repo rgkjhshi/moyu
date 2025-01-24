@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 @Log(jsonLog = true)
 @RestController
 @RequestMapping("/api/auth")
-public class LoginController {
+public class AuthController {
 
     @Resource
     private LoginService loginService;
@@ -30,6 +30,15 @@ public class LoginController {
      */
     @PostMapping("/login")
     public BaseResponse<String> userLogin(UserLoginParam loginParam) {
+        String token = loginService.login(loginParam);
+        return BaseResponse.getSuccessResponse(token);
+    }
+
+    /**
+     * 用户注销登陆(若不自定义，则需要在springSecurity中配置)
+     */
+    @PostMapping("/logout")
+    public BaseResponse<String> userLogout(UserLoginParam loginParam) {
         String token = loginService.login(loginParam);
         return BaseResponse.getSuccessResponse(token);
     }

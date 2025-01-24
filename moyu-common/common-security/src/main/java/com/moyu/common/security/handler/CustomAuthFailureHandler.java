@@ -1,4 +1,4 @@
-package com.moyu.system.auth.security.handle;
+package com.moyu.common.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;

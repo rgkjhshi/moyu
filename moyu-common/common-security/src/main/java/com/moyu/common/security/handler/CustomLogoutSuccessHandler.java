@@ -1,4 +1,4 @@
-package com.moyu.system.auth.security.handle;
+package com.moyu.common.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +17,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * 注销登录处理类, 用于 httpSecurity.logout() 指定
+ *
  * @author shisong
  * @since 2024-12-27
  */
 @Slf4j
-@Service
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override

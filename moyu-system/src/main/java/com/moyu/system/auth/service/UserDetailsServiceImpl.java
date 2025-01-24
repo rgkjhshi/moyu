@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
-public class LoginUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private SysUserService sysUserService;
