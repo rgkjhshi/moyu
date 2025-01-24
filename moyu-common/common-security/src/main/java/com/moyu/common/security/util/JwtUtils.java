@@ -13,9 +13,9 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * JWT工具类
@@ -40,9 +40,8 @@ public class JwtUtils {
     /**
      * 生成token
      */
-    String generateToken(LoginUserDetails loginUser) {
-
-        return null;
+    public static String generateToken(LoginUserDetails loginUser) {
+        return createToken(loginUser);
     }
 
     /**
@@ -50,15 +49,14 @@ public class JwtUtils {
      */
     public static LoginUserDetails getLoginUserFromToken(String token) {
         // 校验token，错误则抛异常
-
+        JWTClaimsSet claims = JwtUtils.verifyToken(token);
         // 根据token获取claims
-
-        // 获取登录用户(从jwt中或者缓存中)
-
+        String username = claims.getSubject();
+        Set<String> perms = (Set<String>) claims.getClaim("perms");
         // 转换成登录用户
-        LoginUserDetails loginUser = LoginUserDetails.builder().build();
-        // 用户存在, 无痛刷新缓存，在登录过期前活动的用户自动刷新缓存时间
-
+        LoginUserDetails loginUser = LoginUserDetails.builder().enabled(true)
+                .username(username).perms(perms).build();
+        loginUser.setAuthorities(perms);
         // 返回当前登陆用户
         return loginUser;
     }
@@ -77,7 +75,7 @@ public class JwtUtils {
                 .subject(loginUser.getUsername())
                 .jwtID(IdUtil.fastSimpleUUID())
                 // 自定义声明
-                .claim("claim", true)
+                .claim("perms", loginUser.getPerms())
                 .build();
         return createToken(claimsSet);
     }
