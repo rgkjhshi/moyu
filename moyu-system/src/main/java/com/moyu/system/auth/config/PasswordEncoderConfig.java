@@ -1,4 +1,4 @@
-package com.moyu.system.sys.config;
+package com.moyu.system.auth.config;
 
 
 import org.springframework.context.annotation.Bean;

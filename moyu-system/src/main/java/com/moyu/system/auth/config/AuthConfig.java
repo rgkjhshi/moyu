@@ -7,7 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Resource;
 
@@ -21,19 +21,14 @@ public class AuthConfig {
     @Resource
     private UserDetailsService userDetailsService;
 
-    /**
-     * 密码编码器(修改、重置密码使用)
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
         AuthenticationManagerBuilder authBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
         // 设置自定义身份认证接口进行身份认证，并使用BCryptPasswordEncoder进行密码加密。
-        authBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        authBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         return authBuilder.build();
     }
 }
