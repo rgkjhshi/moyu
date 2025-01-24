@@ -27,6 +27,6 @@ public interface SysRelationService extends IService<SysRelation> {
     /**
      * 通过(分组-用户、分组-角色、角色-权限)关系查询 用户->权限
      */
-    Set<String> userMenu(String account);
+    Set<String> userPerm(String account);
 
 }

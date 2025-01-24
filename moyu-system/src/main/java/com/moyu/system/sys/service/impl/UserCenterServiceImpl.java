@@ -77,7 +77,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     @Override
     public List<Tree<String>> userMenu(String account) {
         // 用户有权限的菜单code集合(含按钮)
-        Set<String> userMenuSet = sysRelationService.userMenu(account);
+        Set<String> permSet = sysRelationService.userPerm(account);
 
         // 查询所有可用的菜单(不含按钮)
         List<SysMenu> menuList = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
@@ -97,7 +97,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             } else if (MenuTypeEnum.DIR.getCode().equals(sysMenu.getMenuType())) {
                 userMenuList.add(sysMenu);
             } else {
-                if (userMenuSet.contains(sysMenu.getCode())) {
+                if (permSet.contains(sysMenu.getCode())) {
                     userMenuList.add(sysMenu);
                 }
             }

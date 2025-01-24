@@ -67,11 +67,11 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     }
 
     @Override
-    public Set<String> userMenu(String account) {
+    public Set<String> userPerm(String account) {
         // 用户的角色集
         Set<String> roleSet = userRole(account);
         // 权限集
-        Set<String> menuSet = new HashSet<>();
+        Set<String> permSet = new HashSet<>();
         if (ObjectUtil.isNotEmpty(roleSet)) {
             // 查询分组的所有角色
             list(new LambdaQueryWrapper<SysRelation>()
@@ -81,9 +81,9 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
                     .select(SysRelation::getTargetId)
                     // 指定role
                     .in(SysRelation::getObjectId, roleSet)
-            ).forEach(e -> menuSet.add(e.getTargetId()));
+            ).forEach(e -> permSet.add(e.getTargetId()));
         }
-        return menuSet;
+        return permSet;
     }
 
 }
