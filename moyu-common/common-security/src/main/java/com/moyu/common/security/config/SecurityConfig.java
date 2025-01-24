@@ -2,7 +2,6 @@ package com.moyu.common.security.config;
 
 
 import cn.hutool.core.util.ObjectUtil;
-import com.google.common.collect.Lists;
 import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.filter.JwtTokenAuthenticationFilter;
 import com.moyu.common.security.handler.AuthExceptionEntryPoint;
@@ -28,14 +27,17 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
-//    @Resource
-//    private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
-
     /**
      * 是否启用springSecurity的鉴权功能
      */
     @Value("${custom.security.enable:true}")
     private Boolean enabled;
+
+    /**
+     * 白名单url
+     */
+    @Value("${custom.security.whiteList}")
+    private List<String> whiteList;
 
     /**
      * 跨域配置
@@ -71,8 +73,8 @@ public class SecurityConfig {
         // 设置会话会话创建策略为无状态, 基于token，不使用session
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // 放行白名单
-        List<String> whiteList = Lists.newArrayList(SecurityConstants.WHITE_LIST);
+        // 放行白名单 TODO
+        whiteList = SecurityConstants.WHITE_LIST;
         // 如果没有开启认证，则全放行
         if (ObjectUtil.notEqual(enabled, true)) {
             whiteList.add("/**");

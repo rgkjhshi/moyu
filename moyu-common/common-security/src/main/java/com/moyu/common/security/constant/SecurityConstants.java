@@ -1,7 +1,10 @@
 package com.moyu.common.security.constant;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * 系统常量
+ * Security相关的常量
  *
  * @author shisong
  * @since 2024-12-27
@@ -37,7 +40,7 @@ public interface SecurityConstants {
     /**
      * 无需校验的URL白名单
      */
-    String[] WHITE_LIST = {
+    List<String> WHITE_LIST = Arrays.asList(
             // 登陆注册类请求
             "/api/login",
             "/api/register",
@@ -55,7 +58,6 @@ public interface SecurityConstants {
             "/callback/**",
 
             // 远程调用
-            "/feign/**",
-    };
-
+            "/feign/**"
+    );
 }
