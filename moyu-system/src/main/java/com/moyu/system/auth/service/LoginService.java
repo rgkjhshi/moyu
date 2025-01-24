@@ -7,9 +7,7 @@ import com.moyu.common.security.service.TokenService;
 import com.moyu.system.auth.model.param.UserLoginParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +46,12 @@ public class LoginService {
         } catch (Exception e) {
             if (e instanceof BadCredentialsException) {
                 throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户名或密码错误");
+            } else if (e instanceof LockedException) {
+                throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户账号已锁定");
+            } else if (e instanceof DisabledException) {
+                throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户暂不可用");
             } else {
+                log.error("登陆失败", e);
                 throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "登陆失败");
             }
         }

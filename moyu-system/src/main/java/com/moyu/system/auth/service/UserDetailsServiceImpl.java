@@ -48,6 +48,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在");
         }
         // 创建 UserDetails TODO
-        return LoginUserDetails.builder().build();
+        return LoginUserDetails.builder().username(sysUser.getAccount()).password(sysUser.getPassword()).enabled(true).build();
     }
 }
