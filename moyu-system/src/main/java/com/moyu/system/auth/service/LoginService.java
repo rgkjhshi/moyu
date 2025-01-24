@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -44,7 +45,9 @@ public class LoginService {
             // 该方法会在去调用UserDetailsServiceImpl.loadUserByUsername
             authentication = authenticationManager.authenticate(authenticationToken);
         } catch (Exception e) {
-            if (e instanceof BadCredentialsException) {
+            if (e instanceof UsernameNotFoundException) {
+                throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户名或密码错误");
+            } else if (e instanceof BadCredentialsException) {
                 throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户名或密码错误");
             } else if (e instanceof LockedException) {
                 throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户账号已锁定");
