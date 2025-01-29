@@ -159,7 +159,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                     }
                     // 如果是超链接，设置url
                     if (MenuTypeEnum.LINK.getCode().equals(menu.getMenuType())) {
-                        extra.put("url", menu.getPath());
+                        metaMap.put("url", menu.getPath());
                     }
                     extra.put("meta", metaMap);
                     node.setExtra(extra);
