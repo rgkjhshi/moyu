@@ -149,9 +149,6 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
-                    if (MenuTypeEnum.LINK.getCode().equals(menu.getMenuType())) {
-                        extra.put("redirect", menu.getLink());
-                    }
                     Map<String, Object> metaMap = new HashMap<>();
                     metaMap.put("icon", menu.getIcon());
                     metaMap.put("title", menu.getName());
@@ -159,6 +156,10 @@ public class UserCenterServiceImpl implements UserCenterService {
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
                         metaMap.put("hidden", true);
+                    }
+                    // 如果是超链接，设置url
+                    if (MenuTypeEnum.LINK.getCode().equals(menu.getMenuType())) {
+                        extra.put("url", menu.getPath());
                     }
                     extra.put("meta", metaMap);
                     node.setExtra(extra);
