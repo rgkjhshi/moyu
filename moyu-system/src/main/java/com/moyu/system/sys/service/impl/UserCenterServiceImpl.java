@@ -149,19 +149,19 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
-                    Map<String, Object> metaMap = new HashMap<>();
-                    metaMap.put("icon", menu.getIcon());
-                    metaMap.put("title", menu.getName());
-                    metaMap.put("type", menu.getMenuType());
+                    Map<String, Object> meta = new HashMap<>();
+                    meta.put("icon", menu.getIcon());
+                    meta.put("title", menu.getName());
+                    meta.put("type", menu.getMenuType());
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
-                        metaMap.put("hidden", true);
+                        meta.put("hidden", true);
                     }
                     // 如果是超链接，设置url
                     if (MenuTypeEnum.LINK.getCode().equals(menu.getMenuType())) {
-                        metaMap.put("url", menu.getPath());
+                        meta.put("url", menu.getPath());
                     }
-                    extra.put("meta", metaMap);
+                    extra.put("meta", meta);
                     node.setExtra(extra);
                     return node;
                 }).collect(Collectors.toList());
