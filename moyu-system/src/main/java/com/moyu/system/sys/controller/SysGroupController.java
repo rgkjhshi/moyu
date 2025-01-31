@@ -81,7 +81,7 @@ public class SysGroupController {
      */
     @PostMapping("/edit")
     public BaseResponse<String> edit(@Validated @RequestBody SysGroupParam groupParam) {
-        Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
+        Assert.isTrue(!ObjectUtil.isAllEmpty(groupParam.getId(), groupParam.getCode()), "id和code不能同时为空");
         sysGroupService.edit(groupParam);
         return BaseResponse.getSuccessResponse();
     }

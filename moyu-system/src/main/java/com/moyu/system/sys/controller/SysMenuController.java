@@ -1,7 +1,9 @@
 package com.moyu.system.sys.controller;
 
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.ObjectUtil;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
@@ -63,8 +65,9 @@ public class SysMenuController {
      * 获取菜单详情
      */
     @PostMapping("/detail")
-    public BaseResponse<SysMenu> detail(@RequestBody SysMenuParam sysMenuParam) {
-        return BaseResponse.getSuccessResponse(sysMenuService.detail(sysMenuParam));
+    public BaseResponse<SysMenu> detail(@RequestBody SysMenuParam menuParam) {
+        Assert.isTrue(!ObjectUtil.isAllEmpty(menuParam.getId(), menuParam.getCode()), "id和code不能同时为空");
+        return BaseResponse.getSuccessResponse(sysMenuService.detail(menuParam));
     }
 
     /**
@@ -98,8 +101,9 @@ public class SysMenuController {
      * 编辑菜单
      */
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@RequestBody SysMenuParam sysMenuParam) {
-        sysMenuService.edit(sysMenuParam);
+    public BaseResponse<String> edit(@RequestBody SysMenuParam menuParam) {
+        Assert.isTrue(!ObjectUtil.isAllEmpty(menuParam.getId(), menuParam.getCode()), "id和code不能同时为空");
+        sysMenuService.edit(menuParam);
         return BaseResponse.getSuccessResponse();
     }
 

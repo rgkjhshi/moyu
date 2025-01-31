@@ -85,7 +85,7 @@ public class SysRoleController {
      */
     @PostMapping("/edit")
     public BaseResponse<String> edit(@Validated @RequestBody SysRoleParam roleParam) {
-        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
+        Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
         sysRoleService.edit(roleParam);
         return BaseResponse.getSuccessResponse();
     }
