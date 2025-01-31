@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 /**
@@ -55,6 +59,7 @@ public class SysMenuParam extends BasePageParam {
     /**
      * 名称
      */
+    @NotBlank(message = "名称name不能为空")
     private String name;
 
     /**
@@ -67,6 +72,9 @@ public class SysMenuParam extends BasePageParam {
      *
      * @see com.moyu.system.sys.enums.MenuTypeEnum
      */
+    @NotEmpty(message = "菜单类型menuType不能为空")
+    @Min(value = 1, message = "菜单类型menuType有效取值范围为[1,5]")
+    @Max(value = 5, message = "菜单类型menuType有效取值范围为[1,5]")
     private Integer menuType;
 
     /**
@@ -102,11 +110,15 @@ public class SysMenuParam extends BasePageParam {
     /**
      * 排序顺序
      */
+    @NotEmpty(message = "排序顺序sortNum不能为空")
     private Integer sortNum;
 
     /**
      * 使用状态（0正常 1停用）
      */
+    @NotEmpty(message = "使用状态status不能为空")
+    @Min(value = 0, message = "使用状态status有效取值范围为[0,1]")
+    @Max(value = 1, message = "使用状态status有效取值范围为[0,1]")
     private Integer status;
 
     /**

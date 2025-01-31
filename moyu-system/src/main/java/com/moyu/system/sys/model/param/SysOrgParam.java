@@ -22,7 +22,7 @@ public class SysOrgParam extends BasePageParam {
     /**
      * 待删除的code列表，通常会集联删除
      */
-    private Set<String> codeSet;
+    private Set<String> codes;
 
     /**
      * 待删除的id列表，通常不会集联删除
@@ -64,7 +64,7 @@ public class SysOrgParam extends BasePageParam {
      */
     @NotEmpty(message = "组织机构类型orgType不能为空")
     @Min(value = 1, message = "组织机构类型orgType有效取值范围为[1,3]")
-    @Max(value = 2, message = "组织机构类型orgType有效取值范围为[1,3]")
+    @Max(value = 3, message = "组织机构类型orgType有效取值范围为[1,3]")
     private Integer orgType;
 
     /**
@@ -72,7 +72,7 @@ public class SysOrgParam extends BasePageParam {
      */
     @NotEmpty(message = "组织层级orgLevel不能为空")
     @Min(value = 1, message = "组织层级orgLevel有效取值范围为[1,3]")
-    @Max(value = 2, message = "组织层级orgLevel有效取值范围为[1,3]")
+    @Max(value = 3, message = "组织层级orgLevel有效取值范围为[1,3]")
     private Integer orgLevel;
 
     /**

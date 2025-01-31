@@ -207,7 +207,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 查询所有记录
         List<SysOrg> orgList = this.list(queryWrapper);
         // 待删除节点的code集合
-        Set<String> codeSet = orgParam.getCodeSet();
+        Set<String> codeSet = orgParam.getCodes();
 
         // 待删除的id集合(先把指定节点加入集合)
         Set<Long> idSet = orgList.stream()

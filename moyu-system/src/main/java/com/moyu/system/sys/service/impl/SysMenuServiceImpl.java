@@ -1,6 +1,7 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
@@ -124,6 +125,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
         // 非root节点的parent必须存在(module为root节点)
         if (!Objects.equals(MenuTypeEnum.MODULE.getCode(), menuParam.getMenuType())) {
+            Assert.notEmpty(menuParam.getParentCode(), "上级菜单parentCode不能为空");
             // 查询所选父节点
             SysMenu parentMenu = this.getOne(new LambdaQueryWrapper<SysMenu>()
                     .eq(SysMenu::getCode, menuParam.getParentCode())
@@ -136,9 +138,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "与上级菜单module不一致");
             }
         }
-        // 不使用beanCopy是为了效率
+        // 转换
         SysMenu menu = buildSysMenu(menuParam);
-        fillEmptyByType(menu);
+        fillSysMenu(menu);
         menu.setId(null);
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(menuParam.getCode())) {
@@ -204,9 +206,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public void edit(SysMenuParam menuParam) {
         SysMenu oldMenu = this.detail(menuParam);
-        // 不使用beanCopy是为了效率
+        // 转换
         SysMenu updateMenu = buildSysMenu(menuParam);
-        fillEmptyByType(updateMenu);
+        fillSysMenu(updateMenu);
         updateMenu.setId(oldMenu.getId());
         this.updateById(updateMenu);
     }
@@ -258,30 +260,39 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 根据menu的类型为某些字段填充空字符串
+     * 根据menu的类型为某些字段填充默认值
      */
-    private void fillEmptyByType(SysMenu menu) {
-        if (menu == null) {
-            return;
-        }
+    private void fillSysMenu(SysMenu menu) {
+        Assert.notNull(menu, "菜单menu不能为空");
         // 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
         if (Objects.equals(MenuTypeEnum.MODULE.getCode(), menu.getMenuType())) {
             // 模块的路径、组件、权限为空
             menu.setPath("");
             menu.setComponent("");
             menu.setPermission("");
-        } else if (Objects.equals(MenuTypeEnum.DIR.getCode(), menu.getMenuType())) {
+        } else {
+            // 非模块必须指定parentCode及module
+            Assert.notEmpty(menu.getParentCode(), "上级菜单parentCode不能为空");
+            Assert.notEmpty(menu.getModule(), "归属模块module不能为空");
+        }
+        if (Objects.equals(MenuTypeEnum.DIR.getCode(), menu.getMenuType())) {
             // 目录的组件、权限为空
-            menu.setComponent("");
+            Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
+            menu.setComponent("Layout");
             menu.setPermission("");
         } else if (Objects.equals(MenuTypeEnum.MENU.getCode(), menu.getMenuType())) {
+            Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
+            Assert.notEmpty(menu.getPath(), "组件component不能为空");
             // 菜单的权限为空
             menu.setPermission("");
         } else if (Objects.equals(MenuTypeEnum.BUTTON.getCode(), menu.getMenuType())) {
             // 按钮的路径、组件为空，忽略可见性
+            Assert.notEmpty(menu.getPermission(), "权限标识permission不能为空");
             menu.setPath("");
             menu.setComponent("");
         } else if (Objects.equals(MenuTypeEnum.LINK.getCode(), menu.getMenuType())) {
+            Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
+            Assert.isTrue(menu.getPath().startsWith("http"), "链接必须以http(s)开头");
             // 链接的组件、权限为空，忽略可见性
             menu.setComponent("");
             menu.setPermission("");

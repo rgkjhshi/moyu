@@ -37,8 +37,8 @@ public class SysMenuController {
      * 菜单列表
      */
     @PostMapping("/list")
-    public BaseResponse<List<SysMenu>> list(@RequestBody SysMenuParam sysMenuParam) {
-        List<SysMenu> list = sysMenuService.list(sysMenuParam);
+    public BaseResponse<List<SysMenu>> list(@RequestBody SysMenuParam menuParam) {
+        List<SysMenu> list = sysMenuService.list(menuParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -46,18 +46,19 @@ public class SysMenuController {
      * 分页菜单列表
      */
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysMenu>> pageList(@RequestBody SysMenuParam sysMenuParam) {
-        PageResult<SysMenu> list = sysMenuService.pageList(sysMenuParam);
+    public BaseResponse<PageResult<SysMenu>> pageList(@RequestBody SysMenuParam menuParam) {
+        Assert.isTrue(ObjectUtil.isAllNotEmpty(menuParam.getPageNum(), menuParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
+        PageResult<SysMenu> list = sysMenuService.pageList(menuParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
     /**
-     * 获取菜单树
+     * 获取菜单树(可指定module、status)
      */
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
-    public BaseResponse<List<Tree<String>>> tree(@RequestBody SysMenuParam sysMenuParam) {
-        List<Tree<String>> treeList = sysMenuService.tree(sysMenuParam);
+    public BaseResponse<List<Tree<String>>> tree(@RequestBody SysMenuParam menuParam) {
+        List<Tree<String>> treeList = sysMenuService.tree(menuParam);
         return BaseResponse.getSuccessResponse(treeList);
     }
 
@@ -74,8 +75,8 @@ public class SysMenuController {
      * 添加菜单
      */
     @PostMapping("/add")
-    public BaseResponse<String> add(@RequestBody SysMenuParam sysMenuParam) {
-        sysMenuService.add(sysMenuParam);
+    public BaseResponse<String> add(@RequestBody SysMenuParam menuParam) {
+        sysMenuService.add(menuParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -83,8 +84,9 @@ public class SysMenuController {
      * 删除菜单
      */
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysMenuParam sysMenuParam) {
-        sysMenuService.deleteByIds(sysMenuParam);
+    public BaseResponse<String> delete(@RequestBody SysMenuParam menuParam) {
+        Assert.notEmpty(menuParam.getIds(), "删除列表ids不能为空");
+        sysMenuService.deleteByIds(menuParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -92,8 +94,9 @@ public class SysMenuController {
      * 删除菜单树,会集联删除
      */
     @PostMapping("/deleteTree")
-    public BaseResponse<String> deleteTree(@RequestBody SysMenuParam sysMenuParam) {
-        sysMenuService.deleteTree(sysMenuParam);
+    public BaseResponse<String> deleteTree(@RequestBody SysMenuParam menuParam) {
+        Assert.notEmpty(menuParam.getCodes(), "删除列表codes不能为空");
+        sysMenuService.deleteTree(menuParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -111,8 +114,8 @@ public class SysMenuController {
      * 获取菜单树选择器
      */
     @PostMapping("/treeSelector")
-    public BaseResponse<List<Tree<String>>> menuTreeSelector(@RequestBody SysMenuParam sysMenuParam) {
-        return BaseResponse.getSuccessResponse(sysMenuService.menuTreeSelector(sysMenuParam));
+    public BaseResponse<List<Tree<String>>> menuTreeSelector(@RequestBody SysMenuParam menuParam) {
+        return BaseResponse.getSuccessResponse(sysMenuService.menuTreeSelector(menuParam));
     }
 
 }

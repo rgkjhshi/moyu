@@ -60,6 +60,8 @@ public interface SysMenuService extends IService<SysMenu> {
 
     /**
      * 获取菜单树选择器(字段少，不包含按钮)
+     *
+     * @param menuParam 可指定module
      */
     List<Tree<String>> menuTreeSelector(SysMenuParam menuParam);
 

@@ -97,7 +97,7 @@ public class SysOrgController {
      */
     @PostMapping("/deleteTree")
     public BaseResponse<String> deleteTree(@RequestBody SysOrgParam orgParam) {
-        Assert.notEmpty(orgParam.getCodeSet(), "删除列表codeSet不能为空");
+        Assert.notEmpty(orgParam.getCodes(), "删除列表codes不能为空");
         sysOrgService.deleteTree(orgParam);
         return BaseResponse.getSuccessResponse();
     }
