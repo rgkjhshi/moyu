@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
@@ -58,11 +57,8 @@ public class GlobalExceptionHandler {
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
             response.setMessage(message);
         } else if (e instanceof ConstraintViolationException) {
-            // 违反约束异常，如 @NotNull、@Size、@Min、@Max 等会抛出 ConstraintViolationException  =extends ValidationException
-            String message = ((ConstraintViolationException) e).getConstraintViolations().stream()
-                    .map(ConstraintViolation::getMessage)
-                    .collect(Collectors.joining(";"));
-            message = "参数错误:" + message;
+            // 违反约束异常，如 @NotNull、@Size、@Min、@Max 会抛出 ConstraintViolationException extends ValidationException
+            String message = "参数错误:" + e.getMessage();
             log.error(message);
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
             response.setMessage(e.getMessage());
