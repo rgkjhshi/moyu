@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
@@ -45,7 +47,7 @@ public class SysUserParam extends BasePageParam {
     /**
      * 账号
      */
-    @NotBlank(message = "account 用户账号不能为空")
+    @NotBlank(message = "用户账号account不能为空")
     private String account;
 
     /**
@@ -66,13 +68,13 @@ public class SysUserParam extends BasePageParam {
     /**
      * 姓名
      */
-    @NotBlank(message = "name 用户姓名不能为空")
+    @NotBlank(message = "用户姓名name不能为空")
     private String name;
 
     /**
      * 性别(字典 0未知 1男 2女)
      */
-    @NotEmpty(message = "gender 用户性别不能为空")
+    @NotEmpty(message = "用户性别gender不能为空")
     private Integer gender;
 
     /**
@@ -115,12 +117,15 @@ public class SysUserParam extends BasePageParam {
     /**
      * 直属组织编码
      */
-    @NotBlank(message = "orgCode 用户直属组织不能为空")
+    @NotBlank(message = "用户直属组织orgCode不能为空")
     private String orgCode;
 
     /**
      * 状态（0正常 1停用）
      */
+    @NotEmpty(message = "用户状态status不能为空")
+    @Min(value = 0, message = "用户状态status有效取值范围为[0,1]")
+    @Max(value = 1, message = "用户状态status有效取值范围为[0,1]")
     private Integer status;
 
     /**

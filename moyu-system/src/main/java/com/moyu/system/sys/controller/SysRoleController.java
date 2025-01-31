@@ -1,13 +1,16 @@
 package com.moyu.system.sys.controller;
 
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.ObjectUtil;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.service.SysRoleService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +37,8 @@ public class SysRoleController {
      * 获取角色列表
      */
     @PostMapping("/list")
-    public BaseResponse<List<SysRole>> list(@RequestBody SysRoleParam sysRoleParam) {
-        List<SysRole> list = sysRoleService.list(sysRoleParam);
+    public BaseResponse<List<SysRole>> list(@RequestBody SysRoleParam roleParam) {
+        List<SysRole> list = sysRoleService.list(roleParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -43,8 +46,9 @@ public class SysRoleController {
      * 分页获取角色列表
      */
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysRole>> pageList(@RequestBody SysRoleParam sysRoleParam) {
-        PageResult<SysRole> page = sysRoleService.pageList(sysRoleParam);
+    public BaseResponse<PageResult<SysRole>> pageList(@RequestBody SysRoleParam roleParam) {
+        Assert.isTrue(ObjectUtil.isAllNotEmpty(roleParam.getPageNum(), roleParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
+        PageResult<SysRole> page = sysRoleService.pageList(roleParam);
         return BaseResponse.getSuccessResponse(page);
     }
 
@@ -52,16 +56,17 @@ public class SysRoleController {
      * 获取详情
      */
     @PostMapping("/detail")
-    public BaseResponse<SysRole> detail(@RequestBody SysRoleParam sysRoleParam) {
-        return BaseResponse.getSuccessResponse(sysRoleService.detail(sysRoleParam));
+    public BaseResponse<SysRole> detail(@RequestBody SysRoleParam roleParam) {
+        Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
+        return BaseResponse.getSuccessResponse(sysRoleService.detail(roleParam));
     }
 
     /**
      * 添加
      */
     @PostMapping("/add")
-    public BaseResponse<String> add(@RequestBody SysRoleParam sysRoleParam) {
-        sysRoleService.add(sysRoleParam);
+    public BaseResponse<String> add(@Validated @RequestBody SysRoleParam roleParam) {
+        sysRoleService.add(roleParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -69,8 +74,9 @@ public class SysRoleController {
      * 删除
      */
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysRoleParam sysRoleParam) {
-        sysRoleService.deleteByIds(sysRoleParam);
+    public BaseResponse<String> delete(@RequestBody SysRoleParam roleParam) {
+        Assert.notEmpty(roleParam.getIds(), "删除列表ids不能为空");
+        sysRoleService.deleteByIds(roleParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -78,8 +84,9 @@ public class SysRoleController {
      * 编辑
      */
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@RequestBody SysRoleParam sysRoleParam) {
-        sysRoleService.edit(sysRoleParam);
+    public BaseResponse<String> edit(@Validated @RequestBody SysRoleParam roleParam) {
+        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
+        sysRoleService.edit(roleParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -87,16 +94,20 @@ public class SysRoleController {
      * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
      */
     @PostMapping("/menuTreeForGrant")
-    public BaseResponse<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam sysRoleParam) {
-        return BaseResponse.getSuccessResponse(sysRoleService.treeForGrant(sysRoleParam));
+    public BaseResponse<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam roleParam) {
+        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
+        return BaseResponse.getSuccessResponse(sysRoleService.treeForGrant(roleParam));
     }
 
     /**
      * 给角色授权菜单
      */
     @PostMapping("/grantMenu")
-    public BaseResponse<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam sysRoleParam) {
-        sysRoleService.grantMenu(sysRoleParam);
+    public BaseResponse<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam roleParam) {
+        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
+        Assert.notEmpty(roleParam.getModule(), "模块module不能为空");
+        Assert.notEmpty(roleParam.getGrantMenuList(), "授权列表grantMenuList不能为空");
+        sysRoleService.grantMenu(roleParam);
         return BaseResponse.getSuccessResponse();
     }
 
