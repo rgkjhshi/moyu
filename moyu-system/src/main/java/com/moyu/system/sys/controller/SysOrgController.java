@@ -1,7 +1,9 @@
 package com.moyu.system.sys.controller;
 
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.ObjectUtil;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
@@ -9,6 +11,7 @@ import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,8 +38,9 @@ public class SysOrgController {
      * 分页获取组织列表
      */
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam sysOrgParam) {
-        PageResult<SysOrg> page = sysOrgService.pageList(sysOrgParam);
+    public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
+        Assert.isTrue(ObjectUtil.isAllNotEmpty(orgParam.getPageNum(), orgParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
+        PageResult<SysOrg> page = sysOrgService.pageList(orgParam);
         return BaseResponse.getSuccessResponse(page);
     }
 
@@ -64,16 +68,17 @@ public class SysOrgController {
      * 获取详情
      */
     @PostMapping("/detail")
-    public BaseResponse<SysOrg> detail(@RequestBody SysOrgParam sysOrgParam) {
-        return BaseResponse.getSuccessResponse(sysOrgService.detail(sysOrgParam));
+    public BaseResponse<SysOrg> detail(@RequestBody SysOrgParam orgParam) {
+        Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
+        return BaseResponse.getSuccessResponse(sysOrgService.detail(orgParam));
     }
 
     /**
      * 添加
      */
     @PostMapping("/add")
-    public BaseResponse<String> add(@RequestBody SysOrgParam sysOrgParam) {
-        sysOrgService.add(sysOrgParam);
+    public BaseResponse<String> add(@Validated @RequestBody SysOrgParam orgParam) {
+        sysOrgService.add(orgParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -81,8 +86,9 @@ public class SysOrgController {
      * 删除
      */
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysOrgParam sysOrgParam) {
-        sysOrgService.deleteByIds(sysOrgParam);
+    public BaseResponse<String> delete(@RequestBody SysOrgParam orgParam) {
+        Assert.notEmpty(orgParam.getIds(), "删除列表ids不能为空");
+        sysOrgService.deleteByIds(orgParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -90,8 +96,9 @@ public class SysOrgController {
      * 删除树,会集联删除
      */
     @PostMapping("/deleteTree")
-    public BaseResponse<String> deleteTree(@RequestBody SysOrgParam sysOrgParam) {
-        sysOrgService.deleteTree(sysOrgParam);
+    public BaseResponse<String> deleteTree(@RequestBody SysOrgParam orgParam) {
+        Assert.notEmpty(orgParam.getCodeSet(), "删除列表codeSet不能为空");
+        sysOrgService.deleteTree(orgParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -99,8 +106,9 @@ public class SysOrgController {
      * 编辑
      */
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@RequestBody SysOrgParam sysOrgParam) {
-        sysOrgService.edit(sysOrgParam);
+    public BaseResponse<String> edit(@Validated @RequestBody SysOrgParam orgParam) {
+        Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
+        sysOrgService.edit(orgParam);
         return BaseResponse.getSuccessResponse();
     }
 

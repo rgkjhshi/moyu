@@ -4,6 +4,10 @@ package com.moyu.system.sys.model.param;
 import com.moyu.common.model.BasePageParam;
 import lombok.Data;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 /**
@@ -18,7 +22,7 @@ public class SysOrgParam extends BasePageParam {
     /**
      * 待删除的code列表，通常会集联删除
      */
-    private Set<String> codes;
+    private Set<String> codeSet;
 
     /**
      * 待删除的id列表，通常不会集联删除
@@ -39,11 +43,13 @@ public class SysOrgParam extends BasePageParam {
     /**
      * 父节点编码
      */
+    @NotBlank(message = "父节点编码parentCode不能为空")
     private String parentCode;
 
     /**
      * 名称
      */
+    @NotBlank(message = "组织名称name不能为空")
     private String name;
 
     /**
@@ -56,21 +62,31 @@ public class SysOrgParam extends BasePageParam {
      *
      * @see com.moyu.system.sys.enums.OrgTypeEnum
      */
+    @NotEmpty(message = "组织机构类型orgType不能为空")
+    @Min(value = 1, message = "组织机构类型orgType有效取值范围为[1,3]")
+    @Max(value = 2, message = "组织机构类型orgType有效取值范围为[1,3]")
     private Integer orgType;
 
     /**
      * 组织层级(字典 1一级公司 2二级公司 3三级公司)
      */
+    @NotEmpty(message = "组织层级orgLevel不能为空")
+    @Min(value = 1, message = "组织层级orgLevel有效取值范围为[1,3]")
+    @Max(value = 2, message = "组织层级orgLevel有效取值范围为[1,3]")
     private Integer orgLevel;
 
     /**
      * 排序顺序
      */
+    @NotEmpty(message = "排序顺序sortNum不能为空")
     private Integer sortNum;
 
     /**
      * 状态（0正常 1停用）
      */
+    @NotEmpty(message = "分组状态status不能为空")
+    @Min(value = 0, message = "分组状态status有效取值范围为[0,1]")
+    @Max(value = 1, message = "分组状态status有效取值范围为[0,1]")
     private Integer status;
 
     /**
