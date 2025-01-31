@@ -26,13 +26,13 @@ public class UserLoginParam {
     /**
      * 账号
      */
-    @NotBlank(message = "用户名不能为空")
+    @NotBlank(message = "account 用户账号不能为空")
     private String account;
 
     /**
      * 密码 不允许序列化只允许反序列化
      */
-    @NotBlank(message = "密码不能为空")
+    @NotBlank(message = "password 密码不能为空")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
