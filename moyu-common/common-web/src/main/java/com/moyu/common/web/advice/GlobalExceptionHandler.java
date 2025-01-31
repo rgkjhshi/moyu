@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,15 @@ public class GlobalExceptionHandler {
             log.error(message);
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
             response.setMessage(message);
+        } else if (e instanceof ConstraintViolationException) {
+            // 违反约束异常，如 @NotNull、@Size、@Min、@Max 等会抛出 ConstraintViolationException  =extends ValidationException
+            String message = ((ConstraintViolationException) e).getConstraintViolations().stream()
+                    .map(ConstraintViolation::getMessage)
+                    .collect(Collectors.joining(";"));
+            message = "参数错误:" + message;
+            log.error(message);
+            response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
+            response.setMessage(e.getMessage());
         } else if (e instanceof IllegalArgumentException) {
             // hutool中的Assert.isTrue 会抛出 IllegalArgumentException
             String message = "参数错误:" + e.getMessage();
@@ -69,11 +79,6 @@ public class GlobalExceptionHandler {
             response.setMessage(ExceptionEnum.INVALID_PARAMETER.getMessage());
         } else if (e instanceof HttpMessageConversionException) {
             // json格式参数进行参数类型转换时，参数转换失败则HttpMessageConversionException
-            log.error(e.getMessage());
-            response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
-            response.setMessage(e.getMessage());
-        } else if (e instanceof ConstraintViolationException) {
-            // 参数校验失败则ConstraintViolationException
             log.error(e.getMessage());
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
             response.setMessage(e.getMessage());
