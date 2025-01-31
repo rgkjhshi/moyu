@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     public BaseResponse<?> exceptionHandler(Exception e) {
         BaseResponse<?> response = new BaseResponse<>();
         if (e instanceof BindException) {
-            // 使用@Valid和@Validated 会抛出 MethodArgumentNotValidException extends BindException
+            // Spring中使用@Valid和@Validated验证，@NotNull、@Size 会抛出 MethodArgumentNotValidException extends BindException
             BindingResult bindingResult = ((BindException) e).getBindingResult();
             String message = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
             response.setMessage(message);
         } else if (e instanceof ConstraintViolationException) {
-            // 违反约束异常，如 @NotNull、@Size、@Min、@Max 会抛出 ConstraintViolationException extends ValidationException
+            // Bean Validation独立验证，违反约束异常，如 @NotNull、@Size、@Min、@Max 会抛出 ConstraintViolationException extends ValidationException
             String message = "参数错误:" + e.getMessage();
             log.error(message);
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
