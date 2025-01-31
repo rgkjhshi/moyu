@@ -2,7 +2,7 @@
 
 ### 功能
 
-* 定义
+* 定义全局异常处理器
 
 ### 依赖
 
@@ -15,6 +15,11 @@
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <!-- 参数校验 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
     <!-- jackson序列化 -->
     <dependency>

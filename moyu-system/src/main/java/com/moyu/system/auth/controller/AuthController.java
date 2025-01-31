@@ -5,6 +5,7 @@ import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.system.auth.model.param.UserLoginParam;
 import com.moyu.system.auth.service.LoginService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class AuthController {
      * 用户登陆
      */
     @PostMapping("/login")
-    public BaseResponse<String> userLogin(UserLoginParam loginParam) {
+    public BaseResponse<String> userLogin(@Validated UserLoginParam loginParam) {
         String token = loginService.login(loginParam);
         return BaseResponse.getSuccessResponse(token);
     }

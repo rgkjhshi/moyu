@@ -1,1 +1,2 @@
 com.moyu.common.web.config.WebMvcConfig
+com.moyu.common.web.config.ValidatorConfig

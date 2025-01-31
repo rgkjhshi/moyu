@@ -6,11 +6,18 @@ import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.validation.ConstraintViolationException;
+import java.util.stream.Collectors;
 
 /**
  * <p>@ControllerAdvice和@RestControllerAdvice都可以指向控制器的一个子集</p>
@@ -40,7 +47,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public BaseResponse<?> exceptionHandler(Exception exception) {
         BaseResponse<?> response = new BaseResponse<>();
-        if (exception instanceof ServletRequestBindingException) {
+        if (exception instanceof BindException) {
+            // 使用@Valid和@Validated 会抛出 MethodArgumentNotValidException extends BindException
+            BindingResult bindingResult = ((BindException) exception).getBindingResult();
+            String message = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining(";"));
+            log.error(message);
+            response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
+            response.setMessage(message);
+        } else if (exception instanceof ServletRequestBindingException) {
+            MethodArgumentNotValidException e;
             // ServletRequestBindingException是请求参数绑定到JavaBean或模型属性时出现的异常，如必传参数缺失
             log.error(exception.getMessage());
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
@@ -50,11 +67,11 @@ public class GlobalExceptionHandler {
             log.error(exception.getMessage());
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
             response.setMessage(exception.getMessage());
-//        } else if (exception instanceof ConstraintViolationException) {
-//            // 参数校验失败则ConstraintViolationException
-//            log.error(exception.getMessage());
-//            response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
-//            response.setMessage(exception.getMessage());
+        } else if (exception instanceof ConstraintViolationException) {
+            // 参数校验失败则ConstraintViolationException
+            log.error(exception.getMessage());
+            response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
+            response.setMessage(exception.getMessage());
         } else if (exception instanceof IllegalArgumentException) {
             log.error(exception.getMessage(), exception);
             response.setCode(ExceptionEnum.BUSINESS_ERROR.getCode());
