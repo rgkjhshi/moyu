@@ -46,6 +46,11 @@ public class LoginUserDetails implements UserDetails, CredentialsContainer {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    /**
+     * 权限集合，SecurityExpressionRoot中的hasRole、hasRole等方法会使用此字段
+     *
+     * @see org.springframework.security.access.expression.SecurityExpressionRoot
+     */
     @JsonIgnore
     private Collection<GrantedAuthority> authorities;
 
