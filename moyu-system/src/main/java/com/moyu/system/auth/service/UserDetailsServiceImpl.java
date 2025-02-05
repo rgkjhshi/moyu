@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private SysRelationService sysRelationService;
 
     /**
-     * SpringSecurity权限认证时(AuthenticationProvider.authenticate)会调用此方法
+     * SpringSecurity权限认证时(AuthenticationProvider#authenticate)会调用此方法
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

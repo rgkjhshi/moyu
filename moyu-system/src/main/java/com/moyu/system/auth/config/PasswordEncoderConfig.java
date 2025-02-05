@@ -15,6 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class PasswordEncoderConfig {
 
+    /**
+     * 加密比较器
+     *
+     * @see org.springframework.security.authentication.dao.DaoAuthenticationProvider
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
