@@ -10,6 +10,7 @@ import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.service.SysMenuService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,6 +75,7 @@ public class SysMenuController {
     /**
      * 添加菜单
      */
+    @PreAuthorize("hasAuthority('sys:menu:add')")
     @PostMapping("/add")
     public BaseResponse<String> add(@RequestBody SysMenuParam menuParam) {
         sysMenuService.add(menuParam);
@@ -83,6 +85,7 @@ public class SysMenuController {
     /**
      * 删除菜单
      */
+    @PreAuthorize("hasAuthority('sys:menu:delete')")
     @PostMapping("/delete")
     public BaseResponse<String> delete(@RequestBody SysMenuParam menuParam) {
         Assert.notEmpty(menuParam.getIds(), "删除列表ids不能为空");

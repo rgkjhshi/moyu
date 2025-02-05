@@ -1,2 +1,3 @@
-com.moyu.common.security.config.SecurityConfig
 com.moyu.common.security.config.SecurityProperties
+com.moyu.common.security.config.SecurityConfig
+com.moyu.common.security.advice.AuthExceptionHandler

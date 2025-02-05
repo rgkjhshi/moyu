@@ -83,7 +83,7 @@ public class SecurityConfig {
         // 添加CORS filter
         http.addFilterBefore(corsFilter(), JwtTokenAuthenticationFilter.class);
 
-        // 异常处理
+        // 异常处理。若有@ExceptionHandler处理AccessDeniedException和AuthenticationException此处配置不会起到作用
         http.exceptionHandling()
                 // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
                 .authenticationEntryPoint(new AuthExceptionEntryPoint())
