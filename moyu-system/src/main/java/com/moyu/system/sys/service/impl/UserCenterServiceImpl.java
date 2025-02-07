@@ -149,6 +149,11 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
+                    if (MenuTypeEnum.DIR.getCode().equals(menu.getMenuType())) {
+                        extra.put("redirect", menu.getLink());
+                    } else if (MenuTypeEnum.MODULE.getCode().equals(menu.getMenuType())) {
+                        extra.put("redirect", menu.getLink());
+                    }
                     Map<String, Object> meta = new HashMap<>();
                     meta.put("icon", menu.getIcon());
                     meta.put("title", menu.getName());
