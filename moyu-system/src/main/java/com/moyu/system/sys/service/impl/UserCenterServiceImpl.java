@@ -97,6 +97,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             } else if (MenuTypeEnum.DIR.getCode().equals(sysMenu.getMenuType())) {
                 userMenuList.add(sysMenu);
             } else {
+                // 菜单，有权限才添加
                 if (permSet.contains(sysMenu.getCode())) {
                     userMenuList.add(sysMenu);
                 }
