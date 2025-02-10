@@ -22,19 +22,19 @@ import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.model.vo.UserInfo;
 import com.moyu.system.sys.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * @author shisong
  * @since 2025-01-07
  */
+@Slf4j
 @Service
 public class UserCenterServiceImpl implements UserCenterService {
 
@@ -104,7 +104,14 @@ public class UserCenterServiceImpl implements UserCenterService {
             }
         });
         // 构建菜单路由树结构
-        return buildMenuTree(userMenuList, SysConstants.ROOT_ID);
+        Tree<String> singleTree = buildMenuTree(userMenuList, SysConstants.ROOT_ID);
+        // 移除空目录
+        removeTreeNodes(singleTree, tree -> {
+            Object menuType = ((Map<?, ?>) tree.get("meta")).get("type");
+            return !tree.hasChild() && (MenuTypeEnum.MODULE.getCode().equals(menuType) || MenuTypeEnum.DIR.getCode().equals(menuType));
+        });
+
+        return singleTree.getChildren();
     }
 
     @Override
@@ -137,7 +144,7 @@ public class UserCenterServiceImpl implements UserCenterService {
      * @param rootId   指定的根节点(从树中查找此rootId)
      * @return 返回以rootId为根的树，可能是子树或多棵树
      */
-    private List<Tree<String>> buildMenuTree(List<SysMenu> menuList, String rootId) {
+    private Tree<String> buildMenuTree(List<SysMenu> menuList, String rootId) {
         // 配置TreeNode使用指定的字段名
         TreeNodeConfig nodeConfig = new TreeNodeConfig();
         nodeConfig.setIdKey("code");
@@ -172,7 +179,27 @@ public class UserCenterServiceImpl implements UserCenterService {
                     return node;
                 }).collect(Collectors.toList());
         // 构建树
-        return TreeUtil.build(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
+        return TreeUtil.buildSingle(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
+    }
+
+    // 按指定条件移除节点
+
+    /**
+     * 按指定条件移除节点
+     */
+    private static void removeTreeNodes(Tree<String> singleTree, Predicate<Tree<String>> condition) {
+        if (ObjectUtil.isEmpty(singleTree.getChildren())) {
+            return;
+        }
+        List<Tree<String>> removeList = new ArrayList<>();
+        for (Tree<String> child : singleTree.getChildren()) {
+            if (condition.test(child)) {
+                removeList.add(child);
+            } else {
+                removeTreeNodes(child, condition);
+            }
+        }
+        singleTree.getChildren().removeAll(removeList);
     }
 
     /**
