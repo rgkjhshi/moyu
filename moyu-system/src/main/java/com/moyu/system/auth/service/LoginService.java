@@ -2,7 +2,7 @@ package com.moyu.system.auth.service;
 
 
 import com.moyu.common.exception.BaseException;
-import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUser;
 import com.moyu.common.security.service.TokenService;
 import com.moyu.system.auth.model.param.UserLoginParam;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +58,7 @@ public class LoginService {
                 throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "登陆失败");
             }
         }
-        LoginUserDetails loginUser = (LoginUserDetails) authentication.getPrincipal();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         // 生成token
         return TokenService.generateToken(loginUser);
     }

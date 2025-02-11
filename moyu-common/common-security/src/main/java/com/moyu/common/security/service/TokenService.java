@@ -2,7 +2,7 @@ package com.moyu.common.security.service;
 
 
 import cn.hutool.core.util.ObjectUtil;
-import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUser;
 import com.moyu.common.security.util.JwtUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ public class TokenService {
     /**
      * 生成token
      */
-    public static String generateToken(LoginUserDetails loginUser) {
+    public static String generateToken(LoginUser loginUser) {
 
         return JwtUtils.createToken(loginUser);
     }
@@ -38,11 +38,11 @@ public class TokenService {
     /**
      * 从http请求中获取token
      */
-    public static LoginUserDetails getLoginUserByToken(String token) {
+    public static LoginUser getLoginUserByToken(String token) {
         // 校验token，错误则抛异常
         Boolean valid = JwtUtils.verifyToken(token);
         // 直接从token解析jwt获取用户
-        LoginUserDetails loginUser = JwtUtils.getLoginUserFromToken(token);
+        LoginUser loginUser = JwtUtils.getLoginUserFromToken(token);
         // 根据token获取tokenId，然后再从缓存中获取登录用户
         // userCache.get(JwtUtils.getId(token))
 

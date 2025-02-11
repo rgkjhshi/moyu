@@ -1,7 +1,7 @@
 package com.moyu.system.auth.service;
 
 
-import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUser;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
@@ -59,11 +59,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     /**
      * 创建LoginUserDetails
      */
-    private LoginUserDetails buildUserDetails(SysUser sysUser) {
+    private LoginUser buildUserDetails(SysUser sysUser) {
         // 用户有权限的菜单code集合(含按钮)
         Set<String> permSet = sysRelationService.userPerm(sysUser.getAccount());
         Set<String> roleSet = sysRelationService.userRole(sysUser.getAccount());
-        LoginUserDetails loginUser = LoginUserDetails.builder()
+        LoginUser loginUser = LoginUser.builder()
                 .username(sysUser.getAccount())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0)

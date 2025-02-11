@@ -3,7 +3,7 @@ package com.moyu.common.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.common.model.BaseResponse;
-import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUser;
 import com.moyu.common.security.service.TokenService;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -28,7 +28,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        LoginUserDetails loginUser = (LoginUserDetails) authentication.getPrincipal();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         String token = TokenService.generateToken(loginUser);
         // 认证成功直接返回json数据
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

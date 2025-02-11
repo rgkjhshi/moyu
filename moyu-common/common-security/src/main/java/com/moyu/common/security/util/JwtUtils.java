@@ -4,7 +4,7 @@ package com.moyu.common.security.util;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
-import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public class JwtUtils {
      * 生成token
      * 参考 <a href="https://hutool.cn/docs/#/jwt/%E6%A6%82%E8%BF%B0">这里</a>
      */
-    public static String createToken(LoginUserDetails loginUser) {
+    public static String createToken(LoginUser loginUser) {
         String token = JWT.create()
                 .setSubject(loginUser.getUsername())
                 .setJWTId(IdUtil.fastSimpleUUID())
@@ -43,7 +43,7 @@ public class JwtUtils {
     /**
      * 从http请求中获取token
      */
-    public static LoginUserDetails getLoginUserFromToken(String token) {
+    public static LoginUser getLoginUserFromToken(String token) {
         // 解析jwt token
         JWT jwt = JWT.of(token);
         // 根据token获取claims
@@ -51,7 +51,7 @@ public class JwtUtils {
         Set<String> perms = new HashSet<>((List<String>) jwt.getPayload("perms"));
         Set<String> roles = new HashSet<>((List<String>) jwt.getPayload("roles"));
         // 转换成登录用户
-        LoginUserDetails loginUser = LoginUserDetails.builder().enabled(true)
+        LoginUser loginUser = LoginUser.builder().enabled(true)
                 .username(username).perms(perms).roles(roles).build();
         // 初始化authorities后才可使用springSecurity鉴权
         loginUser.initAuthorities();

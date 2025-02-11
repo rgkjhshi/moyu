@@ -3,7 +3,7 @@ package com.moyu.common.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.common.model.BaseResponse;
-import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUser;
 import com.moyu.common.security.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -27,7 +27,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        LoginUserDetails loginUser = SecurityUtils.getLoginUser();
+        LoginUser loginUser = SecurityUtils.getLoginUser();
         if (loginUser != null) {
             // 删除用户缓存记录 TODO
             // 记录用户退出日志

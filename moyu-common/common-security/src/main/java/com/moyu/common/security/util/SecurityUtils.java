@@ -2,7 +2,7 @@ package com.moyu.common.security.util;
 
 
 import com.moyu.common.exception.BaseException;
-import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,9 +32,9 @@ public class SecurityUtils {
     /**
      * 获取用户
      **/
-    public static LoginUserDetails getLoginUser() {
+    public static LoginUser getLoginUser() {
         try {
-            return (LoginUserDetails) getAuthentication().getPrincipal();
+            return (LoginUser) getAuthentication().getPrincipal();
         } catch (Exception e) {
             throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "获取用户信息异常");
         }

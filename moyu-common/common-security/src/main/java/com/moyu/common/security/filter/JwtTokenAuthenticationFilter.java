@@ -1,7 +1,7 @@
 package com.moyu.common.security.filter;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.moyu.common.security.model.LoginUserDetails;
+import com.moyu.common.security.model.LoginUser;
 import com.moyu.common.security.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,11 +31,11 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         if (ObjectUtil.isNotEmpty(token)) {
             // 验证token，并解析为jwt对象
             // 从缓存中获取用户信息
-            LoginUserDetails userDetails = TokenService.getLoginUserByToken(token);
+            LoginUser loginUser = TokenService.getLoginUserByToken(token);
             // 如果 loginUser 存在，设置SecurityContext
-            if (ObjectUtil.isNotNull(userDetails) && ObjectUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
+            if (ObjectUtil.isNotNull(loginUser) && ObjectUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
                 // 设置认证对象
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

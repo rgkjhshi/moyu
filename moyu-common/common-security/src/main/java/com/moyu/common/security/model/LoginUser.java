@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -28,7 +27,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Builder
-public class LoginUserDetails implements UserDetails, CredentialsContainer {
+public class LoginUser implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = 1L;
 
     /**
