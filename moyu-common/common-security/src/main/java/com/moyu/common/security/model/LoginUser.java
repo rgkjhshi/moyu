@@ -19,6 +19,8 @@ import java.util.Set;
 
 
 /**
+ * 登陆用户对象
+ *
  * @author shisong
  * @see org.springframework.security.core.userdetails.User
  * @since 2024-12-27
