@@ -7,12 +7,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -34,6 +37,11 @@ public class LoginUserDetails implements UserDetails, CredentialsContainer {
     private Set<String> perms;
 
     /**
+     * 角色集合
+     */
+    private Set<String> roles;
+
+    /**
      * 默认字段
      *
      * @see org.springframework.security.core.userdetails.User
@@ -47,7 +55,7 @@ public class LoginUserDetails implements UserDetails, CredentialsContainer {
     private String password;
 
     /**
-     * 权限集合，SecurityExpressionRoot中的hasRole、hasRole等方法会使用此字段
+     * 权限集合，SecurityExpressionRoot中的hasRole等方法会使用此字段
      *
      * @see org.springframework.security.access.expression.SecurityExpressionRoot
      */
@@ -85,6 +93,23 @@ public class LoginUserDetails implements UserDetails, CredentialsContainer {
     }
 
     public void setAuthorities(Collection<String> authorities) {
+        this.authorities = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
+    }
+
+    /**
+     * 根据perms和roles生成授权列表
+     */
+    public void initAuthorities() {
+        Set<String> authorities = new HashSet<>();
+        if (!CollectionUtils.isEmpty(roles)) {
+            roles.forEach(role -> {
+                // SecurityExpressionRoot#hasRole中会根据前缀判断
+                authorities.add("ROLE_" + role);
+            });
+        }
+        if (!CollectionUtils.isEmpty(perms)) {
+            authorities.addAll(perms);
+        }
         this.authorities = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
     }
 

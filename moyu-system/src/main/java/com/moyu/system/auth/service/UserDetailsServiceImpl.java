@@ -60,16 +60,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * 创建LoginUserDetails
      */
     private LoginUserDetails buildUserDetails(SysUser sysUser) {
+        // 用户有权限的菜单code集合(含按钮)
+        Set<String> permSet = sysRelationService.userPerm(sysUser.getAccount());
+        Set<String> roleSet = sysRelationService.userRole(sysUser.getAccount());
         LoginUserDetails loginUser = LoginUserDetails.builder()
                 .username(sysUser.getAccount())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0)
+                .roles(roleSet)
+                .perms(permSet)
                 .build();
-        // 用户有权限的菜单code集合(含按钮)
-        Set<String> permSet = sysRelationService.userPerm(sysUser.getAccount());
-        // 添加权限
-        loginUser.setPerms(permSet);
-        loginUser.setAuthorities(permSet);
+        // 初始化权限
+        loginUser.initAuthorities();
         return loginUser;
     }
 }
