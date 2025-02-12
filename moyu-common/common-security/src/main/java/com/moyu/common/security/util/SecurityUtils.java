@@ -44,8 +44,7 @@ public class SecurityUtils {
      * 获取用户角色集合
      */
     public static Set<String> getRoles() {
-        Collection<GrantedAuthority> authorities = getLoginUser().getAuthorities();
-        return authorities == null ? new HashSet<>() : AuthorityUtils.authorityListToSet(authorities);
+        return getLoginUser().getRoles();
     }
 
     /**
@@ -53,6 +52,14 @@ public class SecurityUtils {
      */
     public static Set<String> getPerms() {
         return getLoginUser().getPerms();
+    }
+
+    /**
+     * 获取用户角色集合
+     */
+    public static Set<String> getAuthorities() {
+        Collection<GrantedAuthority> authorities = getLoginUser().getAuthorities();
+        return authorities == null ? new HashSet<>() : AuthorityUtils.authorityListToSet(authorities);
     }
 
     /**
