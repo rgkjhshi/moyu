@@ -9,7 +9,7 @@ import lombok.ToString;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -74,7 +74,7 @@ public class SysRoleParam extends BasePageParam {
     /**
      * 使用状态（0正常 1停用）
      */
-    @NotEmpty(message = "角色状态status不能为空")
+    @NotNull(message = "角色状态status不能为空")
     @Min(value = 0, message = "角色状态status有效取值范围为[0,1]")
     @Max(value = 1, message = "角色状态status有效取值范围为[0,1]")
     private Integer status;
