@@ -92,7 +92,10 @@ public class UserCenterServiceImpl implements UserCenterService {
         List<SysMenu> userMenuList = CollectionUtil.newArrayList();
         menuList.forEach(sysMenu -> {
             if (MenuTypeEnum.MODULE.getCode().equals(sysMenu.getMenuType())) {
-                sysMenu.setPath(StrUtil.SLASH + RandomUtil.randomString(10));
+                // path为空则设置为随机字符串
+                if (ObjectUtil.isEmpty(sysMenu.getPath())) {
+                    sysMenu.setPath(StrUtil.SLASH + RandomUtil.randomString(10));
+                }
                 userMenuList.add(sysMenu);
             } else if (MenuTypeEnum.DIR.getCode().equals(sysMenu.getMenuType())) {
                 userMenuList.add(sysMenu);

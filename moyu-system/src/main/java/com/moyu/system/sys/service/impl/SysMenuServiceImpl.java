@@ -267,7 +267,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
         if (Objects.equals(MenuTypeEnum.MODULE.getCode(), menu.getMenuType())) {
             // 模块的路径、组件、权限为空
-            menu.setPath("");
+            menu.setPath(menu.getPath());
             menu.setComponent("");
             menu.setPermission("");
         } else {
