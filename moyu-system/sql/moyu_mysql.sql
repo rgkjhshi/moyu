@@ -74,7 +74,7 @@ create table sys_group
     `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
-    `post_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '分组类型(字典 1特有 2通用 3自建)',
+    `group_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '分组类型(字典 1特有 2通用 3自建)',
     `org_code`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '直属组织名称',
     `org_chain`   VARCHAR(512) NULL DEFAULT NULL COMMENT '所属组织链,逗号分隔',
