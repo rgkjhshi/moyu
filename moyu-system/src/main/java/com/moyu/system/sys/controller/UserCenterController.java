@@ -31,7 +31,7 @@ public class UserCenterController {
     /**
      * 获取当前登陆用户信息
      */
-    @PostMapping("/me")
+    @PostMapping("/userInfo")
     public BaseResponse<UserInfo> currentUserInfo() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
