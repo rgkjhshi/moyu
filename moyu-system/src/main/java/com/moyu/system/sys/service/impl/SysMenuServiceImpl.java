@@ -278,7 +278,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (Objects.equals(MenuTypeEnum.DIR.getCode(), menu.getMenuType())) {
             // 目录的组件、权限为空
             Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
-            menu.setComponent("Layout");
+            menu.setComponent(menu.getComponent());
             menu.setPermission("");
         } else if (Objects.equals(MenuTypeEnum.MENU.getCode(), menu.getMenuType())) {
             Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
