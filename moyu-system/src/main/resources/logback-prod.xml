@@ -70,7 +70,6 @@
 
     <!-- 兜底日志 -->
     <root level="INFO">
-        <appender-ref ref="consoleAppender"/>
         <appender-ref ref="infoAppender"/>
         <appender-ref ref="errorAppender"/>
         <appender-ref ref="rootAppender"/>

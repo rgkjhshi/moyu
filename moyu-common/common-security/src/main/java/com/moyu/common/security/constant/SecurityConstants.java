@@ -1,5 +1,6 @@
 package com.moyu.common.security.constant;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,8 +40,9 @@ public interface SecurityConstants {
 
     /**
      * 无需校验的URL白名单
+     * Arrays.asList 方法返回的是一个固定大小的 List ，不支持 add
      */
-    List<String> WHITE_LIST = Arrays.asList(
+    List<String> WHITE_LIST = new ArrayList<>(Arrays.asList(
             // 登陆注册类请求
             "/api/login",
             "/api/register",
@@ -59,5 +61,5 @@ public interface SecurityConstants {
 
             // 远程调用
             "/feign/**"
-    );
+    ));
 }
