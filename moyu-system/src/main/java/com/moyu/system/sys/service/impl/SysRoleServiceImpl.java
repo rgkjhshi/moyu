@@ -29,8 +29,11 @@ import com.moyu.system.sys.mapper.SysRoleMapper;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysMenuParam;
+import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
+import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.SysMenuService;
 import com.moyu.system.sys.service.SysRelationService;
 import com.moyu.system.sys.service.SysRoleService;
@@ -257,6 +260,21 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }
             return null;
         });
+    }
+
+    @Override
+    public void userGrantRole(SysRoleParam roleParam) {
+        // 待授权的用户集合
+        Set<String> userSet = roleParam.getCodeSet();
+        // 查询已有角色的用户
+        // 去除已有角色的用户
+        // 真正要授权的用户集合
+        // 添加 用户-角色 关系
+    }
+
+    @Override
+    public void userRevokeRole(SysRoleParam roleParam) {
+
     }
 }
 

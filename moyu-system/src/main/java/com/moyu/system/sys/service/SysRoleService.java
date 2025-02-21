@@ -59,4 +59,17 @@ public interface SysRoleService extends IService<SysRole> {
      */
     void grantMenu(SysRoleParam roleParam);
 
+    /**
+     * 用户分配角色，USER_HAS_ROLE
+     *
+     * @param roleParam 角色code，用户集合 codeSet
+     */
+    void userGrantRole(SysRoleParam roleParam);
+
+    /**
+     * 用户撤销角色，USER_HAS_ROLE
+     *
+     * @param roleParam 角色code，用户集合 codeSet
+     */
+    void userRevokeRole(SysRoleParam roleParam);
 }

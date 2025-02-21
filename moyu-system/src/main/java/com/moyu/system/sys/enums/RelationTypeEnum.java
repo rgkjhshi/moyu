@@ -22,7 +22,8 @@ public enum RelationTypeEnum {
     INVALID(0, null),
     GROUP_HAS_USER(1, "分组-用户关系"),
     GROUP_HAS_ROLE(2, "分组-角色关系"),
-    ROLE_HAS_MENU(3, "角色-权限关系");
+    ROLE_HAS_MENU(3, "角色-权限关系"),
+    USER_HAS_ROLE(4, "用户-角色关系");
 
     //  Mybatis-Plus 提供注解表示插入数据库时插入该值
     @EnumValue

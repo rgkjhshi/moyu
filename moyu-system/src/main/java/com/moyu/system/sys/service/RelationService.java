@@ -3,6 +3,7 @@ package com.moyu.system.sys.service;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysGroupParam;
+import com.moyu.system.sys.model.param.SysRoleParam;
 
 import java.util.List;
 
@@ -40,5 +41,10 @@ public interface RelationService {
      * group删除用户
      */
     void groupDeleteUser(SysGroupParam groupParam);
+
+    /**
+     * 拥有某角色的用户列表
+     */
+    List<SysUser> roleUserList(SysRoleParam roleParam);
 
 }
