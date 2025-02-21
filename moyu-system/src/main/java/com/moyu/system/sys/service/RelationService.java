@@ -43,7 +43,7 @@ public interface RelationService {
     void groupDeleteUser(SysGroupParam groupParam);
 
     /**
-     * 拥有某角色的用户列表
+     * 拥有某角色的用户列表，仅包含用户-角色关系直接指定的用户，即全局角色
      */
     List<SysUser> roleUserList(SysRoleParam roleParam);
 

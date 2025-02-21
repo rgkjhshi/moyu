@@ -118,12 +118,11 @@ public class SysRoleController {
     }
 
     /**
-     * 查询拥有指定角色的所有用户
+     * 查询拥有指定角色的所有用户(仅直接通过 用户-角色 关系指定的用户，即全局角色用户)
      */
     @PostMapping("/userList")
     public BaseResponse<List<SysUser>> userList(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "分组code不能为空");
-        // TODO 通过group拥有角色的user需补充
         List<SysUser> list = relationService.roleUserList(roleParam);
         return BaseResponse.getSuccessResponse(list);
     }
