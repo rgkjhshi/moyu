@@ -20,9 +20,9 @@ public interface SysRelationService extends IService<SysRelation> {
     List<SysRelation> list(SysRelationParam param);
 
     /**
-     * 通过(分组-用户、分组-角色、角色-权限)关系查询 用户->角色
+     * 通过(分组-用户、分组-角色)查询 用户角色 关系，即:用户->分组->角色
      */
-    Set<String> userRole(String account);
+    Set<String> userGroupRole(String account);
 
     /**
      * 通过(用户->分组、分组->角色、角色->权限)关系查询 用户->权限

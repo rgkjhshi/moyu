@@ -38,7 +38,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     }
 
     @Override
-    public Set<String> userRole(String account) {
+    public Set<String> userGroupRole(String account) {
         // 用户所属分组
         Set<String> groupSet = new HashSet<>();
         // 查询用户归属的所有分组
@@ -69,10 +69,10 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     @Override
     public Set<String> userPerm(String account) {
         // 用户的角色集
-        Set<String> roleSet = userRole(account);
+        Set<String> groupRoleSet = userGroupRole(account);
         // 权限集
         Set<String> permSet = new HashSet<>();
-        if (ObjectUtil.isNotEmpty(roleSet)) {
+        if (ObjectUtil.isNotEmpty(groupRoleSet)) {
             // 查询分组的所有角色
             list(new LambdaQueryWrapper<SysRelation>()
                     // 关系类型
@@ -80,7 +80,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
                     // 查询menu
                     .select(SysRelation::getTargetId)
                     // 指定role
-                    .in(SysRelation::getObjectId, roleSet)
+                    .in(SysRelation::getObjectId, groupRoleSet)
             ).forEach(e -> permSet.add(e.getTargetId()));
         }
         return permSet;
