@@ -2,7 +2,6 @@ package com.moyu.system.sys.service.impl;
 
 
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.entity.SysRole;
@@ -18,7 +17,10 @@ import com.moyu.system.sys.service.SysUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -166,13 +168,7 @@ public class RelationServiceImpl implements RelationService {
     @Override
     public List<SysUser> roleUserList(SysRoleParam roleParam) {
         // 查询指定role的所有user
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .relationType(RelationTypeEnum.USER_HAS_ROLE.getCode()).targetId(roleParam.getCode()).build());
-        if (ObjectUtil.isEmpty(list)) {
-            return new ArrayList<>();
-        }
-        // userSet
-        Set<String> userSet = list.stream().map(SysRelation::getObjectId).collect(Collectors.toSet());
+        Set<String> userSet = sysRelationService.roleUser(roleParam.getCode());
         // 查询用户(可指定搜索词)
         List<SysUser> userList = sysUserService.list(SysUserParam.builder()
                 .searchKey(roleParam.getSearchKey())
