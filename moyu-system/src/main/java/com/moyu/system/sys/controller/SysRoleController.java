@@ -127,4 +127,26 @@ public class SysRoleController {
         return BaseResponse.getSuccessResponse(list);
     }
 
+    /**
+     * 授权用户角色
+     */
+    @PostMapping("/userGrantRole")
+    public BaseResponse<?> userGrantRole(@RequestBody SysRoleParam roleParam) {
+        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
+        Assert.notEmpty(roleParam.getCodeSet(), "指定集合codeSet不能为空");
+        sysRoleService.userGrantRole(roleParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 撤销用户已授权的角色
+     */
+    @PostMapping("/userRevokeRole")
+    public BaseResponse<?> userRevokeRole(@RequestBody SysRoleParam roleParam) {
+        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
+        Assert.notEmpty(roleParam.getCodeSet(), "指定集合codeSet不能为空");
+        sysRoleService.userRevokeRole(roleParam);
+        return BaseResponse.getSuccessResponse();
+    }
+
 }

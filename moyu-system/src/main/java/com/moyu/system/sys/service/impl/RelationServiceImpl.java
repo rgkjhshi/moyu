@@ -169,9 +169,13 @@ public class RelationServiceImpl implements RelationService {
     public List<SysUser> roleUserList(SysRoleParam roleParam) {
         // 查询指定role的所有user
         Set<String> userSet = sysRelationService.roleUser(roleParam.getCode());
+        if (ObjectUtil.isEmpty(userSet)) {
+            return new ArrayList<>();
+        }
         // 查询用户(可指定搜索词)
         List<SysUser> userList = sysUserService.list(SysUserParam.builder()
                 .searchKey(roleParam.getSearchKey())
+                .orgCode(roleParam.getOrgCode())
                 .codeSet(userSet).build());
         return userList;
     }

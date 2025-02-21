@@ -30,6 +30,10 @@ public class SysRoleParam extends BasePageParam {
      */
     private Set<String> codeSet;
     /**
+     * 指定要查询的orgCode
+     */
+    private String orgCode;
+    /**
      * 角色授权时的菜单code列表
      */
     private Set<String> grantMenuList;
