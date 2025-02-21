@@ -12,6 +12,7 @@ import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.service.SysRelationService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,6 +69,35 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     }
 
     @Override
+    public Set<String> roleGroupUser(String roleCode) {
+        // 角色所属分组
+        Set<String> groupSet = new HashSet<>();
+        // 查询用户归属的所有分组
+        list(new LambdaQueryWrapper<SysRelation>()
+                // 查询group
+                .select(SysRelation::getObjectId)
+                // 关系类型
+                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_ROLE.getCode())
+                // 指定用户
+                .eq(SysRelation::getTargetId, roleCode)
+        ).forEach(e -> groupSet.add(e.getObjectId()));
+        // 用户集
+        Set<String> userSet = new HashSet<>();
+        if (ObjectUtil.isNotEmpty(groupSet)) {
+            // 查询分组的所有角色
+            list(new LambdaQueryWrapper<SysRelation>()
+                    // 查询user
+                    .select(SysRelation::getTargetId)
+                    // 关系类型
+                    .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
+                    // 指定group
+                    .in(SysRelation::getObjectId, groupSet)
+            ).forEach(e -> userSet.add(e.getTargetId()));
+        }
+        return userSet;
+    }
+
+    @Override
     public Set<String> userRole(String account) {
         // 用户角色集合
         Set<String> roleSet = new HashSet<>();
@@ -81,6 +111,22 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
                 .eq(SysRelation::getObjectId, account)
         ).forEach(e -> roleSet.add(e.getTargetId()));
         return roleSet;
+    }
+
+    @Override
+    public Set<String> roleUser(String roleCode) {
+        // 用户角色集合
+        Set<String> userSet = new HashSet<>();
+        // 查询用户归属的所有分组
+        list(new LambdaQueryWrapper<SysRelation>()
+                // 查询user
+                .select(SysRelation::getObjectId)
+                // 关系类型
+                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
+                // 指定用户
+                .eq(SysRelation::getTargetId, roleCode)
+        ).forEach(e -> userSet.add(e.getObjectId()));
+        return userSet;
     }
 
     @Override

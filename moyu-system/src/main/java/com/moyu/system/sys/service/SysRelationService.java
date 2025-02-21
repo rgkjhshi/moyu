@@ -20,14 +20,27 @@ public interface SysRelationService extends IService<SysRelation> {
     List<SysRelation> list(SysRelationParam param);
 
     /**
-     * 通过(分组-用户、分组-角色)查询 用户角色 关系，即:用户->分组->角色
+     * 通过(分组-用户、分组-角色)关系查询指定用户的所有角色，即:用户->分组->角色
      */
     Set<String> userGroupRole(String account);
 
     /**
-     * 通过(用户-角色)查询用户角色，即:用户->角色
+     * 通过(分组-用户、分组-角色)关系查询指定角色的所有用户，即:角色->分组->用户
+     * 特别注意，group与org有关联
+     */
+    Set<String> roleGroupUser(String roleCode);
+
+    /**
+     * 通过(用户-角色)关系查询指定用户的所有角色，即:用户->角色
+     * 特别注意，role与org无关
      */
     Set<String> userRole(String account);
+
+    /**
+     * 通过(用户-角色)关系查询指定角色的所有用户，即:角色->用户
+     * 特别注意，role与org无关
+     */
+    Set<String> roleUser(String roleCode);
 
     /**
      * 通过(用户->分组、分组->角色、角色->权限)关系查询 用户->权限

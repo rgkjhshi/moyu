@@ -263,7 +263,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public void userGrantRole(SysRoleParam roleParam) {
-        Assert.notEmpty(roleParam.getCode(), "角色coe不能为空");
+        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         // 待授权的用户集合
         Set<String> userSet = roleParam.getCodeSet();
         if (ObjectUtil.isEmpty(userSet)) {
