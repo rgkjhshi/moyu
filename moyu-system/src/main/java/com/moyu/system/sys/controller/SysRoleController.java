@@ -8,7 +8,10 @@ import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.entity.SysUser;
+import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
+import com.moyu.system.sys.service.RelationService;
 import com.moyu.system.sys.service.SysRoleService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +35,9 @@ public class SysRoleController {
 
     @Resource
     private SysRoleService sysRoleService;
+
+    @Resource
+    private RelationService relationService;
 
     /**
      * 获取角色列表
@@ -109,6 +115,17 @@ public class SysRoleController {
         Assert.notEmpty(roleParam.getGrantMenuList(), "授权列表grantMenuList不能为空");
         sysRoleService.grantMenu(roleParam);
         return BaseResponse.getSuccessResponse();
+    }
+
+    /**
+     * 查询拥有指定角色的所有用户
+     */
+    @PostMapping("/userList")
+    public BaseResponse<List<SysUser>> userList(@RequestBody SysRoleParam roleParam) {
+        Assert.notEmpty(roleParam.getCode(), "分组code不能为空");
+        // TODO 通过group拥有角色的user需补充
+        List<SysUser> list = relationService.roleUserList(roleParam);
+        return BaseResponse.getSuccessResponse(list);
     }
 
 }

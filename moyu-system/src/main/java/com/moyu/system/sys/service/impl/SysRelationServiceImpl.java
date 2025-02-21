@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Sets;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.mapper.SysRelationMapper;
 import com.moyu.system.sys.model.entity.SysRelation;
@@ -67,9 +68,28 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     }
 
     @Override
+    public Set<String> userRole(String account) {
+        // 用户角色集合
+        Set<String> roleSet = new HashSet<>();
+        // 查询用户归属的所有分组
+        list(new LambdaQueryWrapper<SysRelation>()
+                // 查询role
+                .select(SysRelation::getTargetId)
+                // 关系类型
+                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
+                // 指定用户
+                .eq(SysRelation::getObjectId, account)
+        ).forEach(e -> roleSet.add(e.getTargetId()));
+        return roleSet;
+    }
+
+    @Override
     public Set<String> userPerm(String account) {
         // 用户的角色集
         Set<String> groupRoleSet = userGroupRole(account);
+        Set<String> userRoleSet = userRole(account);
+        // 两种方式的role集合放在一起
+        groupRoleSet.addAll(userRoleSet);
         // 权限集
         Set<String> permSet = new HashSet<>();
         if (ObjectUtil.isNotEmpty(groupRoleSet)) {
