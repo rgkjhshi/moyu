@@ -97,12 +97,12 @@ public class SysUser extends BaseEntity {
     private Date entryDate;
 
     /**
-     * 直属组织编码
+     * 直属组织机构编码
      */
     private String orgCode;
 
     /**
-     * 直属组织名称
+     * 直属组织机构名称
      */
     private String orgName;
 

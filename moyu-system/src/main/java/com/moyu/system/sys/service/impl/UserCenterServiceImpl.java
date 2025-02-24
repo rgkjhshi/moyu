@@ -122,9 +122,10 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 获取全部树
         Tree<String> tree = sysOrgService.singleTree(SysConstants.ROOT_ID);
 //        // 获取用户所在分组
-//        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-//                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).targetId(account).build());
-//        Set<String> groupSet = list.stream().map(SysRelation::getObjectId).collect(Collectors.toSet());
+//        Set<String> groupSet = new HashSet<>();
+//        sysRelationService.list(SysRelationParam.builder().targetId(account)
+//                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).build()
+//        ).forEach(e -> groupSet.add(e.getObjectId()));
 //        // 收集用户分组归属的org
 //        Set<String> orgSet = new HashSet<>();
 //        // 不为空则查询group所属的org
@@ -134,7 +135,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 查询用户信息
         SysUser user = sysUserService.detail(SysUserParam.builder().account(account).build());
         // 获取用户所属的最近一级公司组织code
-        String orgCode = getOrgNode(tree, user);
+        String orgCode = getUserCompanyCode(tree, user);
         // 获取用户有权限的所有公司
         // 获取公司对应的tree
         return Lists.newArrayList(tree.getNode(orgCode));
@@ -206,14 +207,14 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     /**
-     * 获取给定code的最近一级公司组织
+     * 获取用户直属公司的orgCode
      */
-    private String getOrgNode(Tree<String> tree, SysUser user) {
+    private String getUserCompanyCode(Tree<String> tree, SysUser user) {
         // 通过用户的orgChain获取用户的组织链接
         List<String> orgChainList = TreeUtil.getParentsId(tree.getNode(user.getOrgCode()), true);
         // 从前往后遍历，因组织链有顺序，所以遍历顺序不能变
         String orgCode = orgChainList.stream()
-                .filter(code -> ObjectUtil.equal(OrgTypeEnum.ORG.getCode(), tree.getNode(code).get("orgType")))
+                .filter(code -> ObjectUtil.equal(OrgTypeEnum.COMPANY.getCode(), tree.getNode(code).get("orgType")))
                 .findFirst().orElse(user.getOrgCode());
         return orgCode;
     }
