@@ -19,6 +19,7 @@ import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysGroupMapper;
 import com.moyu.system.sys.model.entity.SysGroup;
+import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.service.SysOrgService;
 import com.moyu.system.sys.service.SysGroupService;
@@ -68,8 +69,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         queryWrapper.lambda()
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(groupParam.getSearchKey()), SysGroup::getName, groupParam.getSearchKey())
-                // 模糊搜索所属组织(选的是一个code，搜的是所有code)
-                .like(StrUtil.isNotBlank(groupParam.getOrgCode()), SysGroup::getOrgChain, groupParam.getOrgCode())
+                // 指定orgCode
+                .eq(StrUtil.isNotBlank(groupParam.getOrgCode()), SysGroup::getOrgCode, groupParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
                 .eq(SysGroup::getDeleteFlag, 0)
