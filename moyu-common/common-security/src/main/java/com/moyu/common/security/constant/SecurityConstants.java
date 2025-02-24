@@ -52,7 +52,7 @@ public interface SecurityConstants {
             "/api/auth/**",
 
             // 监控管理请求
-//            "/actuator/**",
+            "/actuator/**",
             "/test/**",
             "/monitor/**",
 
