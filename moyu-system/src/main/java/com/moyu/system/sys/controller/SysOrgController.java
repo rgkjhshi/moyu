@@ -7,7 +7,6 @@ import cn.hutool.core.util.ObjectUtil;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
-import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
@@ -51,16 +50,6 @@ public class SysOrgController {
     @PostMapping("/tree")
     public BaseResponse<List<Tree<String>>> tree() {
         List<Tree<String>> list = sysOrgService.tree();
-        return BaseResponse.getSuccessResponse(list);
-    }
-
-    /**
-     * 获取组织树下拉选项
-     */
-    @Log(jsonLog = true, response = false)
-    @PostMapping("/treeList")
-    public BaseResponse<List<Option<?>>> treeList() {
-        List<Option<?>> list = sysOrgService.listTreeOptions();
         return BaseResponse.getSuccessResponse(list);
     }
 

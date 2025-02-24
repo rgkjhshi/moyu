@@ -3,7 +3,6 @@ package com.moyu.system.sys.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.common.model.PageResult;
-import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 
@@ -40,13 +39,6 @@ public interface SysOrgService extends IService<SysOrg> {
      * @return 组织机构树
      */
     Tree<String> singleTree(String rootId);
-
-    /**
-     * 部门树形下拉选项
-     *
-     * @return 部门下拉List集合
-     */
-    List<Option<?>> listTreeOptions();
 
     /**
      * 获取组织机构详情

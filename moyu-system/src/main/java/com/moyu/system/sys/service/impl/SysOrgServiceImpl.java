@@ -1,7 +1,6 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
@@ -19,7 +18,6 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
-import com.moyu.common.web.model.Option;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysOrgMapper;
 import com.moyu.system.sys.model.entity.SysOrg;
@@ -29,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -103,50 +100,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         );
         // 构建树
         return buildSingleTree(orgList, rootId);
-    }
-
-    /**
-     * 部门树形下拉选项
-     */
-    @Override
-    public List<Option<?>> listTreeOptions() {
-        // 查询所有组织结构
-        List<SysOrg> orgList = this.list(new LambdaQueryWrapper<SysOrg>()
-                // 查询部分字段
-                .select(SysOrg::getParentCode, SysOrg::getCode, SysOrg::getName)
-                .eq(SysOrg::getDeleteFlag, 0)
-                .orderByAsc(SysOrg::getSortNum)
-        );
-        // 所有的父节点
-        Set<String> parentIds = orgList.stream().map(SysOrg::getParentCode).collect(Collectors.toSet());
-        // 所有的节点id
-        Set<String> deptIds = orgList.stream().map(SysOrg::getCode).collect(Collectors.toSet());
-        // 集合差，根结点
-        List<String> rootIds = CollectionUtil.subtractToList(parentIds, deptIds);
-        // 遍历根结点
-        List<Option<?>> rootList = new ArrayList<>();
-        for (String rootId : rootIds) {
-            rootList.addAll(recursionBuildChildren(rootId, orgList));
-        }
-        return rootList;
-    }
-
-    /**
-     * 递归生成部门子层级
-     */
-    public static List<Option<String>> recursionBuildChildren(String parentCode, List<SysOrg> orgList) {
-        List<Option<String>> list = CollectionUtil.emptyIfNull(orgList).stream()
-                .filter(org -> org.getParentCode().equals(parentCode))
-                .map(org -> {
-                    Option<String> option = new Option<>(org.getCode(), org.getName());
-                    List<Option<String>> children = recursionBuildChildren(org.getCode(), orgList);
-                    if (CollectionUtil.isNotEmpty(children)) {
-                        option.setChildren(children);
-                    }
-                    return option;
-                })
-                .collect(Collectors.toList());
-        return list;
     }
 
     @Override
