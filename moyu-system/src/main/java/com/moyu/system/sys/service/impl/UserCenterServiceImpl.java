@@ -119,6 +119,9 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public List<Tree<String>> userOrgTree(String account) {
+        if (SecurityUtils.getRoles().contains("superAdmin")) {
+            return sysOrgService.tree();
+        }
         // 获取全部树
         Tree<String> tree = sysOrgService.singleTree(SysConstants.ROOT_ID);
 //        // 获取用户所在分组
