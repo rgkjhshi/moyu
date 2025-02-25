@@ -61,10 +61,10 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     @Override
     public PageResult<SysGroup> pageList(SysGroupParam groupParam) {
         // 用户的数据权限
-        List<String> orgList = new ArrayList<>();
+        List<String> scopeList = new ArrayList<>();
         // 非超管才设置数据权限
         if (!SecurityUtils.getRoles().contains(SysConstants.ROOT_ROLE_CODE)) {
-            orgList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getOrgCode());
+            scopeList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getOrgCode());
         }
         // 查询条件
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class)
@@ -75,7 +75,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
                 // 数据权限(非空才有效)
-                .in(ObjectUtil.isNotEmpty(orgList), SysGroup::getOrgCode, orgList)
+                .in(ObjectUtil.isNotEmpty(scopeList), SysGroup::getOrgCode, scopeList)
                 .eq(SysGroup::getDeleteFlag, 0)
                 .orderByAsc(SysGroup::getSortNum);
         // 分页查询

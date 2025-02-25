@@ -2,19 +2,20 @@ package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysUserMapper;
 import com.moyu.system.sys.model.entity.SysUser;
@@ -25,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -44,13 +46,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public List<SysUser> list(SysUserParam userParam) {
+        // 查询指定的组织所有的children
+        List<String> childrenCode = new ArrayList<>();
+        if (StrUtil.isNotBlank(userParam.getOrgCode())) {
+            childrenCode = sysOrgService.childrenCodeList(userParam.getOrgCode());
+        }
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(userParam.getSearchKey()), SysUser::getName, userParam.getSearchKey())
-                // 模糊搜索所属组织(选的是一个code，搜的是所有code)
-                .like(StrUtil.isNotBlank(userParam.getOrgCode()), SysUser::getOrgChain, userParam.getOrgCode())
+                // 指定orgCode
+                .in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode)
                 // 指定account集合
                 .in(ObjectUtil.isNotEmpty(userParam.getCodeSet()), SysUser::getAccount, userParam.getCodeSet())
                 // 指定状态
@@ -63,15 +70,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public PageResult<SysUser> pageList(SysUserParam userParam) {
-        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().checkSqlInjection();
+        // 用户的数据权限
+        List<String> scopeList = new ArrayList<>();
+        // 非超管才设置数据权限
+        if (!SecurityUtils.getRoles().contains(SysConstants.ROOT_ROLE_CODE)) {
+            scopeList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getOrgCode());
+        }
+        // 查询指定的组织所有的children
+        List<String> childrenCode = new ArrayList<>();
+        if (StrUtil.isNotBlank(userParam.getOrgCode())) {
+            childrenCode = sysOrgService.childrenCodeList(userParam.getOrgCode());
+        }
+
         // 查询条件
-        queryWrapper.lambda()
+        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class)
                 // 关键词搜索(name nickname staff_code)
                 .like(StrUtil.isNotBlank(userParam.getSearchKey()), SysUser::getName, userParam.getSearchKey())
-                // 模糊搜索所属组织(选的是一个code，搜的是所有code)
-                .like(StrUtil.isNotBlank(userParam.getOrgCode()), SysUser::getOrgChain, userParam.getOrgCode())
+                // 指定orgCode
+                .in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode)
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
+                // 数据权限(非空才有效)
+                .in(ObjectUtil.isNotEmpty(scopeList), SysUser::getOrgCode, scopeList)
                 .eq(SysUser::getDeleteFlag, 0);
         // 分页查询
         Page<SysUser> page = new Page<>(userParam.getPageNum(), userParam.getPageSize());
@@ -113,9 +133,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             Tree<String> orgNode = rootTree.getNode(user.getOrgCode());
             // 设置直属机构名称
             user.setOrgName(orgNode.getName().toString());
-            // 所属机构列表
-            List<String> list = TreeUtil.getParentsId(orgNode, true);
-            user.setOrgChain(SysConstants.COMMA_JOINER.join(list));
         }
         // 初始密码为系统默认
         if (ObjectUtil.isEmpty(user.getPassword())) {
@@ -140,16 +157,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 属性复制
         SysUser updateUser = BeanUtil.copyProperties(userParam, SysUser.class);
         updateUser.setId(oldUser.getId());
-        // 若指定了直属组织，则设置所属组织
-        if (ObjectUtil.isNotEmpty(updateUser.getOrgCode())) {
+        // 若新指定了直属组织，则设置所属组织
+        if (ObjectUtil.notEqual(oldUser.getOrgCode(), updateUser.getOrgCode()) && ObjectUtil.isNotEmpty(updateUser.getOrgCode())) {
             // 获取组织结构树
             Tree<String> rootTree = sysOrgService.singleTree();
             Tree<String> orgNode = rootTree.getNode(userParam.getOrgCode());
             // 设置直属机构名称
             updateUser.setOrgName(orgNode.getName().toString());
-            // 所属机构列表
-            List<String> list = TreeUtil.getParentsId(orgNode, true);
-            updateUser.setOrgChain(SysConstants.COMMA_JOINER.join(list));
         }
         this.updateById(updateUser);
     }
