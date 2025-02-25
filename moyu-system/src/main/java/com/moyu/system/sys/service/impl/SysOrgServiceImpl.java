@@ -101,11 +101,11 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      */
     @Override
     public List<Tree<String>> tree() {
-        return singleTree(SysConstants.ROOT_NODE_ID).getChildren();
+        return singleTree().getChildren();
     }
 
     @Override
-    public Tree<String> singleTree(String rootId) {
+    public Tree<String> singleTree() {
         if (ObjectUtil.isEmpty(rootTree)) {
             rootTree = loadRootTree();
         }
@@ -146,8 +146,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             org.setCode(IdUtil.objectId());
         }
         // 所属组织链(不包含本节点)
-        Tree<String> orgTree = singleTree(SysConstants.ROOT_NODE_ID);
-        List<String> list = TreeUtil.getParentsId(orgTree.getNode(orgParam.getParentCode()), true);
+        Tree<String> rootTree = singleTree();
+        List<String> list = TreeUtil.getParentsId(rootTree.getNode(orgParam.getParentCode()), true);
         org.setOrgChain(SysConstants.COMMA_JOINER.join(list));
         this.save(org);
     }
@@ -213,8 +213,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 若父节点有变化，则orgChain也要变
         if (ObjectUtil.isEmpty(oldOrg.getOrgChain()) || ObjectUtil.notEqual(oldOrg.getParentCode(), orgParam.getParentCode())) {
             // 所属组织链
-            Tree<String> orgTree = singleTree(SysConstants.ROOT_NODE_ID);
-            List<String> list = TreeUtil.getParentsId(orgTree.getNode(orgParam.getParentCode()), true);
+            Tree<String> rootTree = singleTree();
+            List<String> list = TreeUtil.getParentsId(rootTree.getNode(orgParam.getParentCode()), true);
             updateOrg.setOrgChain(SysConstants.COMMA_JOINER.join(list));
             // 本节点的字节点orgChain也应该改变，异步修改 TODO
         }

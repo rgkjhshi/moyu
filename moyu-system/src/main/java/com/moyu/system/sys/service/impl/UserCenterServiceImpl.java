@@ -123,18 +123,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             return sysOrgService.tree();
         }
         // 获取全部树
-        Tree<String> tree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
-//        // 获取用户所在分组
-//        Set<String> groupSet = new HashSet<>();
-//        sysRelationService.list(SysRelationParam.builder().targetId(account)
-//                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).build()
-//        ).forEach(e -> groupSet.add(e.getObjectId()));
-//        // 收集用户分组归属的org
-//        Set<String> orgSet = new HashSet<>();
-//        // 不为空则查询group所属的org
-//        if (ObjectUtil.isNotEmpty(groupSet)) {
-//            sysGroupService.list(SysGroupParam.builder().codeSet(groupSet).build()).forEach(group -> orgSet.add(group.getOrgCode()));
-//        }
+        Tree<String> tree = sysOrgService.singleTree();
         // 查询用户信息
         SysUser user = sysUserService.detail(SysUserParam.builder().account(account).build());
         // 获取用户所属的最近一级公司组织code

@@ -110,8 +110,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(group.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
-            Tree<String> orgNode = orgTree.getNode(group.getOrgCode());
+            Tree<String> rootTree = sysOrgService.singleTree();
+            Tree<String> orgNode = rootTree.getNode(group.getOrgCode());
             // 设置直属机构名称
             group.setOrgName(orgNode.getName().toString());
         }
@@ -137,8 +137,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 若新指定了直属组织，则设置组织名
         if (ObjectUtil.notEqual(oldGroup.getOrgCode(), updateOrg.getOrgCode()) && ObjectUtil.isNotEmpty(updateOrg.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
-            Tree<String> orgNode = orgTree.getNode(updateOrg.getOrgCode());
+            Tree<String> rootTree = sysOrgService.singleTree();
+            Tree<String> orgNode = rootTree.getNode(updateOrg.getOrgCode());
             // 设置直属机构名称
             updateOrg.setOrgName(orgNode.getName().toString());
         }

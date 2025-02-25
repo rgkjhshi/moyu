@@ -40,10 +40,9 @@ public interface SysOrgService extends IService<SysOrg> {
     /**
      * 根结点的组织机构树（只有一颗树）
      *
-     * @param rootId 指定的根节点
      * @return 组织机构树
      */
-    Tree<String> singleTree(String rootId);
+    Tree<String> singleTree();
 
     /**
      * 获取组织机构详情
