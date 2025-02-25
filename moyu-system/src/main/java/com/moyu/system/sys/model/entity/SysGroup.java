@@ -55,11 +55,6 @@ public class SysGroup extends BaseEntity implements Serializable {
     private String orgName;
 
     /**
-     * 所属组织链,逗号分隔
-     */
-    private String orgChain;
-
-    /**
      * 排序顺序
      */
     private Integer sortNum;

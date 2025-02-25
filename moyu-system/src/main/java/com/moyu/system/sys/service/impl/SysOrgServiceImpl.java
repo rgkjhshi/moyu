@@ -43,6 +43,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
 
+    /**
+     * 组织结构树(本地缓存)
+     */
+    private Tree<String> rootTree;
+
     @Override
     public List<String> childrenCodeList(String orgCode) {
         List<String> codeList = new ArrayList<>();
@@ -101,15 +106,10 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     @Override
     public Tree<String> singleTree(String rootId) {
-        // 查询所有组织结构
-        List<SysOrg> orgList = this.list(Wrappers.lambdaQuery(SysOrg.class)
-                // 查询部分字段
-                .select(SysOrg::getCode, SysOrg::getParentCode, SysOrg::getName, SysOrg::getSortNum, SysOrg::getOrgType)
-                .eq(SysOrg::getDeleteFlag, 0)
-                .orderByAsc(SysOrg::getSortNum)
-        );
-        // 构建树
-        return buildSingleTree(orgList, rootId);
+        if (ObjectUtil.isEmpty(rootTree)) {
+            rootTree = loadRootTree();
+        }
+        return rootTree;
     }
 
     @Override
@@ -259,6 +259,21 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 }).collect(Collectors.toList());
         // 构建树
         return TreeUtil.buildSingle(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
+    }
+
+    /**
+     * 从数据库中加载组织机构树
+     */
+    private Tree<String> loadRootTree() {
+        // 查询所有组织结构
+        List<SysOrg> orgList = this.list(Wrappers.lambdaQuery(SysOrg.class)
+                // 查询部分字段
+                .select(SysOrg::getCode, SysOrg::getParentCode, SysOrg::getName, SysOrg::getSortNum, SysOrg::getOrgType)
+                .eq(SysOrg::getDeleteFlag, 0)
+                .orderByAsc(SysOrg::getSortNum)
+        );
+        // 构建树
+        return buildSingleTree(orgList, SysConstants.ROOT_NODE_ID);
     }
 }
 

@@ -38,7 +38,7 @@ public interface SysOrgService extends IService<SysOrg> {
     List<Tree<String>> tree();
 
     /**
-     * 指定根结点的组织机构树（只有一颗树）
+     * 根结点的组织机构树（只有一颗树）
      *
      * @param rootId 指定的根节点
      * @return 组织机构树

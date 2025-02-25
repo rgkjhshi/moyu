@@ -2,7 +2,6 @@ package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -12,7 +11,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
@@ -116,9 +114,6 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             Tree<String> orgNode = orgTree.getNode(group.getOrgCode());
             // 设置直属机构名称
             group.setOrgName(orgNode.getName().toString());
-            // 所属机构列表
-            List<String> list = TreeUtil.getParentsId(orgNode, true);
-            group.setOrgChain(Joiner.on(",").join(list));
         }
         this.save(group);
     }
@@ -139,13 +134,13 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 属性复制
         SysGroup updateOrg = BeanUtil.copyProperties(groupParam, SysGroup.class);
         updateOrg.setId(oldGroup.getId());
-        // 若指定了直属组织，则设置所属组织
-        if (ObjectUtil.isNotEmpty(updateOrg.getOrgCode())) {
+        // 若新指定了直属组织，则设置组织名
+        if (ObjectUtil.notEqual(oldGroup.getOrgCode(), updateOrg.getOrgCode()) && ObjectUtil.isNotEmpty(updateOrg.getOrgCode())) {
             // 获取组织结构树
             Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
             Tree<String> orgNode = orgTree.getNode(updateOrg.getOrgCode());
-            List<String> list = TreeUtil.getParentsId(orgNode, true);
-            updateOrg.setOrgChain(Joiner.on(",").join(list));
+            // 设置直属机构名称
+            updateOrg.setOrgName(orgNode.getName().toString());
         }
         this.updateById(updateOrg);
     }

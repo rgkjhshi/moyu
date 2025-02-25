@@ -2,9 +2,15 @@ package com.moyu.system.sys.model.param;
 
 
 import com.moyu.common.model.BasePageParam;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -13,7 +19,10 @@ import java.util.Set;
  * @author shisong
  * @since 2024-11-28
  */
-@Data
+@Getter
+@Setter
+@ToString
+@Builder
 public class SysOrgParam extends BasePageParam {
     //********** 额外字段 **********//
     /**
