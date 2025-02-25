@@ -3,6 +3,10 @@ package com.moyu.system.sys.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.moyu.system.sys.model.entity.SysOrg;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @author shisong
@@ -13,6 +17,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SysOrgMapper extends BaseMapper<SysOrg> {
 
+    /**
+     * 查询下属组织机构code列表(包含本身)
+     */
+    @Select("SELECT * FROM sys_org WHERE code = ${orgCode} OR find_in_set(${orgCode}, org_chain)")
+    List<SysOrg> selectChildren(@Param("orgCode") String orgCode);
 }
 
 

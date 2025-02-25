@@ -16,6 +16,11 @@ import java.util.List;
 public interface SysOrgService extends IService<SysOrg> {
 
     /**
+     * 查询指定orgCode的下属组织机构code列表(包含本身)
+     */
+    List<String> childrenCodeList(String orgCode);
+
+    /**
      * 查询组织列表
      */
     List<SysOrg> list(SysOrgParam sysOrgParam);

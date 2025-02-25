@@ -12,6 +12,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +42,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
+
+    @Override
+    public List<String> childrenCodeList(String orgCode) {
+        List<String> codeList = new ArrayList<>();
+        List<SysOrg> orgList = this.baseMapper.selectChildren(orgCode);
+        orgList.forEach(e -> codeList.add(e.getCode()));
+        return codeList;
+    }
 
     @Override
     public List<SysOrg> list(SysOrgParam orgParam) {
@@ -92,7 +102,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Override
     public Tree<String> singleTree(String rootId) {
         // 查询所有组织结构
-        List<SysOrg> orgList = this.list(new LambdaQueryWrapper<SysOrg>()
+        List<SysOrg> orgList = this.list(Wrappers.lambdaQuery(SysOrg.class)
                 // 查询部分字段
                 .select(SysOrg::getCode, SysOrg::getParentCode, SysOrg::getName, SysOrg::getSortNum, SysOrg::getOrgType)
                 .eq(SysOrg::getDeleteFlag, 0)
@@ -104,7 +114,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     @Override
     public SysOrg detail(SysOrgParam orgParam) {
-        LambdaQueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection().lambda()
+        LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class)
                 .eq(ObjectUtil.isNotEmpty(orgParam.getId()), SysOrg::getId, orgParam.getId())
                 .eq(ObjectUtil.isNotEmpty(orgParam.getCode()), SysOrg::getCode, orgParam.getCode());
         // id、code均为唯一标识

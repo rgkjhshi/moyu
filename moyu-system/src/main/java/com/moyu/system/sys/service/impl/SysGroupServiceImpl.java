@@ -9,6 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Joiner;
@@ -16,15 +17,17 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysGroupMapper;
 import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.param.SysGroupParam;
-import com.moyu.system.sys.service.SysOrgService;
 import com.moyu.system.sys.service.SysGroupService;
+import com.moyu.system.sys.service.SysOrgService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -44,12 +47,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         QueryWrapper<SysGroup> queryWrapper = new QueryWrapper<SysGroup>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
-                // 查询部分字段
-//                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(groupParam.getSearchKey()), SysGroup::getName, groupParam.getSearchKey())
-                // 模糊搜索所属组织(选的是一个code，搜的是所有code)
-                .like(StrUtil.isNotBlank(groupParam.getOrgCode()), SysGroup::getOrgChain, groupParam.getOrgCode())
                 // 指定类型
                 .eq(ObjectUtil.isNotEmpty(groupParam.getGroupType()), SysGroup::getGroupType, groupParam.getGroupType())
                 // 指定状态
@@ -63,15 +62,22 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public PageResult<SysGroup> pageList(SysGroupParam groupParam) {
-        QueryWrapper<SysGroup> queryWrapper = new QueryWrapper<SysGroup>().checkSqlInjection();
+        // 用户的数据权限
+        List<String> orgList = new ArrayList<>();
+        // 非超管才设置数据权限
+        if (!SecurityUtils.getRoles().contains(SysConstants.ROOT_ROLE_CODE)) {
+            orgList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getUsername());
+        }
         // 查询条件
-        queryWrapper.lambda()
+        LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(groupParam.getSearchKey()), SysGroup::getName, groupParam.getSearchKey())
                 // 指定orgCode
                 .eq(StrUtil.isNotBlank(groupParam.getOrgCode()), SysGroup::getOrgCode, groupParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
+                // 数据权限(非空才有效)
+                .in(ObjectUtil.isNotEmpty(orgList), SysGroup::getOrgCode, orgList)
                 .eq(SysGroup::getDeleteFlag, 0)
                 .orderByAsc(SysGroup::getSortNum);
         // 分页查询
