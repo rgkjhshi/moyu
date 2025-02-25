@@ -210,7 +210,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         nodeConfig.setIdKey("code");
         nodeConfig.setParentIdKey("parentCode");
         // 指定rootId
-        String rootId = ObjectUtil.isEmpty(roleParam.getModule()) ? SysConstants.ROOT_ID : roleParam.getModule();
+        String rootId = ObjectUtil.isEmpty(roleParam.getModule()) ? SysConstants.ROOT_NODE_ID : roleParam.getModule();
         // 构建树
         return TreeUtil.build(nodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }

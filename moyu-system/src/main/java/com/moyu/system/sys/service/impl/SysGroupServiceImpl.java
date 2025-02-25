@@ -19,7 +19,6 @@ import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysGroupMapper;
 import com.moyu.system.sys.model.entity.SysGroup;
-import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.service.SysOrgService;
 import com.moyu.system.sys.service.SysGroupService;
@@ -107,7 +106,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(group.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_ID);
+            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
             Tree<String> orgNode = orgTree.getNode(group.getOrgCode());
             // 设置直属机构名称
             group.setOrgName(orgNode.getName().toString());
@@ -137,7 +136,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(updateOrg.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_ID);
+            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
             Tree<String> orgNode = orgTree.getNode(updateOrg.getOrgCode());
             List<String> list = TreeUtil.getParentsId(orgNode, true);
             updateOrg.setOrgChain(Joiner.on(",").join(list));

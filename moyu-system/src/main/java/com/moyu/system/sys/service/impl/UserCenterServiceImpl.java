@@ -107,7 +107,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             }
         });
         // 构建菜单路由树结构
-        Tree<String> singleTree = buildMenuTree(userMenuList, SysConstants.ROOT_ID);
+        Tree<String> singleTree = buildMenuTree(userMenuList, SysConstants.ROOT_NODE_ID);
         // 移除空目录
         removeTreeNodes(singleTree, tree -> {
             Object menuType = ((Map<?, ?>) tree.get("meta")).get("type");
@@ -123,7 +123,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             return sysOrgService.tree();
         }
         // 获取全部树
-        Tree<String> tree = sysOrgService.singleTree(SysConstants.ROOT_ID);
+        Tree<String> tree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
 //        // 获取用户所在分组
 //        Set<String> groupSet = new HashSet<>();
 //        sysRelationService.list(SysRelationParam.builder().targetId(account)

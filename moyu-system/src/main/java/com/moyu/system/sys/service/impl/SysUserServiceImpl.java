@@ -109,7 +109,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(user.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_ID);
+            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
             Tree<String> orgNode = orgTree.getNode(user.getOrgCode());
             // 设置直属机构名称
             user.setOrgName(orgNode.getName().toString());
@@ -143,7 +143,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(updateUser.getOrgCode())) {
             // 获取组织结构树
-            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_ID);
+            Tree<String> orgTree = sysOrgService.singleTree(SysConstants.ROOT_NODE_ID);
             Tree<String> orgNode = orgTree.getNode(userParam.getOrgCode());
             // 设置直属机构名称
             updateUser.setOrgName(orgNode.getName().toString());

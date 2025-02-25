@@ -86,7 +86,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      */
     @Override
     public List<Tree<String>> tree() {
-        return singleTree(SysConstants.ROOT_ID).getChildren();
+        return singleTree(SysConstants.ROOT_NODE_ID).getChildren();
     }
 
     @Override

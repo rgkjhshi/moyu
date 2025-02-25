@@ -21,13 +21,17 @@ public interface SysConstants {
     Joiner COMMA_JOINER = Joiner.on(",").skipNulls();
 
     /**
-     * 根节点ID
+     * 组织机构根节点ID
      */
-    String ROOT_ID = "0";
+    String ROOT_NODE_ID = "0";
 
     /**
      * 系统默认密码
      */
     String DEFAULT_PASSWORD = "qwer@123!";
 
+    /**
+     * 超级管理员角色编码
+     */
+    String ROOT_ROLE_CODE = "ROOT";
 }

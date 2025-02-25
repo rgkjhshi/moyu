@@ -50,7 +50,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 查询所有菜单
         List<SysMenu> menuList = this.list(query);
         // 构建树中包含记录的所有字段
-        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_ID : menuParam.getModule();
+        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_NODE_ID : menuParam.getModule();
         return buildTree(menuList, rootId);
     }
 
@@ -229,7 +229,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .orderByAsc(SysMenu::getSortNum)
         );
         // 构建的树中仅包含部分字段
-        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_ID : menuParam.getModule();
+        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_NODE_ID : menuParam.getModule();
         return buildTree(menuList, rootId);
     }
 
