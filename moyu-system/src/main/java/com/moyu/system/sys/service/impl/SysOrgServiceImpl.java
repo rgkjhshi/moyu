@@ -216,7 +216,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             Tree<String> rootTree = singleTree();
             List<String> list = TreeUtil.getParentsId(rootTree.getNode(orgParam.getParentCode()), true);
             updateOrg.setOrgChain(SysConstants.COMMA_JOINER.join(list));
-            // 本节点的字节点orgChain也应该改变，异步修改 TODO
+            // 本节点的子节点orgChain也应该改变，待tree更新之后才可以修改 TODO
         }
         this.updateById(updateOrg);
     }
