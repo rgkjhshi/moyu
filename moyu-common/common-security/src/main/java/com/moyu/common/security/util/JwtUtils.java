@@ -33,6 +33,7 @@ public class JwtUtils {
         String token = JWT.create()
                 .setSubject(loginUser.getUsername())
                 .setJWTId(IdUtil.fastSimpleUUID())
+                .setPayload("orgCode", loginUser.getOrgCode())
                 .setPayload("perms", loginUser.getPerms())
                 .setPayload("roles", loginUser.getRoles())
                 .setKey(SECRET.getBytes())
@@ -48,11 +49,12 @@ public class JwtUtils {
         JWT jwt = JWT.of(token);
         // 根据token获取claims
         String username = (String) jwt.getPayload(JWTPayload.SUBJECT);
+        String orgCode = (String) jwt.getPayload("orgCode");
         Set<String> perms = new HashSet<>((List<String>) jwt.getPayload("perms"));
         Set<String> roles = new HashSet<>((List<String>) jwt.getPayload("roles"));
         // 转换成登录用户
         LoginUser loginUser = LoginUser.builder().enabled(true)
-                .username(username).perms(perms).roles(roles).build();
+                .username(username).orgCode(orgCode).perms(perms).roles(roles).build();
         // 初始化authorities后才可使用springSecurity鉴权
         loginUser.initAuthorities();
         // 返回当前登陆用户

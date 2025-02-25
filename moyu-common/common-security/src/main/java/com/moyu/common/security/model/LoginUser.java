@@ -43,6 +43,11 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private Set<String> roles;
 
     /**
+     * 用户所在组织机构
+     */
+    private String orgCode;
+
+    /**
      * 默认字段
      *
      * @see org.springframework.security.core.userdetails.User

@@ -66,7 +66,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         List<String> orgList = new ArrayList<>();
         // 非超管才设置数据权限
         if (!SecurityUtils.getRoles().contains(SysConstants.ROOT_ROLE_CODE)) {
-            orgList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getUsername());
+            orgList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getOrgCode());
         }
         // 查询条件
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class)

@@ -67,6 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .username(sysUser.getAccount())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0)
+                .orgCode(sysUser.getOrgCode())
                 .roles(roleSet)
                 .perms(permSet)
                 .build();
