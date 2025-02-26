@@ -21,6 +21,7 @@
     <!--  common包中务必尽量减少jar包依赖  -->
     <dependencies>
         <!-- 本工程的其它模块 -->
+        <!-- common-security -->
         <dependency>
             <groupId>com.moyu</groupId>
             <artifactId>common-security</artifactId>

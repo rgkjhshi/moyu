@@ -4,15 +4,23 @@
 
 * 定义数据库表通用基础实体
 * 定义通用字段自动填充处理类
+* 数据权限拦截器
 * 配置类中添加分页插件配置
 
 ### 依赖
+本组件对于 common-security的以来主要用于自动填充处理类及数据权限拦截器，若不使用可删除相关代码
 
 本模块需要如下依赖
 
 ```xml
 
 <dependencies>
+    <!-- common-security -->
+    <dependency>
+        <groupId>com.moyu</groupId>
+        <artifactId>common-security</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </dependency>
     <!-- mybatis-plus 增强CRUD 参考：https://baomidou.com/introduce/ -->
     <dependency>
         <groupId>com.baomidou</groupId>
