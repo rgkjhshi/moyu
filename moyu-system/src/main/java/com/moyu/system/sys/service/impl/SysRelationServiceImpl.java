@@ -128,7 +128,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     }
 
     @Override
-    public Set<String> userPerm(String account) {
+    public Set<String> userMenu(String account) {
         // 用户的角色集
         Set<String> groupRoleSet = userGroupRole(account);
         Set<String> userRoleSet = userRole(account);

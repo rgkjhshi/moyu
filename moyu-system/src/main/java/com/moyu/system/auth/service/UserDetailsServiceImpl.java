@@ -1,10 +1,13 @@
 package com.moyu.system.auth.service;
 
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.moyu.common.security.model.LoginUser;
 import com.moyu.system.sys.enums.StatusEnum;
+import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
+import com.moyu.system.sys.service.SysMenuService;
 import com.moyu.system.sys.service.SysRelationService;
 import com.moyu.system.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,6 +37,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private SysRelationService sysRelationService;
+
+    @Resource
+    private SysMenuService sysMenuService;
 
     /**
      * SpringSecurity权限认证时(AuthenticationProvider#authenticate)会调用此方法
@@ -61,7 +68,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     private LoginUser buildUserDetails(SysUser sysUser) {
         // 用户有权限的菜单code集合(含按钮)
-        Set<String> permSet = sysRelationService.userPerm(sysUser.getAccount());
+        Set<String> menuSet = sysRelationService.userMenu(sysUser.getAccount());
+        Set<String> permSet = new HashSet<>();
+        sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class).select(SysMenu::getPermission).in(SysMenu::getCode, menuSet))
+                .forEach(e -> permSet.add(e.getPermission()));
         Set<String> roleSet = sysRelationService.userGroupRole(sysUser.getAccount());
         LoginUser loginUser = LoginUser.builder()
                 .username(sysUser.getAccount())
