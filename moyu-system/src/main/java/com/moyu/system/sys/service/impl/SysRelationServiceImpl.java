@@ -130,26 +130,30 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     @Override
     public Set<String> userMenu(String account) {
         // 用户的角色集
+        Set<String> roleSet = userRole(account);
         Set<String> groupRoleSet = userGroupRole(account);
-        Set<String> userRoleSet = userRole(account);
         // 两种方式的role集合放在一起
-        groupRoleSet.addAll(userRoleSet);
+        roleSet.addAll(groupRoleSet);
+        return roleMenu(roleSet);
+    }
+
+    @Override
+    public Set<String> roleMenu(Set<String> roleSet) {
         // 权限集
-        Set<String> permSet = new HashSet<>();
-        if (ObjectUtil.isNotEmpty(groupRoleSet)) {
-            // 查询分组的所有角色
+        Set<String> menuSet = new HashSet<>();
+        if (ObjectUtil.isNotEmpty(roleSet)) {
+            // 查询角色的所有资源菜单
             list(new LambdaQueryWrapper<SysRelation>()
                     // 关系类型
                     .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_MENU.getCode())
                     // 查询menu
                     .select(SysRelation::getTargetId)
                     // 指定role
-                    .in(SysRelation::getObjectId, groupRoleSet)
-            ).forEach(e -> permSet.add(e.getTargetId()));
+                    .in(SysRelation::getObjectId, roleSet)
+            ).forEach(e -> menuSet.add(e.getTargetId()));
         }
-        return permSet;
+        return menuSet;
     }
-
 }
 
 

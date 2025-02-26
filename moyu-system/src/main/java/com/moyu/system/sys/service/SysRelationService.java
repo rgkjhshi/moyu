@@ -47,4 +47,9 @@ public interface SysRelationService extends IService<SysRelation> {
      */
     Set<String> userMenu(String account);
 
+    /**
+     * 查询指定角色的所有资源菜单
+     */
+    Set<String> roleMenu(Set<String> roleSet);
+
 }

@@ -1,6 +1,7 @@
 package com.moyu.system.auth.service;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.moyu.common.security.model.LoginUser;
 import com.moyu.system.sys.enums.StatusEnum;
@@ -67,12 +68,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * 创建LoginUserDetails
      */
     private LoginUser buildUserDetails(SysUser sysUser) {
+        // 直接授权的角色
+        Set<String> roleSet = sysRelationService.userRole(sysUser.getAccount());
+        // 分组授权的角色
+        Set<String> groupRoleSet = sysRelationService.userGroupRole(sysUser.getAccount());
+        // 全部角色
+        roleSet.addAll(groupRoleSet);
         // 用户有权限的菜单code集合(含按钮)
-        Set<String> menuSet = sysRelationService.userMenu(sysUser.getAccount());
+        Set<String> menuSet = sysRelationService.roleMenu(roleSet);
+        // 所有权限
         Set<String> permSet = new HashSet<>();
-        sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class).select(SysMenu::getPermission).in(SysMenu::getCode, menuSet))
-                .forEach(e -> permSet.add(e.getPermission()));
-        Set<String> roleSet = sysRelationService.userGroupRole(sysUser.getAccount());
+        sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class).in(SysMenu::getCode, menuSet))
+                .forEach(e -> {
+                    if (ObjectUtil.isNotEmpty(e.getPermission())) {
+                        permSet.add(e.getPermission());
+                    }
+                });
+        // 组装LoginUser
         LoginUser loginUser = LoginUser.builder()
                 .username(sysUser.getAccount())
                 .password(sysUser.getPassword())
