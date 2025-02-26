@@ -10,7 +10,6 @@ import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysGroupParam;
-import com.moyu.system.sys.service.RelationService;
 import com.moyu.system.sys.service.SysGroupService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,9 +33,6 @@ public class SysGroupController {
 
     @Resource
     private SysGroupService sysGroupService;
-
-    @Resource
-    private RelationService relationService;
 
     /**
      * 分页获取角色列表
@@ -92,7 +88,7 @@ public class SysGroupController {
     @PostMapping("/roleList")
     public BaseResponse<List<SysRole>> roleList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
-        List<SysRole> list = relationService.groupRoleList(groupParam);
+        List<SysRole> list = sysGroupService.groupRoleList(groupParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -103,7 +99,7 @@ public class SysGroupController {
     public BaseResponse<?> addRole(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
-        relationService.groupAddRole(groupParam);
+        sysGroupService.groupAddRole(groupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -114,7 +110,7 @@ public class SysGroupController {
     public BaseResponse<?> deleteRole(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
-        relationService.groupDeleteRole(groupParam);
+        sysGroupService.groupDeleteRole(groupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -124,7 +120,7 @@ public class SysGroupController {
     @PostMapping("/userList")
     public BaseResponse<List<SysUser>> userList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
-        List<SysUser> list = relationService.groupUserList(groupParam);
+        List<SysUser> list = sysGroupService.groupUserList(groupParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -135,7 +131,7 @@ public class SysGroupController {
     public BaseResponse<?> addUser(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
-        relationService.groupAddUser(groupParam);
+        sysGroupService.groupAddUser(groupParam);
         return BaseResponse.getSuccessResponse();
     }
 
@@ -146,7 +142,7 @@ public class SysGroupController {
     public BaseResponse<?> deleteUser(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
-        relationService.groupDeleteUser(groupParam);
+        sysGroupService.groupDeleteUser(groupParam);
         return BaseResponse.getSuccessResponse();
     }
 

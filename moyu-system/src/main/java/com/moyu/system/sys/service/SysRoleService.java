@@ -4,6 +4,7 @@ import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysRoleParam;
 
 import java.util.List;
@@ -72,4 +73,10 @@ public interface SysRoleService extends IService<SysRole> {
      * @param roleParam 角色code，用户集合 codeSet
      */
     void userRevokeRole(SysRoleParam roleParam);
+
+    /**
+     * 拥有某角色的用户列表，仅包含用户-角色关系直接指定的用户，即全局角色。USER_HAS_ROLE
+     */
+    List<SysUser> roleUserList(SysRoleParam roleParam);
+
 }

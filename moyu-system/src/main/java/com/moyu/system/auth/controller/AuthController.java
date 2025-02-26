@@ -40,8 +40,7 @@ public class AuthController {
      */
     @PostMapping("/logout")
     public BaseResponse<String> userLogout(UserLoginParam loginParam) {
-        String token = loginService.login(loginParam);
-        return BaseResponse.getSuccessResponse(token);
+        return BaseResponse.getSuccessResponse();
     }
 
 }

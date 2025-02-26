@@ -30,12 +30,15 @@ import com.moyu.system.sys.mapper.SysRoleMapper;
 import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
+import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.SysMenuService;
 import com.moyu.system.sys.service.SysRelationService;
 import com.moyu.system.sys.service.SysRoleService;
+import com.moyu.system.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -61,6 +64,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private SysMenuService sysMenuService;
+
+    @Resource
+    private SysUserService sysUserService;
 
     @Override
     public List<SysRole> list(SysRoleParam roleParam) {
@@ -269,16 +275,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isEmpty(userSet)) {
             return;
         }
-        // 查询已拥有该角色的用户
+        // 查询该角色已拥有的用户
         Set<String> oldUserSet = new HashSet<>();
         sysRelationService.list(new LambdaQueryWrapper<SysRelation>()
                 // 只查询user的code
-                .select(SysRelation::getObjectId)
+                .select(SysRelation::getTargetId)
                 // 关系类型
-                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
                 // 指定role
-                .eq(SysRelation::getTargetId, roleParam.getCode())
-        ).forEach(e -> oldUserSet.add(e.getObjectId()));
+                .eq(SysRelation::getObjectId, roleParam.getCode())
+        ).forEach(e -> oldUserSet.add(e.getTargetId()));
 
         // 去除已有角色的用户
         userSet.removeAll(oldUserSet);
@@ -286,13 +292,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isEmpty(userSet)) {
             return;
         }
-        // 添加 用户-角色 关系
+        // 添加 ROLE_HAS_USER 关系
         List<SysRelation> addList = new ArrayList<>();
         userSet.forEach(code -> {
             SysRelation entity = new SysRelation();
-            entity.setObjectId(code);
-            entity.setTargetId(roleParam.getCode());
-            entity.setRelationType(RelationTypeEnum.USER_HAS_ROLE.getCode());
+            entity.setObjectId(roleParam.getCode());
+            entity.setTargetId(code);
+            entity.setRelationType(RelationTypeEnum.ROLE_HAS_USER.getCode());
             addList.add(entity);
         });
         sysRelationService.saveBatch(addList);
@@ -308,14 +314,29 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
-        // 查询指定group中存在的role，加入ids待删
-        sysRelationService.list(SysRelationParam.builder().objectSet(userSet).targetId(roleParam.getCode())
-                .relationType(RelationTypeEnum.USER_HAS_ROLE.getCode()).build()
+        // 查询指定userSet中已存在的于指定role的user，加入ids待删
+        sysRelationService.list(SysRelationParam.builder().objectId(roleParam.getCode()).targetSet(userSet)
+                .relationType(RelationTypeEnum.ROLE_HAS_USER.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
         // 删除
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
+    }
+
+    @Override
+    public List<SysUser> roleUserList(SysRoleParam roleParam) {
+        // 查询指定role的所有user
+        Set<String> userSet = sysRelationService.roleUser(roleParam.getCode());
+        if (ObjectUtil.isEmpty(userSet)) {
+            return new ArrayList<>();
+        }
+        // 查询用户(可指定搜索词)
+        List<SysUser> userList = sysUserService.list(SysUserParam.builder()
+                .searchKey(roleParam.getSearchKey())
+                .orgCode(roleParam.getOrgCode())
+                .codeSet(userSet).build());
+        return userList;
     }
 }
 

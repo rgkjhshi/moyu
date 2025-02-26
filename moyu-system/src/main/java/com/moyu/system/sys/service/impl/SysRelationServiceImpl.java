@@ -102,12 +102,12 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         // 查询用户归属的所有分组
         list(new LambdaQueryWrapper<SysRelation>()
                 // 查询role
-                .select(SysRelation::getTargetId)
+                .select(SysRelation::getObjectId)
                 // 关系类型
-                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
                 // 指定用户
-                .eq(SysRelation::getObjectId, account)
-        ).forEach(e -> roleSet.add(e.getTargetId()));
+                .eq(SysRelation::getTargetId, account)
+        ).forEach(e -> roleSet.add(e.getObjectId()));
         return roleSet;
     }
 
@@ -118,12 +118,12 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         // 查询用户归属的所有分组
         list(new LambdaQueryWrapper<SysRelation>()
                 // 查询user
-                .select(SysRelation::getObjectId)
+                .select(SysRelation::getTargetId)
                 // 关系类型
-                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
-                // 指定用户
-                .eq(SysRelation::getTargetId, roleCode)
-        ).forEach(e -> userSet.add(e.getObjectId()));
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
+                // 指定角色
+                .eq(SysRelation::getObjectId, roleCode)
+        ).forEach(e -> userSet.add(e.getTargetId()));
         return userSet;
     }
 

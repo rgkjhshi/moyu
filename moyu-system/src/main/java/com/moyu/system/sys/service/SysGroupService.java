@@ -3,7 +3,10 @@ package com.moyu.system.sys.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysGroup;
+import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysGroupParam;
+import com.moyu.system.sys.model.param.SysRoleParam;
 
 import java.util.List;
 
@@ -43,5 +46,37 @@ public interface SysGroupService extends IService<SysGroup> {
      * 修改记录
      */
     void edit(SysGroupParam groupParam);
+
+    ////// group 通过 relation 管理的数据
+
+    /**
+     * group内角色列表
+     */
+    List<SysRole> groupRoleList(SysGroupParam groupParam);
+
+    /**
+     * group内用户列表
+     */
+    List<SysUser> groupUserList(SysGroupParam groupParam);
+
+    /**
+     * group新增角色
+     */
+    void groupAddRole(SysGroupParam groupParam);
+
+    /**
+     * group删除角色
+     */
+    void groupDeleteRole(SysGroupParam groupParam);
+
+    /**
+     * group新增用户
+     */
+    void groupAddUser(SysGroupParam groupParam);
+
+    /**
+     * group删除用户
+     */
+    void groupDeleteUser(SysGroupParam groupParam);
 
 }
