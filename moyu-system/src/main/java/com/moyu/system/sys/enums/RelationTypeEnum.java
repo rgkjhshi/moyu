@@ -17,7 +17,7 @@ import java.util.Objects;
 public enum RelationTypeEnum {
 
     /**
-     * 关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)
+     * 关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu,4:role_has_user)
      */
     INVALID(0, null),
     GROUP_HAS_USER(1, "分组-用户关系"),
