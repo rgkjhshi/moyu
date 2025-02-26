@@ -24,12 +24,6 @@
         <!-- 本工程的其它模块 -->
         <dependency>
             <groupId>com.moyu</groupId>
-            <artifactId>moyu-common</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-        </dependency>
-        <!-- 本工程的其它模块 -->
-        <dependency>
-            <groupId>com.moyu</groupId>
             <artifactId>common-core</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>

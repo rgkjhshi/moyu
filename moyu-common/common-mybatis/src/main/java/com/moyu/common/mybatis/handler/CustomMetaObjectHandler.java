@@ -59,7 +59,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
             // setFieldValByName方法会判断db中是否有对应的字段,无需判断 (metaObject.getOriginalObject() instanceof BaseEntity)
             // 更新时不使用严格模式,不管原来是否有值,都更新
             setFieldValByName(UPDATE_TIME, new Date(), metaObject);
-            setFieldValByName(UPDATE_USER, this.getUserId(), metaObject);
+            setFieldValByName(UPDATE_USER, getUserId(), metaObject);
         } catch (Exception e) {
             log.warn("CustomMetaObjectHandler.updateFill自动填充字段失败，可不做处理");
         }
