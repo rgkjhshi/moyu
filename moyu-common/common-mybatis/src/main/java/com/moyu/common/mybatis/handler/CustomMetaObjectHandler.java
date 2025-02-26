@@ -2,6 +2,7 @@ package com.moyu.common.mybatis.handler;
 
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.moyu.common.security.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -65,9 +66,9 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     }
 
     /**
-     * 获取用户id TODO
+     * 获取用户id
      */
     private String getUserId() {
-        return null;
+        return SecurityUtils.getLoginUser().getUsername();
     }
 }

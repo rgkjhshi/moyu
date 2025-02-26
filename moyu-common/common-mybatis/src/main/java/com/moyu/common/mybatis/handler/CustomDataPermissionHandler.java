@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
 import com.moyu.common.mybatis.annotation.DataPermission;
+import com.moyu.common.security.util.SecurityUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
@@ -34,10 +35,10 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
             if (annotation == null) {
                 return where;
             }
-            // 超级管理员不受数据权限控制
-//            if (SecurityUtils.isRoot()) {
-//                return where;
-//            }
+            // root超级管理员不受数据权限控制
+            if (SecurityUtils.isRoot()) {
+                return where;
+            }
             if (ObjectUtils.isNotEmpty(annotation)
                     && (method.getName().equals(methodName) || (method.getName() + "_COUNT").equals(methodName))) {
                 return dataScopeFilter(annotation.orgAlias(), annotation.orgColumnName(), annotation.userAlias(), annotation.userColumnName(), where);

@@ -20,6 +20,12 @@
 
     <!--  common包中务必尽量减少jar包依赖  -->
     <dependencies>
+        <!-- 本工程的其它模块 -->
+        <dependency>
+            <groupId>com.moyu</groupId>
+            <artifactId>common-security</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- mybatis-plus 增强CRUD 参考：https://baomidou.com/introduce/ -->
         <dependency>
             <groupId>com.baomidou</groupId>
