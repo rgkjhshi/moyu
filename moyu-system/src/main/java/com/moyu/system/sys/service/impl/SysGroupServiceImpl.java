@@ -15,8 +15,8 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.util.SecurityUtils;
-import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysGroupMapper;
 import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.param.SysGroupParam;
@@ -63,7 +63,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 用户的数据权限
         List<String> scopeList = new ArrayList<>();
         // 非超管才设置数据权限
-        if (!SecurityUtils.getRoles().contains(SysConstants.ROOT_ROLE_CODE)) {
+        if (!SecurityUtils.getRoles().contains(SecurityConstants.ROOT_ROLE_CODE)) {
             scopeList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getOrgCode());
         }
         // 查询条件

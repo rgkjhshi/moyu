@@ -11,6 +11,12 @@ import java.util.List;
  * @since 2024-12-27
  */
 public interface SecurityConstants {
+
+    /**
+     * 超级管理员角色编码
+     */
+    String ROOT_ROLE_CODE = "ROOT";
+
     /**
      * token相关常量
      */

@@ -1,8 +1,8 @@
 package com.moyu.common.security.util;
 
 
-import cn.hutool.core.convert.Convert;
 import com.moyu.common.exception.BaseException;
+import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.model.LoginUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -22,11 +22,6 @@ import java.util.Set;
  * @since 2025-01-06
  */
 public class SecurityUtils {
-
-    /**
-     * 超级管理员角色编码
-     */
-    private static final String ROOT_ROLE_CODE = "ROOT";
 
     /**
      * 获取Authentication
@@ -72,7 +67,7 @@ public class SecurityUtils {
      * 是否为root超级管理员
      */
     public static boolean isRoot() {
-        return getRoles().contains(ROOT_ROLE_CODE);
+        return getRoles().contains(SecurityConstants.ROOT_ROLE_CODE);
     }
 
     /**

@@ -29,9 +29,4 @@ public interface SysConstants {
      * 系统默认密码
      */
     String DEFAULT_PASSWORD = "qwer@123!";
-
-    /**
-     * 超级管理员角色编码
-     */
-    String ROOT_ROLE_CODE = "ROOT";
 }

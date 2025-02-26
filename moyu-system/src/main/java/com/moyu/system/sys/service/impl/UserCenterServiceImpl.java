@@ -12,6 +12,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
+import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.MenuTypeEnum;
@@ -119,7 +120,7 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public List<Tree<String>> userOrgTree(String account) {
-        if (SecurityUtils.getRoles().contains(SysConstants.ROOT_ROLE_CODE)) {
+        if (SecurityUtils.getRoles().contains(SecurityConstants.ROOT_ROLE_CODE)) {
             return sysOrgService.tree();
         }
         // 获取全部树
