@@ -15,7 +15,6 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
-import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysUserMapper;
@@ -71,11 +70,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public PageResult<SysUser> pageList(SysUserParam userParam) {
-        // 用户的数据权限
-        List<String> scopeList = new ArrayList<>();
-        // 非超管才设置数据权限
-        if (!SecurityUtils.getRoles().contains(SecurityConstants.ROOT_ROLE_CODE)) {
-            scopeList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getOrgCode());
+        // 数据权限范围
+        Set<String> scopeSet = SecurityUtils.getScopes();
+        // 非ROOT则限制
+        if (!SecurityUtils.isRoot()) {
+            scopeSet = SecurityUtils.getScopes();
         }
         // 查询指定的组织所有的children
         List<String> childrenCode = new ArrayList<>();
@@ -92,7 +91,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
                 // 数据权限(非空才有效)
-                .in(ObjectUtil.isNotEmpty(scopeList), SysUser::getOrgCode, scopeList)
+                .in(ObjectUtil.isNotEmpty(scopeSet), SysUser::getOrgCode, scopeSet)
                 .eq(SysUser::getDeleteFlag, 0);
         // 分页查询
         Page<SysUser> page = new Page<>(userParam.getPageNum(), userParam.getPageSize());

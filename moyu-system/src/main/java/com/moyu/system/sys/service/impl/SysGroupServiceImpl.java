@@ -15,7 +15,6 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
-import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.mapper.SysGroupMapper;
@@ -77,11 +76,11 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public PageResult<SysGroup> pageList(SysGroupParam groupParam) {
-        // 用户的数据权限
-        List<String> scopeList = new ArrayList<>();
-        // 非超管才设置数据权限
-        if (!SecurityUtils.getRoles().contains(SecurityConstants.ROOT_ROLE_CODE)) {
-            scopeList = sysOrgService.childrenCodeList(SecurityUtils.getLoginUser().getOrgCode());
+        // 数据权限范围
+        Set<String> scopeSet = SecurityUtils.getScopes();
+        // 非ROOT则限制
+        if (!SecurityUtils.isRoot()) {
+            scopeSet = SecurityUtils.getScopes();
         }
         // 查询条件
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class)
@@ -92,7 +91,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
                 // 数据权限(非空才有效)
-                .in(ObjectUtil.isNotEmpty(scopeList), SysGroup::getOrgCode, scopeList)
+                .in(ObjectUtil.isNotEmpty(scopeSet), SysGroup::getOrgCode, scopeSet)
                 .eq(SysGroup::getDeleteFlag, 0)
                 .orderByAsc(SysGroup::getSortNum);
         // 分页查询
