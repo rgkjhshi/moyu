@@ -49,4 +49,9 @@ public class UserInfo {
      * 用户权限标识集合
      */
     private Set<String> perms;
+
+    /**
+     * 用户数据范围集合
+     */
+    private Set<String> scopes;
 }

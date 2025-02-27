@@ -35,7 +35,7 @@ public class UserCenterController {
     public BaseResponse<UserInfo> currentUserInfo() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
-        return BaseResponse.getSuccessResponse(userCenterService.currentUserInfo());
+        return BaseResponse.getSuccessResponse(userCenterService.currentUserInfo(username));
     }
 
     /**

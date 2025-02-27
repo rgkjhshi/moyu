@@ -49,29 +49,30 @@ public class UserCenterServiceImpl implements UserCenterService {
     private SysOrgService sysOrgService;
 
     @Resource
-    private SysGroupService sysGroupService;
+    private SysRoleService sysRoleService;
+
+    @Resource
+    private SysScopeService sysScopeService;
 
     @Resource
     private SysRelationService sysRelationService;
 
     @Override
-    public UserInfo currentUserInfo() {
-        // 当前登陆用户username
-        String username = SecurityUtils.getLoginUser().getUsername();
+    public UserInfo currentUserInfo(String username) {
         // 查询用户entity
         SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         // 构造用户信息视图对象
         UserInfo userInfo = UserInfo.builder().account(username)
                 .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar()).build();
         // 角色集合
-        Set<String> roles = SecurityUtils.getRoles();
+        Set<String> roles = sysRoleService.userAllRoles(username);
         userInfo.setRoles(roles);
         // 权限集合
-        if (ObjectUtil.isNotEmpty(roles)) {
-            // TODO Set<String> perms = permissionService.getRolePermsFormCache(roles);
-            Set<String> perms = SecurityUtils.getPerms();
-            userInfo.setPerms(perms);
-        }
+        Set<String> perms = sysRoleService.rolePerms(roles);
+        userInfo.setPerms(perms);
+        // 数据范围集合
+        Set<String> scopes = sysScopeService.userDataScopes(username);
+        userInfo.setScopes(scopes);
         return userInfo;
     }
 

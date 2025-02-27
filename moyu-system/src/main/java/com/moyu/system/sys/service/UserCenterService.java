@@ -15,7 +15,7 @@ public interface UserCenterService {
     /**
      * 获取登陆用户详情
      */
-    UserInfo currentUserInfo();
+    UserInfo currentUserInfo(String username);
 
     /**
      * 获取用户菜单树
