@@ -38,7 +38,7 @@ public interface SysOrgService extends IService<SysOrg> {
     List<Tree<String>> tree();
 
     /**
-     * 根结点的组织机构树（只有一颗树）需要有缓存
+     * 根结点的组织机构树（只有一颗树）最好有缓存
      *
      * @return 组织机构树
      */
