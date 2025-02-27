@@ -13,6 +13,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
@@ -350,6 +351,24 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         roleSet.addAll(userRoleSet);
         roleSet.addAll(groupRoleSet);
         return roleSet;
+    }
+
+    @Override
+    public Set<String> rolePerms(Set<String> roleSet) {
+        // 权限标识集合
+        Set<String> permSet = new HashSet<>();
+        if (ObjectUtil.isEmpty(roleSet)) {
+            return permSet;
+        }
+        // 全部资源集
+        Set<String> menuSet = sysRelationService.roleMenu(roleSet);
+        // 获取资源上的权限标识
+        sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class).in(SysMenu::getCode, menuSet)).forEach(e -> {
+            if (ObjectUtil.isNotEmpty(e.getPermission())) {
+                permSet.add(e.getPermission());
+            }
+        });
+        return permSet;
     }
 }
 

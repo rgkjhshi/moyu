@@ -1,11 +1,8 @@
 package com.moyu.system.auth.service;
 
 
-import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.moyu.common.security.model.LoginUser;
 import com.moyu.system.sys.enums.StatusEnum;
-import com.moyu.system.sys.model.entity.SysMenu;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.*;
@@ -16,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -72,18 +68,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * 创建LoginUserDetails
      */
     private LoginUser buildUserDetails(SysUser sysUser) {
-        // 所有的角色，包括 userRole + userGroupRole
+        // 所有的角色集，包括 userRole + userGroupRole
         Set<String> roleSet = sysRoleService.userAllRoles(sysUser.getAccount());
-        // 所有权限
-        Set<String> permSet = new HashSet<>();
-        // 用户有权限的菜单code集合(含按钮)
-        Set<String> menuSet = sysRelationService.roleMenu(roleSet);
-        sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class).in(SysMenu::getCode, menuSet)).forEach(e -> {
-            if (ObjectUtil.isNotEmpty(e.getPermission())) {
-                permSet.add(e.getPermission());
-            }
-        });
-        // 所有数据权限
+        // 所有权限集
+        Set<String> permSet = sysRoleService.rolePerms(roleSet);
+        // 所有数据权限集
         Set<String> scopeSet = sysScopeService.userDataScopes(sysUser.getAccount());
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder()

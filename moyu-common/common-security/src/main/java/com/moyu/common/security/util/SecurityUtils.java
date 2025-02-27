@@ -56,7 +56,14 @@ public class SecurityUtils {
     }
 
     /**
-     * 获取用户角色集合
+     * 获取用户数据权限范围
+     */
+    public static Set<String> getScopes() {
+        return getLoginUser().getScopes();
+    }
+
+    /**
+     * 获取用户授权集合
      */
     public static Set<String> getAuthorities() {
         Collection<GrantedAuthority> authorities = getLoginUser().getAuthorities();
