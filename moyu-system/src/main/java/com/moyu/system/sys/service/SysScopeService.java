@@ -7,6 +7,7 @@ import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysScopeParam;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author shisong
@@ -57,4 +58,8 @@ public interface SysScopeService extends IService<SysScope> {
      */
     void scopeDeleteUser(SysScopeParam scopeParam);
 
+    /**
+     * 获取用户所有的数据权限
+     */
+    Set<String> userDataScopes(String userId);
 }

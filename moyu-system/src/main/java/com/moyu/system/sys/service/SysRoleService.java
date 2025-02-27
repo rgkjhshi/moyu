@@ -8,6 +8,7 @@ import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysRoleParam;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author shisong
@@ -75,8 +76,12 @@ public interface SysRoleService extends IService<SysRole> {
     void userRevokeRole(SysRoleParam roleParam);
 
     /**
-     * 拥有某角色的用户列表，仅包含用户-角色关系直接指定的用户，即全局角色。USER_HAS_ROLE
+     * 拥有某角色的用户列表，仅包含用户-角色关系直接指定的用户，即全局角色。ROLE_HAS_USER
      */
     List<SysUser> roleUserList(SysRoleParam roleParam);
 
+    /**
+     * 获取指定用户所有的角色，包括 userRole + userGroupRole
+     */
+    Set<String> userAllRoles(String account);
 }

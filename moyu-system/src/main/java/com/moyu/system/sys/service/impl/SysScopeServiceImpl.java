@@ -1,6 +1,7 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -14,8 +15,10 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.mybatis.enums.DataScopeEnum;
 import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.util.SecurityUtils;
+import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.mapper.SysScopeMapper;
 import com.moyu.system.sys.model.entity.SysRelation;
@@ -111,6 +114,11 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
             // 设置直属机构名称
             scope.setOrgName(orgNode.getName().toString());
         }
+        // 若是自定义范围,需要处理
+        if (ObjectUtil.equal(scopeParam.getScopeType(), DataScopeEnum.ORG_DEFINE.getCode())) {
+            Assert.notEmpty(scopeParam.getScopeList(), "自定义数据范围时, scopeList不能为空");
+            scope.setScopeSet(SysConstants.COMMA_JOINER.join(scopeParam.getScopeList()));
+        }
         this.save(scope);
     }
 
@@ -138,14 +146,19 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
             // 设置直属机构名称
             updateScope.setOrgName(orgNode.getName().toString());
         }
+        // 若是自定义范围,需要处理
+        if (ObjectUtil.equal(scopeParam.getScopeType(), DataScopeEnum.ORG_DEFINE.getCode())) {
+            Assert.notEmpty(scopeParam.getScopeList(), "自定义数据范围时, scopeList不能为空");
+            updateScope.setScopeSet(SysConstants.COMMA_JOINER.join(scopeParam.getScopeList()));
+        }
         this.updateById(updateScope);
     }
 
     @Override
     public List<SysUser> scopeUserList(SysScopeParam scopeParam) {
         // 查询指定scope的所有user
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .relationType(RelationTypeEnum.SCOPE_HAS_USER.getCode()).objectId(scopeParam.getCode()).build());
+        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder().objectId(scopeParam.getCode())
+                .relationType(RelationTypeEnum.SCOPE_HAS_USER.getCode()).build());
         if (ObjectUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
@@ -169,8 +182,8 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         Set<String> oldSet = new HashSet<>();
         // 查询指定scope包含的user，放入oldSet
         sysRelationService.list(SysRelationParam.builder().objectId(objectId).targetSet(targetSet)
-                .relationType(RelationTypeEnum.SCOPE_HAS_USER.getCode()).build()
-        ).forEach(e -> oldSet.add(e.getTargetId()));
+                        .relationType(RelationTypeEnum.SCOPE_HAS_USER.getCode()).build())
+                .forEach(e -> oldSet.add(e.getTargetId()));
         // 从target中删除已经存在的
         targetSet.removeAll(oldSet);
         // 再次判断要新增的内容为空则返回
@@ -197,12 +210,52 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         Set<Long> ids = new HashSet<>();
         // 查询指定scope中存在的user，加入ids待删
         sysRelationService.list(SysRelationParam.builder().objectId(scopeParam.getCode()).targetSet(scopeParam.getCodeSet())
-                .relationType(RelationTypeEnum.SCOPE_HAS_USER.getCode()).build()
-        ).forEach(e -> ids.add(e.getId()));
+                        .relationType(RelationTypeEnum.SCOPE_HAS_USER.getCode()).build())
+                .forEach(e -> ids.add(e.getId()));
         // 删除
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
+    }
+
+    @Override
+    public Set<String> userDataScopes(String userId) {
+        Set<String> scopes = new HashSet<>();
+        // 查关系
+        LambdaQueryWrapper<SysRelation> queryRelationWrapper = Wrappers.lambdaQuery(SysRelation.class)
+                .eq(SysRelation::getTargetId, userId)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.SCOPE_HAS_USER.getCode());
+        // 通过SCOPE_HAS_USER查关系
+        Set<String> scopeSet = new HashSet<>();
+        sysRelationService.list(queryRelationWrapper).forEach(e -> scopeSet.add(e.getObjectId()));
+        if (ObjectUtil.isEmpty(scopeSet)) {
+            return scopes;
+        }
+        // 查数据范围分组
+        LambdaQueryWrapper<SysScope> queryScopeWrapper = Wrappers.lambdaQuery(SysScope.class)
+                .in(SysScope::getCode, scopeSet)
+                .eq(SysScope::getStatus, 0)
+                .eq(SysScope::getDeleteFlag, 0);
+        List<SysScope> scopeList = this.list(queryScopeWrapper);
+        if (ObjectUtil.isEmpty(scopeList)) {
+            return scopes;
+        }
+        // 根据scopeType计算最终的scopes
+        scopeList.forEach(e -> {
+            if (ObjectUtil.equal(e.getScopeType(), DataScopeEnum.ORG.getCode())) {
+                scopes.add(e.getOrgCode());
+            } else if (ObjectUtil.equal(e.getScopeType(), DataScopeEnum.ORG_DEFINE.getCode())) {
+                List<String> list = SysConstants.COMMA_SPLITTER.splitToList(e.getScopeSet());
+                scopes.addAll(list);
+            } else if (ObjectUtil.equal(e.getScopeType(), DataScopeEnum.ORG_CHILD.getCode())) {
+                // 添加org
+                scopes.add(e.getOrgCode());
+                Tree<String> orgTree = sysOrgService.singleTree().getNode(e.getOrgCode());
+                // 添加org的所有child
+                orgTree.walk(node -> scopes.add(node.getId()));
+            }
+        });
+        return scopes;
     }
 }
 

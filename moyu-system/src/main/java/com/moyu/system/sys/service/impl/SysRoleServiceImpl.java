@@ -338,6 +338,19 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .codeSet(userSet).build());
         return userList;
     }
+
+    @Override
+    public Set<String> userAllRoles(String account) {
+        Set<String> roleSet = new HashSet<>();
+        // 直接授权的角色
+        Set<String> userRoleSet = sysRelationService.userRole(account);
+        // 分组授权的角色
+        Set<String> groupRoleSet = sysRelationService.userGroupRole(account);
+        // 全部角色
+        roleSet.addAll(userRoleSet);
+        roleSet.addAll(groupRoleSet);
+        return roleSet;
+    }
 }
 
 

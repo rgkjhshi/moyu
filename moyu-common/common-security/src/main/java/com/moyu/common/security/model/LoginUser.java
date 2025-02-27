@@ -43,6 +43,11 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private Set<String> roles;
 
     /**
+     * 数据权限范围
+     */
+    private Set<String> scopes;
+
+    /**
      * 用户所在组织机构
      */
     private String orgCode;
