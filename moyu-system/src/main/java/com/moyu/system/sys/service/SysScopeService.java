@@ -18,43 +18,43 @@ public interface SysScopeService extends IService<SysScope> {
     /**
      * 分页获取记录列表
      */
-    PageResult<SysScope> pageList(SysScopeParam groupParam);
+    PageResult<SysScope> pageList(SysScopeParam scopeParam);
 
     /**
      * 获取记录详情
      */
-    SysScope detail(SysScopeParam groupParam);
+    SysScope detail(SysScopeParam scopeParam);
 
     /**
      * 添加记录
      */
-    void add(SysScopeParam groupParam);
+    void add(SysScopeParam scopeParam);
 
     /**
      * 通过ids删除记录
      */
-    void deleteByIds(SysScopeParam groupParam);
+    void deleteByIds(SysScopeParam scopeParam);
 
     /**
      * 修改记录
      */
-    void edit(SysScopeParam groupParam);
+    void edit(SysScopeParam scopeParam);
 
     ////// scope 通过 relation 管理的数据
 
     /**
      * scope内用户列表
      */
-    List<SysUser> scopeUserList(SysScopeParam groupParam);
+    List<SysUser> scopeUserList(SysScopeParam scopeParam);
 
     /**
      * scope新增用户
      */
-    void scopeAddUser(SysScopeParam groupParam);
+    void scopeAddUser(SysScopeParam scopeParam);
 
     /**
      * scope删除用户
      */
-    void scopeDeleteUser(SysScopeParam groupParam);
+    void scopeDeleteUser(SysScopeParam scopeParam);
 
 }

@@ -107,11 +107,11 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 .eq(ObjectUtil.isNotEmpty(groupParam.getId()), SysGroup::getId, groupParam.getId())
                 .eq(ObjectUtil.isNotEmpty(groupParam.getCode()), SysGroup::getCode, groupParam.getCode());
         // id、code均为唯一标识
-        SysGroup SysGroup = this.getOne(queryWrapper);
-        if (SysGroup == null) {
+        SysGroup sysGroup = this.getOne(queryWrapper);
+        if (sysGroup == null) {
             throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "未查到指定数据");
         }
-        return SysGroup;
+        return sysGroup;
     }
 
     @Override
