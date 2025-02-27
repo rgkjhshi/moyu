@@ -46,7 +46,7 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
                 return where;
             }
             if (ObjectUtils.isNotEmpty(annotation)
-                    && (method.getName().equals(methodName) || (method.getName() + "_COUNT").equals(methodName))) {
+                    && (method.getName().equals(methodName) || (method.getName() + "_mpCount").equals(methodName))) {
                 return dataScopeFilter(annotation.orgAlias(), annotation.orgColumnName(), annotation.userAlias(), annotation.userColumnName(), where);
             }
         }

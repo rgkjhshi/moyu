@@ -2,6 +2,7 @@ package com.moyu.common.security.util;
 
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import com.moyu.common.security.model.LoginUser;
@@ -51,9 +52,9 @@ public class JwtUtils {
         // 根据token获取claims
         String username = (String) jwt.getPayload(JWTPayload.SUBJECT);
         String orgCode = (String) jwt.getPayload("orgCode");
-        Set<String> perms = new HashSet<>((List<String>) jwt.getPayload("perms"));
-        Set<String> roles = new HashSet<>((List<String>) jwt.getPayload("roles"));
-        Set<String> scopes = new HashSet<>((List<String>) jwt.getPayload("scopes"));
+        Set<String> perms = ObjectUtil.isEmpty(jwt.getPayload("perms")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("perms"));
+        Set<String> roles = ObjectUtil.isEmpty(jwt.getPayload("roles")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("roles"));
+        Set<String> scopes = ObjectUtil.isEmpty(jwt.getPayload("scopes")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("scopes"));
         // 转换成登录用户
         LoginUser loginUser = LoginUser.builder().enabled(true).username(username).orgCode(orgCode)
                 .perms(perms).roles(roles).scopes(scopes).build();
