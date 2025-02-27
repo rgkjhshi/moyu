@@ -250,9 +250,12 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
             } else if (ObjectUtil.equal(e.getScopeType(), DataScopeEnum.ORG_CHILD.getCode())) {
                 // 添加org
                 scopes.add(e.getOrgCode());
+                // 从rootTree中获取所有child（有缓存时）
                 Tree<String> orgTree = sysOrgService.singleTree().getNode(e.getOrgCode());
-                // 添加org的所有child
                 orgTree.walk(node -> scopes.add(node.getId()));
+                // 从数据库中获取所有child（无缓存时）
+//                List<String> childList = sysOrgService.childrenCodeList(e.getOrgCode());
+//                scopes.addAll(childList);
             }
         });
         return scopes;
