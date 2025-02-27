@@ -139,7 +139,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
 
     @Override
     public Set<String> roleMenu(Set<String> roleSet) {
-        // 权限集
+        // 资源集
         Set<String> menuSet = new HashSet<>();
         if (ObjectUtil.isNotEmpty(roleSet)) {
             // 查询角色的所有资源菜单
