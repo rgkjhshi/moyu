@@ -37,10 +37,6 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
     @Override
     @SneakyThrows
     public Expression getSqlSegment(Table table, Expression where, String mappedStatementId) {
-        // root超管不做任何限制
-        if (SecurityUtils.isRoot()) {
-            return null;
-        }
         // mappedStatementId 根据该参数可以判断具体执行方法，xml中为自定义名，注解中为方法签名，类似于com.xx.xxMapper.selectList
         Class<?> clazz = Class.forName(mappedStatementId.substring(0, mappedStatementId.lastIndexOf(StringPool.DOT)));
         // 只有Mapper中的方法才会被拦截到
@@ -54,6 +50,10 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
         DataPermission annotation = optMethod.get().getAnnotation(DataPermission.class);
         // 若匹配到的执行方法上无注解，不做处理返回
         if (annotation == null) {
+            return null;
+        }
+        // root超管不做任何限制
+        if (SecurityUtils.isRoot()) {
             return null;
         }
         log.debug("{}设置数据权限", mappedStatementId);
