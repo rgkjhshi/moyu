@@ -67,7 +67,7 @@ create table sys_user
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '用户信息表';
 
--- 3. 分组信息表
+-- 3. 功能权限分组表
 drop table if exists sys_group;
 create table sys_group
 (
@@ -92,7 +92,7 @@ create table sys_group
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '分组信息表';
 
--- 3. 数据权限分组表
+-- 7. 数据权限分组表
 drop table if exists sys_scope;
 create table sys_scope
 (
