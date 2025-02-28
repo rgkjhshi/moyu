@@ -247,11 +247,25 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         if (ObjectUtil.isEmpty(targetSet)) {
             return;
         }
+        // 已加入分组的用户
         Set<String> oldSet = new HashSet<>();
+        Set<String> otherGroupUserSet = new HashSet<>();
         // 查询指定group包含的user，放入oldSet
-        sysRelationService.list(SysRelationParam.builder().objectId(objectId).targetSet(targetSet)
-                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).build()
-        ).forEach(e -> oldSet.add(e.getTargetId()));
+        sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
+                .in(SysRelation::getTargetId, targetSet)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
+        ).forEach(e -> {
+            if (objectId.equals(e.getObjectId())) {
+                oldSet.add(e.getTargetId());
+            } else {
+                otherGroupUserSet.add(e.getTargetId());
+            }
+        });
+        // 是否限制用户只允许加入一个分组？
+        if (ObjectUtil.isNotEmpty(otherGroupUserSet)) {
+            String message = otherGroupUserSet + "已存在其他分组，不可重复添加";
+            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, message);
+        }
         // 从target中删除已经存在的
         targetSet.removeAll(oldSet);
         // 再次判断要新增的内容为空则返回
