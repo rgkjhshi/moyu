@@ -1,6 +1,9 @@
 package com.moyu.system.sys.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.moyu.common.mybatis.annotation.DataPermission;
 import com.moyu.system.sys.model.entity.SysOrg;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,6 +25,11 @@ public interface SysOrgMapper extends BaseMapper<SysOrg> {
      */
     @Select("SELECT * FROM sys_org WHERE code = #{orgCode} OR find_in_set(#{orgCode}, org_chain)")
     List<SysOrg> selectChildren(@Param("orgCode") String orgCode);
+
+    @DataPermission(orgColumnName = "code")
+    @Select("SELECT * FROM sys_org ${ew.customSqlSegment}")
+    List<SysOrg> selectAll(@Param(Constants.WRAPPER) Wrapper<SysOrg> wrapper);
+
 }
 
 

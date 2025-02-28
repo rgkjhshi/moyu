@@ -65,6 +65,7 @@
 
     <!-- 业务日志级别 -->
     <logger name="com.moyu" level="INFO"/>
+    <logger name="com.moyu.common" level="DEBUG"/>
     <logger name="com.moyu.system" level="DEBUG"/>
     <logger name="org.springframework" level="INFO"/>
 
