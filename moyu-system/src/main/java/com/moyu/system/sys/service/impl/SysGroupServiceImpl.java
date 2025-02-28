@@ -261,9 +261,9 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 otherGroupUserSet.add(e.getTargetId());
             }
         });
-        // 是否限制用户只允许加入一个分组？
+        // 限制用户只允许加入一个分组
         if (ObjectUtil.isNotEmpty(otherGroupUserSet)) {
-            String message = otherGroupUserSet + "已存在其他分组，不可重复添加";
+            String message = "下列用户已在其他分组，不可重复添加:" + otherGroupUserSet;
             throw new BaseException(ExceptionEnum.INVALID_PARAMETER, message);
         }
         // 从target中删除已经存在的
