@@ -56,7 +56,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         List<String> codeList = new ArrayList<>();
         List<SysOrg> orgList = this.baseMapper.selectChildren(orgCode);
         orgList.forEach(e -> codeList.add(e.getCode()));
-        this.baseMapper.selectAll(Wrappers.lambdaQuery());
+//        this.baseMapper.selectAll(Wrappers.lambdaQuery());
         return codeList;
     }
 
