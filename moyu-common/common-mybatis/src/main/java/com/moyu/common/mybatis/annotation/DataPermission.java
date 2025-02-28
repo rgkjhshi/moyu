@@ -4,7 +4,7 @@ package com.moyu.common.mybatis.annotation;
 import java.lang.annotation.*;
 
 /**
- * 数据权限注解
+ * 数据权限注解(支持指定org和user列名)
  * 数据权限 {@link com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor}
  *
  * @author shisong
@@ -16,23 +16,13 @@ import java.lang.annotation.*;
 public @interface DataPermission {
 
     /**
-     * 用于控制组织机构的表名
+     * 用于控制组织机构的列名，如:org_code
      */
-    String orgAlias() default "";
+    String orgColumn() default "";
 
     /**
-     * 用于控制组织机构的列名
+     * 用于控制用户的列名，如:create_by
      */
-    String orgColumnName() default "org_code";
-
-    /**
-     * 用于控制用户的表名
-     */
-    String userAlias() default "";
-
-    /**
-     * 用于控制用户的列名
-     */
-    String userColumnName() default "create_by";
+    String userColumn() default "";
 
 }
