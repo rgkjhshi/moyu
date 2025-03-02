@@ -65,7 +65,8 @@ create table sys_user
     UNIQUE INDEX `uniq_account` (`account`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = '用户信息表';
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 2000 COMMENT = '用户信息表';
 
 -- 3. 功能权限分组表
 drop table if exists sys_group;
@@ -90,7 +91,8 @@ create table sys_group
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = '分组信息表';
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 1000 COMMENT = '分组信息表';
 
 -- 7. 数据权限分组表
 drop table if exists sys_scope;
@@ -116,7 +118,8 @@ create table sys_scope
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = '数据权限分组表';
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 1000 COMMENT = '数据权限分组表';
 
 -- 4. 角色信息表
 drop table if exists sys_role;
@@ -183,10 +186,11 @@ CREATE TABLE `sys_relation`
     `id`            BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `object_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '对象ID',
     `target_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '目标ID',
-    `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)',
+    `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu,4:role_has_user,5:scope_has_user)',
     `create_time`   DATETIME    NULL DEFAULT NULL COMMENT '创建时间',
     `create_user`   VARCHAR(32) NULL DEFAULT NULL COMMENT '创建用户',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = '用户角色权限关系表';
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 2000 COMMENT = '用户角色权限关系表';
