@@ -26,7 +26,7 @@ public class SysUser extends BaseEntity {
     /**
      * 主键id
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 

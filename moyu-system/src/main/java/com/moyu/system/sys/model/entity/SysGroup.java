@@ -25,7 +25,7 @@ public class SysGroup extends BaseEntity implements Serializable {
     /**
      * 主键id
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
