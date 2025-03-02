@@ -224,15 +224,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public void grantMenu(SysRoleParam roleParam) {
-        // 查询指定模块的可授权内容(菜单、按钮、链接)
-        QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<SysMenu>().checkSqlInjection();
-        queryWrapper.lambda().select(SysMenu::getCode)
+        // 查询指定模块的所有可授权内容(菜单、按钮、链接)
+        List<SysMenu> menuList = sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
+                .select(SysMenu::getCode)
                 // 指定模块
                 .eq(SysMenu::getModule, roleParam.getModule())
                 // 指定菜单类型
                 .in(SysMenu::getMenuType, MenuTypeEnum.MENU.getCode(), MenuTypeEnum.BUTTON.getCode(), MenuTypeEnum.LINK.getCode())
-                .eq(SysMenu::getDeleteFlag, 0);
-        List<SysMenu> menuList = sysMenuService.list(queryWrapper);
+                .eq(SysMenu::getDeleteFlag, 0));
         // 本模块的所有权限
         List<String> allMenuCode = menuList.stream().map(SysMenu::getCode).collect(Collectors.toList());
         // 如果本模块无任何可用资源，则不用授权
@@ -249,9 +248,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // TransactionCallbackWithoutResult 有异常则会自动回滚
 
             // 清空角色在本模块的所有权限
-            QueryWrapper<SysRelation> wrapper = new QueryWrapper<SysRelation>().checkSqlInjection();
-            wrapper.lambda().eq(SysRelation::getObjectId, roleParam.getCode()).in(SysRelation::getTargetId, allMenuCode);
-            sysRelationService.remove(wrapper);
+            sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
+                    .eq(SysRelation::getObjectId, roleParam.getCode()).in(SysRelation::getTargetId, allMenuCode));
             // 非空则新加权限
             if (ObjectUtil.isNotEmpty(grantMenuSet)) {
                 List<SysRelation> addList = new ArrayList<>();
