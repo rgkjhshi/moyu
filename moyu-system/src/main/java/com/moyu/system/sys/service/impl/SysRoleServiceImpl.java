@@ -172,7 +172,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 所有的role-menu关系(menu.code->menu)
         Map<String, SysRelation> rmMap = new HashMap<>();
-        sysRelationService.list(new LambdaQueryWrapper<SysRelation>()
+        sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
                         // 指定关系类型
                         .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_MENU.getCode())
                         // 指定哪个role
