@@ -103,11 +103,9 @@ values  (1, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQ
 insert into moyu.sys_relation (id, object_id, target_id, relation_type, create_time, create_user)
 values  (1, '6784d936e1d6502bc7db738d', 'superAdmin', 1, '2025-02-20 16:39:25', null),
         (2, '6784d936e1d6502bc7db738d', 'superadmin', 2, '2025-02-20 16:39:25', null),
-        (3, 'superadmin', '1548901111999770726', 3, '2025-02-20 16:39:25', null),
         (4, 'superadmin', '1548901111999770826', 3, '2025-02-20 16:39:25', null),
         (5, 'superadmin', '1548901111999770926', 3, '2025-02-20 16:39:25', null),
         (6, 'superadmin', '1548901111999771026', 3, '2025-02-20 16:39:25', null),
-        (7, 'superadmin', '1548901111999771126', 3, '2025-02-20 16:39:25', null),
         (8, 'superadmin', '1548901111999771226', 3, '2025-02-20 16:39:25', null),
         (9, 'superadmin', '1548901111999771326', 3, '2025-02-20 16:39:25', null),
         (10, 'superadmin', '1548901111999771426', 3, '2025-02-20 16:39:25', null);
