@@ -301,6 +301,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             entity.setObjectId(roleParam.getCode());
             entity.setTargetId(code);
             entity.setRelationType(RelationTypeEnum.ROLE_HAS_USER.getCode());
+            entity.setCreateTime(new Date());
+            entity.setCreateUser(SecurityUtils.getLoginUser().getUsername());
             addList.add(entity);
         });
         sysRelationService.saveBatch(addList);
