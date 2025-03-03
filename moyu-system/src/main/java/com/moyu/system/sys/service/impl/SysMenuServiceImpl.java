@@ -22,14 +22,18 @@ import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.MenuTypeEnum;
+import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.mapper.SysMenuMapper;
 import com.moyu.system.sys.model.entity.SysMenu;
+import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.service.SysMenuService;
+import com.moyu.system.sys.service.SysRelationService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +47,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
+
+    @Resource
+    private SysRelationService sysRelationService;
 
     @Override
     public List<Tree<String>> tree(SysMenuParam menuParam) {
@@ -158,6 +165,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         UpdateWrapper<SysMenu> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", idSet).set("delete_flag", 1);
         this.update(updateWrapper);
+        // 资源删除时,对应的role_has_menu也要删除
+        clearRoleMenu(idSet);
     }
 
     @Override
@@ -201,6 +210,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         UpdateWrapper<SysMenu> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", idSet).set("delete_flag", 1);
         this.update(updateWrapper);
+        // 资源删除时,对应的role_has_menu也要删除
+        clearRoleMenu(idSet);
     }
 
     @Override
@@ -320,6 +331,25 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 }).collect(Collectors.toList());
         // 构建树
         return TreeUtil.build(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
+    }
+
+    /**
+     * 清除关系表中role_has_menu的指定的menu id的关系
+     *
+     * @param menuIds 指定的menu id集合
+     */
+    private void clearRoleMenu(Set<Long> menuIds) {
+        if (ObjectUtil.isEmpty(menuIds)) {
+            return;
+        }
+        // 查询出来menu对应的code
+        Set<String> codeSet = new HashSet<>();
+        this.list(Wrappers.lambdaQuery(SysMenu.class).select(SysMenu::getCode).in(SysMenu::getId, menuIds))
+                .forEach(e -> codeSet.add(e.getCode()));
+        // 删除指定menuCode 的 ROLE_HAS_MENU
+        sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_MENU)
+                .in(SysRelation::getTargetId, codeSet));
     }
 }
 
