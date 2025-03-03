@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -78,11 +77,11 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public List<Tree<String>> userMenu(String account) {
-        // 用户有权限的菜单code集合(含按钮)
-        Set<String> menuSet = sysRelationService.userMenu(account);
+        // 用户有权限的资源code集合(含按钮)
+        Set<String> permSet = sysRelationService.userMenu(account);
 
         // 查询所有可用的菜单(不含按钮)
-        List<SysMenu> menuList = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
+        List<SysMenu> allMenuList = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
                 // 不能已停用
                 .ne(SysMenu::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮
@@ -92,7 +91,9 @@ public class UserCenterServiceImpl implements UserCenterService {
         );
         // 用户有权限的菜单(不含按钮) + 所有模块、目录
         List<SysMenu> userMenuList = CollectionUtil.newArrayList();
-        menuList.forEach(sysMenu -> {
+        // 仅菜单
+        Set<String> onlyMenuSet = new HashSet<>();
+        allMenuList.forEach(sysMenu -> {
             if (MenuTypeEnum.MODULE.getCode().equals(sysMenu.getMenuType())) {
                 // path为空则设置为随机字符串
                 if (ObjectUtil.isEmpty(sysMenu.getPath())) {
@@ -103,18 +104,23 @@ public class UserCenterServiceImpl implements UserCenterService {
                 userMenuList.add(sysMenu);
             } else {
                 // 菜单，有权限才添加
-                if (menuSet.contains(sysMenu.getCode())) {
+                if (permSet.contains(sysMenu.getCode())) {
                     userMenuList.add(sysMenu);
+                    onlyMenuSet.add(sysMenu.getCode());
                 }
             }
         });
         // 构建菜单路由树结构
         Tree<String> singleTree = buildMenuTree(userMenuList, SysConstants.ROOT_NODE_ID);
-        // 移除空目录
-        removeTreeNodes(singleTree, tree -> {
-            Object menuType = ((Map<?, ?>) tree.get("meta")).get("type");
-            return !tree.hasChild() && (MenuTypeEnum.MODULE.getCode().equals(menuType) || MenuTypeEnum.DIR.getCode().equals(menuType));
+        // 树中需要的节点(准备移除空目录)
+        Set<String> needSet = new HashSet<>();
+        onlyMenuSet.forEach(code -> {
+            Tree<String> node = singleTree.getNode(code);
+            // node及所有父节点均加入集合
+            needSet.addAll(TreeUtil.getParentsId(node, true));
         });
+        // 移除空目录
+        singleTree.filter(node -> needSet.contains(node.getId()));
 
         return singleTree.getChildren();
     }
@@ -178,26 +184,6 @@ public class UserCenterServiceImpl implements UserCenterService {
                 }).collect(Collectors.toList());
         // 构建树
         return TreeUtil.buildSingle(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
-    }
-
-    // 按指定条件移除节点
-
-    /**
-     * 按指定条件移除节点
-     */
-    private static void removeTreeNodes(Tree<String> singleTree, Predicate<Tree<String>> condition) {
-        if (ObjectUtil.isEmpty(singleTree.getChildren())) {
-            return;
-        }
-        List<Tree<String>> removeList = new ArrayList<>();
-        for (Tree<String> child : singleTree.getChildren()) {
-            if (condition.test(child)) {
-                removeList.add(child);
-            } else {
-                removeTreeNodes(child, condition);
-            }
-        }
-        singleTree.getChildren().removeAll(removeList);
     }
 
     /**
