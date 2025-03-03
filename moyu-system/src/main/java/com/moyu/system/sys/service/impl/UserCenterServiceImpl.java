@@ -27,7 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -91,8 +94,6 @@ public class UserCenterServiceImpl implements UserCenterService {
         );
         // 用户有权限的菜单(不含按钮) + 所有模块、目录
         List<SysMenu> userMenuList = CollectionUtil.newArrayList();
-        // 仅菜单
-        Set<String> onlyMenuSet = new HashSet<>();
         allMenuList.forEach(sysMenu -> {
             if (MenuTypeEnum.MODULE.getCode().equals(sysMenu.getMenuType())) {
                 // path为空则设置为随机字符串
@@ -106,22 +107,29 @@ public class UserCenterServiceImpl implements UserCenterService {
                 // 菜单，有权限才添加
                 if (permSet.contains(sysMenu.getCode())) {
                     userMenuList.add(sysMenu);
-                    onlyMenuSet.add(sysMenu.getCode());
                 }
             }
         });
         // 构建菜单路由树结构
         Tree<String> singleTree = buildMenuTree(userMenuList, SysConstants.ROOT_NODE_ID);
-        // 树中需要的节点(准备移除空目录)
-        Set<String> needSet = new HashSet<>();
-        onlyMenuSet.forEach(code -> {
-            Tree<String> node = singleTree.getNode(code);
-            // node及所有父节点均加入集合
-            needSet.addAll(TreeUtil.getParentsId(node, true));
-        });
-        // 移除空目录
-        singleTree.filter(node -> needSet.contains(node.getId()));
 
+        // 移除空目录(只要有符合条件的子节点就保留)
+        singleTree.filter(tree -> {
+            // id=0或parentId=0均不符合要求(排除根和模块)
+            if (SysConstants.ROOT_NODE_ID.equals(tree.getId()) || SysConstants.ROOT_NODE_ID.equals(tree.getParentId())) {
+                return false;
+            }
+            if (ObjectUtil.isNotEmpty(tree.get("meta"))) {
+                Map<String, Object> meta = (Map<String, Object>) tree.get("meta");
+                Integer menuType = (Integer) meta.get("type");
+                // 不是目录
+                boolean notDir = !MenuTypeEnum.DIR.getCode().equals(menuType) && !MenuTypeEnum.MODULE.getCode().equals(menuType);
+                // 有权限的菜单叶子节点才符合要求
+                return notDir && permSet.contains(tree.getId());
+            } else {
+                return false;
+            }
+        });
         return singleTree.getChildren();
     }
 
