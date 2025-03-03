@@ -23,6 +23,7 @@ import com.google.common.collect.Multimap;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.MenuTypeEnum;
 import com.moyu.system.sys.enums.RelationTypeEnum;
@@ -258,6 +259,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     relation.setObjectId(roleParam.getCode());
                     relation.setTargetId(code);
                     relation.setRelationType(RelationTypeEnum.ROLE_HAS_MENU.getCode());
+                    relation.setCreateTime(new Date());
+                    relation.setCreateUser(SecurityUtils.getLoginUser().getUsername());
                     addList.add(relation);
                 });
                 sysRelationService.saveBatch(addList);
