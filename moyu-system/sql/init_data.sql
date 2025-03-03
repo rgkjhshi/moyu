@@ -68,16 +68,16 @@ values  (1, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQ
 
 -- 关系
 insert into moyu.sys_relation (id, object_id, target_id, relation_type, create_time, create_user)
-values  (1, 'superAdmin', 'superAdmin', 4, null, null),
-        (2, 'superAdmin', 'menu_sys_scope', 3, null, null),
-        (3, 'superAdmin', 'menu_sys_org', 3, null, null),
-        (4, 'superAdmin', 'menu_sys_role', 3, null, null),
-        (5, 'superAdmin', 'menu_sys_button', 3, null, null),
-        (6, 'superAdmin', 'menu_sys_user', 3, null, null),
-        (7, 'superAdmin', 'menu_sys_group', 3, null, null),
-        (8, 'superAdmin', 'menu_sys_menu', 3, null, null),
-        (9, 'superAdmin', 'menu_sys_module', 3, null, null),
-        (10, 'superAdmin', 'menu_biz_pos', 3, null, null),
+values  (1, 'roleSuperAdmin', 'superAdmin', 4, null, null),
+        (2, 'roleSuperAdmin', 'menu_sys_scope', 3, null, null),
+        (3, 'roleSuperAdmin', 'menu_sys_org', 3, null, null),
+        (4, 'roleSuperAdmin', 'menu_sys_role', 3, null, null),
+        (5, 'roleSuperAdmin', 'menu_sys_button', 3, null, null),
+        (6, 'roleSuperAdmin', 'menu_sys_user', 3, null, null),
+        (7, 'roleSuperAdmin', 'menu_sys_group', 3, null, null),
+        (8, 'roleSuperAdmin', 'menu_sys_menu', 3, null, null),
+        (9, 'roleSuperAdmin', 'menu_sys_module', 3, null, null),
+        (10, 'roleSuperAdmin', 'menu_biz_pos', 3, null, null),
         (11, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5, null, null),
-        (12, '6784d936e1d6502bc7db738d', 'superAdmin', 2, null, null),
-        (13, '6784d936e1d6502bc7db738d', 'superAdmin', 1, null, null);
+        (12, '6784d936e1d6502bc7db738d', 'superAdmin', 1, null, null),
+        (13, '6784d936e1d6502bc7db738d', 'roleSuperAdmin', 2, null, null);
