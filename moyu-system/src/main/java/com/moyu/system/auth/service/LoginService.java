@@ -38,7 +38,7 @@ public class LoginService {
         String username = param.getAccount();
         String password = param.getPassword();
 
-        // 验证
+        // 认证
         Authentication authentication = null;
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
