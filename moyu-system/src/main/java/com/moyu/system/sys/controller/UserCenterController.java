@@ -5,9 +5,12 @@ import cn.hutool.core.lang.tree.Tree;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.security.util.SecurityUtils;
+import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.vo.UserInfo;
 import com.moyu.system.sys.service.UserCenterService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,7 +45,7 @@ public class UserCenterController {
      * 获取当前登陆用户的菜单
      */
     @RequestMapping("/userMenu")
-    public BaseResponse<List<Tree<String>>> currentUserMenu() {
+    public BaseResponse<List<Tree<String>>> userMenu() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
         return BaseResponse.getSuccessResponse(userCenterService.userMenu(username));
@@ -58,6 +61,16 @@ public class UserCenterController {
         String username = SecurityUtils.getLoginUser().getUsername();
         List<Tree<String>> list = userCenterService.userOrgTree(username);
         return BaseResponse.getSuccessResponse(list);
+    }
+
+    /**
+     * 获取当前用户拥有的角色列表
+     */
+    @RequestMapping("/userRoleList")
+    public BaseResponse<List<SysRole>> userRoleList(@RequestBody SysRoleParam roleParam) {
+        // 当前登陆用户username
+        String username = SecurityUtils.getLoginUser().getUsername();
+        return BaseResponse.getSuccessResponse(userCenterService.userRoleList(username, roleParam.getSearchKey()));
     }
 
 }

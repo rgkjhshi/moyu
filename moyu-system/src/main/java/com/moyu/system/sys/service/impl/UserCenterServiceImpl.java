@@ -14,11 +14,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
-import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.OrgTypeEnum;
+import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.model.entity.SysResource;
+import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
+import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.model.vo.UserInfo;
 import com.moyu.system.sys.service.*;
@@ -78,9 +80,9 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     @Override
-    public List<Tree<String>> userMenu(String account) {
+    public List<Tree<String>> userMenu(String username) {
         // 用户有权限的资源code集合(含按钮)
-        Set<String> permSet = sysRelationService.userMenu(account);
+        Set<String> permSet = sysRelationService.userMenu(username);
 
         // 查询所有可用的菜单(不含按钮)
         List<SysResource> allMenuList = sysResourceService.list(new LambdaQueryWrapper<SysResource>()
@@ -133,19 +135,26 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     @Override
-    public List<Tree<String>> userOrgTree(String account) {
+    public List<Tree<String>> userOrgTree(String username) {
         if (SecurityUtils.isRoot()) {
             return sysOrgService.tree();
         }
         // 获取全部树
         Tree<String> tree = sysOrgService.singleTree();
         // 查询用户信息
-        SysUser user = sysUserService.detail(SysUserParam.builder().account(account).build());
+        SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         // 获取用户所属的最近一级公司组织code
         String orgCode = getUserCompanyCode(tree, user);
         // 获取用户有权限的所有公司
         // 获取公司对应的tree
         return Lists.newArrayList(tree.getNode(orgCode));
+    }
+
+    @Override
+    public List<SysRole> userRoleList(String username, String searchKey) {
+        // 查询用户所有的角色列表
+        Set<String> codeSet = sysRoleService.userAllRoles(username);
+        return sysRoleService.list(SysRoleParam.builder().codeSet(codeSet).searchKey(searchKey).build());
     }
 
     /**
