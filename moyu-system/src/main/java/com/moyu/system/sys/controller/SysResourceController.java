@@ -35,7 +35,7 @@ public class SysResourceController {
     private SysResourceService sysResourceService;
 
     /**
-     * 菜单列表
+     * 资源列表
      */
     @PostMapping("/list")
     public BaseResponse<List<SysResource>> list(@RequestBody SysResourceParam menuParam) {
@@ -44,7 +44,7 @@ public class SysResourceController {
     }
 
     /**
-     * 分页菜单列表
+     * 资源分页列表
      */
     @PostMapping("/page")
     public BaseResponse<PageResult<SysResource>> pageList(@RequestBody SysResourceParam menuParam) {
@@ -54,7 +54,7 @@ public class SysResourceController {
     }
 
     /**
-     * 获取菜单树(可指定module、status)
+     * 获取资源树(可指定module、status)
      */
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
@@ -64,7 +64,7 @@ public class SysResourceController {
     }
 
     /**
-     * 获取菜单详情
+     * 获取资源详情
      */
     @PostMapping("/detail")
     public BaseResponse<SysResource> detail(@RequestBody SysResourceParam menuParam) {
@@ -73,7 +73,7 @@ public class SysResourceController {
     }
 
     /**
-     * 添加菜单
+     * 添加资源
      */
     @PreAuthorize("hasAuthority('sys:menu:add')")
     @PostMapping("/add")
@@ -83,7 +83,7 @@ public class SysResourceController {
     }
 
     /**
-     * 删除菜单
+     * 删除资源
      */
     @PreAuthorize("hasAuthority('sys:menu:delete')")
     @PostMapping("/delete")
@@ -94,7 +94,7 @@ public class SysResourceController {
     }
 
     /**
-     * 删除菜单树,会集联删除
+     * 删除资源树,会集联删除
      */
     @PostMapping("/deleteTree")
     public BaseResponse<String> deleteTree(@RequestBody SysResourceParam menuParam) {
@@ -104,7 +104,7 @@ public class SysResourceController {
     }
 
     /**
-     * 编辑菜单
+     * 编辑资源
      */
     @PostMapping("/edit")
     public BaseResponse<String> edit(@RequestBody SysResourceParam menuParam) {
