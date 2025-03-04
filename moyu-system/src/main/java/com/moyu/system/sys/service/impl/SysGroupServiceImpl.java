@@ -74,7 +74,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     @Override
     public PageResult<SysGroup> pageList(SysGroupParam groupParam) {
         // 数据权限范围
-        Set<String> scopeSet = SecurityUtils.getScopes();
+        Set<String> scopeSet = new HashSet<>();
         // 非ROOT则限制
         if (!SecurityUtils.isRoot()) {
             scopeSet = SecurityUtils.getScopes();

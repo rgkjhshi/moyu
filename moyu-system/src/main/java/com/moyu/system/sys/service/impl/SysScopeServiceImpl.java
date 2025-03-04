@@ -56,7 +56,7 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
     @Override
     public PageResult<SysScope> pageList(SysScopeParam scopeParam) {
         // 数据权限范围
-        Set<String> scopeSet = SecurityUtils.getScopes();
+        Set<String> scopeSet = new HashSet<>();
         // 非ROOT则限制
         if (!SecurityUtils.isRoot()) {
             scopeSet = SecurityUtils.getScopes();

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -71,7 +72,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public PageResult<SysUser> pageList(SysUserParam userParam) {
         // 数据权限范围
-        Set<String> scopeSet = SecurityUtils.getScopes();
+        Set<String> scopeSet = new HashSet<>();
         // 非ROOT则限制
         if (!SecurityUtils.isRoot()) {
             scopeSet = SecurityUtils.getScopes();
