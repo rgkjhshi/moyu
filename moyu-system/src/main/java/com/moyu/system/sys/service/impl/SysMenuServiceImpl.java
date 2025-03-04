@@ -24,7 +24,7 @@ import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
-import com.moyu.system.sys.mapper.SysMenuMapper;
+import com.moyu.system.sys.mapper.SysResourceMapper;
 import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.param.SysMenuParam;
@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * @createDate 2024-12-10 21:05:13
  */
 @Service
-public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysResource> implements SysMenuService {
+public class SysMenuServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysMenuService {
 
     @Resource
     private SysRelationService sysRelationService;
