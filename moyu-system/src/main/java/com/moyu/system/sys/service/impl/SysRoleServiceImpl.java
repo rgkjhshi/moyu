@@ -25,11 +25,11 @@ import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
-import com.moyu.system.sys.enums.MenuTypeEnum;
+import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.mapper.SysRoleMapper;
-import com.moyu.system.sys.model.entity.SysMenu;
+import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
@@ -164,7 +164,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 模块编码
         SysMenuParam query = SysMenuParam.builder().module(roleParam.getModule()).status(StatusEnum.ENABLE.getCode()).build();
         // 查询所有菜单
-        List<SysMenu> menuList = sysMenuService.list(query);
+        List<SysResource> menuList = sysMenuService.list(query);
 
         // 所有的role-menu关系(menu.code->menu)
         Map<String, SysRelation> rmMap = new HashMap<>();
@@ -176,9 +176,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .forEach(e -> rmMap.put(e.getTargetId(), e));
 
         // 过滤出button，转为 parentCode->button 格式的的 multimap
-        Multimap<String, SysMenu> allButtonMap = ArrayListMultimap.create();
+        Multimap<String, SysResource> allButtonMap = ArrayListMultimap.create();
         Multimap<String, String> grantButtonMap = HashMultimap.create();
-        menuList.stream().filter(e -> MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
+        menuList.stream().filter(e -> ResourceTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
                     allButtonMap.put(e.getParentCode(), e);
                     if (rmMap.containsKey(e.getCode())) {
@@ -189,11 +189,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 过滤出menu转为treeNode
         List<TreeNode<String>> nodeList = new ArrayList<>();
         menuList.stream()
-                .filter(e -> !MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
+                .filter(e -> !ResourceTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
                     TreeNode<String> node = new TreeNode<>(e.getCode(), e.getParentCode(), e.getName(), e.getSortNum());
                     Map<String, Object> extMap = new HashMap<>();
-                    if (MenuTypeEnum.MODULE.getCode().equals(e.getMenuType())) {
+                    if (ResourceTypeEnum.MODULE.getCode().equals(e.getMenuType())) {
                         // 模块只放图标
                         extMap.put("icon", e.getIcon());
                     } else {
@@ -221,15 +221,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void grantMenu(SysRoleParam roleParam) {
         // 查询指定模块的所有可授权内容(菜单、按钮、链接)
-        List<SysMenu> menuList = sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
-                .select(SysMenu::getCode)
+        List<SysResource> menuList = sysMenuService.list(Wrappers.lambdaQuery(SysResource.class)
+                .select(SysResource::getCode)
                 // 指定模块
-                .eq(SysMenu::getModule, roleParam.getModule())
+                .eq(SysResource::getModule, roleParam.getModule())
                 // 指定菜单类型
-                .in(SysMenu::getMenuType, MenuTypeEnum.MENU.getCode(), MenuTypeEnum.BUTTON.getCode(), MenuTypeEnum.LINK.getCode())
-                .eq(SysMenu::getDeleteFlag, 0));
+                .in(SysResource::getMenuType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.BUTTON.getCode(), ResourceTypeEnum.LINK.getCode())
+                .eq(SysResource::getDeleteFlag, 0));
         // 本模块的所有权限
-        List<String> allMenuCode = menuList.stream().map(SysMenu::getCode).collect(Collectors.toList());
+        List<String> allMenuCode = menuList.stream().map(SysResource::getCode).collect(Collectors.toList());
         // 如果本模块无任何可用资源，则不用授权
         if (ObjectUtil.isEmpty(allMenuCode)) {
             return;
@@ -361,7 +361,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 全部资源集
         Set<String> menuSet = sysRelationService.roleMenu(roleSet);
         // 获取资源上的权限标识
-        sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class).in(SysMenu::getCode, menuSet)).forEach(e -> {
+        sysMenuService.list(Wrappers.lambdaQuery(SysResource.class).in(SysResource::getCode, menuSet)).forEach(e -> {
             if (ObjectUtil.isNotEmpty(e.getPermission())) {
                 permSet.add(e.getPermission());
             }

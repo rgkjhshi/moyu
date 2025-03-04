@@ -1,7 +1,7 @@
 package com.moyu.system.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.moyu.system.sys.model.entity.SysMenu;
+import com.moyu.system.sys.model.entity.SysResource;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @Entity com.moyu.system.sys.model.entity.SysMenu
  */
 @Mapper
-public interface SysMenuMapper extends BaseMapper<SysMenu> {
+public interface SysMenuMapper extends BaseMapper<SysResource> {
 
 }
 

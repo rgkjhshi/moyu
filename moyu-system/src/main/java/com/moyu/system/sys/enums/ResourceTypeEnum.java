@@ -8,16 +8,16 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * 菜单类型，SysMenu实体中menuType字段对应的取值范围
+ * 菜单类型，SysResource实体中resourceType字段对应的取值范围
  *
  * @author shisong
  * @since 2024-12-11
  */
 @Getter
-public enum MenuTypeEnum {
+public enum ResourceTypeEnum {
 
     /**
-     * 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
+     * 资源类型（字典 1模块 2目录 3菜单 4按钮 5外链）
      */
     INVALID(0, null),
     // 菜单
@@ -34,7 +34,7 @@ public enum MenuTypeEnum {
 
     private final String desc;
 
-    MenuTypeEnum(Integer code, String desc) {
+    ResourceTypeEnum(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -42,7 +42,7 @@ public enum MenuTypeEnum {
     /**
      * 根据枚举的code值获取枚举对象
      */
-    public static MenuTypeEnum getByCode(Integer code) {
-        return Arrays.stream(MenuTypeEnum.values()).filter(e -> Objects.equals(e.getCode(), code)).findFirst().orElse(INVALID);
+    public static ResourceTypeEnum getByCode(Integer code) {
+        return Arrays.stream(ResourceTypeEnum.values()).filter(e -> Objects.equals(e.getCode(), code)).findFirst().orElse(INVALID);
     }
 }

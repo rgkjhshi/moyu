@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.common.mybatis.entity.BaseEntity;
+import com.moyu.system.sys.enums.ResourceTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,9 +18,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName(value = "sys_menu")
+@TableName(value = "sys_resource")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysMenu extends BaseEntity {
+public class SysResource extends BaseEntity {
     /**
      * 主键id
      * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
@@ -46,7 +47,7 @@ public class SysMenu extends BaseEntity {
     /**
      * 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
      *
-     * @see com.moyu.system.sys.enums.MenuTypeEnum
+     * @see ResourceTypeEnum
      */
     private Integer menuType;
 

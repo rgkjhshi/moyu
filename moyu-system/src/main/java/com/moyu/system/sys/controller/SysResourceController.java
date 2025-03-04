@@ -7,7 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
-import com.moyu.system.sys.model.entity.SysMenu;
+import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.service.SysMenuService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,8 +38,8 @@ public class SysResourceController {
      * 菜单列表
      */
     @PostMapping("/list")
-    public BaseResponse<List<SysMenu>> list(@RequestBody SysMenuParam menuParam) {
-        List<SysMenu> list = sysMenuService.list(menuParam);
+    public BaseResponse<List<SysResource>> list(@RequestBody SysMenuParam menuParam) {
+        List<SysResource> list = sysMenuService.list(menuParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -47,9 +47,9 @@ public class SysResourceController {
      * 分页菜单列表
      */
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysMenu>> pageList(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<PageResult<SysResource>> pageList(@RequestBody SysMenuParam menuParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(menuParam.getPageNum(), menuParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageResult<SysMenu> list = sysMenuService.pageList(menuParam);
+        PageResult<SysResource> list = sysMenuService.pageList(menuParam);
         return BaseResponse.getSuccessResponse(list);
     }
 
@@ -67,7 +67,7 @@ public class SysResourceController {
      * 获取菜单详情
      */
     @PostMapping("/detail")
-    public BaseResponse<SysMenu> detail(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<SysResource> detail(@RequestBody SysMenuParam menuParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(menuParam.getId(), menuParam.getCode()), "id和code不能同时为空");
         return BaseResponse.getSuccessResponse(sysMenuService.detail(menuParam));
     }

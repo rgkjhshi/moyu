@@ -3,7 +3,7 @@ package com.moyu.system.sys.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.common.model.PageResult;
-import com.moyu.system.sys.model.entity.SysMenu;
+import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.param.SysMenuParam;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @description 针对表【sys_menu(菜单权限表)】的数据库操作Service
  * @createDate 2024-12-10 21:05:13
  */
-public interface SysMenuService extends IService<SysMenu> {
+public interface SysMenuService extends IService<SysResource> {
 
     /**
      * 菜单树,包含按钮(借助hutool的树结构)
@@ -26,17 +26,17 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 获取菜单列表
      */
-    List<SysMenu> list(SysMenuParam menuParam);
+    List<SysResource> list(SysMenuParam menuParam);
 
     /**
      * 分页获取菜单列表
      */
-    PageResult<SysMenu> pageList(SysMenuParam menuParam);
+    PageResult<SysResource> pageList(SysMenuParam menuParam);
 
     /**
      * 获取菜单详情
      */
-    SysMenu detail(SysMenuParam menuParam);
+    SysResource detail(SysMenuParam menuParam);
 
     /**
      * 添加菜单

@@ -14,10 +14,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
-import com.moyu.system.sys.enums.MenuTypeEnum;
+import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.OrgTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
-import com.moyu.system.sys.model.entity.SysMenu;
+import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.model.vo.UserInfo;
@@ -83,24 +83,24 @@ public class UserCenterServiceImpl implements UserCenterService {
         Set<String> permSet = sysRelationService.userMenu(account);
 
         // 查询所有可用的菜单(不含按钮)
-        List<SysMenu> allMenuList = sysMenuService.list(new LambdaQueryWrapper<SysMenu>()
+        List<SysResource> allMenuList = sysMenuService.list(new LambdaQueryWrapper<SysResource>()
                 // 不能已停用
-                .ne(SysMenu::getStatus, StatusEnum.DISABLE.getCode())
+                .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮
-                .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
-                .eq(SysMenu::getDeleteFlag, 0)
-                .orderByAsc(SysMenu::getSortNum)
+                .ne(SysResource::getMenuType, ResourceTypeEnum.BUTTON.getCode())
+                .eq(SysResource::getDeleteFlag, 0)
+                .orderByAsc(SysResource::getSortNum)
         );
         // 用户有权限的菜单(不含按钮) + 所有模块、目录
-        List<SysMenu> userMenuList = CollectionUtil.newArrayList();
+        List<SysResource> userMenuList = CollectionUtil.newArrayList();
         allMenuList.forEach(sysMenu -> {
-            if (MenuTypeEnum.MODULE.getCode().equals(sysMenu.getMenuType())) {
+            if (ResourceTypeEnum.MODULE.getCode().equals(sysMenu.getMenuType())) {
                 // path为空则设置为随机字符串
                 if (ObjectUtil.isEmpty(sysMenu.getPath())) {
                     sysMenu.setPath(StrUtil.SLASH + RandomUtil.randomString(10));
                 }
                 userMenuList.add(sysMenu);
-            } else if (MenuTypeEnum.DIR.getCode().equals(sysMenu.getMenuType())) {
+            } else if (ResourceTypeEnum.DIR.getCode().equals(sysMenu.getMenuType())) {
                 userMenuList.add(sysMenu);
             } else {
                 // 菜单，有权限才添加
@@ -122,7 +122,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                 Map<String, Object> meta = (Map<String, Object>) tree.get("meta");
                 Integer menuType = (Integer) meta.get("type");
                 // 不是目录
-                boolean notDir = !MenuTypeEnum.DIR.getCode().equals(menuType) && !MenuTypeEnum.MODULE.getCode().equals(menuType);
+                boolean notDir = !ResourceTypeEnum.DIR.getCode().equals(menuType) && !ResourceTypeEnum.MODULE.getCode().equals(menuType);
                 // 有权限的菜单叶子节点才符合要求
                 return notDir && permSet.contains(tree.getId());
             } else {
@@ -155,7 +155,7 @@ public class UserCenterServiceImpl implements UserCenterService {
      * @param rootId   指定的根节点(从树中查找此rootId)
      * @return 返回以rootId为根的树，可能是子树或多棵树
      */
-    private Tree<String> buildMenuTree(List<SysMenu> menuList, String rootId) {
+    private Tree<String> buildMenuTree(List<SysResource> menuList, String rootId) {
         // 配置TreeNode使用指定的字段名
         TreeNodeConfig nodeConfig = new TreeNodeConfig();
         nodeConfig.setIdKey("code");
@@ -168,9 +168,9 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
-                    if (MenuTypeEnum.DIR.getCode().equals(menu.getMenuType())) {
+                    if (ResourceTypeEnum.DIR.getCode().equals(menu.getMenuType())) {
                         extra.put("redirect", menu.getLink());
-                    } else if (MenuTypeEnum.MODULE.getCode().equals(menu.getMenuType())) {
+                    } else if (ResourceTypeEnum.MODULE.getCode().equals(menu.getMenuType())) {
                         extra.put("redirect", menu.getLink());
                     }
                     Map<String, Object> meta = new HashMap<>();
@@ -182,7 +182,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                         meta.put("hidden", true);
                     }
                     // 如果是超链接，设置url
-                    if (MenuTypeEnum.LINK.getCode().equals(menu.getMenuType())) {
+                    if (ResourceTypeEnum.LINK.getCode().equals(menu.getMenuType())) {
                         meta.put("url", menu.getPath());
                     }
                     extra.put("meta", meta);
