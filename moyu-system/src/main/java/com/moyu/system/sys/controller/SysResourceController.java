@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/sys/menu")
+@RequestMapping("/api/sys/resource")
 public class SysResourceController {
 
 
