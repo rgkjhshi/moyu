@@ -120,7 +120,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             }
             if (ObjectUtil.isNotEmpty(tree.get("meta"))) {
                 Map<String, Object> meta = (Map<String, Object>) tree.get("meta");
-                Integer menuType = (Integer) meta.get("type");
+                Integer menuType = (Integer) meta.get("menuType");
                 // 不是目录
                 boolean notDir = !ResourceTypeEnum.DIR.getCode().equals(menuType) && !ResourceTypeEnum.MODULE.getCode().equals(menuType);
                 // 有权限的菜单叶子节点才符合要求
@@ -176,7 +176,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> meta = new HashMap<>();
                     meta.put("icon", menu.getIcon());
                     meta.put("title", menu.getName());
-                    meta.put("type", menu.getResourceType());
+                    meta.put("menuType", menu.getResourceType());
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
                         meta.put("hidden", true);

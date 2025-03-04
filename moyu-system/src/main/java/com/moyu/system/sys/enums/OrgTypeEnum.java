@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * 菜单类型，SysMenu实体中menuType字段对应的取值范围
+ * 组织机构类型，SysOrg实体中orgType字段对应的取值范围
  *
  * @author shisong
  * @since 2024-12-11
