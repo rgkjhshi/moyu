@@ -21,15 +21,15 @@ import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.constant.SysConstants;
-import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.RelationTypeEnum;
+import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.mapper.SysResourceMapper;
-import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysRelation;
+import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.param.SysResourceParam;
-import com.moyu.system.sys.service.SysResourceService;
 import com.moyu.system.sys.service.SysRelationService;
+import com.moyu.system.sys.service.SysResourceService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -173,7 +173,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     public void deleteTree(SysResourceParam resourceParam) {
         // 要集联删除，子节点也要全部删除
         QueryWrapper<SysResource> queryWrapper = new QueryWrapper<SysResource>().checkSqlInjection();
-        // 查询所有的菜单(包括目录、按钮等)
+        // 查询所有的资源(包括目录、按钮等)
         queryWrapper.lambda()
                 // 查询部分字段
                 .select(SysResource::getId, SysResource::getCode, SysResource::getParentCode)
@@ -181,13 +181,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .eq(ObjectUtil.isNotEmpty(resourceParam.getModule()), SysResource::getModule, resourceParam.getModule())
                 .eq(SysResource::getDeleteFlag, 0);
         // 所有的菜单
-        List<SysResource> menuList = this.list(queryWrapper);
+        List<SysResource> resourceList = this.list(queryWrapper);
         // 待删除节点的code集合
         Set<String> codeSet = resourceParam.getCodes();
 
         // 待删除的id集合(先把指定节点加入集合)
-        Set<Long> idSet = menuList.stream()
-                .filter(menu -> codeSet.contains(menu.getCode()))
+        Set<Long> idSet = resourceList.stream()
+                .filter(e -> codeSet.contains(e.getCode()))
                 .map(SysResource::getId)
                 .collect(Collectors.toSet());
         if (CollectionUtils.isEmpty(idSet)) {
@@ -196,10 +196,10 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // 循环查找子节点,并加入到待删除集合
         while (!CollectionUtils.isEmpty(codeSet)) {
             Set<String> childrenSet = new HashSet<>();
-            menuList.forEach(menu -> {
-                if (codeSet.contains(menu.getParentCode())) {
-                    childrenSet.add(menu.getCode());
-                    idSet.add(menu.getId());
+            resourceList.forEach(e -> {
+                if (codeSet.contains(e.getParentCode())) {
+                    childrenSet.add(e.getCode());
+                    idSet.add(e.getId());
                 }
             });
             // 子节点将变为新的父节点
