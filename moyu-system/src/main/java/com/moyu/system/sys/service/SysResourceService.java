@@ -10,10 +10,10 @@ import java.util.List;
 
 /**
  * @author shisong
- * @description 针对表【sys_menu(菜单权限表)】的数据库操作Service
+ * @description 针对表【sys_resource(资源权限表)】的数据库操作Service
  * @createDate 2024-12-10 21:05:13
  */
-public interface SysMenuService extends IService<SysResource> {
+public interface SysResourceService extends IService<SysResource> {
 
     /**
      * 菜单树,包含按钮(借助hutool的树结构)

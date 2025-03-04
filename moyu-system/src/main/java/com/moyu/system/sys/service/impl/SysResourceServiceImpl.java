@@ -28,7 +28,7 @@ import com.moyu.system.sys.mapper.SysResourceMapper;
 import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysRelation;
 import com.moyu.system.sys.model.param.SysMenuParam;
-import com.moyu.system.sys.service.SysMenuService;
+import com.moyu.system.sys.service.SysResourceService;
 import com.moyu.system.sys.service.SysRelationService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * @createDate 2024-12-10 21:05:13
  */
 @Service
-public class SysMenuServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysMenuService {
+public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService {
 
     @Resource
     private SysRelationService sysRelationService;

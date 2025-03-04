@@ -37,7 +37,7 @@ import com.moyu.system.sys.model.param.SysMenuParam;
 import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.param.SysUserParam;
-import com.moyu.system.sys.service.SysMenuService;
+import com.moyu.system.sys.service.SysResourceService;
 import com.moyu.system.sys.service.SysRelationService;
 import com.moyu.system.sys.service.SysRoleService;
 import com.moyu.system.sys.service.SysUserService;
@@ -65,7 +65,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRelationService sysRelationService;
 
     @Resource
-    private SysMenuService sysMenuService;
+    private SysResourceService sysResourceService;
 
     @Resource
     private SysUserService sysUserService;
@@ -164,7 +164,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 模块编码
         SysMenuParam query = SysMenuParam.builder().module(roleParam.getModule()).status(StatusEnum.ENABLE.getCode()).build();
         // 查询所有菜单
-        List<SysResource> menuList = sysMenuService.list(query);
+        List<SysResource> menuList = sysResourceService.list(query);
 
         // 所有的role-menu关系(menu.code->menu)
         Map<String, SysRelation> rmMap = new HashMap<>();
@@ -221,7 +221,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void grantMenu(SysRoleParam roleParam) {
         // 查询指定模块的所有可授权内容(菜单、按钮、链接)
-        List<SysResource> menuList = sysMenuService.list(Wrappers.lambdaQuery(SysResource.class)
+        List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
                 .select(SysResource::getCode)
                 // 指定模块
                 .eq(SysResource::getModule, roleParam.getModule())
@@ -361,7 +361,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 全部资源集
         Set<String> menuSet = sysRelationService.roleMenu(roleSet);
         // 获取资源上的权限标识
-        sysMenuService.list(Wrappers.lambdaQuery(SysResource.class).in(SysResource::getCode, menuSet)).forEach(e -> {
+        sysResourceService.list(Wrappers.lambdaQuery(SysResource.class).in(SysResource::getCode, menuSet)).forEach(e -> {
             if (ObjectUtil.isNotEmpty(e.getPermission())) {
                 permSet.add(e.getPermission());
             }

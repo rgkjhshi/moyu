@@ -44,7 +44,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     private SysUserService sysUserService;
 
     @Resource
-    private SysMenuService sysMenuService;
+    private SysResourceService sysResourceService;
 
     @Resource
     private SysOrgService sysOrgService;
@@ -83,7 +83,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         Set<String> permSet = sysRelationService.userMenu(account);
 
         // 查询所有可用的菜单(不含按钮)
-        List<SysResource> allMenuList = sysMenuService.list(new LambdaQueryWrapper<SysResource>()
+        List<SysResource> allMenuList = sysResourceService.list(new LambdaQueryWrapper<SysResource>()
                 // 不能已停用
                 .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮

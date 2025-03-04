@@ -40,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private SysRelationService sysRelationService;
 
     @Resource
-    private SysMenuService sysMenuService;
+    private SysResourceService sysResourceService;
 
     /**
      * SpringSecurity权限认证时(AuthenticationProvider#authenticate)会调用此方法
