@@ -145,37 +145,36 @@ create table sys_role
   AUTO_INCREMENT = 100 COMMENT = '角色信息表';
 
 -- 5. 菜单权限表
-drop table if exists sys_menu;
-create table sys_menu
+drop table if exists sys_resource;
+create table sys_resource
 (
-    `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `parent_code` VARCHAR(64)  NULL DEFAULT '0' COMMENT '父编码',
+    `id`            BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `parent_code`   VARCHAR(64)  NULL DEFAULT '0' COMMENT '父编码',
+    `name`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
+    `code`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
+    `resource_type` TINYINT(5)   NULL DEFAULT NULL COMMENT '资源类型（字典 1模块 2目录 3菜单 4按钮 5外链）',
+    `path`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '路由地址',
+    `component`     VARCHAR(64)  NULL DEFAULT NULL COMMENT '组件地址',
+    `icon`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '图标',
+    `permission`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '权限标识',
+    `visible`       TINYINT(5)   NULL DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
+    `link`          VARCHAR(255) NULL DEFAULT NULL COMMENT '链接地址',
+    `module`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '归属模块',
 
-    `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
-    `menu_type`   TINYINT(5)   NULL DEFAULT NULL COMMENT '菜单类别（字典 1模块 2目录 3菜单 4按钮 5外链）',
-    `path`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '路由地址',
-    `component`   VARCHAR(64)  NULL DEFAULT NULL COMMENT '组件地址',
-    `icon`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '图标',
-    `permission`  VARCHAR(64)  NULL DEFAULT NULL COMMENT '权限标识',
-    `visible`     TINYINT(5)   NULL DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
-    `link`        VARCHAR(255) NULL DEFAULT NULL COMMENT '链接地址',
-    `module`      VARCHAR(64)  NULL DEFAULT NULL COMMENT '归属模块',
-
-    `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
-    `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
-    `remark`      VARCHAR(200) NULL DEFAULT NULL comment '备注',
-    `delete_flag` TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
-    `create_time` DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建用户',
-    `update_time` DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改用户',
+    `sort_num`      INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
+    `status`        TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `ext_json`      LONGTEXT     NULL COMMENT '扩展信息',
+    `remark`        VARCHAR(200) NULL DEFAULT NULL comment '备注',
+    `delete_flag`   TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `create_time`   DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
+    `create_user`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建用户',
+    `update_time`   DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
+    `update_user`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改用户',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  AUTO_INCREMENT = 2000 COMMENT = '菜单权限表';
+  AUTO_INCREMENT = 2000 COMMENT = '资源权限表';
 
 -- 6. 用户角色权限关系表
 DROP TABLE IF EXISTS `sys_relation`;
@@ -184,7 +183,7 @@ CREATE TABLE `sys_relation`
     `id`            BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `object_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '对象ID',
     `target_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '目标ID',
-    `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu,4:role_has_user,5:scope_has_user)',
+    `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_resource,4:role_has_user,5:scope_has_user)',
     `create_time`   DATETIME    NULL DEFAULT NULL COMMENT '创建时间',
     `create_user`   VARCHAR(32) NULL DEFAULT NULL COMMENT '创建用户',
     PRIMARY KEY (`id`)
