@@ -42,16 +42,6 @@ public class SysRole extends BaseEntity {
     private String code;
 
     /**
-     * 归属模块
-     */
-    private String module;
-
-    /**
-     * 数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）
-     */
-    private Integer dataScope;
-
-    /**
      * 排序顺序
      */
     private Integer sortNum;

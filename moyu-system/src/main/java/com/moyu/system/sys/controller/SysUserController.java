@@ -8,7 +8,6 @@ import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
-import com.moyu.system.sys.service.SysGroupService;
 import com.moyu.system.sys.service.SysUserService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +27,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/api/sys/user")
 public class SysUserController {
-
-    @Resource
-    private SysGroupService sysGroupService;
 
     @Resource
     private SysUserService sysUserService;

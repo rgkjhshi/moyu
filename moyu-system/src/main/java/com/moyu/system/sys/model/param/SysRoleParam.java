@@ -39,6 +39,11 @@ public class SysRoleParam extends BasePageParam {
     private Set<String> grantMenuList;
 
     /**
+     * 指定模块
+     */
+    private String module;
+
+    /**
      * 名称关键词
      */
     private String searchKey;
@@ -59,11 +64,6 @@ public class SysRoleParam extends BasePageParam {
      * 编码
      */
     private String code;
-
-    /**
-     * 归属模块
-     */
-    private String module;
 
     /**
      * 排序顺序

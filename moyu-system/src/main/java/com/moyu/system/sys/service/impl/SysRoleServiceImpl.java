@@ -79,8 +79,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .like(StrUtil.isNotBlank(roleParam.getSearchKey()), SysRole::getName, roleParam.getSearchKey())
                 // 指定code集合
                 .in(ObjectUtil.isNotEmpty(roleParam.getCodeSet()), SysRole::getCode, roleParam.getCodeSet())
-                // 指定模块
-                .eq(ObjectUtil.isNotEmpty(roleParam.getModule()), SysRole::getModule, roleParam.getModule())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(roleParam.getStatus()), SysRole::getStatus, roleParam.getStatus())
                 .eq(SysRole::getDeleteFlag, 0)
@@ -92,13 +90,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public PageResult<SysRole> pageList(SysRoleParam roleParam) {
-        QueryWrapper<SysRole> queryWrapper = new QueryWrapper<SysRole>().checkSqlInjection();
         // 查询条件
-        queryWrapper.lambda()
+        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(roleParam.getSearchKey()), SysRole::getName, roleParam.getSearchKey())
-                // 指定模块
-                .eq(ObjectUtil.isNotEmpty(roleParam.getModule()), SysRole::getModule, roleParam.getModule())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(roleParam.getStatus()), SysRole::getStatus, roleParam.getStatus())
                 .eq(SysRole::getDeleteFlag, 0)

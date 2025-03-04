@@ -128,8 +128,6 @@ create table sys_role
     `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
-    `module`      VARCHAR(64)  NULL DEFAULT NULL COMMENT '归属模块',
-    `data_scope`  TINYINT(5)   NULL DEFAULT 0 comment '数据范围（0全部数据权限 1自定数据权限 2本部门数据权限 3本部门及以下数据权限）',
 
     `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
