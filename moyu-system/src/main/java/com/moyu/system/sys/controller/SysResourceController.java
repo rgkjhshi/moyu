@@ -116,7 +116,7 @@ public class SysResourceController {
     /**
      * 获取菜单树选择器
      */
-    @PostMapping("/treeSelector")
+    @PostMapping("/menuTreeSelector")
     public BaseResponse<List<Tree<String>>> menuTreeSelector(@RequestBody SysMenuParam menuParam) {
         return BaseResponse.getSuccessResponse(sysMenuService.menuTreeSelector(menuParam));
     }
