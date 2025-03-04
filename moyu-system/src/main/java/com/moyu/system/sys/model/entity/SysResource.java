@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.common.mybatis.entity.BaseEntity;
-import com.moyu.system.sys.enums.ResourceTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -47,7 +46,7 @@ public class SysResource extends BaseEntity {
     /**
      * 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
      *
-     * @see ResourceTypeEnum
+     * @see com.moyu.system.sys.enums.ResourceTypeEnum
      */
     private Integer menuType;
 
