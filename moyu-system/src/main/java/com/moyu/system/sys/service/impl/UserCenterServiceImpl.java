@@ -87,20 +87,20 @@ public class UserCenterServiceImpl implements UserCenterService {
                 // 不能已停用
                 .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮
-                .ne(SysResource::getMenuType, ResourceTypeEnum.BUTTON.getCode())
+                .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
                 .eq(SysResource::getDeleteFlag, 0)
                 .orderByAsc(SysResource::getSortNum)
         );
         // 用户有权限的菜单(不含按钮) + 所有模块、目录
         List<SysResource> userMenuList = CollectionUtil.newArrayList();
         allMenuList.forEach(sysMenu -> {
-            if (ResourceTypeEnum.MODULE.getCode().equals(sysMenu.getMenuType())) {
+            if (ResourceTypeEnum.MODULE.getCode().equals(sysMenu.getResourceType())) {
                 // path为空则设置为随机字符串
                 if (ObjectUtil.isEmpty(sysMenu.getPath())) {
                     sysMenu.setPath(StrUtil.SLASH + RandomUtil.randomString(10));
                 }
                 userMenuList.add(sysMenu);
-            } else if (ResourceTypeEnum.DIR.getCode().equals(sysMenu.getMenuType())) {
+            } else if (ResourceTypeEnum.DIR.getCode().equals(sysMenu.getResourceType())) {
                 userMenuList.add(sysMenu);
             } else {
                 // 菜单，有权限才添加
@@ -168,21 +168,21 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
-                    if (ResourceTypeEnum.DIR.getCode().equals(menu.getMenuType())) {
+                    if (ResourceTypeEnum.DIR.getCode().equals(menu.getResourceType())) {
                         extra.put("redirect", menu.getLink());
-                    } else if (ResourceTypeEnum.MODULE.getCode().equals(menu.getMenuType())) {
+                    } else if (ResourceTypeEnum.MODULE.getCode().equals(menu.getResourceType())) {
                         extra.put("redirect", menu.getLink());
                     }
                     Map<String, Object> meta = new HashMap<>();
                     meta.put("icon", menu.getIcon());
                     meta.put("title", menu.getName());
-                    meta.put("type", menu.getMenuType());
+                    meta.put("type", menu.getResourceType());
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
                         meta.put("hidden", true);
                     }
                     // 如果是超链接，设置url
-                    if (ResourceTypeEnum.LINK.getCode().equals(menu.getMenuType())) {
+                    if (ResourceTypeEnum.LINK.getCode().equals(menu.getResourceType())) {
                         meta.put("url", menu.getPath());
                     }
                     extra.put("meta", meta);

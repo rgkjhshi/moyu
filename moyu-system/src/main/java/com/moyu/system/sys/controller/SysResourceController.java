@@ -8,7 +8,7 @@ import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysResource;
-import com.moyu.system.sys.model.param.SysMenuParam;
+import com.moyu.system.sys.model.param.SysResourceParam;
 import com.moyu.system.sys.service.SysResourceService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +38,7 @@ public class SysResourceController {
      * 菜单列表
      */
     @PostMapping("/list")
-    public BaseResponse<List<SysResource>> list(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<List<SysResource>> list(@RequestBody SysResourceParam menuParam) {
         List<SysResource> list = sysResourceService.list(menuParam);
         return BaseResponse.getSuccessResponse(list);
     }
@@ -47,7 +47,7 @@ public class SysResourceController {
      * 分页菜单列表
      */
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysResource>> pageList(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<PageResult<SysResource>> pageList(@RequestBody SysResourceParam menuParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(menuParam.getPageNum(), menuParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageResult<SysResource> list = sysResourceService.pageList(menuParam);
         return BaseResponse.getSuccessResponse(list);
@@ -58,7 +58,7 @@ public class SysResourceController {
      */
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
-    public BaseResponse<List<Tree<String>>> tree(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<List<Tree<String>>> tree(@RequestBody SysResourceParam menuParam) {
         List<Tree<String>> treeList = sysResourceService.tree(menuParam);
         return BaseResponse.getSuccessResponse(treeList);
     }
@@ -67,7 +67,7 @@ public class SysResourceController {
      * 获取菜单详情
      */
     @PostMapping("/detail")
-    public BaseResponse<SysResource> detail(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<SysResource> detail(@RequestBody SysResourceParam menuParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(menuParam.getId(), menuParam.getCode()), "id和code不能同时为空");
         return BaseResponse.getSuccessResponse(sysResourceService.detail(menuParam));
     }
@@ -77,7 +77,7 @@ public class SysResourceController {
      */
     @PreAuthorize("hasAuthority('sys:menu:add')")
     @PostMapping("/add")
-    public BaseResponse<String> add(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<String> add(@RequestBody SysResourceParam menuParam) {
         sysResourceService.add(menuParam);
         return BaseResponse.getSuccessResponse();
     }
@@ -87,7 +87,7 @@ public class SysResourceController {
      */
     @PreAuthorize("hasAuthority('sys:menu:delete')")
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<String> delete(@RequestBody SysResourceParam menuParam) {
         Assert.notEmpty(menuParam.getIds(), "删除列表ids不能为空");
         sysResourceService.deleteByIds(menuParam);
         return BaseResponse.getSuccessResponse();
@@ -97,7 +97,7 @@ public class SysResourceController {
      * 删除菜单树,会集联删除
      */
     @PostMapping("/deleteTree")
-    public BaseResponse<String> deleteTree(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<String> deleteTree(@RequestBody SysResourceParam menuParam) {
         Assert.notEmpty(menuParam.getCodes(), "删除列表codes不能为空");
         sysResourceService.deleteTree(menuParam);
         return BaseResponse.getSuccessResponse();
@@ -107,7 +107,7 @@ public class SysResourceController {
      * 编辑菜单
      */
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<String> edit(@RequestBody SysResourceParam menuParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(menuParam.getId(), menuParam.getCode()), "id和code不能同时为空");
         sysResourceService.edit(menuParam);
         return BaseResponse.getSuccessResponse();
@@ -117,7 +117,7 @@ public class SysResourceController {
      * 获取菜单树选择器
      */
     @PostMapping("/menuTreeSelector")
-    public BaseResponse<List<Tree<String>>> menuTreeSelector(@RequestBody SysMenuParam menuParam) {
+    public BaseResponse<List<Tree<String>>> menuTreeSelector(@RequestBody SysResourceParam menuParam) {
         return BaseResponse.getSuccessResponse(sysResourceService.menuTreeSelector(menuParam));
     }
 

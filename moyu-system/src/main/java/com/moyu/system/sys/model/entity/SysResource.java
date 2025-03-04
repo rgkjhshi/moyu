@@ -48,7 +48,7 @@ public class SysResource extends BaseEntity {
      *
      * @see com.moyu.system.sys.enums.ResourceTypeEnum
      */
-    private Integer menuType;
+    private Integer resourceType;
 
     /**
      * 路由地址

@@ -4,7 +4,7 @@ import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysResource;
-import com.moyu.system.sys.model.param.SysMenuParam;
+import com.moyu.system.sys.model.param.SysResourceParam;
 
 import java.util.List;
 
@@ -21,48 +21,48 @@ public interface SysResourceService extends IService<SysResource> {
      * @param menuParam 查询条件(可指定module、status)
      * @return 菜单树List集合
      */
-    List<Tree<String>> tree(SysMenuParam menuParam);
+    List<Tree<String>> tree(SysResourceParam menuParam);
 
     /**
      * 获取菜单列表
      */
-    List<SysResource> list(SysMenuParam menuParam);
+    List<SysResource> list(SysResourceParam menuParam);
 
     /**
      * 分页获取菜单列表
      */
-    PageResult<SysResource> pageList(SysMenuParam menuParam);
+    PageResult<SysResource> pageList(SysResourceParam menuParam);
 
     /**
      * 获取菜单详情
      */
-    SysResource detail(SysMenuParam menuParam);
+    SysResource detail(SysResourceParam menuParam);
 
     /**
      * 添加菜单
      */
-    void add(SysMenuParam menuParam);
+    void add(SysResourceParam menuParam);
 
     /**
      * 通过ids删除，且不会集联删除
      */
-    void deleteByIds(SysMenuParam menuParam);
+    void deleteByIds(SysResourceParam menuParam);
 
     /**
      * 通过codes删除，会集联删除树的所有节点
      */
-    void deleteTree(SysMenuParam menuParam);
+    void deleteTree(SysResourceParam menuParam);
 
     /**
      * 修改菜单
      */
-    void edit(SysMenuParam menuParam);
+    void edit(SysResourceParam menuParam);
 
     /**
      * 获取菜单树选择器(字段少，不包含按钮)
      *
      * @param menuParam 可指定module
      */
-    List<Tree<String>> menuTreeSelector(SysMenuParam menuParam);
+    List<Tree<String>> menuTreeSelector(SysResourceParam menuParam);
 
 }

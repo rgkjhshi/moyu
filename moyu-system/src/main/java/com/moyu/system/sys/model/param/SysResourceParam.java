@@ -2,7 +2,6 @@ package com.moyu.system.sys.model.param;
 
 
 import com.moyu.common.model.BasePageParam;
-import com.moyu.system.sys.enums.ResourceTypeEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +23,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Builder
-public class SysMenuParam extends BasePageParam {
+public class SysResourceParam extends BasePageParam {
     //********** 额外字段 **********//
     /**
      * 待删除的code列表，通常会集联删除
@@ -69,14 +68,14 @@ public class SysMenuParam extends BasePageParam {
     private String code;
 
     /**
-     * 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
+     * 资源类型（字典 1模块 2目录 3菜单 4按钮 5外链）
      *
-     * @see ResourceTypeEnum
+     * @see com.moyu.system.sys.enums.ResourceTypeEnum
      */
-    @NotNull(message = "菜单类型menuType不能为空")
-    @Min(value = 1, message = "菜单类型menuType有效取值范围为[1,5]")
-    @Max(value = 5, message = "菜单类型menuType有效取值范围为[1,5]")
-    private Integer menuType;
+    @NotNull(message = "菜单类型resourceType不能为空")
+    @Min(value = 1, message = "资源类型resourceType有效取值范围为[1,5]")
+    @Max(value = 5, message = "资源类型resourceType有效取值范围为[1,5]")
+    private Integer resourceType;
 
     /**
      * 路由地址
