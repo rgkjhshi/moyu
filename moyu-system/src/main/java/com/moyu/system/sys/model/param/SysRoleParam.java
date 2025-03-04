@@ -34,7 +34,7 @@ public class SysRoleParam extends BasePageParam {
      */
     private String orgCode;
     /**
-     * 角色授权时的菜单code列表
+     * 角色授权时的资源code列表(按钮也在里面)
      */
     private Set<String> grantMenuList;
 

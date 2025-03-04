@@ -18,51 +18,51 @@ public interface SysResourceService extends IService<SysResource> {
     /**
      * 菜单树,包含按钮(借助hutool的树结构)
      *
-     * @param menuParam 查询条件(可指定module、status)
+     * @param resourceParam 查询条件(可指定module、status)
      * @return 菜单树List集合
      */
-    List<Tree<String>> tree(SysResourceParam menuParam);
+    List<Tree<String>> tree(SysResourceParam resourceParam);
 
     /**
      * 获取菜单列表
      */
-    List<SysResource> list(SysResourceParam menuParam);
+    List<SysResource> list(SysResourceParam resourceParam);
 
     /**
      * 分页获取菜单列表
      */
-    PageResult<SysResource> pageList(SysResourceParam menuParam);
+    PageResult<SysResource> pageList(SysResourceParam resourceParam);
 
     /**
      * 获取菜单详情
      */
-    SysResource detail(SysResourceParam menuParam);
+    SysResource detail(SysResourceParam resourceParam);
 
     /**
      * 添加菜单
      */
-    void add(SysResourceParam menuParam);
+    void add(SysResourceParam resourceParam);
 
     /**
      * 通过ids删除，且不会集联删除
      */
-    void deleteByIds(SysResourceParam menuParam);
+    void deleteByIds(SysResourceParam resourceParam);
 
     /**
      * 通过codes删除，会集联删除树的所有节点
      */
-    void deleteTree(SysResourceParam menuParam);
+    void deleteTree(SysResourceParam resourceParam);
 
     /**
      * 修改菜单
      */
-    void edit(SysResourceParam menuParam);
+    void edit(SysResourceParam resourceParam);
 
     /**
      * 获取菜单树选择器(字段少，不包含按钮)
      *
-     * @param menuParam 可指定module
+     * @param resourceParam 可指定module
      */
-    List<Tree<String>> menuTreeSelector(SysResourceParam menuParam);
+    List<Tree<String>> menuTreeSelector(SysResourceParam resourceParam);
 
 }

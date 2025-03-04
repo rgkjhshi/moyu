@@ -52,64 +52,64 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     private SysRelationService sysRelationService;
 
     @Override
-    public List<Tree<String>> tree(SysResourceParam menuParam) {
+    public List<Tree<String>> tree(SysResourceParam resourceParam) {
         // 查询条件(可指定module、status)
-        SysResourceParam query = SysResourceParam.builder().module(menuParam.getModule()).status(menuParam.getStatus()).build();
-        // 查询所有菜单
-        List<SysResource> menuList = this.list(query);
+        SysResourceParam query = SysResourceParam.builder().module(resourceParam.getModule()).status(resourceParam.getStatus()).build();
+        // 查询所有资源
+        List<SysResource> resourceList = this.list(query);
         // 构建树中包含记录的所有字段
-        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_NODE_ID : menuParam.getModule();
-        return buildTree(menuList, rootId);
+        String rootId = ObjectUtil.isEmpty(resourceParam.getModule()) ? SysConstants.ROOT_NODE_ID : resourceParam.getModule();
+        return buildTree(resourceList, rootId);
     }
 
     @Override
-    public List<SysResource> list(SysResourceParam menuParam) {
+    public List<SysResource> list(SysResourceParam resourceParam) {
         // 查询条件
         LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class)
                 // 关键词搜索
-                .like(StrUtil.isNotBlank(menuParam.getSearchKey()), SysResource::getName, menuParam.getSearchKey())
-                // 指定菜单类型
-                .eq(ObjectUtil.isNotEmpty(menuParam.getResourceType()), SysResource::getResourceType, menuParam.getResourceType())
+                .like(StrUtil.isNotBlank(resourceParam.getSearchKey()), SysResource::getName, resourceParam.getSearchKey())
+                // 指定资源类型
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getResourceType()), SysResource::getResourceType, resourceParam.getResourceType())
                 // 指定模块
-                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysResource::getModule, menuParam.getModule())
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getModule()), SysResource::getModule, resourceParam.getModule())
                 // 指定状态
-                .eq(ObjectUtil.isNotEmpty(menuParam.getStatus()), SysResource::getStatus, menuParam.getStatus())
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getStatus()), SysResource::getStatus, resourceParam.getStatus())
                 .eq(SysResource::getDeleteFlag, 0)
                 .orderByAsc(SysResource::getSortNum);
         // 查询
-        List<SysResource> menuList = this.list(queryWrapper);
-        return menuList;
+        List<SysResource> resourceList = this.list(queryWrapper);
+        return resourceList;
     }
 
     @Override
-    public PageResult<SysResource> pageList(SysResourceParam menuParam) {
+    public PageResult<SysResource> pageList(SysResourceParam resourceParam) {
         QueryWrapper<SysResource> queryWrapper = new QueryWrapper<SysResource>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
                 // 查询部分字段
 //                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
                 // 关键词搜索
-                .like(StrUtil.isNotBlank(menuParam.getSearchKey()), SysResource::getName, menuParam.getSearchKey())
+                .like(StrUtil.isNotBlank(resourceParam.getSearchKey()), SysResource::getName, resourceParam.getSearchKey())
                 // 指定菜单类型
-                .eq(ObjectUtil.isNotEmpty(menuParam.getResourceType()), SysResource::getResourceType, menuParam.getResourceType())
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getResourceType()), SysResource::getResourceType, resourceParam.getResourceType())
                 // 指定模块
-                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysResource::getModule, menuParam.getModule())
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getModule()), SysResource::getModule, resourceParam.getModule())
                 // 指定状态
-                .eq(ObjectUtil.isNotEmpty(menuParam.getStatus()), SysResource::getStatus, menuParam.getStatus())
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getStatus()), SysResource::getStatus, resourceParam.getStatus())
                 .eq(SysResource::getDeleteFlag, 0)
                 .orderByAsc(SysResource::getSortNum);
 
         // 分页查询
-        Page<SysResource> page = new Page<>(menuParam.getPageNum(), menuParam.getPageSize());
+        Page<SysResource> page = new Page<>(resourceParam.getPageNum(), resourceParam.getPageSize());
         Page<SysResource> menuPage = this.page(page, queryWrapper);
         return new PageResult<>(menuPage.getTotal(), menuPage.getRecords());
     }
 
     @Override
-    public SysResource detail(SysResourceParam menuParam) {
+    public SysResource detail(SysResourceParam resourceParam) {
         LambdaQueryWrapper<SysResource> queryWrapper = new QueryWrapper<SysResource>().checkSqlInjection().lambda()
-                .eq(ObjectUtil.isNotEmpty(menuParam.getId()), SysResource::getId, menuParam.getId())
-                .eq(ObjectUtil.isNotEmpty(menuParam.getCode()), SysResource::getCode, menuParam.getCode());
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getId()), SysResource::getId, resourceParam.getId())
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getCode()), SysResource::getCode, resourceParam.getCode());
         // id、code均为唯一标识
         SysResource sysResource = this.getOne(queryWrapper);
         if (sysResource == null) {
@@ -119,38 +119,38 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public void add(SysResourceParam menuParam) {
+    public void add(SysResourceParam resourceParam) {
         // 若指定了唯一编码code，则必须全局唯一
-        if (!Strings.isNullOrEmpty(menuParam.getCode())) {
+        if (!Strings.isNullOrEmpty(resourceParam.getCode())) {
             // 查询指定code
             SysResource menu = this.getOne(new LambdaQueryWrapper<SysResource>()
-                    .eq(SysResource::getCode, menuParam.getCode())
+                    .eq(SysResource::getCode, resourceParam.getCode())
                     .eq(SysResource::getDeleteFlag, 0));
             if (menu != null) {
                 throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
         }
         // 非root节点的parent必须存在(module为root节点)
-        if (!Objects.equals(ResourceTypeEnum.MODULE.getCode(), menuParam.getResourceType())) {
-            Assert.notEmpty(menuParam.getParentCode(), "上级菜单parentCode不能为空");
+        if (!Objects.equals(ResourceTypeEnum.MODULE.getCode(), resourceParam.getResourceType())) {
+            Assert.notEmpty(resourceParam.getParentCode(), "上级菜单parentCode不能为空");
             // 查询所选父节点
             SysResource parentMenu = this.getOne(new LambdaQueryWrapper<SysResource>()
-                    .eq(SysResource::getCode, menuParam.getParentCode())
+                    .eq(SysResource::getCode, resourceParam.getParentCode())
                     .eq(SysResource::getDeleteFlag, 0));
             if (parentMenu == null) {
                 throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "指定的父节点不存在");
             }
             // 若上级菜单指定了module, 则子节点也必须一致
-            if (parentMenu.getModule() != null && !parentMenu.getModule().equals(menuParam.getModule())) {
+            if (parentMenu.getModule() != null && !parentMenu.getModule().equals(resourceParam.getModule())) {
                 throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "与上级菜单module不一致");
             }
         }
         // 转换
-        SysResource menu = buildSysMenu(menuParam);
+        SysResource menu = buildSysMenu(resourceParam);
         fillSysMenu(menu);
         menu.setId(null);
         // 若未指定唯一编码code，则自动生成
-        if (Strings.isNullOrEmpty(menuParam.getCode())) {
+        if (Strings.isNullOrEmpty(resourceParam.getCode())) {
             // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
             menu.setCode(IdUtil.objectId());
         }
@@ -158,9 +158,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public void deleteByIds(SysResourceParam menuParam) {
+    public void deleteByIds(SysResourceParam resourceParam) {
         // 待删除的id集合
-        Set<Long> idSet = menuParam.getIds();
+        Set<Long> idSet = resourceParam.getIds();
         // 逻辑删除
         UpdateWrapper<SysResource> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", idSet).set("delete_flag", 1);
@@ -170,7 +170,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public void deleteTree(SysResourceParam menuParam) {
+    public void deleteTree(SysResourceParam resourceParam) {
         // 要集联删除，子节点也要全部删除
         QueryWrapper<SysResource> queryWrapper = new QueryWrapper<SysResource>().checkSqlInjection();
         // 查询所有的菜单(包括目录、按钮等)
@@ -178,12 +178,12 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 // 查询部分字段
                 .select(SysResource::getId, SysResource::getCode, SysResource::getParentCode)
                 // 指定模块(有模块的情况下要过滤)
-                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysResource::getModule, menuParam.getModule())
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getModule()), SysResource::getModule, resourceParam.getModule())
                 .eq(SysResource::getDeleteFlag, 0);
         // 所有的菜单
         List<SysResource> menuList = this.list(queryWrapper);
         // 待删除节点的code集合
-        Set<String> codeSet = menuParam.getCodes();
+        Set<String> codeSet = resourceParam.getCodes();
 
         // 待删除的id集合(先把指定节点加入集合)
         Set<Long> idSet = menuList.stream()
@@ -210,28 +210,28 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         UpdateWrapper<SysResource> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", idSet).set("delete_flag", 1);
         this.update(updateWrapper);
-        // 资源删除时,对应的role_has_menu也要删除
+        // 资源删除时,对应的role_has_resource也要删除
         clearRoleMenu(idSet);
     }
 
     @Override
-    public void edit(SysResourceParam menuParam) {
-        SysResource oldMenu = this.detail(menuParam);
+    public void edit(SysResourceParam resourceParam) {
+        SysResource oldMenu = this.detail(resourceParam);
         // 转换
-        SysResource updateMenu = buildSysMenu(menuParam);
+        SysResource updateMenu = buildSysMenu(resourceParam);
         fillSysMenu(updateMenu);
         updateMenu.setId(oldMenu.getId());
         this.updateById(updateMenu);
     }
 
     @Override
-    public List<Tree<String>> menuTreeSelector(SysResourceParam menuParam) {
+    public List<Tree<String>> menuTreeSelector(SysResourceParam resourceParam) {
         // 查询所有菜单
         List<SysResource> menuList = this.list(new LambdaQueryWrapper<SysResource>()
                 // 查询部分字段
                 .select(SysResource::getCode, SysResource::getParentCode, SysResource::getName, SysResource::getSortNum, SysResource::getId)
                 // 指定模块
-                .eq(ObjectUtil.isNotEmpty(menuParam.getModule()), SysResource::getModule, menuParam.getModule())
+                .eq(ObjectUtil.isNotEmpty(resourceParam.getModule()), SysResource::getModule, resourceParam.getModule())
                 // 不能已停用
                 .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮
@@ -240,33 +240,33 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .orderByAsc(SysResource::getSortNum)
         );
         // 构建的树中仅包含部分字段
-        String rootId = ObjectUtil.isEmpty(menuParam.getModule()) ? SysConstants.ROOT_NODE_ID : menuParam.getModule();
+        String rootId = ObjectUtil.isEmpty(resourceParam.getModule()) ? SysConstants.ROOT_NODE_ID : resourceParam.getModule();
         return buildTree(menuList, rootId);
     }
 
     /**
-     * SysMenuParam -> SysMenu
+     * SysresourceParam -> SysMenu
      */
-    private SysResource buildSysMenu(SysResourceParam menuParam) {
-        if (menuParam == null) {
+    private SysResource buildSysMenu(SysResourceParam resourceParam) {
+        if (resourceParam == null) {
             return null;
         }
         SysResource sysResource = new SysResource();
-        sysResource.setId(menuParam.getId());
-        sysResource.setParentCode(menuParam.getParentCode());
-        sysResource.setName(menuParam.getName());
-        sysResource.setCode(menuParam.getCode());
-        sysResource.setResourceType(menuParam.getResourceType());
-        sysResource.setPath(menuParam.getPath());
-        sysResource.setComponent(menuParam.getComponent());
-        sysResource.setIcon(menuParam.getIcon());
-        sysResource.setPermission(menuParam.getPermission());
-        sysResource.setVisible(menuParam.getVisible());
-        sysResource.setModule(menuParam.getModule());
-        sysResource.setSortNum(menuParam.getSortNum());
-        sysResource.setStatus(menuParam.getStatus());
-        sysResource.setExtJson(menuParam.getExtJson());
-        sysResource.setRemark(menuParam.getRemark());
+        sysResource.setId(resourceParam.getId());
+        sysResource.setParentCode(resourceParam.getParentCode());
+        sysResource.setName(resourceParam.getName());
+        sysResource.setCode(resourceParam.getCode());
+        sysResource.setResourceType(resourceParam.getResourceType());
+        sysResource.setPath(resourceParam.getPath());
+        sysResource.setComponent(resourceParam.getComponent());
+        sysResource.setIcon(resourceParam.getIcon());
+        sysResource.setPermission(resourceParam.getPermission());
+        sysResource.setVisible(resourceParam.getVisible());
+        sysResource.setModule(resourceParam.getModule());
+        sysResource.setSortNum(resourceParam.getSortNum());
+        sysResource.setStatus(resourceParam.getStatus());
+        sysResource.setExtJson(resourceParam.getExtJson());
+        sysResource.setRemark(resourceParam.getRemark());
         return sysResource;
     }
 
