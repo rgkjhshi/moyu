@@ -115,8 +115,8 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         }
         // 若是自定义范围,需要处理
         if (ObjectUtil.equal(scopeParam.getScopeType(), DataScopeEnum.ORG_DEFINE.getCode())) {
-            Assert.notEmpty(scopeParam.getScopeList(), "自定义数据范围时, scopeList不能为空");
-            scope.setScopeSet(SysConstants.COMMA_JOINER.join(scopeParam.getScopeList()));
+            Assert.notEmpty(scopeParam.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
+            scope.setScopeSet(scopeParam.getScopeSet());
         }
         this.save(scope);
     }
@@ -147,8 +147,8 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         }
         // 若是自定义范围,需要处理
         if (ObjectUtil.equal(scopeParam.getScopeType(), DataScopeEnum.ORG_DEFINE.getCode())) {
-            Assert.notEmpty(scopeParam.getScopeList(), "自定义数据范围时, scopeList不能为空");
-            updateScope.setScopeSet(SysConstants.COMMA_JOINER.join(scopeParam.getScopeList()));
+            Assert.notEmpty(scopeParam.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
+            updateScope.setScopeSet(scopeParam.getScopeSet());
         }
         this.updateById(updateScope);
     }
