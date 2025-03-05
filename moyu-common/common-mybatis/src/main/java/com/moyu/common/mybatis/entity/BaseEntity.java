@@ -32,10 +32,10 @@ public class BaseEntity implements Serializable {
     private Date createTime;
 
     /**
-     * 创建用户
+     * 创建人
      */
     @TableField(fill = FieldFill.INSERT)
-    private String createUser;
+    private String createBy;
 
     /**
      * 修改时间
@@ -44,8 +44,8 @@ public class BaseEntity implements Serializable {
     private Date updateTime;
 
     /**
-     * 修改用户
+     * 修改人
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private String updateUser;
+    private String updateBy;
 }
