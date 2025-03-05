@@ -184,8 +184,11 @@ CREATE TABLE `sys_relation`
     `object_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '对象ID',
     `target_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '目标ID',
     `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role,5:scope_has_user)',
+    `delete_flag`   TINYINT(5)  NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`   DATETIME    NULL DEFAULT NULL COMMENT '创建时间',
     `create_by`     VARCHAR(32) NULL DEFAULT NULL COMMENT '创建人',
+    `update_time`   DATETIME    NULL DEFAULT NULL COMMENT '修改时间',
+    `update_by`     VARCHAR(32) NULL DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
