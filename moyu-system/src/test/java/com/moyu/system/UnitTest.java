@@ -1,5 +1,7 @@
 package com.moyu.system;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.google.common.base.CaseFormat;
 import lombok.SneakyThrows;
@@ -29,10 +31,21 @@ public class UnitTest {
 
     @SneakyThrows
     @Test
-    public void testSql() {
-        String sqlStr = "code = 1";
-        sqlStr = sqlStr + StringPool.AND + "username = 'xx'";
-        log.info(sqlStr);
+    public void testId() {
+        // 24位: 67c7b60fd19001d4b33539b6
+        log.info(IdUtil.objectId());
+        // 20位随机NanoId: R06PP2RUZeS9j6g0bNxyW
+        log.info(IdUtil.nanoId());
+        // 指定位数: g4Pq_XFDRq
+        log.info(IdUtil.nanoId(10));
+        // 32位: 512e1c1d55b14cd2ad107e8150d0ac26
+        log.info(IdUtil.simpleUUID());
+        // 32位有横线: c577c28c-aa92-460f-a3c1-bfaa0c59d2ba
+        log.info(IdUtil.fastUUID());
+        // 19个数 Long: 1897111148578750464
+        log.info("Long:{}", IdUtil.getSnowflakeNextId());
+        // 随机: Jg3Q3QvK3V
+        log.info(RandomUtil.randomString(10));
     }
 
 }
