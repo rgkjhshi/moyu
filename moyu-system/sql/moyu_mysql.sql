@@ -17,9 +17,9 @@ CREATE TABLE `sys_org`
     `remark`      VARCHAR(200)  NULL DEFAULT NULL comment '备注',
     `delete_flag` TINYINT(5)    NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME      NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(20)   NULL DEFAULT NULL COMMENT '创建人',
+    `create_by`   VARCHAR(20)   NULL DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME      NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(20)   NULL DEFAULT NULL COMMENT '修改人',
+    `update_by`   VARCHAR(20)   NULL DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -58,9 +58,9 @@ create table sys_user
     `remark`          VARCHAR(200) NULL DEFAULT NULL comment '备注',
     `delete_flag`     TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`     DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user`     VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
+    `create_by`       VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
     `update_time`     DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user`     VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
+    `update_by`       VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `uniq_account` (`account`)
 ) ENGINE = InnoDB
@@ -82,9 +82,9 @@ create table sys_role
     `remark`      VARCHAR(200) NULL DEFAULT NULL comment '备注',
     `delete_flag` TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
+    `create_by`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
+    `update_by`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -108,9 +108,9 @@ create table sys_group
     `remark`      VARCHAR(200) NULL DEFAULT NULL comment '备注',
     `delete_flag` TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
+    `create_by`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
+    `update_by`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -135,9 +135,9 @@ create table sys_scope
     `remark`      VARCHAR(200)  NULL DEFAULT NULL comment '备注',
     `delete_flag` TINYINT(5)    NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME      NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(32)   NULL DEFAULT NULL COMMENT '创建人',
+    `create_by`   VARCHAR(32)   NULL DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME      NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(32)   NULL DEFAULT NULL COMMENT '修改人',
+    `update_by`   VARCHAR(32)   NULL DEFAULT NULL COMMENT '修改人',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -167,9 +167,9 @@ create table sys_resource
     `remark`        VARCHAR(200) NULL DEFAULT NULL comment '备注',
     `delete_flag`   TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`   DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
+    `create_by`     VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
     `update_time`   DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user`   VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
+    `update_by`     VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
     primary key (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -185,7 +185,7 @@ CREATE TABLE `sys_relation`
     `target_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '目标ID',
     `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role,5:scope_has_user)',
     `create_time`   DATETIME    NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user`   VARCHAR(32) NULL DEFAULT NULL COMMENT '创建人',
+    `create_by`     VARCHAR(32) NULL DEFAULT NULL COMMENT '创建人',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
