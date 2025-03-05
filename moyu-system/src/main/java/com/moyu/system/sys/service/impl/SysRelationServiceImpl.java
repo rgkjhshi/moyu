@@ -145,7 +145,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
             // 查询角色的所有资源菜单
             list(new LambdaQueryWrapper<SysRelation>()
                     // 关系类型
-                    .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_RESOURCE.getCode())
+                    .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                     // 查询menu
                     .select(SysRelation::getTargetId)
                     // 指定role

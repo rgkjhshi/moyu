@@ -348,7 +348,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .forEach(e -> codeSet.add(e.getCode()));
         // 删除指定menuCode 的 ROLE_HAS_MENU
         sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
-                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_RESOURCE)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM)
                 .in(SysRelation::getTargetId, codeSet));
     }
 }

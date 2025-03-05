@@ -170,7 +170,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Map<String, SysRelation> rmMap = new HashMap<>();
         sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
                         // 指定关系类型
-                        .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_RESOURCE.getCode())
+                        .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                         // 指定哪个role
                         .eq(SysRelation::getObjectId, roleParam.getCode()))
                 .forEach(e -> rmMap.put(e.getTargetId(), e));
@@ -253,7 +253,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     SysRelation relation = new SysRelation();
                     relation.setObjectId(roleParam.getCode());
                     relation.setTargetId(code);
-                    relation.setRelationType(RelationTypeEnum.ROLE_HAS_RESOURCE.getCode());
+                    relation.setRelationType(RelationTypeEnum.ROLE_HAS_PERM.getCode());
                     relation.setCreateTime(new Date());
                     relation.setCreateUser(SecurityUtils.getLoginUser().getUsername());
                     addList.add(relation);

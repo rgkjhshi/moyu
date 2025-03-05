@@ -17,13 +17,13 @@ import java.util.Objects;
 public enum RelationTypeEnum {
 
     /**
-     * 关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_resource,4:role_has_user,5:scope_has_user)
+     * 关系类型(字典 1:role_has_user, 2:role_has_perm, 3:group_has_user, 4:group_has_role, 5:scope_has_user)
      */
     INVALID(0, null),
-    GROUP_HAS_USER(1, "分组-用户关系"),
-    GROUP_HAS_ROLE(2, "分组-角色关系"),
-    ROLE_HAS_RESOURCE(3, "角色-权限关系"),
-    ROLE_HAS_USER(4, "角色-用户关系"),
+    ROLE_HAS_USER(1, "角色-用户关系"),
+    ROLE_HAS_PERM(2, "角色-权限关系"),
+    GROUP_HAS_USER(3, "分组-用户关系"),
+    GROUP_HAS_ROLE(4, "分组-角色关系"),
     SCOPE_HAS_USER(5, "数据-用户关系");
 
     //  Mybatis-Plus 提供注解表示插入数据库时插入该值

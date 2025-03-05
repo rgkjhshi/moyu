@@ -84,17 +84,17 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', '', 'appstore
 
 -- 关系
 insert into moyu.sys_relation (id, object_id, target_id, relation_type, create_time, create_user)
-values  (1, 'superAdmin', 'superAdmin', 4, null, null),
-        (2, 'superAdmin', 'menu_sys_scope', 3, null, null),
-        (3, 'superAdmin', 'menu_sys_org', 3, null, null),
-        (4, 'superAdmin', 'menu_sys_role', 3, null, null),
-        (5, 'superAdmin', 'menu_sys_button', 3, null, null),
-        (6, 'superAdmin', 'menu_sys_user', 3, null, null),
-        (7, 'superAdmin', 'menu_sys_group', 3, null, null),
-        (8, 'superAdmin', 'menu_sys_menu', 3, null, null),
-        (9, 'superAdmin', 'menu_sys_module', 3, null, null),
-        (10, 'superAdmin', 'menu_biz_pos', 3, null, null),
-        (11, '67c7beb6e4b0c22bea04257c', 'superAdmin', 1, null, null),
-        (12, '67c7beb6e4b0c22bea04257c', 'superAdmin', 2, null, null),
+values  (1, 'superAdmin', 'superAdmin', 1, null, null),
+        (2, 'superAdmin', 'menu_sys_scope', 2, null, null),
+        (3, 'superAdmin', 'menu_sys_org', 2, null, null),
+        (4, 'superAdmin', 'menu_sys_role', 2, null, null),
+        (5, 'superAdmin', 'menu_sys_button', 2, null, null),
+        (6, 'superAdmin', 'menu_sys_user', 2, null, null),
+        (7, 'superAdmin', 'menu_sys_group', 2, null, null),
+        (8, 'superAdmin', 'menu_sys_menu', 2, null, null),
+        (9, 'superAdmin', 'menu_sys_module', 2, null, null),
+        (10, 'superAdmin', 'menu_biz_pos', 2, null, null),
+        (11, '67c7beb6e4b0c22bea04257c', 'superAdmin', 3, null, null),
+        (12, '67c7beb6e4b0c22bea04257c', 'superAdmin', 4, null, null),
         (13, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5, null, null);
 

@@ -38,7 +38,7 @@ public class SysRelation {
     private String targetId;
 
     /**
-     * 关系类型(字典 1:group_has_user,2:group_has_role,3:role_has_menu)
+     * 关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role,5:scope_has_user)
      *
      * @see com.moyu.system.sys.enums.RelationTypeEnum
      */
