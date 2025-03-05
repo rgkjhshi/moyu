@@ -8,6 +8,7 @@ import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.entity.SysUser;
+import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.SysGroupService;
 import com.moyu.system.sys.service.SysRoleService;
@@ -67,9 +68,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * 创建LoginUserDetails
      */
     private LoginUser buildUserDetails(SysUser sysUser) {
-        // 所有的角色集，包括 userRole + userGroupRole
+        // 角色集
         Set<String> roleSet = sysRoleService.userAllRoles(sysUser.getAccount());
-        // 所有权限集 TODO 权限也应该来自于所属group
+        // 权限集
         Set<String> permSet = sysRoleService.rolePerms(roleSet);
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder()
@@ -91,6 +92,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         // 有岗位则有数据权限
         if (group != null) {
+            // user-group-role
+            Set<String> groupRoleSet = new HashSet<>();
+            sysGroupService.groupRoleList(SysGroupParam.builder().code(group.getCode()).build())
+                    .forEach(e -> groupRoleSet.add(e.getCode()));
+            loginUser.getRoles().addAll(groupRoleSet);
+            // groupRoleSet带来的perms
+            loginUser.getPerms().addAll(sysRoleService.rolePerms(groupRoleSet));
+            // 当前岗位
             loginUser.setGroupCode(group.getCode());
             // 组织机构随岗位变化
             loginUser.setOrgCode(group.getOrgCode());
