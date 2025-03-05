@@ -61,6 +61,8 @@ public class SysGroupParam extends BasePageParam {
 
     /**
      * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
+     *
+     * @see com.moyu.common.mybatis.enums.DataScopeEnum
      */
     private Integer dataScope;
 
