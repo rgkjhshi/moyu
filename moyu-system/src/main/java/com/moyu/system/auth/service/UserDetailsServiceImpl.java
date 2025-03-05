@@ -92,12 +92,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         // 有岗位则有数据权限
         if (group != null) {
-            // user-group-role
+            // 岗位角色 user-group-role
             Set<String> groupRoleSet = new HashSet<>();
             sysGroupService.groupRoleList(SysGroupParam.builder().code(group.getCode()).build())
                     .forEach(e -> groupRoleSet.add(e.getCode()));
             loginUser.getRoles().addAll(groupRoleSet);
-            // groupRoleSet带来的perms
+            // 岗位权限 groupRoleSet带来的perms
             loginUser.getPerms().addAll(sysRoleService.rolePerms(groupRoleSet));
             // 当前岗位
             loginUser.setGroupCode(group.getCode());
