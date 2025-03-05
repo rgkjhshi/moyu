@@ -29,4 +29,9 @@ public interface SysConstants {
      * 系统默认密码
      */
     String DEFAULT_PASSWORD = "qwer@123!";
+
+    // 自动生成code时的前缀
+    String GROUP_PREFIX = "G";
+    String SCOPE_PREFIX = "S";
+    String ROLE_PREFIX = "R";
 }
