@@ -23,7 +23,7 @@ values  (100, '超级管理员', 'superAdmin', 2, 0, null, null, 0, '2025-02-26 
 
 -- 功能权限组
 insert into moyu.sys_group (id, name, code, org_code, org_name, data_scope, scope_set, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
-values  (1894925631903645700, '总部管理组', '67c7beb6e4b0c22bea04257c', '11000000', '集团总部', 2, null, 2, 0, null, null, 0, '2025-03-05 11:02:14', 'superAdmin', '2025-03-05 11:02:14', 'superAdmin');
+values  (1894925631903645700, '总部管理组', 'G1897207291765641216', '11000000', '集团总部', 2, null, 2, 0, null, null, 0, '2025-03-05 11:02:14', 'superAdmin', '2025-03-05 11:02:14', 'superAdmin');
 
 -- 数据权限组
 insert into moyu.sys_scope (id, name, code, org_code, org_name, scope_type, scope_set, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
@@ -94,7 +94,7 @@ values  (1, 'superAdmin', 'superAdmin', 1, null, null),
         (8, 'superAdmin', 'menu_sys_menu', 2, null, null),
         (9, 'superAdmin', 'menu_sys_module', 2, null, null),
         (10, 'superAdmin', 'menu_biz_pos', 2, null, null),
-        (11, '67c7beb6e4b0c22bea04257c', 'superAdmin', 3, null, null),
-        (12, '67c7beb6e4b0c22bea04257c', 'superAdmin', 4, null, null),
+        (11, 'G1897207291765641216', 'superAdmin', 3, null, null),
+        (12, 'G1897207291765641216', 'superAdmin', 4, null, null),
         (13, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5, null, null);
 
