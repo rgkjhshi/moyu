@@ -54,11 +54,6 @@ public class SysGroupParam extends BasePageParam {
     private String code;
 
     /**
-     * 岗位类型(字典 1特有 2通用 3自建)
-     */
-    private Integer groupType;
-
-    /**
      * 直属组织
      */
     @NotBlank(message = "直属组织orgCode不能为空")

@@ -311,6 +311,29 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         }
     }
 
+    @Override
+    public Set<String> groupDataScopes(String groupCode) {
+        Set<String> scopes = new HashSet<>();
+        // 查询group
+        SysGroup group = detail(SysGroupParam.builder().code(groupCode).build());
+
+        if (ObjectUtil.equal(group.getDataScope(), DataScopeEnum.ORG.getCode())) {
+            scopes.add(group.getOrgCode());
+        } else if (ObjectUtil.equal(group.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
+            List<String> list = SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet());
+            scopes.addAll(list);
+        } else if (ObjectUtil.equal(group.getDataScope(), DataScopeEnum.ORG_CHILD.getCode())) {
+            // 添加org
+            scopes.add(group.getOrgCode());
+            // 从rootTree中获取所有child（有缓存时）
+            Tree<String> orgTree = sysOrgService.singleTree().getNode(group.getOrgCode());
+            orgTree.walk(node -> scopes.add(node.getId()));
+            // 从数据库中获取所有child（无缓存时）
+//                List<String> childList = sysOrgService.childrenCodeList(e.getOrgCode());
+//                scopes.addAll(childList);
+        }
+        return scopes;
+    }
 }
 
 

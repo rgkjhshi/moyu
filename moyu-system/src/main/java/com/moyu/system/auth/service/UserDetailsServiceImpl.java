@@ -5,7 +5,9 @@ import com.moyu.common.security.model.LoginUser;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
-import com.moyu.system.sys.service.*;
+import com.moyu.system.sys.service.SysRoleService;
+import com.moyu.system.sys.service.SysScopeService;
+import com.moyu.system.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,12 +37,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private SysScopeService sysScopeService;
-
-    @Resource
-    private SysRelationService sysRelationService;
-
-    @Resource
-    private SysResourceService sysResourceService;
 
     /**
      * SpringSecurity权限认证时(AuthenticationProvider#authenticate)会调用此方法

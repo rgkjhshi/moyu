@@ -42,7 +42,7 @@ public class LoginService {
         Authentication authentication = null;
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-            // 该方法会在去调用UserDetailsServiceImpl#loadUserByUsername
+            // 该方法会在去调用 UserDetailsServiceImpl#loadUserByUsername
             authentication = authenticationManager.authenticate(authenticationToken);
         } catch (Exception e) {
             if (e instanceof UsernameNotFoundException) {

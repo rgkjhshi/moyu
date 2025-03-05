@@ -6,9 +6,9 @@ import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysGroupParam;
-import com.moyu.system.sys.model.param.SysRoleParam;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author shisong
@@ -79,4 +79,8 @@ public interface SysGroupService extends IService<SysGroup> {
      */
     void groupDeleteUser(SysGroupParam groupParam);
 
+    /**
+     * 获取指定group的数据范围集合
+     */
+    Set<String> groupDataScopes(String groupCode);
 }
