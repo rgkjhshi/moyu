@@ -95,6 +95,6 @@ values  (1, 'superAdmin', 'superAdmin', 4, null, null),
         (9, 'superAdmin', 'menu_sys_module', 3, null, null),
         (10, 'superAdmin', 'menu_biz_pos', 3, null, null),
         (11, '67c7beb6e4b0c22bea04257c', 'superAdmin', 1, null, null),
-        (12, '6784d936e1d6502bc7db738d', 'superAdmin', 2, null, null),
+        (12, '67c7beb6e4b0c22bea04257c', 'superAdmin', 2, null, null),
         (13, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5, null, null);
 
