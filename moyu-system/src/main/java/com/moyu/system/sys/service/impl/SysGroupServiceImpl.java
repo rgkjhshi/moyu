@@ -254,37 +254,37 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     @Override
     public void groupAddUser(SysGroupParam groupParam) {
         String objectId = groupParam.getCode();
-        Set<String> targetSet = groupParam.getCodeSet();
-        if (ObjectUtil.isEmpty(targetSet)) {
+        Set<String> userSet = groupParam.getCodeSet();
+        if (ObjectUtil.isEmpty(userSet)) {
             return;
         }
         // 已加入分组的用户
-        Set<String> oldSet = new HashSet<>();
+        Set<String> oldUserSet = new HashSet<>();
         Set<String> otherGroupUserSet = new HashSet<>();
         // 查询指定group包含的user，放入oldSet
         sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
-                .in(SysRelation::getTargetId, targetSet)
+                .in(SysRelation::getTargetId, userSet)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
         ).forEach(e -> {
             if (objectId.equals(e.getObjectId())) {
-                oldSet.add(e.getTargetId());
+                oldUserSet.add(e.getTargetId());
             } else {
                 otherGroupUserSet.add(e.getTargetId());
             }
         });
         // 限制用户只允许加入一个分组
         if (ObjectUtil.isNotEmpty(otherGroupUserSet)) {
-            String message = "下列用户已加入其他分组，不可重复添加:" + otherGroupUserSet;
+            String message = String.format("用户%s已加入其他分组，不可重复添加", otherGroupUserSet);
             throw new BaseException(ExceptionEnum.INVALID_PARAMETER.getCode(), message);
         }
         // 从target中删除已经存在的
-        targetSet.removeAll(oldSet);
+        userSet.removeAll(oldUserSet);
         // 再次判断要新增的内容为空则返回
-        if (ObjectUtil.isEmpty(targetSet)) {
+        if (ObjectUtil.isEmpty(userSet)) {
             return;
         }
         List<SysRelation> addList = new ArrayList<>();
-        targetSet.forEach(code -> {
+        userSet.forEach(code -> {
             SysRelation entity = new SysRelation();
             entity.setObjectId(objectId);
             entity.setTargetId(code);
