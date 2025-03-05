@@ -25,20 +25,20 @@ import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
-import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.RelationTypeEnum;
+import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.mapper.SysRoleMapper;
-import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysRelation;
+import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
-import com.moyu.system.sys.model.param.SysResourceParam;
 import com.moyu.system.sys.model.param.SysRelationParam;
+import com.moyu.system.sys.model.param.SysResourceParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.param.SysUserParam;
-import com.moyu.system.sys.service.SysResourceService;
 import com.moyu.system.sys.service.SysRelationService;
+import com.moyu.system.sys.service.SysResourceService;
 import com.moyu.system.sys.service.SysRoleService;
 import com.moyu.system.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -134,8 +134,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         role.setId(null);
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(role.getCode())) {
-            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-            role.setCode(IdUtil.objectId());
+            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
+            role.setCode(SysConstants.ROLE_PREFIX + IdUtil.objectId());
         }
         this.save(role);
     }

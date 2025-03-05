@@ -16,6 +16,7 @@ import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
 import com.moyu.common.security.util.SecurityUtils;
+import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.mapper.SysGroupMapper;
 import com.moyu.system.sys.model.entity.SysGroup;
@@ -117,8 +118,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         group.setId(null);
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(group.getCode())) {
-            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-            group.setCode(IdUtil.objectId());
+            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
+            group.setCode(SysConstants.GROUP_PREFIX + IdUtil.getSnowflakeNextId());
         }
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(group.getOrgCode())) {

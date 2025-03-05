@@ -99,8 +99,8 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         scope.setId(null);
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(scope.getCode())) {
-            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-            scope.setCode(IdUtil.objectId());
+            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
+            scope.setCode(SysConstants.SCOPE_PREFIX + IdUtil.getSnowflakeNextId());
         }
         // 若指定了直属组织，则设置所属组织名称
         if (ObjectUtil.isNotEmpty(scope.getOrgCode())) {
