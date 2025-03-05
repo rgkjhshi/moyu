@@ -206,6 +206,25 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     }
 
     @Override
+    public List<SysGroup> userGroupList(String username) {
+        // 查询指定user的所有group
+        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
+                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).targetId(username).build());
+        if (ObjectUtil.isEmpty(list)) {
+            return new ArrayList<>();
+        }
+        // groupSet
+        Set<String> groupSet = list.stream().map(SysRelation::getObjectId).collect(Collectors.toSet());
+        // 查询岗位分组
+        List<SysGroup> groupList = this.list(Wrappers.lambdaQuery(SysGroup.class)
+                .in(SysGroup::getCode, groupSet)
+                .eq(SysGroup::getStatus, 0)
+                .eq(SysGroup::getDeleteFlag, 0)
+        );
+        return groupList;
+    }
+
+    @Override
     public void groupAddRole(SysGroupParam groupParam) {
         String objectId = groupParam.getCode();
         Set<String> targetSet = groupParam.getCodeSet();

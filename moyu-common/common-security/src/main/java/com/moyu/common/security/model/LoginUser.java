@@ -45,7 +45,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      */
     private Integer dataScope;
     /**
-     * 数据权限集合
+     * 自定义数据权限集合
      */
     private Set<String> scopes;
 

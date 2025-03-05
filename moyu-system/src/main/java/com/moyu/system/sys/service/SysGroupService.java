@@ -60,6 +60,11 @@ public interface SysGroupService extends IService<SysGroup> {
     List<SysUser> groupUserList(SysGroupParam groupParam);
 
     /**
+     * 用户所属的group列表
+     */
+    List<SysGroup> userGroupList(String username);
+
+    /**
      * group新增角色
      */
     void groupAddRole(SysGroupParam groupParam);

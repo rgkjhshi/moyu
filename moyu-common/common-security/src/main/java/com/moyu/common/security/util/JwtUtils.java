@@ -35,9 +35,11 @@ public class JwtUtils {
                 .setSubject(loginUser.getUsername())
                 .setJWTId(IdUtil.fastSimpleUUID())
                 .setPayload("orgCode", loginUser.getOrgCode())
+                .setPayload("groupCode", loginUser.getGroupCode())
+                .setPayload("dataScope", loginUser.getDataScope())
+                .setPayload("scopes", loginUser.getScopes())
                 .setPayload("perms", loginUser.getPerms())
                 .setPayload("roles", loginUser.getRoles())
-                .setPayload("scopes", loginUser.getScopes())
                 .setKey(SECRET.getBytes())
                 .sign();
         return token;
@@ -52,12 +54,15 @@ public class JwtUtils {
         // 根据token获取claims
         String username = (String) jwt.getPayload(JWTPayload.SUBJECT);
         String orgCode = (String) jwt.getPayload("orgCode");
+        String groupCode = (String) jwt.getPayload("groupCode");
+        Integer dataScope = (Integer) jwt.getPayload("dataScope");
+        Set<String> scopes = ObjectUtil.isEmpty(jwt.getPayload("scopes")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("scopes"));
         Set<String> perms = ObjectUtil.isEmpty(jwt.getPayload("perms")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("perms"));
         Set<String> roles = ObjectUtil.isEmpty(jwt.getPayload("roles")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("roles"));
-        Set<String> scopes = ObjectUtil.isEmpty(jwt.getPayload("scopes")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("scopes"));
         // 转换成登录用户
-        LoginUser loginUser = LoginUser.builder().enabled(true).username(username).orgCode(orgCode)
-                .perms(perms).roles(roles).scopes(scopes).build();
+        LoginUser loginUser = LoginUser.builder().enabled(true).username(username)
+                .orgCode(orgCode).groupCode(groupCode).dataScope(dataScope).scopes(scopes)
+                .perms(perms).roles(roles).build();
         // 初始化authorities后才可使用springSecurity鉴权
         loginUser.initAuthorities();
         // 返回当前登陆用户
