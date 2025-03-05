@@ -68,7 +68,30 @@ create table sys_user
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 2000 COMMENT = '用户信息表';
 
--- 3. 功能权限分组表
+-- 3. 角色信息表
+drop table if exists sys_role;
+create table sys_role
+(
+    `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
+    `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
+
+    `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
+    `remark`      VARCHAR(200) NULL DEFAULT NULL comment '备注',
+    `delete_flag` TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `create_time` DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
+    `create_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
+    `update_time` DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
+    `update_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
+    primary key (`id`)
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 100 COMMENT = '角色信息表';
+
+-- 4. 功能权限分组表
 drop table if exists sys_group;
 create table sys_group
 (
@@ -94,7 +117,7 @@ create table sys_group
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 1000 COMMENT = '分组信息表';
 
--- 7. 数据权限分组表
+-- 5. 数据权限分组表
 drop table if exists sys_scope;
 create table sys_scope
 (
@@ -121,30 +144,7 @@ create table sys_scope
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 1000 COMMENT = '数据权限分组表';
 
--- 4. 角色信息表
-drop table if exists sys_role;
-create table sys_role
-(
-    `id`          BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `name`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
-
-    `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
-    `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
-    `remark`      VARCHAR(200) NULL DEFAULT NULL comment '备注',
-    `delete_flag` TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
-    `create_time` DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '创建人',
-    `update_time` DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_user` VARCHAR(32)  NULL DEFAULT NULL COMMENT '修改人',
-    primary key (`id`)
-) ENGINE = InnoDB
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci
-  AUTO_INCREMENT = 100 COMMENT = '角色信息表';
-
--- 5. 菜单权限表
+-- 6. 资源权限表
 drop table if exists sys_resource;
 create table sys_resource
 (
@@ -176,7 +176,7 @@ create table sys_resource
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 2000 COMMENT = '资源权限表';
 
--- 6. 用户角色权限关系表
+-- 7. 用户角色权限关系表
 DROP TABLE IF EXISTS `sys_relation`;
 CREATE TABLE `sys_relation`
 (
