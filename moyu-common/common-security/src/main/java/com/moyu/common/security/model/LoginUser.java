@@ -33,6 +33,18 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 当前组织机构
+     */
+    private String orgCode;
+    /**
+     * 当前岗位(可能为空)
+     */
+    private String groupCode;
+    /**
+     * 数据权限范围
+     */
+    private Integer dataScope;
+    /**
      * 数据权限集合
      */
     private Set<String> scopes;
@@ -46,7 +58,6 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      * 角色集合
      */
     private Set<String> roles;
-
 
     /**
      * 默认字段
