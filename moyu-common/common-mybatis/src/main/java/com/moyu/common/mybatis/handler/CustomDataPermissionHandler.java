@@ -83,7 +83,7 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
             String username = SecurityUtils.getLoginUser().getUsername();
             sqlStr = userColumn + " = '" + username + "'";
         }
-        // org 条件
+        // org 条件(两个均不为空时org会覆盖user条件)
         if (StrUtil.isNotBlank(orgColumn)) {
             // 数据权限范围
             Set<String> scopes = SecurityUtils.getScopes();
