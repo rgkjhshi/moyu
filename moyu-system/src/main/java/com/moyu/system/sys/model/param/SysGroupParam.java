@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -60,6 +63,16 @@ public class SysGroupParam extends BasePageParam {
      */
     @NotBlank(message = "直属组织orgCode不能为空")
     private String orgCode;
+
+    /**
+     * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
+     */
+    private Integer dataScope;
+
+    /**
+     * 自定义scope集合,逗号分隔
+     */
+    private String scopeSet;
 
     /**
      * 排序顺序

@@ -91,17 +91,17 @@ create table sys_role
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 100 COMMENT = '角色信息表';
 
--- 4. 功能权限分组表
+-- 4. 分组信息表
 drop table if exists sys_group;
 create table sys_group
 (
     `id`          bigint(20)    NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `name`        VARCHAR(64)   NULL DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)   NULL DEFAULT NULL COMMENT '编码',
-    `data_scope`  TINYINT(5)    NULL DEFAULT NULL COMMENT '数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)',
-    `scope_set`   VARCHAR(1024) NULL DEFAULT NULL COMMENT '自定义scope集合,逗号分隔',
     `org_code`    VARCHAR(64)   NULL DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)   NULL DEFAULT NULL COMMENT '直属组织名称',
+    `data_scope`  TINYINT(5)    NULL DEFAULT NULL COMMENT '数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)',
+    `scope_set`   VARCHAR(1024) NULL DEFAULT NULL COMMENT '自定义scope集合,逗号分隔',
 
     `sort_num`    INT(10)       NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)    NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',

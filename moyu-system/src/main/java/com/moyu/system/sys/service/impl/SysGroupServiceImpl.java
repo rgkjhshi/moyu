@@ -1,6 +1,7 @@
 package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -15,6 +16,7 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.mybatis.enums.DataScopeEnum;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.RelationTypeEnum;
@@ -64,8 +66,6 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         queryWrapper.lambda()
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(groupParam.getSearchKey()), SysGroup::getName, groupParam.getSearchKey())
-                // 指定类型
-                .eq(ObjectUtil.isNotEmpty(groupParam.getGroupType()), SysGroup::getGroupType, groupParam.getGroupType())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
                 .eq(SysGroup::getDeleteFlag, 0)
@@ -132,6 +132,11 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             // 设置直属机构名称
             group.setOrgName(orgNode.getName().toString());
         }
+        // 若是自定义数据范围,需要处理
+        if (ObjectUtil.equal(groupParam.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
+            Assert.notEmpty(groupParam.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
+            group.setScopeSet(groupParam.getScopeSet());
+        }
         this.save(group);
     }
 
@@ -149,17 +154,22 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     public void edit(SysGroupParam groupParam) {
         SysGroup oldGroup = this.detail(groupParam);
         // 属性复制
-        SysGroup updateOrg = BeanUtil.copyProperties(groupParam, SysGroup.class);
-        updateOrg.setId(oldGroup.getId());
+        SysGroup updateGroup = BeanUtil.copyProperties(groupParam, SysGroup.class);
+        updateGroup.setId(oldGroup.getId());
         // 若新指定了直属组织，则设置组织名
-        if (ObjectUtil.notEqual(oldGroup.getOrgCode(), updateOrg.getOrgCode()) && ObjectUtil.isNotEmpty(updateOrg.getOrgCode())) {
+        if (ObjectUtil.notEqual(oldGroup.getOrgCode(), updateGroup.getOrgCode()) && ObjectUtil.isNotEmpty(updateGroup.getOrgCode())) {
             // 获取组织结构树
             Tree<String> rootTree = sysOrgService.singleTree();
-            Tree<String> orgNode = rootTree.getNode(updateOrg.getOrgCode());
+            Tree<String> orgNode = rootTree.getNode(updateGroup.getOrgCode());
             // 设置直属机构名称
-            updateOrg.setOrgName(orgNode.getName().toString());
+            updateGroup.setOrgName(orgNode.getName().toString());
         }
-        this.updateById(updateOrg);
+        // 若是自定义数据范围,需要处理
+        if (ObjectUtil.equal(groupParam.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
+            Assert.notEmpty(groupParam.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
+            updateGroup.setScopeSet(groupParam.getScopeSet());
+        }
+        this.updateById(updateGroup);
     }
 
     @Override

@@ -40,11 +40,6 @@ public class SysGroup extends BaseEntity implements Serializable {
     private String code;
 
     /**
-     * 岗位类型(字典 1特有 2通用 3自建)
-     */
-    private Integer groupType;
-
-    /**
      * 直属组织
      */
     private String orgCode;
@@ -53,6 +48,16 @@ public class SysGroup extends BaseEntity implements Serializable {
      * 直属组织名称
      */
     private String orgName;
+
+    /**
+     * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
+     */
+    private Integer dataScope;
+
+    /**
+     * 自定义scope集合,逗号分隔
+     */
+    private String scopeSet;
 
     /**
      * 排序顺序
