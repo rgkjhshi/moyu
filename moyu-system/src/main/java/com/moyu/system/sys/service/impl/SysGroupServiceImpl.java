@@ -31,7 +31,10 @@ import com.moyu.system.sys.service.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -216,8 +219,6 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             entity.setObjectId(objectId);
             entity.setTargetId(code);
             entity.setRelationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode());
-            entity.setCreateTime(new Date());
-            entity.setCreateUser(SecurityUtils.getLoginUser().getUsername());
             addList.add(entity);
         });
         sysRelationService.saveBatch(addList);
@@ -278,8 +279,6 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             entity.setObjectId(objectId);
             entity.setTargetId(code);
             entity.setRelationType(RelationTypeEnum.GROUP_HAS_USER.getCode());
-            entity.setCreateTime(new Date());
-            entity.setCreateUser(SecurityUtils.getLoginUser().getUsername());
             addList.add(entity);
         });
         sysRelationService.saveBatch(addList);

@@ -6,9 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.moyu.common.mybatis.entity.BaseEntity;
 import lombok.Data;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * 用户角色权限关系表
@@ -18,7 +19,7 @@ import java.util.Date;
 @Data
 @TableName(value = "sys_relation")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysRelation {
+public class SysRelation extends BaseEntity implements Serializable {
     /**
      * 主键id
      * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
@@ -43,15 +44,4 @@ public class SysRelation {
      * @see com.moyu.system.sys.enums.RelationTypeEnum
      */
     private Integer relationType;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 创建用户
-     */
-    private String createUser;
-
 }

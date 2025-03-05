@@ -33,7 +33,10 @@ import com.moyu.system.sys.service.SysUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -192,8 +195,6 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
             entity.setObjectId(objectId);
             entity.setTargetId(code);
             entity.setRelationType(RelationTypeEnum.SCOPE_HAS_USER.getCode());
-            entity.setCreateTime(new Date());
-            entity.setCreateUser(SecurityUtils.getLoginUser().getUsername());
             addList.add(entity);
         });
         sysRelationService.saveBatch(addList);
