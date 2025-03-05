@@ -4,7 +4,7 @@ package com.moyu.common.mybatis.annotation;
 import java.lang.annotation.*;
 
 /**
- * 数据权限注解(支持指定org和user列名)
+ * 数据权限注解(支持指定org或user列名,同时指定则org优先)
  * 数据权限 {@link com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor}
  *
  * @author shisong
