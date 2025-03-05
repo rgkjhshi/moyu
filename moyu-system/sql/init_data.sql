@@ -84,18 +84,19 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', '', 'appstore
         (2048, 'sys_module', '测试接口', 'btn_sys_api_test', 4, '', '', null, 'sys:btn:test', 1, null, 'sys_module', 1, 0, null, null, 0, '2025-02-26 20:15:12', 'superAdmin', '2025-03-03 16:46:24', 'superAdmin');
 
 -- 关系
-insert into moyu.sys_relation (id, object_id, target_id, relation_type, create_time, create_by)
-values  (1, 'superAdmin', 'superAdmin', 1, null, null),
-        (2, 'superAdmin', 'menu_sys_scope', 2, null, null),
-        (3, 'superAdmin', 'menu_sys_org', 2, null, null),
-        (4, 'superAdmin', 'menu_sys_role', 2, null, null),
-        (5, 'superAdmin', 'menu_sys_button', 2, null, null),
-        (6, 'superAdmin', 'menu_sys_user', 2, null, null),
-        (7, 'superAdmin', 'menu_sys_group', 2, null, null),
-        (8, 'superAdmin', 'menu_sys_menu', 2, null, null),
-        (9, 'superAdmin', 'menu_sys_module', 2, null, null),
-        (10, 'superAdmin', 'menu_biz_pos', 2, null, null),
-        (11, 'G1897207291765641216', 'superAdmin', 3, null, null),
-        (12, 'G1897207291765641216', 'superAdmin', 4, null, null),
-        (13, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5, null, null);
+insert into moyu.sys_relation (id, object_id, target_id, relation_type, delete_flag, create_time, create_by, update_time, update_by)
+values  (1, 'superAdmin', 'superAdmin', 1, 0, null, null, null, null),
+        (2, 'superAdmin', 'menu_sys_org', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (3, 'superAdmin', 'menu_sys_user', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (4, 'superAdmin', 'menu_sys_position', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (5, 'superAdmin', 'menu_sys_group', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (6, 'superAdmin', 'menu_sys_scope', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (7, 'superAdmin', 'menu_sys_role', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (8, 'superAdmin', 'menu_sys_module', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (9, 'superAdmin', 'menu_sys_menu', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (10, 'superAdmin', 'menu_sys_button', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
+        (11, 'superAdmin', 'menu_biz_pos', 2, 0, null, null, null, null),
+        (12, 'G1897207291765641216', 'superAdmin', 3, 0, null, null, null, null),
+        (13, 'G1897207291765641216', 'superAdmin', 4, 0, null, null, null, null),
+        (14, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5, 0, null, null, null, null);
 
