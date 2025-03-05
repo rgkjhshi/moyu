@@ -84,7 +84,8 @@ public class UserCenterServiceImpl implements UserCenterService {
                 // nameList进行反转
                 Collections.reverse(nameList);
                 String fullName = Joiner.on("-").skipNulls().join(nameList);
-                GroupInfo groupInfo = GroupInfo.builder().code(e.getCode()).name(e.getName()).orgCode(e.getOrgCode()).fullName(fullName).build();
+                GroupInfo groupInfo = GroupInfo.builder().code(e.getCode()).name(e.getName())
+                        .orgCode(e.getOrgCode()).orgName(e.getOrgName()).orgFullName(fullName).build();
                 groupInfoList.add(groupInfo);
             });
             userInfo.setGroupInfoList(groupInfoList);
