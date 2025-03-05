@@ -11,27 +11,28 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.moyu.common.security.model.LoginUser;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.OrgTypeEnum;
 import com.moyu.system.sys.enums.ResourceTypeEnum;
 import com.moyu.system.sys.enums.StatusEnum;
+import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.param.SysUserParam;
+import com.moyu.system.sys.model.vo.GroupInfo;
 import com.moyu.system.sys.model.vo.UserInfo;
 import com.moyu.system.sys.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -55,7 +56,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     private SysRoleService sysRoleService;
 
     @Resource
-    private SysScopeService sysScopeService;
+    private SysGroupService sysGroupService;
 
     @Resource
     private SysRelationService sysRelationService;
@@ -64,18 +65,30 @@ public class UserCenterServiceImpl implements UserCenterService {
     public UserInfo currentUserInfo(String username) {
         // 查询用户entity
         SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
+        // 当前登陆用户
+        LoginUser loginUser = SecurityUtils.getLoginUser();
         // 构造用户信息视图对象
         UserInfo userInfo = UserInfo.builder().account(username)
-                .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar()).build();
-        // 角色集合
-        Set<String> roles = sysRoleService.userAllRoles(username);
-        userInfo.setRoles(roles);
-        // 权限集合
-        Set<String> perms = sysRoleService.rolePerms(roles);
-        userInfo.setPerms(perms);
-        // 数据范围集合
-        Set<String> scopes = sysScopeService.userDataScopes(username);
-        userInfo.setScopes(scopes);
+                .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar())
+                .perms(loginUser.getPerms()).roles(loginUser.getRoles())
+                .orgCode(loginUser.getOrgCode()).groupCode(loginUser.getGroupCode())
+                .dataScope(loginUser.getDataScope()).scopes(loginUser.getScopes())
+                .build();
+        // 岗位列表
+        List<SysGroup> groupList = sysGroupService.userGroupList(username);
+        if (ObjectUtil.isNotEmpty(groupList)) {
+            Tree<String> orgTree = sysOrgService.singleTree();
+            List<GroupInfo> groupInfoList = new ArrayList<>();
+            groupList.forEach(e -> {
+                List<CharSequence> nameList = TreeUtil.getParentsName(orgTree.getNode(e.getOrgCode()), true);
+                // nameList进行反转
+                Collections.reverse(nameList);
+                String fullName = Joiner.on("-").skipNulls().join(nameList);
+                GroupInfo groupInfo = GroupInfo.builder().code(e.getCode()).name(e.getName()).orgCode(e.getOrgCode()).fullName(fullName).build();
+                groupInfoList.add(groupInfo);
+            });
+            userInfo.setGroupInfoList(groupInfoList);
+        }
         return userInfo;
     }
 

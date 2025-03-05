@@ -32,5 +32,5 @@ public class GroupInfo {
     /**
      * 当前组织机构名称
      */
-    private String orgName;
+    private String fullName;
 }

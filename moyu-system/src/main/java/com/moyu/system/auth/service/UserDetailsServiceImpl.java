@@ -69,7 +69,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private LoginUser buildUserDetails(SysUser sysUser) {
         // 所有的角色集，包括 userRole + userGroupRole
         Set<String> roleSet = sysRoleService.userAllRoles(sysUser.getAccount());
-        // 所有权限集
+        // 所有权限集 TODO 权限也应该来自于所属group
         Set<String> permSet = sysRoleService.rolePerms(roleSet);
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder()
