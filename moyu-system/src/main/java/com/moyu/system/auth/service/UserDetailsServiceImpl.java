@@ -9,7 +9,9 @@ import com.moyu.system.sys.enums.StatusEnum;
 import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
-import com.moyu.system.sys.service.*;
+import com.moyu.system.sys.service.SysGroupService;
+import com.moyu.system.sys.service.SysRoleService;
+import com.moyu.system.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,12 +37,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private SysRoleService sysRoleService;
-
-    @Resource
-    private SysRelationService sysRelationService;
-
-    @Resource
-    private SysScopeService sysScopeService;
 
     @Resource
     private SysGroupService sysGroupService;
@@ -80,10 +76,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .username(sysUser.getAccount())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0)
-                // 默认用户所在的组织机构
-                .orgCode(sysUser.getOrgCode())
                 .roles(roleSet)
                 .perms(permSet)
+                // 默认用户所在的组织机构
+                .orgCode(sysUser.getOrgCode())
                 .dataScope(DataScopeEnum.SELF.getCode())
                 .build();
         // 岗位列表
