@@ -56,7 +56,7 @@ public class SysOrg extends BaseEntity {
     private Integer orgLevel;
 
     /**
-     * 所属组织链,逗号分隔,父节点在后
+     * 所属组织树路径,逗号分隔,父节点在后
      */
     private String orgChain;
 

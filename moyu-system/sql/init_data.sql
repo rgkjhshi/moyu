@@ -1,5 +1,5 @@
 -- 组织机构
-insert into moyu.sys_org (id, parent_code, name, code, org_type, org_level, org_chain, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
+insert into moyu.sys_org (id, parent_code, name, code, org_type, org_level, org_path, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
 values  (2001, '0', 'MY集团', '10000000', 1, 1, '0', 1, 0, null, null, 0, '2025-03-03 23:37:20', null, '2025-02-26 14:24:47', null),
         (2002, '10000000', '集团总部', '11000000', 1, 2, '10000000,0', 2, 0, null, null, 0, '2025-02-18 18:52:51', null, '2025-03-05 10:40:40', 'superAdmin'),
         (2003, '10000000', '北京公司', '12000000', 1, 2, '10000000,0', 4, 0, null, null, 0, '2025-03-04 22:30:14', 'superAdmin', '2025-03-05 10:41:11', 'superAdmin'),

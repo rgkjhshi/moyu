@@ -23,7 +23,7 @@ public interface SysOrgMapper extends BaseMapper<SysOrg> {
     /**
      * 查询下属组织机构code列表(包含本身)
      */
-    @Select("SELECT * FROM sys_org WHERE code = #{orgCode} OR find_in_set(#{orgCode}, org_chain)")
+    @Select("SELECT * FROM sys_org WHERE code = #{orgCode} OR find_in_set(#{orgCode}, org_path)")
     List<SysOrg> selectChildren(@Param("orgCode") String orgCode);
 
     /**
