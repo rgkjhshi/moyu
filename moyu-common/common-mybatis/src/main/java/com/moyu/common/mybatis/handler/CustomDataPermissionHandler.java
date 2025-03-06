@@ -70,7 +70,6 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
     @SneakyThrows
     public static Expression dataScopeFilter(DataPermission annotation) {
         // 指定的列名
-        String userColumn = annotation.userColumn();
         String orgColumn = annotation.orgColumn();
         Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
         // 追加的条件
@@ -80,13 +79,16 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
             return null;
         } else if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
             String username = SecurityUtils.getLoginUser().getUsername();
-            sqlStr = userColumn + " = '" + username + "'";
+            sqlStr = annotation.userColumn() + " = '" + username + "'";
         } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
             String orgCode = SecurityUtils.getLoginUser().getOrgCode();
             sqlStr = orgColumn + " = '" + orgCode + "'";
         } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
             String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+            // 这种处理方式适合所有服务都能访问组织机构表且组织机构不多的情况(否则数量过多会导致in效率低下)
             sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , org_path ) )";
+            // 第二种处理方式则需要在数据表中新增一个表示组织机构树层级路径的字段，如:org_path
+//            sqlStr = annotation.orgPathColumn() + " LIKE %" + orgCode + "%";
         } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
             Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
             if (ObjectUtil.isEmpty(scopes)) {
@@ -95,22 +97,10 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
                 sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
             }
         }
-//        if (StrUtil.isNotBlank(orgColumn)) {
-//            // 数据权限范围
-//            Set<String> scopes = SecurityUtils.getScopes();
-//            if (ObjectUtil.isEmpty(scopes)) {
-//                // 无权限
-//                sqlStr = "1 = 0";
-//            } else if (StrUtil.isBlank(sqlStr)) {
-//                sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
-//            } else {
-//                sqlStr = sqlStr + " AND " + orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
-//            }
-//        }
         if (StrUtil.isBlank(sqlStr)) {
             return null;
         }
-        log.debug("追加的数据权限过滤条件为:{}", sqlStr);
+        log.debug("数据权限为:{}, 追加的过滤条件为:{}", DataScopeEnum.getByCode(dataScope), sqlStr);
         // 将sqlStr转换为条件表达式
         return CCJSqlParserUtil.parseCondExpression(sqlStr);
     }

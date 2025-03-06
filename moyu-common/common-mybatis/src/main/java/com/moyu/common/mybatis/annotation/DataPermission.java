@@ -16,13 +16,18 @@ import java.lang.annotation.*;
 public @interface DataPermission {
 
     /**
+     * 用于控制用户的列名，如:create_by
+     */
+    String userColumn() default "create_by";
+
+    /**
      * 用于控制组织机构的列名，如:org_code
      */
     String orgColumn() default "org_code";
 
     /**
-     * 用于控制用户的列名，如:create_by
+     * 用于控制组织机构层级路径的列名，如:org_path
      */
-    String userColumn() default "create_by";
+    String orgPathColumn() default "org_path";
 
 }
