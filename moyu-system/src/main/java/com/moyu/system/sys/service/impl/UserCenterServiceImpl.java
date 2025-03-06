@@ -220,10 +220,10 @@ public class UserCenterServiceImpl implements UserCenterService {
      * 获取用户直属公司的orgCode
      */
     private String getUserCompanyCode(Tree<String> tree, SysUser user) {
-        // 通过用户的orgChain获取用户的组织链接
-        List<String> orgChainList = TreeUtil.getParentsId(tree.getNode(user.getOrgCode()), true);
+        // 通过用户的orgPath获取用户的组织链接
+        List<String> orgPathList = TreeUtil.getParentsId(tree.getNode(user.getOrgCode()), true);
         // 从前往后遍历，因组织链有顺序，所以遍历顺序不能变
-        String orgCode = orgChainList.stream()
+        String orgCode = orgPathList.stream()
                 .filter(code -> ObjectUtil.equal(OrgTypeEnum.COMPANY.getCode(), tree.getNode(code).get("orgType")))
                 .findFirst().orElse(user.getOrgCode());
         return orgCode;

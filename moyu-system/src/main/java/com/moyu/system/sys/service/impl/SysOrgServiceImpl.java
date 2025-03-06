@@ -159,7 +159,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 所属组织链(不包含本节点)
         Tree<String> rootTree = singleTree();
         List<String> list = TreeUtil.getParentsId(rootTree.getNode(orgParam.getParentCode()), true);
-        org.setOrgChain(SysConstants.COMMA_JOINER.join(list));
+        org.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         this.save(org);
     }
 
@@ -221,13 +221,13 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 不使用beanCopy是为了效率
         SysOrg updateOrg = buildSysOrg(orgParam);
         updateOrg.setId(oldOrg.getId());
-        // 若父节点有变化，则orgChain也要变
-        if (ObjectUtil.isEmpty(oldOrg.getOrgChain()) || ObjectUtil.notEqual(oldOrg.getParentCode(), orgParam.getParentCode())) {
+        // 若父节点有变化，则orgPath也要变
+        if (ObjectUtil.isEmpty(oldOrg.getOrgPath()) || ObjectUtil.notEqual(oldOrg.getParentCode(), orgParam.getParentCode())) {
             // 所属组织链
             Tree<String> rootTree = singleTree();
             List<String> list = TreeUtil.getParentsId(rootTree.getNode(orgParam.getParentCode()), true);
-            updateOrg.setOrgChain(SysConstants.COMMA_JOINER.join(list));
-            // 本节点的子节点orgChain也应该改变，待tree更新之后才可以修改 TODO
+            updateOrg.setOrgPath(SysConstants.COMMA_JOINER.join(list));
+            // 本节点的子节点orgPath也应该改变，待tree更新之后才可以修改 TODO
         }
         this.updateById(updateOrg);
     }
