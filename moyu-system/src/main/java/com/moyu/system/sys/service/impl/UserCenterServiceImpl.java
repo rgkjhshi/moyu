@@ -155,10 +155,8 @@ public class UserCenterServiceImpl implements UserCenterService {
         }
         // 获取全部树
         Tree<String> rootTree = sysOrgService.singleTree();
-        // 查询用户信息
-        SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
-        // 获取用户所属的最近一级公司组织code
-        String orgCode = getUserCompanyCode(rootTree, user.getOrgCode());
+        // 查询用户当前岗位所属公司
+        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getLoginUser().getOrgCode());
         // 用户直属公司orgTree
         Tree<String> orgTree = rootTree.getNode(orgCode);
         // 用户公司树列表
