@@ -89,7 +89,7 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
             sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , org_path ) )";
             // 第二种处理方式则需要在数据表中新增一个表示组织机构树层级路径的字段，如:org_path
 //            sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR " + annotation.orgPathColumn() + " LIKE '%" + orgCode + "%' )";
-            sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , org_path ) )";
+            sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , " + annotation.orgPathColumn() + " ) )";
         } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
             Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
             if (ObjectUtil.isEmpty(scopes)) {
