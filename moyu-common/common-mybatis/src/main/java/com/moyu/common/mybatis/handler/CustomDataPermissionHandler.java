@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.handler.MultiDataPermissionHandler;
 import com.moyu.common.mybatis.annotation.DataPermission;
+import com.moyu.common.mybatis.enums.DataScopeEnum;
 import com.moyu.common.security.util.SecurityUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -52,20 +53,13 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
         if (annotation == null) {
             return null;
         }
-        // 指定的列名
-        String userColumn = annotation.userColumn();
-        String orgColumn = annotation.orgColumn();
-        if (StrUtil.isBlank(userColumn) && StrUtil.isBlank(orgColumn)) {
-            log.debug("{}加了数据权限注解，但未指定字段名，无法追加筛选条件", mappedStatementId);
-            return null;
-        }
         // root超管不做任何限制
         if (SecurityUtils.isRoot()) {
             return null;
         }
-        log.debug("{}设置数据了权限", mappedStatementId);
+        log.debug("{}执行数据权限过滤", mappedStatementId);
         // 匹配到的方法上有注解，则按照注解内容生成追加的表达式
-        return dataScopeFilter(userColumn, orgColumn);
+        return dataScopeFilter(annotation);
     }
 
     /**
@@ -74,28 +68,45 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
      * @return 构建后查询条件
      */
     @SneakyThrows
-    public static Expression dataScopeFilter(String userColumn, String orgColumn) {
+    public static Expression dataScopeFilter(DataPermission annotation) {
+        // 指定的列名
+        String userColumn = annotation.userColumn();
+        String orgColumn = annotation.orgColumn();
+        Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
         // 追加的条件
         String sqlStr = "";
-        // user 条件
-        if (StrUtil.isNotBlank(userColumn)) {
-            // 用户名
+        if (DataScopeEnum.ALL.getCode().equals(dataScope)) {
+            //  不限制
+            return null;
+        } else if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
             String username = SecurityUtils.getLoginUser().getUsername();
             sqlStr = userColumn + " = '" + username + "'";
-        }
-        // org 条件(两个均不为空时org会覆盖user条件)
-        if (StrUtil.isNotBlank(orgColumn)) {
-            // 数据权限范围
-            Set<String> scopes = SecurityUtils.getScopes();
+        } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
+            String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+            sqlStr = orgColumn + " = '" + orgCode + "'";
+        } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
+            String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+            sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = " + orgCode + " or find_in_set( " + orgCode + " , org_path ) )";
+        } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
+            Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
             if (ObjectUtil.isEmpty(scopes)) {
-                // 无权限
                 sqlStr = "1 = 0";
-            } else if (StrUtil.isBlank(sqlStr)) {
-                sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
             } else {
-                sqlStr = sqlStr + " AND " + orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
+                sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
             }
         }
+//        if (StrUtil.isNotBlank(orgColumn)) {
+//            // 数据权限范围
+//            Set<String> scopes = SecurityUtils.getScopes();
+//            if (ObjectUtil.isEmpty(scopes)) {
+//                // 无权限
+//                sqlStr = "1 = 0";
+//            } else if (StrUtil.isBlank(sqlStr)) {
+//                sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
+//            } else {
+//                sqlStr = sqlStr + " AND " + orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
+//            }
+//        }
         if (StrUtil.isBlank(sqlStr)) {
             return null;
         }
