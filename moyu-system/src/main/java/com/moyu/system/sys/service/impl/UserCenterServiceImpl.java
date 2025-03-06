@@ -187,8 +187,8 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder().enabled(true)
                 .username(username).roles(roleSet).perms(permSet)
-                .orgCode(group.getOrgCode()).dataScope(group.getDataScope())
-                .build();
+                .orgCode(group.getOrgCode()).groupCode(group.getCode())
+                .dataScope(group.getDataScope()).build();
         // 自定义数据权限集合
         if (DataScopeEnum.ORG_DEFINE.getCode().equals(group.getDataScope())) {
             loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
