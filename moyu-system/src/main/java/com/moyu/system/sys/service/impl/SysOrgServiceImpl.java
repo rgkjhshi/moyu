@@ -19,6 +19,7 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.mybatis.enums.DataScopeEnum;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysOrgMapper;
@@ -83,12 +84,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      */
     @Override
     public PageResult<SysOrg> pageList(SysOrgParam orgParam) {
-        // 数据权限范围
-        Set<String> scopeSet = new HashSet<>();
-        // 非ROOT则限制
-        if (!SecurityUtils.isRoot()) {
-            scopeSet = SecurityUtils.getScopes();
-        }
         // 查询条件
         LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class)
                 // 关键词搜索
@@ -97,10 +92,28 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
-                // 数据权限(非空才有效)
-                .in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet)
                 .eq(SysOrg::getDeleteFlag, 0)
                 .orderByAsc(SysOrg::getSortNum);
+        // 非ROOT则限制数据权限
+        if (!SecurityUtils.isRoot()) {
+            // 指定的列名
+            Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
+            if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
+                String username = SecurityUtils.getLoginUser().getUsername();
+                queryWrapper.and(e -> e.eq(SysOrg::getCreateBy, username));
+            } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
+                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode));
+            } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
+                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                // find_in_set函数比like高效
+//                queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode).or().like(SysOrg::getOrgPath, orgCode));
+                queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode).or().apply("find_in_set('" + orgCode + "', org_path)"));
+            } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
+                Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
+                queryWrapper.and(e -> e.in(SysOrg::getCode, scopes));
+            }
+        }
         // 分页查询
         Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
         Page<SysOrg> orgPage = this.page(page, queryWrapper);

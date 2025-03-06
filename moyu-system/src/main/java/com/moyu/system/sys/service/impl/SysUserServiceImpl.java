@@ -16,6 +16,7 @@ import com.google.common.base.Strings;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.mybatis.enums.DataScopeEnum;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysUserMapper;
@@ -23,12 +24,12 @@ import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.SysOrgService;
 import com.moyu.system.sys.service.SysUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ import java.util.Set;
  * @description 针对表【sys_user(用户信息表)】的数据库操作Service实现
  * @createDate 2024-12-25 20:35:45
  */
+@Slf4j
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
@@ -72,16 +74,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public PageResult<SysUser> pageList(SysUserParam userParam) {
-        // 数据权限范围
-        Set<String> scopeSet = new HashSet<>();
-        // 非ROOT则限制
-        if (!SecurityUtils.isRoot()) {
-            scopeSet = SecurityUtils.getScopes();
-        }
+        String deptCode = userParam.getOrgCode();
         // 查询指定的组织所有的children
         List<String> childrenCode = new ArrayList<>();
-        if (StrUtil.isNotBlank(userParam.getOrgCode())) {
-            childrenCode = sysOrgService.childrenCodeList(userParam.getOrgCode());
+        if (StrUtil.isNotBlank(deptCode)) {
+            childrenCode = sysOrgService.childrenCodeList(deptCode);
         }
 
         // 查询条件
@@ -90,11 +87,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .like(StrUtil.isNotBlank(userParam.getSearchKey()), SysUser::getName, userParam.getSearchKey())
                 // 指定orgCode
                 .in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode)
+                .apply(ObjectUtil.isNotEmpty(deptCode), "find_in_set('" + deptCode + "', org_path)")
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
-                // 数据权限(非空才有效)
-                .in(ObjectUtil.isNotEmpty(scopeSet), SysUser::getOrgCode, scopeSet)
                 .eq(SysUser::getDeleteFlag, 0);
+        // 非ROOT则限制数据权限
+        if (!SecurityUtils.isRoot()) {
+            // 指定的列名
+            Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
+            if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
+                String username = SecurityUtils.getLoginUser().getUsername();
+                queryWrapper.and(e -> e.eq(SysUser::getCreateBy, username));
+            } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
+                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                queryWrapper.and(e -> e.eq(SysUser::getOrgCode, orgCode));
+            } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
+                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                // find_in_set函数比like高效
+//                queryWrapper.and(e -> e.eq(SysUser::getOrgCode, orgCode).or().like(SysUser::getOrgPath, orgCode));
+                queryWrapper.and(e -> e.eq(SysUser::getOrgCode, orgCode).or().apply("find_in_set('" + orgCode + "', org_path)"));
+            } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
+                Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
+                queryWrapper.and(e -> e.in(SysUser::getOrgCode, scopes));
+            }
+            log.debug("数据权限为:{}, 已追加过滤条件", DataScopeEnum.getByCode(dataScope));
+        }
         // 分页查询
         Page<SysUser> page = new Page<>(userParam.getPageNum(), userParam.getPageSize());
         Page<SysUser> groupPage = this.page(page, queryWrapper);
