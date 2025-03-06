@@ -3,6 +3,7 @@ package com.moyu.system.sys.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -112,6 +113,9 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
             Tree<String> orgNode = rootTree.getNode(scope.getOrgCode());
             // 设置直属机构名称
             scope.setOrgName(orgNode.getName().toString());
+            // 组织机构层级路径,逗号分隔,父节点在后
+            List<String> list = TreeUtil.getParentsId(orgNode, true);
+            scope.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         }
         // 若是自定义范围,需要处理
         if (ObjectUtil.equal(scopeParam.getScopeType(), DataScopeEnum.ORG_DEFINE.getCode())) {
@@ -144,6 +148,9 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
             Tree<String> orgNode = rootTree.getNode(updateScope.getOrgCode());
             // 设置直属机构名称
             updateScope.setOrgName(orgNode.getName().toString());
+            // 组织机构层级路径,逗号分隔,父节点在后
+            List<String> list = TreeUtil.getParentsId(orgNode, true);
+            updateScope.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         }
         // 若是自定义范围,需要处理
         if (ObjectUtil.equal(scopeParam.getScopeType(), DataScopeEnum.ORG_DEFINE.getCode())) {
