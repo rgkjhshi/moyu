@@ -107,6 +107,11 @@ public class SysUser extends BaseEntity {
     private String orgName;
 
     /**
+     * 组织机构层级路径,逗号分隔,父节点在后
+     */
+    private String orgPath;
+
+    /**
      * 登陆IP
      */
     private String loginIp;

@@ -156,7 +156,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
             org.setCode(IdUtil.objectId());
         }
-        // 所属组织链(不包含本节点)
+        // 组织机构层级路径,逗号分隔,父节点在后(不包含本节点)
         Tree<String> rootTree = singleTree();
         List<String> list = TreeUtil.getParentsId(rootTree.getNode(orgParam.getParentCode()), true);
         org.setOrgPath(SysConstants.COMMA_JOINER.join(list));
@@ -223,7 +223,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         updateOrg.setId(oldOrg.getId());
         // 若父节点有变化，则orgPath也要变
         if (ObjectUtil.isEmpty(oldOrg.getOrgPath()) || ObjectUtil.notEqual(oldOrg.getParentCode(), orgParam.getParentCode())) {
-            // 所属组织链
+            // 组织机构层级路径,逗号分隔,父节点在后(不包含本节点)
             Tree<String> rootTree = singleTree();
             List<String> list = TreeUtil.getParentsId(rootTree.getNode(orgParam.getParentCode()), true);
             updateOrg.setOrgPath(SysConstants.COMMA_JOINER.join(list));

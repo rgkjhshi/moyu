@@ -2,6 +2,7 @@ package com.moyu.system.sys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -134,6 +135,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             Tree<String> orgNode = rootTree.getNode(user.getOrgCode());
             // 设置直属机构名称
             user.setOrgName(orgNode.getName().toString());
+            // 组织机构层级路径,逗号分隔,父节点在后
+            List<String> list = TreeUtil.getParentsId(orgNode, true);
+            user.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         }
         // 初始密码为系统默认
         if (ObjectUtil.isEmpty(user.getPassword())) {
@@ -165,6 +169,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             Tree<String> orgNode = rootTree.getNode(userParam.getOrgCode());
             // 设置直属机构名称
             updateUser.setOrgName(orgNode.getName().toString());
+            // 组织机构层级路径,逗号分隔,父节点在后
+            List<String> list = TreeUtil.getParentsId(orgNode, true);
+            updateUser.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         }
         this.updateById(updateUser);
     }
