@@ -158,7 +158,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 查询用户信息
         SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         // 获取用户所属的最近一级公司组织code
-        String orgCode = getUserCompanyCode(tree, user);
+        String orgCode = getUserCompanyCode(tree, user.getOrgCode());
         // 获取用户有权限的所有公司
         // 获取公司对应的tree
         return Lists.newArrayList(tree.getNode(orgCode));
@@ -217,15 +217,15 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     /**
-     * 获取用户直属公司的orgCode
+     * 获取指定部门所属公司的orgCode
      */
-    private String getUserCompanyCode(Tree<String> tree, SysUser user) {
+    private String getUserCompanyCode(Tree<String> tree, String deptCode) {
         // 通过用户的orgPath获取用户的组织链接
-        List<String> orgPathList = TreeUtil.getParentsId(tree.getNode(user.getOrgCode()), true);
+        List<String> orgPathList = TreeUtil.getParentsId(tree.getNode(deptCode), true);
         // 从前往后遍历，因组织链有顺序，所以遍历顺序不能变
         String orgCode = orgPathList.stream()
                 .filter(code -> ObjectUtil.equal(OrgTypeEnum.COMPANY.getCode(), tree.getNode(code).get("orgType")))
-                .findFirst().orElse(user.getOrgCode());
+                .findFirst().orElse(deptCode);
         return orgCode;
     }
 }
