@@ -26,8 +26,8 @@ insert into moyu.sys_group (id, name, code, org_code, org_name, data_scope, scop
 values  (1894925631903645700, '总部管理组', 'G1897207291765641216', '11000000', '集团总部', 2, null, 2, 0, null, null, 0, '2025-03-05 11:02:14', 'superAdmin', '2025-03-05 11:02:14', 'superAdmin');
 
 -- 数据权限组
-insert into moyu.sys_scope (id, name, code, org_code, org_name, scope_type, scope_set, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
-values  (1, '总部及以下数据', '67c19a5de4b0576ca0dc6dd8', '11000000', '集团总部', 3, null, 5, 0, null, null, 0, '2025-02-28 19:13:34', 'superAdmin', '2025-03-05 10:47:40', 'superAdmin');
+insert into moyu.sys_scope (id, name, code, org_code, org_name, scope_type, scope_set, org_path, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
+values  (1, '总部及以下数据', '67c19a5de4b0576ca0dc6dd8', '11000000', '集团总部', 3, null, '11000000,10000000,0', 5, 0, null, null, 0, '2025-02-28 19:13:34', 'superAdmin', '2025-03-05 10:47:40', 'superAdmin');
 
 -- 菜单数据
 insert into moyu.sys_resource (id, parent_code, name, code, resource_type, path, component, icon, permission, visible, link, module, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
