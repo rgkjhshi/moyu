@@ -31,6 +31,7 @@ import com.moyu.system.sys.model.param.SysRelationParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,6 +46,7 @@ import java.util.stream.Collectors;
  * @description 针对表【sys_pos(岗位信息表)】的数据库操作Service实现
  * @createDate 2024-12-20 14:29:15
  */
+@Slf4j
 @Service
 public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> implements SysGroupService {
 
@@ -78,12 +80,6 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public PageResult<SysGroup> pageList(SysGroupParam groupParam) {
-        // 数据权限范围
-        Set<String> scopeSet = new HashSet<>();
-        // 非ROOT则限制
-        if (!SecurityUtils.isRoot()) {
-            scopeSet = SecurityUtils.getScopes();
-        }
         // 查询条件
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class)
                 // 关键词搜索
@@ -92,10 +88,28 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 .eq(StrUtil.isNotBlank(groupParam.getOrgCode()), SysGroup::getOrgCode, groupParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
-                // 数据权限(非空才有效)
-                .in(ObjectUtil.isNotEmpty(scopeSet), SysGroup::getOrgCode, scopeSet)
                 .eq(SysGroup::getDeleteFlag, 0)
                 .orderByAsc(SysGroup::getSortNum);
+        // 非ROOT则限制数据权限
+        if (!SecurityUtils.isRoot()) {
+            LambdaQueryWrapper<SysGroup> appendWrapper = Wrappers.lambdaQuery(SysGroup.class);
+            // 指定的列名
+            Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
+            if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
+                String username = SecurityUtils.getLoginUser().getUsername();
+                appendWrapper.eq(SysGroup::getCreateBy, username);
+            } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
+                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                appendWrapper.eq(SysGroup::getOrgCode, orgCode);
+            } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
+                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                appendWrapper.eq(SysGroup::getOrgCode, orgCode).or().like(SysGroup::getOrgPath, orgCode);
+            } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
+                Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
+                appendWrapper.in(SysGroup::getOrgCode, scopes);
+            }
+            log.debug("数据权限为:{}, 追加的过滤条件为:{}", DataScopeEnum.getByCode(dataScope), appendWrapper.getSqlSelect());
+        }
         // 分页查询
         Page<SysGroup> page = new Page<>(groupParam.getPageNum(), groupParam.getPageSize());
         Page<SysGroup> groupPage = this.page(page, queryWrapper);
