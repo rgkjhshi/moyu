@@ -3,6 +3,7 @@ package com.moyu.system.sys.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -131,6 +132,9 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             Tree<String> orgNode = rootTree.getNode(group.getOrgCode());
             // 设置直属机构名称
             group.setOrgName(orgNode.getName().toString());
+            // 组织机构层级路径,逗号分隔,父节点在后
+            List<String> list = TreeUtil.getParentsId(orgNode, true);
+            group.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         }
         // 若是自定义数据范围,需要处理
         if (ObjectUtil.equal(groupParam.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
@@ -163,6 +167,9 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             Tree<String> orgNode = rootTree.getNode(updateGroup.getOrgCode());
             // 设置直属机构名称
             updateGroup.setOrgName(orgNode.getName().toString());
+            // 组织机构层级路径,逗号分隔,父节点在后
+            List<String> list = TreeUtil.getParentsId(orgNode, true);
+            updateGroup.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         }
         // 若是自定义数据范围,需要处理
         if (ObjectUtil.equal(groupParam.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {

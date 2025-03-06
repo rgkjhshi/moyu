@@ -103,6 +103,7 @@ create table sys_group
     `org_name`    VARCHAR(64)   NULL DEFAULT NULL COMMENT '直属组织名称',
     `data_scope`  TINYINT(5)    NULL DEFAULT NULL COMMENT '数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)',
     `scope_set`   VARCHAR(1024) NULL DEFAULT NULL COMMENT '自定义scope集合,逗号分隔',
+    `org_path`    VARCHAR(1024) NULL DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
 
     `sort_num`    INT(10)       NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)    NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
