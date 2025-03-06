@@ -57,7 +57,7 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
         if (SecurityUtils.isRoot()) {
             return null;
         }
-        log.debug("{}执行数据权限过滤", mappedStatementId);
+        log.debug("{} 执行数据权限过滤", mappedStatementId);
         // 匹配到的方法上有注解，则按照注解内容生成追加的表达式
         return dataScopeFilter(annotation);
     }
@@ -86,7 +86,7 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
             sqlStr = orgColumn + " = '" + orgCode + "'";
         } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
             String orgCode = SecurityUtils.getLoginUser().getOrgCode();
-            sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = " + orgCode + " or find_in_set( " + orgCode + " , org_path ) )";
+            sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , org_path ) )";
         } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
             Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
             if (ObjectUtil.isEmpty(scopes)) {
