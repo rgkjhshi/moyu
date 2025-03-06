@@ -13,7 +13,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.moyu.common.mybatis.enums.DataScopeEnum;
 import com.moyu.common.security.model.LoginUser;
+import com.moyu.common.security.service.TokenService;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.OrgTypeEnum;
@@ -23,6 +25,7 @@ import com.moyu.system.sys.model.entity.SysGroup;
 import com.moyu.system.sys.model.entity.SysResource;
 import com.moyu.system.sys.model.entity.SysRole;
 import com.moyu.system.sys.model.entity.SysUser;
+import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.model.vo.GroupInfo;
@@ -168,6 +171,29 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 查询用户所有的角色列表
         Set<String> codeSet = sysRoleService.userAllRoles(username);
         return sysRoleService.list(SysRoleParam.builder().codeSet(codeSet).searchKey(searchKey).build());
+    }
+
+    @Override
+    public String switchUserGroup(String groupCode) {
+        String username = SecurityUtils.getLoginUser().getUsername();
+        SysGroup group = sysGroupService.detail(SysGroupParam.builder().code(groupCode).build());
+        // 角色集
+        Set<String> roleSet = sysRoleService.userAllRoles(username);
+        // 添加group中的角色
+        sysGroupService.groupRoleList(SysGroupParam.builder().code(group.getCode()).build())
+                .forEach(e -> roleSet.add(e.getCode()));
+        // 权限集
+        Set<String> permSet = sysRoleService.rolePerms(roleSet);
+        // 组装LoginUser
+        LoginUser loginUser = LoginUser.builder().enabled(true)
+                .username(username).roles(roleSet).perms(permSet)
+                .orgCode(group.getOrgCode()).dataScope(group.getDataScope())
+                .build();
+        // 自定义数据权限集合
+        if (DataScopeEnum.ORG_DEFINE.getCode().equals(group.getDataScope())) {
+            loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
+        }
+        return TokenService.generateToken(loginUser);
     }
 
     /**

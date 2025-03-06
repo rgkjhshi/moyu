@@ -33,4 +33,8 @@ public interface UserCenterService {
      */
     List<SysRole> userRoleList(String username, String searchKey);
 
+    /**
+     * 当前用户切换岗位重新生成token
+     */
+    String switchUserGroup(String groupCode);
 }

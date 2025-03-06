@@ -1,11 +1,13 @@
 package com.moyu.system.sys.controller;
 
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import com.moyu.common.annotation.Log;
 import com.moyu.common.model.BaseResponse;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.model.entity.SysRole;
+import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.vo.UserInfo;
 import com.moyu.system.sys.service.UserCenterService;
@@ -66,11 +68,20 @@ public class UserCenterController {
     /**
      * 获取当前用户拥有的角色列表
      */
-    @RequestMapping("/userRoleList")
+    @PostMapping("/userRoleList")
     public BaseResponse<List<SysRole>> userRoleList(@RequestBody SysRoleParam roleParam) {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
         return BaseResponse.getSuccessResponse(userCenterService.userRoleList(username, roleParam.getSearchKey()));
+    }
+
+    /**
+     * 获取当前用户拥有的角色列表
+     */
+    @PostMapping("/switchUserGroup")
+    public BaseResponse<String> switchUserGroup(@RequestBody SysGroupParam groupParam) {
+        Assert.notEmpty(groupParam.getCode(), "岗位code不能为空");
+        return BaseResponse.getSuccessResponse(userCenterService.switchUserGroup(groupParam.getCode()));
     }
 
 }
