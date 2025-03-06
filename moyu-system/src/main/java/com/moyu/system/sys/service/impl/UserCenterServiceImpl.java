@@ -154,14 +154,31 @@ public class UserCenterServiceImpl implements UserCenterService {
             return sysOrgService.tree();
         }
         // 获取全部树
-        Tree<String> tree = sysOrgService.singleTree();
+        Tree<String> rootTree = sysOrgService.singleTree();
         // 查询用户信息
         SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         // 获取用户所属的最近一级公司组织code
-        String orgCode = getUserCompanyCode(tree, user.getOrgCode());
+        String orgCode = getUserCompanyCode(rootTree, user.getOrgCode());
+        // 用户直属公司orgTree
+        Tree<String> orgTree = rootTree.getNode(orgCode);
+        // 用户公司树列表
+        List<Tree<String>> treeList = Lists.newArrayList(rootTree.getNode(orgCode));
+        // 岗位列表
+        List<SysGroup> groupList = sysGroupService.userGroupList(username);
+        if (ObjectUtil.isEmpty(groupList)) {
+            return treeList;
+        }
         // 获取用户有权限的所有公司
+        groupList.forEach(group -> {
+            String groupOrgCode = getUserCompanyCode(rootTree, group.getOrgCode());
+            // 公司以外的groupTree, 也加入列表
+            if (orgTree.getNode(groupOrgCode) == null) {
+                Tree<String> groupTree = rootTree.getNode(groupOrgCode);
+                treeList.add(groupTree);
+            }
+        });
         // 获取公司对应的tree
-        return Lists.newArrayList(tree.getNode(orgCode));
+        return treeList;
     }
 
     @Override
@@ -228,4 +245,6 @@ public class UserCenterServiceImpl implements UserCenterService {
                 .findFirst().orElse(deptCode);
         return orgCode;
     }
+
+
 }
