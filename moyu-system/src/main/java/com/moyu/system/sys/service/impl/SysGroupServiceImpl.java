@@ -92,23 +92,22 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 .orderByAsc(SysGroup::getSortNum);
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
-            LambdaQueryWrapper<SysGroup> appendWrapper = Wrappers.lambdaQuery(SysGroup.class);
             // 指定的列名
             Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
             if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
                 String username = SecurityUtils.getLoginUser().getUsername();
-                appendWrapper.eq(SysGroup::getCreateBy, username);
+                queryWrapper.and(e -> e.eq(SysGroup::getCreateBy, username));
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
                 String orgCode = SecurityUtils.getLoginUser().getOrgCode();
-                appendWrapper.eq(SysGroup::getOrgCode, orgCode);
+                queryWrapper.and(e -> e.eq(SysGroup::getOrgCode, orgCode));
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
                 String orgCode = SecurityUtils.getLoginUser().getOrgCode();
-                appendWrapper.eq(SysGroup::getOrgCode, orgCode).or().like(SysGroup::getOrgPath, orgCode);
+                queryWrapper.and(e -> e.eq(SysGroup::getOrgCode, orgCode).or().like(SysGroup::getOrgPath, orgCode));
             } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
                 Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
-                appendWrapper.in(SysGroup::getOrgCode, scopes);
+                queryWrapper.and(e -> e.in(SysGroup::getOrgCode, scopes));
             }
-            log.debug("数据权限为:{}, 追加的过滤条件为:{}", DataScopeEnum.getByCode(dataScope), appendWrapper.getSqlSelect());
+            log.debug("数据权限为:{}, 已追加过滤条件", DataScopeEnum.getByCode(dataScope));
         }
         // 分页查询
         Page<SysGroup> page = new Page<>(groupParam.getPageNum(), groupParam.getPageSize());
