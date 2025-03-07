@@ -1,8 +1,5 @@
 package com.moyu.common.aop;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.common.annotation.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,17 +34,6 @@ public class LogAspect {
      */
     @Resource
     private ObjectMapper objectMapper;
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    static {
-        // 未知字段忽略
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // 不使用科学计数
-        MAPPER.configure(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN, true);
-        // null 值不输出(节省内存)
-        MAPPER.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
-    }
 
     /**
      * 拦截方法上的注解
