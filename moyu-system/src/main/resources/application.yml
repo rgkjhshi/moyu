@@ -21,6 +21,8 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     locale: zh_CN
+    # Asia/Shanghai 或 GMT+8
+    time-zone: Asia/Shanghai
 
 # MyBatis Plus配置 参考：https://baomidou.com/reference/
 mybatis-plus:
