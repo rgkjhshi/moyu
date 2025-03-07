@@ -23,6 +23,8 @@ spring:
     locale: zh_CN
     # Asia/Shanghai 或 GMT+8
     time-zone: Asia/Shanghai
+    # 不序列化null字段
+    default-property-inclusion: non_null
 
 # MyBatis Plus配置 参考：https://baomidou.com/reference/
 mybatis-plus:
