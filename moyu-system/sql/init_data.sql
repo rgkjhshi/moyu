@@ -14,7 +14,8 @@ values  (2001, '0', 'MY集团', '10000000', 1, 1, '0', 1, 0, null, null, 0, '202
 
 -- 用户
 insert into moyu.sys_user (id, account, password, nick_name, avatar, name, gender, birthday, email, phone, id_no, address, staff_code, entry_date, org_code, org_name, org_path, login_ip, login_time, last_login_ip, last_login_time, pwd_update_time, status, remark, delete_flag, create_time, create_by, update_time, update_by)
-values  (101, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'superAdmin', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null);
+values  (101, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'superAdmin', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
+        (102, 'bjAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'bjAdmin', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null);
 
 -- 角色
 insert into moyu.sys_role (id, name, code, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
@@ -23,7 +24,8 @@ values  (100, '超级管理员', 'superAdmin', 2, 0, null, null, 0, '2025-02-26 
 
 -- 功能权限组
 insert into moyu.sys_group (id, name, code, org_code, org_name, data_scope, scope_set, org_path, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
-values  (1894925631903645700, '总部管理组', 'G1897207291765641216', '11000000', '集团总部', 3, null, '11000000,10000000,0', 2, 0, null, null, 0, '2025-03-05 11:02:14', 'superAdmin', '2025-03-05 11:02:14', 'superAdmin');
+values  (1894925631903645700, '总部管理组', 'G1897207291765641216', '11000000', '集团总部', 3, '', '11000000,10000000,0', 2, 0, null, null, 0, '2025-03-05 11:02:14', 'superAdmin', '2025-03-06 13:10:51', 'superAdmin'),
+        (1894925631903645701, '北京技术部兼职岗', 'G1897478009027895296', '12002000', '北京技术部', 3, '', '12002000,12000000,10000000,0', 9, 0, null, null, 0, '2025-03-06 10:43:05', 'superAdmin', '2025-03-06 18:43:38', 'superAdmin');
 
 -- 数据权限组
 insert into moyu.sys_scope (id, name, code, org_code, org_name, scope_type, scope_set, org_path, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
@@ -95,8 +97,10 @@ values  (1, 'superAdmin', 'superAdmin', 1, 0, null, null, null, null),
         (8, 'superAdmin', 'menu_sys_module', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
         (9, 'superAdmin', 'menu_sys_menu', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
         (10, 'superAdmin', 'menu_sys_button', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
-        (11, 'superAdmin', 'menu_biz_pos', 2, 0, null, null, null, null),
-        (12, 'G1897207291765641216', 'superAdmin', 3, 0, null, null, null, null),
-        (13, 'G1897207291765641216', 'superAdmin', 4, 0, null, null, null, null),
-        (14, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5, 0, null, null, null, null);
+        (11, 'superAdmin', 'menu_biz_pos', 2, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
+        (12, 'G1897207291765641216', 'superAdmin', 3, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
+        (13, 'G1897207291765641216', 'superAdmin', 4, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
+        (14, 'G1897478009027895296', 'bjAdmin', 3, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
+        (15, 'G1897478009027895296', 'superAdmin', 4, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
+        (16, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5,  0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin');
 
