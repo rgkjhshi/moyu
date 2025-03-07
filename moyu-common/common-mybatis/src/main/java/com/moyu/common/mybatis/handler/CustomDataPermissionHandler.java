@@ -72,36 +72,55 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
         // 指定的列名
         String orgColumn = annotation.orgColumn();
         Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
-        // 追加的条件
+        DataScopeEnum scopeEnum = DataScopeEnum.getByCode(dataScope);
+        // 要追加的条件
         String sqlStr = "";
-        if (DataScopeEnum.ALL.getCode().equals(dataScope)) {
-            //  不限制
-            return null;
-        } else if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
-            String username = SecurityUtils.getLoginUser().getUsername();
-            sqlStr = annotation.userColumn() + " = '" + username + "'";
-        } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-            String orgCode = SecurityUtils.getLoginUser().getOrgCode();
-            sqlStr = orgColumn + " = '" + orgCode + "'";
-        } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
-            String orgCode = SecurityUtils.getLoginUser().getOrgCode();
-            // 这种处理方式适合所有服务都能访问组织机构表且组织机构不多的情况(否则数量过多会导致in效率低下)
-//            sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , org_path ) )";
-            // 第二种处理方式则需要在数据表中新增一个表示组织机构树层级路径的字段，如:org_path(组织机构若变更则要洗数据)
-//            sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR " + annotation.orgPathColumn() + " LIKE '%" + orgCode + "%' )";
-            sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR find_in_set('" + orgCode + "', " + annotation.orgPathColumn() + " ) )";
-        } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
-            Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
-            if (ObjectUtil.isEmpty(scopes)) {
-                sqlStr = "1 = 0";
-            } else {
-                sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
+        switch (scopeEnum) {
+            case ALL: {
+                //  不限制
+                return null;
+            }
+            case SELF: {
+                // 仅自己
+                String username = SecurityUtils.getLoginUser().getUsername();
+                sqlStr = annotation.userColumn() + " = '" + username + "'";
+                break;
+            }
+            case ORG: {
+                // 本机构
+                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                sqlStr = orgColumn + " = '" + orgCode + "'";
+                break;
+            }
+            case ORG_CHILD: {
+                // 本机构及以下
+                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                // 这种处理方式适合所有服务都能访问组织机构表且组织机构不多的情况(否则数量过多会导致in效率低下)
+                // sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , org_path ) )";
+                // 第二种处理方式则需要在数据表中新增一个表示组织机构树层级路径的字段，如:org_path(组织机构若变更则要洗数据)
+                // sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR " + annotation.orgPathColumn() + " LIKE '%" + orgCode + "%' )";
+                sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR find_in_set('" + orgCode + "', " + annotation.orgPathColumn() + " ) )";
+                break;
+            }
+            case ORG_DEFINE: {
+                //  自定义
+                Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
+                if (ObjectUtil.isEmpty(scopes)) {
+                    sqlStr = "1 = 0";
+                } else {
+                    sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
+                }
+                break;
+            }
+            default: {
+                // 默认不处理数据权限
+                return null;
             }
         }
         if (StrUtil.isBlank(sqlStr)) {
             return null;
         }
-        log.debug("数据权限为:{}, 追加的过滤条件为:{}", DataScopeEnum.getByCode(dataScope), sqlStr);
+        log.debug("数据权限为:{}, 追加的过滤条件为:{}", scopeEnum, sqlStr);
         // 将sqlStr转换为条件表达式
         return CCJSqlParserUtil.parseCondExpression(sqlStr);
     }
