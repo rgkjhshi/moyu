@@ -10,7 +10,7 @@ management:
 spring:
   # 数据源配置
   datasource:
-    url: jdbc:mysql://127.0.0.1/moyu?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1/moyu?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: shisong
     password: shisong
     driver-class-name: com.mysql.cj.jdbc.Driver
