@@ -2,7 +2,6 @@ package com.moyu.system;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.google.common.base.CaseFormat;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
