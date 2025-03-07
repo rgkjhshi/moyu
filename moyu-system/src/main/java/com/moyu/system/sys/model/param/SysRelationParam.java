@@ -18,6 +18,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysRelationParam {
     //********** 额外字段 **********//
     /**
