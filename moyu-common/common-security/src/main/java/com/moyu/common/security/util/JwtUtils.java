@@ -55,7 +55,7 @@ public class JwtUtils {
         String username = (String) jwt.getPayload(JWTPayload.SUBJECT);
         String orgCode = (String) jwt.getPayload("orgCode");
         String groupCode = (String) jwt.getPayload("groupCode");
-        Integer dataScope = ((Number) jwt.getPayload("dataScope")).intValue();
+        Integer dataScope = ObjectUtil.isEmpty(jwt.getPayload("dataScope")) ? 1 : ((Number) jwt.getPayload("dataScope")).intValue();
         Set<String> scopes = ObjectUtil.isEmpty(jwt.getPayload("scopes")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("scopes"));
         Set<String> perms = ObjectUtil.isEmpty(jwt.getPayload("perms")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("perms"));
         Set<String> roles = ObjectUtil.isEmpty(jwt.getPayload("roles")) ? new HashSet<>() : new HashSet<>((List<String>) jwt.getPayload("roles"));

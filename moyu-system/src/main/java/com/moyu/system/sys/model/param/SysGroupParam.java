@@ -1,6 +1,7 @@
 package com.moyu.system.sys.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.moyu.common.enums.DataScopeEnum;
 import com.moyu.common.model.BasePageParam;
 import lombok.Builder;
 import lombok.Getter;
@@ -62,7 +63,7 @@ public class SysGroupParam extends BasePageParam {
     /**
      * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
      *
-     * @see com.moyu.common.mybatis.enums.DataScopeEnum
+     * @see DataScopeEnum
      */
     private Integer dataScope;
 

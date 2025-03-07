@@ -2,7 +2,7 @@ package com.moyu.system.auth.service;
 
 
 import cn.hutool.core.util.ObjectUtil;
-import com.moyu.common.mybatis.enums.DataScopeEnum;
+import com.moyu.common.enums.DataScopeEnum;
 import com.moyu.common.security.model.LoginUser;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.StatusEnum;

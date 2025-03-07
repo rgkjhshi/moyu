@@ -7,7 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.handler.MultiDataPermissionHandler;
 import com.moyu.common.mybatis.annotation.DataPermission;
-import com.moyu.common.mybatis.enums.DataScopeEnum;
+import com.moyu.common.enums.DataScopeEnum;
 import com.moyu.common.security.util.SecurityUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

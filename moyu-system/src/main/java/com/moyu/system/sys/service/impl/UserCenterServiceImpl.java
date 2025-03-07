@@ -13,7 +13,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.moyu.common.mybatis.enums.DataScopeEnum;
+import com.moyu.common.enums.DataScopeEnum;
 import com.moyu.common.security.model.LoginUser;
 import com.moyu.common.security.service.TokenService;
 import com.moyu.common.security.util.SecurityUtils;

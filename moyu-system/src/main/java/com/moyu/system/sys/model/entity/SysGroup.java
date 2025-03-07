@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.moyu.common.enums.DataScopeEnum;
 import com.moyu.common.mybatis.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,7 +53,7 @@ public class SysGroup extends BaseEntity implements Serializable {
     /**
      * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
      *
-     * @see com.moyu.common.mybatis.enums.DataScopeEnum
+     * @see DataScopeEnum
      */
     private Integer dataScope;
 

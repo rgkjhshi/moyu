@@ -1,7 +1,6 @@
-package com.moyu.common.mybatis.enums;
+package com.moyu.common.enums;
 
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -25,8 +24,6 @@ public enum DataScopeEnum {
     ORG_CHILD(3, "本机构及以下"),
     ORG_DEFINE(4, "自定义");
 
-    //  Mybatis-Plus 提供注解表示插入数据库时插入该值
-    @EnumValue
     private final Integer code;
 
     private final String desc;
@@ -40,6 +37,6 @@ public enum DataScopeEnum {
      * 根据枚举的code值获取枚举对象
      */
     public static DataScopeEnum getByCode(Integer code) {
-        return Arrays.stream(DataScopeEnum.values()).filter(e -> Objects.equals(e.getCode(), code)).findFirst().orElse(null);
+        return Arrays.stream(DataScopeEnum.values()).filter(e -> Objects.equals(e.getCode(), code)).findFirst().orElse(ALL);
     }
 }
