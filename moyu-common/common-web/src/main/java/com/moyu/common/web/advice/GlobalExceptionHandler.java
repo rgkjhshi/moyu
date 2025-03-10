@@ -70,12 +70,12 @@ public class GlobalExceptionHandler {
             response.setMessage(message);
         } else if (e instanceof ServletRequestBindingException) {
             // ServletRequestBindingException是请求参数绑定到JavaBean或模型属性时出现的异常，如必传参数缺失
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
             response.setMessage(ExceptionEnum.INVALID_PARAMETER.getMessage());
         } else if (e instanceof HttpMessageConversionException) {
             // json格式参数进行参数类型转换时，参数转换失败则HttpMessageConversionException
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
             response.setCode(ExceptionEnum.INVALID_PARAMETER.getCode());
             response.setMessage(e.getMessage());
         } else if (e instanceof BaseException) {
