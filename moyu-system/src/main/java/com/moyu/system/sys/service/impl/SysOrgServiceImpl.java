@@ -16,10 +16,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
+import com.moyu.common.enums.DataScopeEnum;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
-import com.moyu.common.enums.DataScopeEnum;
 import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.mapper.SysOrgMapper;
@@ -84,12 +84,15 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      */
     @Override
     public PageResult<SysOrg> pageList(SysOrgParam orgParam) {
+        String parentCode = orgParam.getParentCode();
         // 查询条件
         LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class)
                 // 关键词搜索
                 .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
+                // 指定父节点 = 父节点+直接子节点
+                //.and(ObjectUtil.isNotEmpty(parentCode), e -> e.eq(SysOrg::getCode, parentCode).or().eq(SysOrg::getParentCode, parentCode))
                 // 指定父节点
-                .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
+                .eq(ObjectUtil.isNotEmpty(parentCode), SysOrg::getParentCode, parentCode)
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
                 .eq(SysOrg::getDeleteFlag, 0)
