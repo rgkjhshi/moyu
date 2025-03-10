@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 登陆控制器
@@ -30,7 +31,8 @@ public class AuthController {
      * 用户登陆
      */
     @PostMapping("/login")
-    public BaseResponse<String> userLogin(@Validated UserLoginParam loginParam) {
+    public BaseResponse<String> userLogin(HttpServletRequest request, @Validated UserLoginParam loginParam) {
+//        String IpStr = ServletUtil.getClientIP(request);
         String token = loginService.login(loginParam);
         return BaseResponse.getSuccessResponse(token);
     }
