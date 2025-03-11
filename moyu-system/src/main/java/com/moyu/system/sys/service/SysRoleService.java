@@ -62,23 +62,23 @@ public interface SysRoleService extends IService<SysRole> {
     void grantMenu(SysRoleParam roleParam);
 
     /**
-     * 用户分配角色，USER_HAS_ROLE
-     *
-     * @param roleParam 角色code，用户集合 codeSet
-     */
-    void userGrantRole(SysRoleParam roleParam);
-
-    /**
-     * 用户撤销角色，USER_HAS_ROLE
-     *
-     * @param roleParam 角色code，用户集合 codeSet
-     */
-    void userRevokeRole(SysRoleParam roleParam);
-
-    /**
-     * 拥有某角色的用户列表，仅包含用户-角色关系直接指定的用户，即全局角色。ROLE_HAS_USER
+     * 角色内用户列表，仅包含 ROLE_HAS_USER 关系直接指定的用户。
      */
     List<SysUser> roleUserList(SysRoleParam roleParam);
+
+    /**
+     * 角色新增用户，ROLE_HAS_USER
+     *
+     * @param roleParam 角色code，用户集合 codeSet
+     */
+    void roleAddUser(SysRoleParam roleParam);
+
+    /**
+     * 角色删除用户，ROLE_HAS_USER
+     *
+     * @param roleParam 角色code，用户集合 codeSet
+     */
+    void roleDeleteUser(SysRoleParam roleParam);
 
     /**
      * 获取指定用户所有的角色，包括 userRole + userGroupRole
