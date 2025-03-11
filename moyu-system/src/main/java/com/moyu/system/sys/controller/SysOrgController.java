@@ -10,6 +10,7 @@ import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysOrg;
 import com.moyu.system.sys.model.param.SysOrgParam;
 import com.moyu.system.sys.service.SysOrgService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,7 @@ public class SysOrgController {
     /**
      * 分页获取组织列表
      */
+    @PreAuthorize("hasAuthority('sys:org:page')")
     @PostMapping("/page")
     public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(orgParam.getPageNum(), orgParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -56,6 +58,7 @@ public class SysOrgController {
     /**
      * 获取详情
      */
+    @PreAuthorize("hasAuthority('sys:org:detail')")
     @PostMapping("/detail")
     public BaseResponse<SysOrg> detail(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
@@ -65,6 +68,7 @@ public class SysOrgController {
     /**
      * 添加
      */
+    @PreAuthorize("hasAuthority('sys:org:add')")
     @PostMapping("/add")
     public BaseResponse<String> add(@Validated @RequestBody SysOrgParam orgParam) {
         sysOrgService.add(orgParam);
@@ -74,6 +78,7 @@ public class SysOrgController {
     /**
      * 删除
      */
+    @PreAuthorize("hasAuthority('sys:org:delete')")
     @PostMapping("/delete")
     public BaseResponse<String> delete(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getIds(), "删除列表ids不能为空");
@@ -84,6 +89,7 @@ public class SysOrgController {
     /**
      * 删除树,会集联删除
      */
+    @PreAuthorize("hasAuthority('sys:org:deleteTree')")
     @PostMapping("/deleteTree")
     public BaseResponse<String> deleteTree(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getCodes(), "删除列表codes不能为空");
@@ -94,6 +100,7 @@ public class SysOrgController {
     /**
      * 编辑
      */
+    @PreAuthorize("hasAuthority('sys:org:edit')")
     @PostMapping("/edit")
     public BaseResponse<String> edit(@Validated @RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
