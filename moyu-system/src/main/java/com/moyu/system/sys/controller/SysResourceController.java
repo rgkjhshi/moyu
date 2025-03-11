@@ -46,6 +46,7 @@ public class SysResourceController {
     /**
      * 资源分页列表
      */
+    @PreAuthorize("hasAuthority('sys:resource:page')")
     @PostMapping("/page")
     public BaseResponse<PageResult<SysResource>> pageList(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(resourceParam.getPageNum(), resourceParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -56,6 +57,7 @@ public class SysResourceController {
     /**
      * 获取资源树(可指定module、status)
      */
+    @PreAuthorize("hasAuthority('sys:resource:tree')")
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
     public BaseResponse<List<Tree<String>>> tree(@RequestBody SysResourceParam resourceParam) {
@@ -66,6 +68,7 @@ public class SysResourceController {
     /**
      * 获取资源详情
      */
+    @PreAuthorize("hasAuthority('sys:resource:detail')")
     @PostMapping("/detail")
     public BaseResponse<SysResource> detail(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
@@ -75,7 +78,7 @@ public class SysResourceController {
     /**
      * 添加资源
      */
-    @PreAuthorize("hasAuthority('sys:menu:add')")
+    @PreAuthorize("hasAuthority('sys:resource:add')")
     @PostMapping("/add")
     public BaseResponse<String> add(@RequestBody SysResourceParam resourceParam) {
         sysResourceService.add(resourceParam);
@@ -85,7 +88,7 @@ public class SysResourceController {
     /**
      * 删除资源
      */
-    @PreAuthorize("hasAuthority('sys:menu:delete')")
+    @PreAuthorize("hasAuthority('sys:resource:delete')")
     @PostMapping("/delete")
     public BaseResponse<String> delete(@RequestBody SysResourceParam resourceParam) {
         Assert.notEmpty(resourceParam.getIds(), "删除列表ids不能为空");
@@ -96,6 +99,7 @@ public class SysResourceController {
     /**
      * 删除资源树,会集联删除
      */
+    @PreAuthorize("hasAuthority('sys:resource:deleteTree')")
     @PostMapping("/deleteTree")
     public BaseResponse<String> deleteTree(@RequestBody SysResourceParam resourceParam) {
         Assert.notEmpty(resourceParam.getCodes(), "删除列表codes不能为空");
@@ -106,6 +110,7 @@ public class SysResourceController {
     /**
      * 编辑资源
      */
+    @PreAuthorize("hasAuthority('sys:resource:edit')")
     @PostMapping("/edit")
     public BaseResponse<String> edit(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
