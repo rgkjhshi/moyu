@@ -72,7 +72,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', '', 'appstore
         (2037, 'dir_biz_company', '人员管理', 'menu_biz_user', 3, '/biz/user', 'biz/user/index', 'user-outlined', null, 1, null, 'biz_module', 53, 0, null, '', 0, null, null, null, null),
         (2038, 'dir_biz_company', '岗位管理', 'menu_biz_pos', 3, '/biz/position', 'biz/position/index', 'apartment-outlined', null, 1, null, 'biz_module', 54, 0, null, '', 0, null, null, null, null),
 
-        (2041, 'menu_sys_org', '增加组织', 'btn_sys_org_add', 4, '/api/sys/org/add', '', '', 'sys:org:add', 1, null, 'sys_module', 2, 0, null, '', 0, null, null, '2025-03-11 14:15:20', 'superAdmin'),
+        (2041, 'menu_sys_org', '新增组织', 'btn_sys_org_add', 4, '/api/sys/org/add', '', '', 'sys:org:add', 1, null, 'sys_module', 2, 0, null, '', 0, null, null, '2025-03-11 14:15:20', 'superAdmin'),
         (2042, 'menu_sys_org', '删除组织', 'btn_sys_org_delete', 4, '/api/sys/org/delete', '', '', 'sys:org:delete', 1, null, 'sys_module', 4, 0, null, '', 0, null, null, '2025-03-11 14:15:28', 'superAdmin'),
         (2043, 'menu_sys_org', '修改组织', 'btn_sys_org_edit', 4, '/api/sys/org/edit', '', '', 'sys:org:edit', 1, null, 'sys_module', 6, 0, null, '', 0, null, null, '2025-03-11 14:15:45', 'superAdmin'),
         (2044, 'menu_sys_org', '组织列表', 'btn_sys_org_list', 4, '/api/sys/org/page', '', '', 'sys:org:page', 1, null, 'sys_module', 8, 0, null, '', 0, null, null, '2025-03-11 14:15:55', 'superAdmin'),
@@ -113,7 +113,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', '', 'appstore
         (2075, 'menu_sys_module', '模块列表', 'btn_sys_module_list', 4, '/api/sys/resource/page', '', null, 'sys:resource:page', 1, null, 'sys_module', 8, 0, null, null, 0, '2025-03-11 12:47:57', 'superAdmin', '2025-03-11 12:51:54', 'superAdmin'),
         (2076, 'menu_sys_module', '模块详情', 'btn_sys_module_detail', 4, '/api/sys/resource/detail', '', null, 'sys:resource:detail', 1, null, 'sys_module', 10, 0, null, null, 0, '2025-03-11 12:53:35', 'superAdmin', '2025-03-11 12:53:35', 'superAdmin'),
 
-        (2077, 'menu_sys_menu', '添加菜单', 'btn_sys_menu_add', 4, '/api/sys/resource/add', '', '', 'sys:resource:add', 1, null, 'sys_module', 2, 0, null, '', 0, '2025-02-05 18:27:12', null, '2025-02-05 18:27:12', null),
+        (2077, 'menu_sys_menu', '新增菜单', 'btn_sys_menu_add', 4, '/api/sys/resource/add', '', '', 'sys:resource:add', 1, null, 'sys_module', 2, 0, null, '', 0, '2025-02-05 18:27:12', null, '2025-02-05 18:27:12', null),
         (2078, 'menu_sys_menu', '删除菜单树', 'btn_sys_menu_deleteTree', 4, '/api/sys/resource/deleteTree', '', null, 'sys:resource:deleteTree', 1, null, 'sys_module', 4, 0, null, null, 0, '2025-03-11 12:51:42', 'superAdmin', '2025-03-11 12:51:42', 'superAdmin'),
         (2079, 'menu_sys_menu', '修改菜单', 'btn_sys_menu_edit', 4, '/api/sys/resource/edit', '', null, 'sys:resource:edit', 1, null, 'sys_module', 6, 0, null, null, 0, '2025-03-11 12:52:47', 'superAdmin', '2025-03-11 12:52:47', 'superAdmin'),
         (2080, 'menu_sys_menu', '菜单树', 'btn_sys_menu_tree', 4, '/api/sys/resource/tree', '', null, 'sys:resource:detail', 1, null, 'sys_module', 8, 0, null, null, 0, '2025-03-11 12:53:35', 'superAdmin', '2025-03-11 12:53:35', 'superAdmin'),
