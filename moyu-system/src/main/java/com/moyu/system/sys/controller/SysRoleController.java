@@ -47,7 +47,7 @@ public class SysRoleController {
     /**
      * 分页获取角色列表
      */
-    @PreAuthorize("hasAuthority('sys:role:page')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:page')")
     @PostMapping("/page")
     public BaseResponse<PageResult<SysRole>> pageList(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(roleParam.getPageNum(), roleParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -58,7 +58,7 @@ public class SysRoleController {
     /**
      * 获取详情
      */
-    @PreAuthorize("hasAuthority('sys:role:detail')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:detail')")
     @PostMapping("/detail")
     public BaseResponse<SysRole> detail(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
@@ -68,7 +68,7 @@ public class SysRoleController {
     /**
      * 添加
      */
-    @PreAuthorize("hasAuthority('sys:role:add')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:add')")
     @PostMapping("/add")
     public BaseResponse<String> add(@Validated @RequestBody SysRoleParam roleParam) {
         sysRoleService.add(roleParam);
@@ -78,7 +78,7 @@ public class SysRoleController {
     /**
      * 删除
      */
-    @PreAuthorize("hasAuthority('sys:role:delete')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:delete')")
     @PostMapping("/delete")
     public BaseResponse<String> delete(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getIds(), "删除列表ids不能为空");
@@ -89,7 +89,7 @@ public class SysRoleController {
     /**
      * 编辑
      */
-    @PreAuthorize("hasAuthority('sys:role:edit')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:edit')")
     @PostMapping("/edit")
     public BaseResponse<String> edit(@Validated @RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
@@ -109,7 +109,7 @@ public class SysRoleController {
     /**
      * 给角色授权菜单
      */
-    @PreAuthorize("hasAuthority('sys:role:grantMenu')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:grantMenu')")
     @PostMapping("/grantMenu")
     public BaseResponse<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
@@ -122,7 +122,7 @@ public class SysRoleController {
     /**
      * 查询指定角色的用户列表(仅直接通过 role_has_user 关系指定的用户，即全局角色用户)
      */
-    @PreAuthorize("hasAuthority('sys:role:userList')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:userList')")
     @PostMapping("/userList")
     public BaseResponse<List<SysUser>> userList(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "分组code不能为空");
@@ -133,7 +133,7 @@ public class SysRoleController {
     /**
      * 角色新增用户
      */
-    @PreAuthorize("hasAuthority('sys:role:addUser')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:addUser')")
     @PostMapping("/roleAddUser")
     public BaseResponse<?> roleAddUser(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
@@ -145,7 +145,7 @@ public class SysRoleController {
     /**
      * 角色删除用户
      */
-    @PreAuthorize("hasAuthority('sys:role:deleteUser')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:deleteUser')")
     @PostMapping("/roleDeleteUser")
     public BaseResponse<?> roleDeleteUser(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
