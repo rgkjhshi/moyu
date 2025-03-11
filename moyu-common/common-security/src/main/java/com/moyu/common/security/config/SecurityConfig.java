@@ -73,9 +73,8 @@ public class SecurityConfig {
         http.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
         // 静态资源放行
         http.authorizeRequests().antMatchers("/static/**", "/public/**", "/**/*.ico").permitAll();
-
-        // /api下的接口，具有ROOT角色的用户放行，其他用户需要认证
-        http.authorizeRequests().antMatchers("/api/**").hasRole(SecurityConstants.ROOT_ROLE).anyRequest().permitAll();
+        // /api下的接口，需要认证才可访问
+        http.authorizeRequests().antMatchers("/api/**").authenticated();
 
         // 添加JWT filter
         http.addFilterBefore(new JwtTokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
