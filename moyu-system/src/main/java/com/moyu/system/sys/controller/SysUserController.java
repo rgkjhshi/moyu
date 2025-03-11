@@ -9,6 +9,7 @@ import com.moyu.common.model.PageResult;
 import com.moyu.system.sys.model.entity.SysUser;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.service.SysUserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ public class SysUserController {
     /**
      * 分页获取角色列表
      */
+    @PreAuthorize("hasAuthority('sys:user:page')")
     @PostMapping("/page")
     public BaseResponse<PageResult<SysUser>> pageList(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getPageNum(), userParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -44,6 +46,7 @@ public class SysUserController {
     /**
      * 获取详情
      */
+    @PreAuthorize("hasAuthority('sys:user:detail')")
     @PostMapping("/detail")
     public BaseResponse<SysUser> detail(@RequestBody SysUserParam userParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(userParam.getId(), userParam.getAccount()), "id和account不能同时为空");
@@ -53,6 +56,7 @@ public class SysUserController {
     /**
      * 添加
      */
+    @PreAuthorize("hasAuthority('sys:user:add')")
     @PostMapping("/add")
     public BaseResponse<String> add(@Validated @RequestBody SysUserParam sysUserParam) {
         sysUserService.add(sysUserParam);
@@ -62,6 +66,7 @@ public class SysUserController {
     /**
      * 删除
      */
+    @PreAuthorize("hasAuthority('sys:user:delete')")
     @PostMapping("/delete")
     public BaseResponse<String> delete(@RequestBody SysUserParam sysUserParam) {
         Assert.notEmpty(sysUserParam.getIds(), "删除列表ids不能为空");
@@ -72,6 +77,7 @@ public class SysUserController {
     /**
      * 编辑
      */
+    @PreAuthorize("hasAuthority('sys:user:edit')")
     @PostMapping("/edit")
     public BaseResponse<?> edit(@Validated @RequestBody SysUserParam userParam) {
         sysUserService.edit(userParam);
@@ -81,6 +87,7 @@ public class SysUserController {
     /**
      * 修改密码
      **/
+    @PreAuthorize("hasAuthority('sys:user:edit')")
     @PostMapping("/updatePwd")
     public BaseResponse<?> updatePassword(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getAccount(), userParam.getPassword()), "account、password都不能为空");
