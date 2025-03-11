@@ -15,7 +15,7 @@ public interface SecurityConstants {
     /**
      * 超级管理员角色编码
      */
-    String ROOT_ROLE_CODE = "ROOT";
+    String ROOT_ROLE = "ROOT";
 
     /**
      * token相关常量

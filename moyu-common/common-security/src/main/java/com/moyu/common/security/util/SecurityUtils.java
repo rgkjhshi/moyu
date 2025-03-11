@@ -74,7 +74,7 @@ public class SecurityUtils {
      * 是否为root超级管理员
      */
     public static boolean isRoot() {
-        return getRoles().contains(SecurityConstants.ROOT_ROLE_CODE);
+        return getRoles().contains(SecurityConstants.ROOT_ROLE);
     }
 
     /**
