@@ -1,6 +1,7 @@
 package com.moyu.common.security.filter;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.moyu.common.security.model.LoginUser;
 import com.moyu.common.security.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,8 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             // 验证token，并解析为jwt对象
             // 从缓存中获取用户信息
             LoginUser loginUser = TokenService.getLoginUserByToken(token);
+            String IpStr = ServletUtil.getClientIP(request);
+
             // 如果 loginUser 存在，设置SecurityContext
             if (ObjectUtil.isNotNull(loginUser) && ObjectUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
                 // 设置认证对象
