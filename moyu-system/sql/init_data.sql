@@ -145,5 +145,6 @@ values  (1, 'ROOT', 'superAdmin', 1, 0, null, null, null, null),
         (12, 'G1897207291765641216', 'superAdmin', 4, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
         (13, 'G1897478009027895296', 'bjAdmin', 3, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
         (14, 'G1897478009027895296', 'superAdmin', 4, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
-        (15, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5,  0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin');
+        (15, 'G1897207291765641216', 'bjAdmin', 3, 0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin'),
+        (16, '67c19a5de4b0576ca0dc6dd8', 'superAdmin', 5,  0, '2025-03-07 09:28:00', 'superAdmin', '2025-03-07 09:28:00', 'superAdmin');
 
