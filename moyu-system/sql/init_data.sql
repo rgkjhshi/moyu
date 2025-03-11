@@ -24,8 +24,8 @@ values  (100, '超级管理员', 'superAdmin', 2, 0, null, null, 0, '2025-02-26 
 
 -- 功能权限组
 insert into moyu.sys_group (id, name, code, org_code, org_name, data_scope, scope_set, org_path, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
-values  (1894925631903645700, '总部管理组', 'G1897207291765641216', '11000000', '集团总部', 3, '', '11000000,10000000,0', 2, 0, null, null, 0, '2025-03-05 11:02:14', 'superAdmin', '2025-03-06 13:10:51', 'superAdmin'),
-        (1894925631903645701, '北京技术部兼职岗', 'G1897478009027895296', '12002000', '北京技术部', 3, '', '12002000,12000000,10000000,0', 9, 0, null, null, 0, '2025-03-06 10:43:05', 'superAdmin', '2025-03-06 18:43:38', 'superAdmin');
+values  (1894925631903645700, '总部兼职岗', 'G1897207291765641216', '11000000', '集团总部', 3, '', '11000000,10000000,0', 2, 0, null, null, 0, '2025-03-05 11:02:14', 'superAdmin', '2025-03-06 13:10:51', 'superAdmin'),
+        (1894925631903645701, '北京技术部岗', 'G1897478009027895296', '12002000', '北京技术部', 3, '', '12002000,12000000,10000000,0', 9, 0, null, null, 0, '2025-03-06 10:43:05', 'superAdmin', '2025-03-06 18:43:38', 'superAdmin');
 
 -- 数据权限组
 insert into moyu.sys_scope (id, name, code, org_code, org_name, scope_type, scope_set, org_path, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
