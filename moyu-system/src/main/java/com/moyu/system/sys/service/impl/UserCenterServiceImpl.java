@@ -229,8 +229,8 @@ public class UserCenterServiceImpl implements UserCenterService {
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
                         meta.put("hidden", true);
                     }
-                    // 如果是超链接，设置url
-                    if (ResourceTypeEnum.LINK.getCode().equals(menu.getResourceType())) {
+                    // 如果是内链或者外链，设置url
+                    if (ResourceTypeEnum.LINK.getCode().equals(menu.getResourceType()) || ResourceTypeEnum.IFRAME.getCode().equals(menu.getResourceType())) {
                         meta.put("url", menu.getPath());
                     }
                     extra.put("meta", meta);
