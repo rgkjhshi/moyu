@@ -156,7 +156,7 @@ create table sys_resource
     `parent_code`   VARCHAR(64)  NULL DEFAULT '0' COMMENT '父编码',
     `name`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '名称',
     `code`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '编码',
-    `resource_type` TINYINT(5)   NULL DEFAULT NULL COMMENT '资源类型（字典 1模块 2目录 3菜单 4按钮 5外链）',
+    `resource_type` TINYINT(5)   NULL DEFAULT NULL COMMENT '资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）',
     `path`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '路由地址',
     `component`     VARCHAR(64)  NULL DEFAULT NULL COMMENT '组件地址',
     `icon`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '图标',

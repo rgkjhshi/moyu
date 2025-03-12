@@ -70,7 +70,7 @@ public class SysResourceParam extends BasePageParam {
     private String code;
 
     /**
-     * 资源类型（字典 1模块 2目录 3菜单 4按钮 5外链）
+     * 资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）
      *
      * @see com.moyu.system.sys.enums.ResourceTypeEnum
      */
