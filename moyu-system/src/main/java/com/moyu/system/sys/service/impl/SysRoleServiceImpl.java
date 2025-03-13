@@ -225,7 +225,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 // 指定模块
                 .eq(SysResource::getModule, roleParam.getModule())
                 // 指定菜单类型
-                .in(SysResource::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.BUTTON.getCode(), ResourceTypeEnum.LINK.getCode())
+                .in(SysResource::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.IFRAME.getCode(), ResourceTypeEnum.LINK.getCode(), ResourceTypeEnum.BUTTON.getCode())
                 .eq(SysResource::getDeleteFlag, 0));
         // 本模块的所有权限
         List<String> allMenuCode = menuList.stream().map(SysResource::getCode).collect(Collectors.toList());
