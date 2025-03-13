@@ -11,6 +11,7 @@ import com.moyu.common.mybatis.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -64,7 +65,7 @@ public class SysUser extends BaseEntity {
     /**
      * 生日
      */
-    private Date birthday;
+    private LocalDate birthday;
 
     /**
      * 邮箱
@@ -94,7 +95,7 @@ public class SysUser extends BaseEntity {
     /**
      * 员工入职日期
      */
-    private Date entryDate;
+    private LocalDate entryDate;
 
     /**
      * 直属组织机构编码

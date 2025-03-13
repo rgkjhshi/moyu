@@ -12,7 +12,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -81,7 +81,7 @@ public class SysUserParam extends BasePageParam {
      * 生日
      */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date birthday;
+    private LocalDate birthday;
 
     /**
      * 邮箱
@@ -112,7 +112,7 @@ public class SysUserParam extends BasePageParam {
      * 员工入职日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date entryDate;
+    private LocalDate entryDate;
 
     /**
      * 直属组织编码
