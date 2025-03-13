@@ -139,9 +139,9 @@ public class UserCenterServiceImpl implements UserCenterService {
             }
             if (ObjectUtil.isNotEmpty(tree.get("meta"))) {
                 Map<String, Object> meta = (Map<String, Object>) tree.get("meta");
-                Integer metaType = (Integer) meta.get("type");
+                String metaType = (String) meta.get("type");
                 // 不是目录
-                boolean notDir = !ResourceTypeEnum.DIR.getCode().equals(metaType) && !ResourceTypeEnum.MODULE.getCode().equals(metaType);
+                boolean notDir = !ResourceTypeEnum.DIR.name().equalsIgnoreCase(metaType) && !ResourceTypeEnum.MODULE.name().equalsIgnoreCase(metaType);
                 // 有权限的菜单叶子节点才符合要求
                 return notDir && permSet.contains(tree.getId());
             } else {
