@@ -139,9 +139,9 @@ public class UserCenterServiceImpl implements UserCenterService {
             }
             if (ObjectUtil.isNotEmpty(tree.get("meta"))) {
                 Map<String, Object> meta = (Map<String, Object>) tree.get("meta");
-                Integer menuType = (Integer) meta.get("menuType");
+                Integer metaType = (Integer) meta.get("type");
                 // 不是目录
-                boolean notDir = !ResourceTypeEnum.DIR.getCode().equals(menuType) && !ResourceTypeEnum.MODULE.getCode().equals(menuType);
+                boolean notDir = !ResourceTypeEnum.DIR.getCode().equals(metaType) && !ResourceTypeEnum.MODULE.getCode().equals(metaType);
                 // 有权限的菜单叶子节点才符合要求
                 return notDir && permSet.contains(tree.getId());
             } else {
@@ -224,7 +224,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> meta = new HashMap<>();
                     meta.put("icon", menu.getIcon());
                     meta.put("title", menu.getName());
-                    meta.put("menuType", menu.getResourceType());
+                    meta.put("type", menu.getResourceType());
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
                         meta.put("hidden", true);
