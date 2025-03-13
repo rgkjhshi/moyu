@@ -211,20 +211,22 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 结构转换
         List<TreeNode<String>> treeNodeList = menuList.stream()
                 .map(menu -> {
+                    ResourceTypeEnum resourceType = ResourceTypeEnum.getByCode(menu.getResourceType());
                     TreeNode<String> node = new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum());
                     // path、name、component、redirect、hidden
                     Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
-                    if (ResourceTypeEnum.DIR.getCode().equals(menu.getResourceType())) {
+                    if (ResourceTypeEnum.DIR.equals(resourceType)) {
                         extra.put("redirect", menu.getLink());
-                    } else if (ResourceTypeEnum.MODULE.getCode().equals(menu.getResourceType())) {
+                    } else if (ResourceTypeEnum.MODULE.equals(resourceType)) {
                         extra.put("redirect", menu.getLink());
                     }
                     Map<String, Object> meta = new HashMap<>();
                     meta.put("icon", menu.getIcon());
                     meta.put("title", menu.getName());
-                    meta.put("type", menu.getResourceType());
+                    // metaType 使用字符串
+                    meta.put("type", resourceType.name().toLowerCase());
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
                         meta.put("hidden", true);

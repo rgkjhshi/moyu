@@ -196,7 +196,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                         // 模块只放图标
                         extMap.put("icon", e.getIcon());
                     } else {
-                        extMap.put("menuType", e.getResourceType());
+                        extMap.put("resourceType", e.getResourceType());
                         // rm关系中存在，表示有权限
                         extMap.put("checked", rmMap.containsKey(e.getCode()));
                         // 将把包含的按钮加进来
