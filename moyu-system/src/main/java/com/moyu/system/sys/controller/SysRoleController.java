@@ -109,7 +109,7 @@ public class SysRoleController {
     /**
      * 给角色授权菜单
      */
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:grantMenu')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:grantMenu')")
     @PostMapping("/grantMenu")
     public BaseResponse<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
