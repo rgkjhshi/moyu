@@ -61,24 +61,24 @@ public class SysResource extends BaseEntity {
     private String component;
 
     /**
-     * 图标
-     */
-    private String icon;
-
-    /**
      * 权限标识
      */
     private String permission;
 
     /**
-     * 是否可见（0不可见 1可见）
-     */
-    private Integer visible;
-
-    /**
      * 链接地址
      */
     private String link;
+
+    /**
+     * 图标
+     */
+    private String icon;
+
+    /**
+     * 是否可见（0不可见 1可见）
+     */
+    private Integer visible;
 
     /**
      * 归属模块

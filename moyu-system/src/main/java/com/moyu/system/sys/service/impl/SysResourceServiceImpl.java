@@ -260,8 +260,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysResource.setResourceType(resourceParam.getResourceType());
         sysResource.setPath(resourceParam.getPath());
         sysResource.setComponent(resourceParam.getComponent());
-        sysResource.setIcon(resourceParam.getIcon());
         sysResource.setPermission(resourceParam.getPermission());
+        sysResource.setLink(resourceParam.getLink());
+        sysResource.setIcon(resourceParam.getIcon());
         sysResource.setVisible(resourceParam.getVisible());
         sysResource.setModule(resourceParam.getModule());
         sysResource.setSortNum(resourceParam.getSortNum());
@@ -276,37 +277,25 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
      */
     private void fillSysMenu(SysResource menu) {
         Assert.notNull(menu, "菜单menu不能为空");
-        // 菜单类型（字典 1模块 2目录 3菜单 4按钮 5外链）
-        if (Objects.equals(ResourceTypeEnum.MODULE.getCode(), menu.getResourceType())) {
-            // 模块的路径、组件、权限为空
-            menu.setPath(menu.getPath());
-            menu.setComponent("");
-            menu.setPermission("");
-        } else {
+        ResourceTypeEnum resourceType = ResourceTypeEnum.getByCode(menu.getResourceType());
+        // 资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）
+        if (!Objects.equals(ResourceTypeEnum.MODULE, resourceType)) {
             // 非模块必须指定parentCode及module
             Assert.notEmpty(menu.getParentCode(), "上级菜单parentCode不能为空");
             Assert.notEmpty(menu.getModule(), "归属模块module不能为空");
         }
-        if (Objects.equals(ResourceTypeEnum.DIR.getCode(), menu.getResourceType())) {
+        if (Objects.equals(ResourceTypeEnum.DIR, resourceType)) {
             // 目录的组件、权限为空
             Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
-            menu.setComponent(menu.getComponent());
-            menu.setPermission("");
-        } else if (Objects.equals(ResourceTypeEnum.MENU.getCode(), menu.getResourceType())) {
+        } else if (Objects.equals(ResourceTypeEnum.MENU, resourceType)) {
             Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
-            Assert.notEmpty(menu.getPath(), "组件component不能为空");
-            // 菜单的权限为空
-            menu.setPermission("");
-        } else if (Objects.equals(ResourceTypeEnum.BUTTON.getCode(), menu.getResourceType())) {
+            Assert.notEmpty(menu.getComponent(), "组件component不能为空");
+        } else if (Objects.equals(ResourceTypeEnum.BUTTON, resourceType)) {
             // 按钮的组件为空
             Assert.notEmpty(menu.getPermission(), "权限标识permission不能为空");
-            menu.setComponent("");
-        } else if (Objects.equals(ResourceTypeEnum.LINK.getCode(), menu.getResourceType())) {
-            Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
+        } else if (Objects.equals(ResourceTypeEnum.IFRAME, resourceType) || Objects.equals(ResourceTypeEnum.LINK, resourceType)) {
+            Assert.notEmpty(menu.getPath(), "链接地址path不能为空");
             Assert.isTrue(menu.getPath().startsWith("http"), "链接必须以http(s)开头");
-            // 链接的组件、权限为空
-            menu.setComponent("");
-            menu.setPermission("");
         }
     }
 

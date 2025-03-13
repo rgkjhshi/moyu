@@ -232,7 +232,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                         meta.put("hidden", true);
                     }
                     // 如果是内链或者外链，设置url
-                    if (ResourceTypeEnum.LINK.getCode().equals(menu.getResourceType()) || ResourceTypeEnum.IFRAME.getCode().equals(menu.getResourceType())) {
+                    if (ResourceTypeEnum.IFRAME.equals(resourceType) || ResourceTypeEnum.LINK.equals(resourceType)) {
                         meta.put("url", menu.getPath());
                     }
                     extra.put("meta", meta);

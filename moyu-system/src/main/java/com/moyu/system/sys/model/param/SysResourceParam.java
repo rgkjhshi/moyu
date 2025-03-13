@@ -90,14 +90,19 @@ public class SysResourceParam extends BasePageParam {
     private String component;
 
     /**
-     * 图标
-     */
-    private String icon;
-
-    /**
      * 权限标识
      */
     private String permission;
+
+    /**
+     * 链接地址
+     */
+    private String link;
+
+    /**
+     * 图标
+     */
+    private String icon;
 
     /**
      * 是否可见（0不可见 1可见）

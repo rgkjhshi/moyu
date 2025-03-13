@@ -159,10 +159,10 @@ create table sys_resource
     `resource_type` TINYINT(5)   NULL DEFAULT NULL COMMENT '资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）',
     `path`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '路由地址',
     `component`     VARCHAR(64)  NULL DEFAULT NULL COMMENT '组件地址',
-    `icon`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '图标',
     `permission`    VARCHAR(64)  NULL DEFAULT NULL COMMENT '权限标识',
-    `visible`       TINYINT(5)   NULL DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
     `link`          VARCHAR(255) NULL DEFAULT NULL COMMENT '链接地址',
+    `icon`          VARCHAR(64)  NULL DEFAULT NULL COMMENT '图标',
+    `visible`       TINYINT(5)   NULL DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
     `module`        VARCHAR(64)  NULL DEFAULT NULL COMMENT '归属模块',
 
     `sort_num`      INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
