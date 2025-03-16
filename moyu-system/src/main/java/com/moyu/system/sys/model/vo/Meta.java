@@ -36,7 +36,12 @@ public class Meta {
     private Boolean hidden;
 
     /**
-     * tabView中是否固定显示在tab中
+     * 【目录】只有一个子路由是否始终显示
+     */
+    private Boolean alwaysShow;
+
+    /**
+     * 【菜单】在tabView中是否固定显示在tab中
      */
     private Boolean affix;
 
@@ -44,11 +49,6 @@ public class Meta {
      * 【菜单】是否开启页面缓存
      */
     private Boolean keepAlive;
-
-    /**
-     * 【目录】只有一个子路由是否始终显示
-     */
-    private Boolean alwaysShow;
 
     /**
      * 【链接】链接的地址(包括内链外链)
