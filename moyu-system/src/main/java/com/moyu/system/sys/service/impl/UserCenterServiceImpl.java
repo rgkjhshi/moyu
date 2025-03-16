@@ -29,6 +29,7 @@ import com.moyu.system.sys.model.param.SysGroupParam;
 import com.moyu.system.sys.model.param.SysRoleParam;
 import com.moyu.system.sys.model.param.SysUserParam;
 import com.moyu.system.sys.model.vo.GroupInfo;
+import com.moyu.system.sys.model.vo.Meta;
 import com.moyu.system.sys.model.vo.UserInfo;
 import com.moyu.system.sys.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -138,8 +139,8 @@ public class UserCenterServiceImpl implements UserCenterService {
                 return false;
             }
             if (ObjectUtil.isNotEmpty(tree.get("meta"))) {
-                Map<String, Object> meta = (Map<String, Object>) tree.get("meta");
-                String metaType = (String) meta.get("type");
+                Meta meta = (Meta) tree.get("meta");
+                String metaType = meta.getType();
                 // 不是目录
                 boolean notDir = !ResourceTypeEnum.DIR.name().equalsIgnoreCase(metaType) && !ResourceTypeEnum.MODULE.name().equalsIgnoreCase(metaType);
                 // 有权限的菜单叶子节点才符合要求
@@ -222,18 +223,18 @@ public class UserCenterServiceImpl implements UserCenterService {
                     } else if (ResourceTypeEnum.MODULE.equals(resourceType)) {
                         extra.put("redirect", menu.getLink());
                     }
-                    Map<String, Object> meta = new HashMap<>();
-                    meta.put("icon", menu.getIcon());
-                    meta.put("title", menu.getName());
+                    Meta meta = new Meta();
+                    meta.setIcon(menu.getIcon());
+                    meta.setTitle(menu.getName());
                     // metaType 使用字符串
-                    meta.put("type", resourceType.name().toLowerCase());
+                    meta.setType(resourceType.name().toLowerCase());
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
-                        meta.put("hidden", true);
+                        meta.setHidden(true);
                     }
                     // 如果是内链或者外链，设置url
                     if (ResourceTypeEnum.IFRAME.equals(resourceType) || ResourceTypeEnum.LINK.equals(resourceType)) {
-                        meta.put("url", menu.getPath());
+                        meta.setUrl(menu.getPath());
                     }
                     extra.put("meta", meta);
                     node.setExtra(extra);
