@@ -18,6 +18,7 @@ public class Meta {
      * 路由title
      */
     private String title;
+
     /**
      * 标识路由的类型
      *
