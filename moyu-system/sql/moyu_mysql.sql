@@ -119,35 +119,7 @@ create table sys_group
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 1000 COMMENT = '分组信息表';
 
--- 5. 数据权限分组表
-drop table if exists sys_scope;
-create table sys_scope
-(
-    `id`          bigint(20)    NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `name`        VARCHAR(64)   NULL DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(64)   NULL DEFAULT NULL COMMENT '编码',
-    `org_code`    VARCHAR(64)   NULL DEFAULT NULL COMMENT '直属组织编码',
-    `org_name`    VARCHAR(64)   NULL DEFAULT NULL COMMENT '直属组织名称',
-    `scope_type`  TINYINT(5)    NULL DEFAULT NULL COMMENT '数据权限(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)',
-    `scope_set`   VARCHAR(1024) NULL DEFAULT NULL COMMENT '自定义scope集合,逗号分隔',
-    `org_path`    VARCHAR(1024) NULL DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
-
-    `sort_num`    INT(10)       NULL DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)    NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
-    `ext_json`    LONGTEXT      NULL COMMENT '扩展信息',
-    `remark`      VARCHAR(200)  NULL DEFAULT NULL comment '备注',
-    `delete_flag` TINYINT(5)    NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
-    `create_time` DATETIME      NULL DEFAULT NULL COMMENT '创建时间',
-    `create_by`   VARCHAR(32)   NULL DEFAULT NULL COMMENT '创建人',
-    `update_time` DATETIME      NULL DEFAULT NULL COMMENT '修改时间',
-    `update_by`   VARCHAR(32)   NULL DEFAULT NULL COMMENT '修改人',
-    primary key (`id`)
-) ENGINE = InnoDB
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci
-  AUTO_INCREMENT = 1000 COMMENT = '数据权限分组表';
-
--- 6. 资源权限表
+-- 5. 资源权限表
 drop table if exists sys_resource;
 create table sys_resource
 (
@@ -179,7 +151,7 @@ create table sys_resource
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 2000 COMMENT = '资源权限表';
 
--- 7. 用户角色权限关系表
+-- 6. 用户角色权限关系表
 DROP TABLE IF EXISTS `sys_relation`;
 CREATE TABLE `sys_relation`
 (
