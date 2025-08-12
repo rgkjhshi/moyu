@@ -23,6 +23,8 @@ import com.google.common.collect.Multimap;
 import com.moyu.common.enums.ExceptionEnum;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.model.PageResult;
+import com.moyu.common.security.constant.SecurityConstants;
+import com.moyu.common.security.util.SecurityUtils;
 import com.moyu.system.sys.constant.SysConstants;
 import com.moyu.system.sys.enums.RelationTypeEnum;
 import com.moyu.system.sys.enums.ResourceTypeEnum;
@@ -97,6 +99,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .eq(ObjectUtil.isNotEmpty(roleParam.getStatus()), SysRole::getStatus, roleParam.getStatus())
                 .eq(SysRole::getDeleteFlag, 0)
                 .orderByAsc(SysRole::getSortNum);
+        // 非 ROOT 不显示
+        if (!SecurityUtils.isRoot()) {
+            queryWrapper.ne(SysRole::getCode, SecurityConstants.ROOT_ROLE);
+        }
         // 分页查询
         Page<SysRole> page = new Page<>(roleParam.getPageNum(), roleParam.getPageSize());
         Page<SysRole> rolePage = this.page(page, queryWrapper);
