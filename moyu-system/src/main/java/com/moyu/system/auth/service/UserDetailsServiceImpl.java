@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("加载{}的用户信息", username);
-        // 这里应该通过远程调用获取用户信息
+        // 如果auth与user属于不同的服务，则这里应该通过远程调用获取用户信息
         SysUser sysUser = sysUserService.detail(SysUserParam.builder().account(username).build());
         if (sysUser == null) {
             log.info("登录用户:{}不存在", username);

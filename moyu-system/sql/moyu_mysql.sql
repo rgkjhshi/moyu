@@ -4,7 +4,6 @@ CREATE TABLE `sys_org`
 (
     `id`          BIGINT(20)    NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `parent_code` VARCHAR(64)   NULL DEFAULT '0' COMMENT '父编码',
-
     `name`        VARCHAR(64)   NULL DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)   NULL DEFAULT NULL COMMENT '编码',
     `org_type`    TINYINT(5)    NULL DEFAULT NULL COMMENT '组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)',
@@ -187,7 +186,7 @@ CREATE TABLE `sys_relation`
     `id`            BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `object_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '对象ID',
     `target_id`     VARCHAR(64) NULL DEFAULT NULL COMMENT '目标ID',
-    `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role,5:scope_has_user)',
+    `relation_type` TINYINT(5)  NULL DEFAULT NULL COMMENT '关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role)',
     `delete_flag`   TINYINT(5)  NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`   DATETIME    NULL DEFAULT NULL COMMENT '创建时间',
     `create_by`     VARCHAR(32) NULL DEFAULT NULL COMMENT '创建人',
