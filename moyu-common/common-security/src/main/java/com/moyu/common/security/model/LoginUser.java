@@ -73,7 +73,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private String password;
 
     /**
-     * 权限集合，SecurityExpressionRoot中的hasRole等方法会使用此字段
+     * 授权集合，角色标识、权限标识均位于此集合。SecurityExpressionRoot中的hasRole等方法会使用此字段
      *
      * @see org.springframework.security.access.expression.SecurityExpressionRoot
      */
