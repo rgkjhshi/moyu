@@ -101,10 +101,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE)
                 .eq(SysRole::getDeleteFlag, 0)
                 .orderByAsc(SysRole::getSortNum);
-        // 非 ROOT 不显示
-        if (!SecurityUtils.isRoot()) {
-            queryWrapper.ne(SysRole::getCode, SecurityConstants.ROOT_ROLE);
-        }
         // 分页查询
         Page<SysRole> page = new Page<>(roleParam.getPageNum(), roleParam.getPageSize());
         Page<SysRole> rolePage = this.page(page, queryWrapper);

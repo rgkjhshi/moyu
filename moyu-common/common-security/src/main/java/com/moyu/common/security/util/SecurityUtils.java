@@ -4,6 +4,7 @@ package com.moyu.common.security.util;
 import com.moyu.common.exception.BaseException;
 import com.moyu.common.security.constant.SecurityConstants;
 import com.moyu.common.security.model.LoginUser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import java.util.Set;
  * @author shisong
  * @since 2025-01-06
  */
+@Slf4j
 public class SecurityUtils {
 
     /**
@@ -31,12 +33,17 @@ public class SecurityUtils {
     }
 
     /**
-     * 获取用户
+     * 获取用户(已认证返回LoginUser，未认证返回null)
      **/
     public static LoginUser getLoginUser() {
         try {
-            return (LoginUser) getAuthentication().getPrincipal();
+            if (getAuthentication().getPrincipal() instanceof LoginUser) {
+                return (LoginUser) getAuthentication().getPrincipal();
+            } else {
+                return null;
+            }
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "获取用户信息异常");
         }
     }
@@ -45,6 +52,9 @@ public class SecurityUtils {
      * 获取用户角色集合
      */
     public static Set<String> getRoles() {
+        if (getLoginUser() == null) {
+            return new HashSet<>();
+        }
         return getLoginUser().getRoles();
     }
 
@@ -52,6 +62,9 @@ public class SecurityUtils {
      * 获取用户权限集合
      */
     public static Set<String> getPerms() {
+        if (getLoginUser() == null) {
+            return new HashSet<>();
+        }
         return getLoginUser().getPerms();
     }
 
@@ -59,6 +72,9 @@ public class SecurityUtils {
      * 获取用户数据权限范围
      */
     public static Set<String> getScopes() {
+        if (getLoginUser() == null) {
+            return new HashSet<>();
+        }
         return getLoginUser().getScopes();
     }
 
@@ -66,6 +82,9 @@ public class SecurityUtils {
      * 获取用户授权集合
      */
     public static Set<String> getAuthorities() {
+        if (getLoginUser() == null) {
+            return new HashSet<>();
+        }
         Collection<GrantedAuthority> authorities = getLoginUser().getAuthorities();
         return authorities == null ? new HashSet<>() : AuthorityUtils.authorityListToSet(authorities);
     }
@@ -74,6 +93,9 @@ public class SecurityUtils {
      * 是否为root超级管理员
      */
     public static boolean isRoot() {
+        if (getLoginUser() == null) {
+            return false;
+        }
         return getRoles().contains(SecurityConstants.ROOT_ROLE);
     }
 
